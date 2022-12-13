@@ -1,0 +1,9 @@
+GET https://api.cavernprotocol.com/api/anc/buyback/total
+Accept: application/json
+
+###
+
+GET https://api.cavernprotocol.com/api/anc/buyback/72hrs
+Accept: application/json
+
+###
