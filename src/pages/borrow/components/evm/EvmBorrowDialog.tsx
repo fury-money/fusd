@@ -11,6 +11,7 @@ import { useFormatters } from '@anchor-protocol/formatter';
 import Big from 'big.js';
 import { WhitelistCollateral } from 'queries';
 import '@extensions/xanchor';
+import { EstimatedFee } from '@libs/app-provider';
 
 export const EvmBorrowDialog = (
   props: DialogProps<Omit<BorrowFormParams, 'input' | 'states'>>,
@@ -29,7 +30,7 @@ export const EvmBorrowDialog = (
   const proceed = useCallback(
     (
       amount: UST,
-      txFee: u<UST>,
+      txFee: EstimatedFee,
       collateral?: WhitelistCollateral,
       collateralAmount?: u<CollateralAmount<Big>>,
     ) => {

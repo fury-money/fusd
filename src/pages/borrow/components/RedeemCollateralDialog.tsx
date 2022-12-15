@@ -97,14 +97,14 @@ function RedeemCollateralDialogBase(props: RedeemCollateralDialogProps) {
     useFeeEstimationFor(terraWalletAddress);
 
   useEffect(() => {
-    if (!connected || !states.redeemAmount) {
+    if (!connected || !states.redeemAmount || !terraWalletAddress) {
       return;
     }
 
     estimateFee([
       // unlock collateral
       new MsgExecuteContract(
-        terraWalletAddress,
+        terraWalletAddress as string,
         contractAddress.moneyMarket.overseer,
         {
           // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L78
@@ -124,7 +124,7 @@ function RedeemCollateralDialogBase(props: RedeemCollateralDialogProps) {
 
       // withdraw from custody
       new MsgExecuteContract(
-        terraWalletAddress,
+        terraWalletAddress as string,
         props.collateral.custody_contract,
         {
           // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69

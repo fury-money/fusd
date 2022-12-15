@@ -1,24 +1,27 @@
 import { validateTxFee } from '@anchor-protocol/app-fns';
 import { useAnchorBank, useBAssetClaimTx } from '@anchor-protocol/app-provider';
-import { formatUST } from '@anchor-protocol/notation';
-import { useFixedFee } from '@libs/app-provider';
+import { formatLuna, formatUST } from '@anchor-protocol/notation';
+import { useFeeEstimationFor, useFixedFee } from '@libs/app-provider';
 import { demicrofy } from '@libs/formatter';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
+import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { Section } from '@libs/neumorphism-ui/components/Section';
-import { u, UST } from '@libs/types';
 import { StreamStatus } from '@rx-stream/react';
+import { MsgExecuteContract } from '@terra-money/terra.js';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { Big } from 'big.js';
+import big from 'big.js';
 import { CenteredLayout } from 'components/layouts/CenteredLayout';
 import { MessageBox } from 'components/MessageBox';
 import { Sub } from 'components/Sub';
 import { TxResultRenderer } from 'components/tx/TxResultRenderer';
 import { TxFeeList, TxFeeListItem } from 'components/TxFeeList';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
+import { useAccount } from 'contexts/account';
 import { fixHMR } from 'fix-hmr';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import { CircleSpinner } from 'react-spinners-kit';
+import styled, { useTheme } from 'styled-components';
 import { useClaimableRewardsBreakdown } from './hooks/useRewardsBreakdown';
 
 export interface BAssetClaimProps {
@@ -32,7 +35,12 @@ function Component({ className }: BAssetClaimProps) {
   const connectedWallet = useConnectedWallet();
   const navigate = useNavigate();
 
-  const fixedFee = useFixedFee();
+  const {connected, terraWalletAddress} = useAccount();
+
+  const [estimatedFee, estimatedFeeError, estimateFee] =
+    useFeeEstimationFor(terraWalletAddress);
+  const [noRewards, setNoRewards] = useState(false);
+
 
   const [claim, claimResult] = useBAssetClaimTx();
 
@@ -48,21 +56,46 @@ function Component({ className }: BAssetClaimProps) {
   // ---------------------------------------------
   // logics
   // ---------------------------------------------
-  const invalidTxFee = useMemo(
-    () => !!connectedWallet && validateTxFee(tokenBalances.uUST, fixedFee),
-    [connectedWallet, tokenBalances.uUST, fixedFee],
-  );
 
-  const estimatedAmount = useMemo(() => {
-    const amount = totalRewardsUST.minus(fixedFee) as u<UST<Big>>;
-    return amount.gt(fixedFee) ? amount : undefined;
-  }, [totalRewardsUST, fixedFee]);
+  useEffect(() => {
+    setNoRewards(()=>false);
+    if (!connected || !rewardBreakdowns) {
+      return;
+    }
+
+    if (rewardBreakdowns.length === 0) {
+      setNoRewards(()=>true);
+    }
+
+    estimateFee(rewardBreakdowns.map((rewardBreakdown) => {
+        return new MsgExecuteContract(
+          terraWalletAddress as string,
+          rewardBreakdown.rewardAddr,
+          {
+            claim_rewards: {
+              recipient: undefined,
+            },
+          },
+        );
+      }),);
+  }, [
+    terraWalletAddress,
+    rewardBreakdowns,
+    estimateFee,
+    connected,
+    setNoRewards
+  ]);
+
+  const invalidTxFee = useMemo(
+    () => !!connectedWallet && !!estimatedFee && validateTxFee(tokenBalances.uLuna, estimatedFee.txFee),
+    [connectedWallet, tokenBalances.uUST, estimatedFee?.txFee],
+  );
 
   // ---------------------------------------------
   // callbacks
   // ---------------------------------------------
   const proceed = useCallback(() => {
-    if (!connectedWallet || !claim || !totalRewardsUST) {
+    if (!connectedWallet || !claim || !totalRewardsUST || !estimatedFee) {
       return;
     }
 
@@ -72,12 +105,16 @@ function Component({ className }: BAssetClaimProps) {
 
     claim({
       rewardBreakdowns,
+      estimatedFee
     });
-  }, [claim, totalRewardsUST, connectedWallet, rewardBreakdowns]);
+  }, [claim, totalRewardsUST, connectedWallet, rewardBreakdowns, estimatedFee]);
 
   // ---------------------------------------------
   // presentation
   // ---------------------------------------------
+
+  const theme = useTheme();
+
   if (
     claimResult?.status === StreamStatus.IN_PROGRESS ||
     claimResult?.status === StreamStatus.DONE
@@ -118,14 +155,23 @@ function Component({ className }: BAssetClaimProps) {
         </div>
 
         <TxFeeList className="receipt">
-          {estimatedAmount && (
+          {totalRewardsUST && (
             <TxFeeListItem label="Estimated Amount">
-              {formatUST(demicrofy(estimatedAmount))} Luna
+              {formatUST(demicrofy(totalRewardsUST))} Luna
             </TxFeeListItem>
           )}
-          <TxFeeListItem label="Tx Fee">
-            {formatUST(demicrofy(fixedFee))} Luna
-          </TxFeeListItem>
+          <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
+              {estimatedFee && !noRewards && 
+                big(estimatedFee.txFee).gt(0) &&
+                `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
+              {!estimatedFeeError && !estimatedFee && (
+                <span className="spinner">
+                  <CircleSpinner size={14} color={theme.colors.positive} />
+                </span>
+              )}
+              {estimatedFeeError}
+              {noRewards && !!estimatedFeeError && " : there is no rewards available"}
+            </TxFeeListItem>
         </TxFeeList>
 
         <ViewAddressWarning>
@@ -135,7 +181,7 @@ function Component({ className }: BAssetClaimProps) {
               !connectedWallet ||
               !connectedWallet.availablePost ||
               !claim ||
-              !estimatedAmount ||
+              !totalRewardsUST ||
               !!invalidTxFee
             }
             onClick={proceed}

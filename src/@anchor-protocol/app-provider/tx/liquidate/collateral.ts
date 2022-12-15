@@ -1,5 +1,4 @@
 import { liquidationWithdrawCollateralTx } from '@anchor-protocol/app-fns/tx/liquidate/collateral';
-import { Luna, u } from '@anchor-protocol/types';
 import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
@@ -52,7 +51,6 @@ export function useLiquidationWithdrawCollateralTx() {
       connectedWallet,
       contractAddress.liquidation.liquidationQueueContract,
       contractAddress.cw20.bLuna,
-      constants.gasWanted,
       constants.gasAdjustment,
       queryClient,
       txErrorReporter,

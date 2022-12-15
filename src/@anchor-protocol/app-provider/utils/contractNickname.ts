@@ -35,8 +35,6 @@ export function useContractNickname(): (addr: HumanAddr | CW20Addr) => string {
         return `Money Market / Interest Model`;
       case address.moneyMarket.distributionModel:
         return `Money Market / Distribution Model`;
-      case address.liquidation.liquidationContract:
-        return `Liquidation`;
       case address.anchorToken.gov:
         return `Anchor Token / Gov`;
       case address.anchorToken.staking:

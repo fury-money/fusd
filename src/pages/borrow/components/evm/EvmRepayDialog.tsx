@@ -7,6 +7,7 @@ import { RepayFormParams } from '../types';
 import { useRepayUstTx } from 'tx/evm';
 import { RepayDialog } from '../RepayDialog';
 import { EvmTxResultRenderer } from 'components/tx/EvmTxResultRenderer';
+import { EstimatedFee } from '@libs/app-provider';
 
 export const EvmRepayDialog = (props: DialogProps<RepayFormParams>) => {
   const { connected } = useAccount();
@@ -16,7 +17,7 @@ export const EvmRepayDialog = (props: DialogProps<RepayFormParams>) => {
   const [postTx, txResult] = repayUstTx?.stream ?? [null, null];
 
   const proceed = useCallback(
-    (amount: UST, _txFee: u<UST>) => {
+    (amount: UST, _txFee: EstimatedFee) => {
       if (connected && postTx) {
         postTx({ amount });
       }

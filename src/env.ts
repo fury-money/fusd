@@ -83,7 +83,7 @@ const PHOENIX_CONTRACT_ADDRESS = {
   mmLiquidation: 'terra1w9ky73v4g7v98zzdqpqgf3kjmusnx4d4mvnac6',
   mmDistributionModel: 'terra14mufqpr5mevdfn92p4jchpkxp7xr46uyknqjwq',
   mmLiquidationQueue: 'terra1e25zllgag7j9xsun3me4stnye2pcg66234je3u',
-  aTerra: 'terra1hzh9vpxhsk8253se0vv5jj6etdvxu3nv8z07zu',
+  aUSDC: 'terra1hzh9vpxhsk8253se0vv5jj6etdvxu3nv8z07zu',
   bLunaLunaPair: 'terra1j66jatn3k50hjtg2xemnjm8s7y8dws9xqa5y8w',
   bLunaLunaLPToken: 'terra1htw7hm40ch0hacm8qpgd24sus4h0tq3hsseatl',
   ancUstPair: 'terra1qr2k6yjjd5p2kaewqvg93ag74k6gyjr7re37fs',
@@ -117,7 +117,7 @@ const PISCO_CONTRACT_ADDRESS = {
   mmLiquidationQueue:
     'terra1k5c0l7t3wvu4vhedv870n9748ycw53h6qmrrr6x76pg7ptdjdw0sudqt3q',
   aUSDC: 'terra1phktkrnr99m56gqjk37n0xlr7vk2zp3p835tqtu6v2sgzl4tet4srypktp',
-  custodyBLuna:
+  mmCustody:
     'terra1gd5wqk7tq66je4y0msd5ftayp3u8yqq3jzj3ryng2lnwr37lk3gq047m3z',
   bLunaReward:
     'terra1ml375eu9c0k04muchdt3csjwdcmspqz4cn6qkldmfhav0jd60fes7kwn5n',
@@ -169,7 +169,6 @@ export const ANCHOR_CONTRACT_ADDRESS = (
       distributionModel: addressMap.mmDistributionModel as HumanAddr,
     },
     liquidation: {
-      liquidationContract: addressMap.mmLiquidation as HumanAddr,
       liquidationQueueContract: addressMap.mmLiquidationQueue as HumanAddr,
     },
     anchorToken: {
@@ -194,7 +193,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
     cw20: {
       bLuna: addressMap.bLunaToken as CW20Addr,
       //bEth: addressMap.bEthToken as CW20Addr,
-      aUST: addressMap.aTerra as CW20Addr,
+      aUST: addressMap.aUSDC as CW20Addr,
       ANC: addressMap.ANC as CW20Addr,
       AncUstLP: addressMap.ancUstLPToken as CW20Addr,
       bLunaLunaLP: addressMap.bLunaLunaLPToken as CW20Addr,
@@ -211,6 +210,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
 export const ANCHOR_INDEXER_API_ENDPOINTS = (network: NetworkInfo): string => {
   if (network.chainID.startsWith('pisco')) {
     return 'https://api.cavernprotocol.com/api/testnet';
+    //return 'http://localhost:3000/api/testnet';
   } else if (network.chainID.startsWith('phoenix')) {
     return 'https://api.cavernprotocol.com/api/testnet';
   } else {

@@ -1,7 +1,7 @@
 import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { anc160gif, anc80gif, GifIcon, TokenIcon, tokens, variants } from '../';
+import { GifIcon, TokenIcon, tokens, variants } from '../';
 
 export default {
   title: 'assets/Token Icons',
@@ -10,10 +10,6 @@ export default {
 export const Token_Icons = () => {
   return (
     <div>
-      <GifIcons>
-        <GifIcon src={anc80gif} style={{ fontSize: 30 }} />
-        <GifIcon src={anc160gif} style={{ fontSize: 60 }} />
-      </GifIcons>
 
       {[50, 100, 200].map((size) => (
         <Grid key={'preview' + size} size={size}>

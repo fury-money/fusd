@@ -1,5 +1,5 @@
 import { bAssetClaimTx } from '@anchor-protocol/app-fns';
-import { useFixedFee, useRefetchQueries } from '@libs/app-provider';
+import { EstimatedFee, useFixedFee, useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { RewardBreakdown } from 'pages/basset/hooks/useRewardsBreakdown';
@@ -10,6 +10,7 @@ import { ANCHOR_TX_KEY } from '../../env';
 export interface BAssetClaimTxParams {
   rewardBreakdowns: RewardBreakdown[];
   onTxSucceed?: () => void;
+  estimatedFee: EstimatedFee;
 }
 
 export function useBAssetClaimTx() {
@@ -19,12 +20,10 @@ export function useBAssetClaimTx() {
 
   const { queryClient, txErrorReporter, constants } = useAnchorWebapp();
 
-  const fixedFee = useFixedFee();
-
   const refetchQueries = useRefetchQueries();
 
   const stream = useCallback(
-    ({ onTxSucceed, rewardBreakdowns }: BAssetClaimTxParams) => {
+    ({ onTxSucceed, rewardBreakdowns, estimatedFee }: BAssetClaimTxParams) => {
       if (!connectedWallet || !connectedWallet.availablePost) {
         throw new Error('Can not post!');
       }
@@ -36,8 +35,8 @@ export function useBAssetClaimTx() {
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
-        fixedGas: fixedFee,
-        gasFee: constants.gasWanted,
+        fixedGas: estimatedFee.txFee,
+        gasFee: estimatedFee.gasWanted,
         gasAdjustment: constants.gasAdjustment,
         // query
         queryClient,
@@ -52,8 +51,6 @@ export function useBAssetClaimTx() {
     },
     [
       connectedWallet,
-      fixedFee,
-      constants.gasWanted,
       constants.gasAdjustment,
       queryClient,
       txErrorReporter,

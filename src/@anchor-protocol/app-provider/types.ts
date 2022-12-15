@@ -21,7 +21,6 @@ export interface AnchorContractAddress extends AppContractAddress {
     distributionModel: HumanAddr;
   };
   liquidation: {
-    liquidationContract: HumanAddr;
     liquidationQueueContract: HumanAddr;
   };
   anchorToken: {

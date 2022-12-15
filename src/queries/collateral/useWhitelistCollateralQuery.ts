@@ -46,6 +46,8 @@ const mapTokenInformation = (
   return whitelist.map((collateral) => {
     if (collateral && tokenInformation[collateral.collateral_token]) {
       const token = tokenInformation[collateral.collateral_token];
+
+
       return {
         ...token,
         ...collateral,
@@ -76,17 +78,6 @@ const mapBridgedAssets = async (
   });
 };
 
-const bLunaInformation = {
-  terra1qplftykc0sehm2632zd0n5swdxc3k24sjtsf9lm8em50fqyyt8aq2k6u26: {
-    protocol: 'Anchor',
-    symbol: 'aLuna',
-    token:
-      'terra1qplftykc0sehm2632zd0n5swdxc3k24sjtsf9lm8em50fqyyt8aq2k6u26' as CW20Addr,
-    icon: 'assets/tokens/bluna.svg',
-    name: 'Cavern Bonded Luna',
-  },
-};
-
 async function whitelistCollateralQuery(
   overseerContract: HumanAddr,
   target: DeploymentTarget,
@@ -102,11 +93,26 @@ async function whitelistCollateralQuery(
   return await mapBridgedAssets(
     mapTokenInformation(
       whitelist,
-      { ...tokenInformation, ...bLunaInformation } ?? bLunaInformation,
+      tokenInformation ?? {},
     ),
     target,
     network,
   );
+}
+
+function useLocalTokenInformation(){
+  const { contractAddress } = useAnchorWebapp();
+
+  // We return the bLuna token information
+  return {
+    [contractAddress.cw20.bLuna]: {
+      protocol: 'Anchor',
+      symbol: 'aLuna',
+      token: contractAddress.cw20.bLuna,
+      icon: 'assets/tokens/bluna.svg',
+      name: 'Cavern Bonded Luna',
+    } 
+  } 
 }
 
 const queryFn = createQueryFn(whitelistCollateralQuery);
@@ -122,13 +128,15 @@ export function useWhitelistCollateralQuery(): UseQueryResult<
 
   const { data: tokens } = useCW20TokenDisplayInfosQuery();
 
+  const localTokenInformation = useLocalTokenInformation();
+
   const query = useAnchorQuery(
     [
       ANCHOR_QUERY_KEY.WHITELIST_COLLATERAL,
       contractAddress.moneyMarket.overseer,
       target,
       network,
-      tokens && tokens[network.name],
+      {...(tokens && tokens[network.name]), ...localTokenInformation},
       queryClient,
     ],
     queryFn,

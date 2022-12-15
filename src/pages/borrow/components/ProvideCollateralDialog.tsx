@@ -101,14 +101,14 @@ function ProvideCollateralDialogBase(props: ProvideCollateralDialogProps) {
     useFeeEstimationFor(terraWalletAddress);
 
   useEffect(() => {
-    if (!connected || !states.depositAmount) {
+    if (!connected || !states.depositAmount || !terraWalletAddress) {
       return;
     }
 
     estimateFee([
       // provide_collateral call
       new MsgExecuteContract(
-        terraWalletAddress,
+        terraWalletAddress as string,
         props.collateral.collateral_token,
         {
           send: {
@@ -125,7 +125,7 @@ function ProvideCollateralDialogBase(props: ProvideCollateralDialogProps) {
       ),
       // lock_collateral call
       new MsgExecuteContract(
-        terraWalletAddress,
+        terraWalletAddress as string,
         contractAddress.moneyMarket.overseer,
         {
           // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L75

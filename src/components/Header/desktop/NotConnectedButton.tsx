@@ -52,7 +52,7 @@ export const NotConnectedButton = styled(NotConnectedButtonBase)`
 
     color: ${({ theme }) => theme.header.textColor};
     border-color: ${({ theme }) => theme.header.textColor};
-    border: 1px solid ${({ theme }) => theme.header.borderColor};
+    border: 1px solid ${({ theme }) => theme.header.textColor};
 
     &:hover {
       color: ${({ theme }) => theme.header.textColor};

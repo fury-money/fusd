@@ -9,7 +9,6 @@ export interface BurnComponent {
   setGetAmount: (nextGetAmount: Luna) => void;
 
   connectedWallet: ConnectedWallet | undefined;
-  fixedFee: u<Luna>;
 
   setMode: (nextMode: 'burn' | 'swap') => void;
 }

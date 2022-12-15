@@ -6,7 +6,7 @@
   "scripts": {
     "app:dev": "VITE_APP_VERSION=$(git rev-parse --short HEAD) && vite",
     "app:dev:browser": "HTTPS=true PORT=3000 TS_NODE_PROJECT=tsconfig.script.json node -r ts-node/register -r tsconfig-paths/register scripts/start.ts",
-    "build": "VITE_APP_VERSION=$(git rev-parse --short HEAD) && tsc --noEmit && vite build",
+    "build": "VITE_APP_VERSION=$(git rev-parse --short HEAD) && tsc --noEmit && NODE_OPTIONS=--max_old_space_size=8384 && vite build ",
     "build-storybook": "build-storybook -s public",
     "coverage": "react-scripts test --colors --coverage",
     "start": "multiplerun dev",
@@ -62,6 +62,7 @@
     "@web3-react/empty": "8.0.11-beta.0",
     "@web3-react/metamask": "^8.0.18-beta.0",
     "@web3-react/walletconnect": "8.0.25-beta.0",
+    "async-mutex": "^0.4.0",
     "big.js": "^6.1.1",
     "chart.js": "^3.9.1",
     "classnames": "^2.3.1",

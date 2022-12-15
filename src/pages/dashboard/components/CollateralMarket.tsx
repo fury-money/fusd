@@ -30,14 +30,22 @@ function CollateralMarketBase(props: UIElementProps) {
     const last = marketCollaterals.now;
     const last1DayBefore =
       marketCollaterals.history.find(findPrevDay(last.timestamp)) ??
-      marketCollaterals.history[marketCollaterals.history.length - 2];
+      marketCollaterals.history[marketCollaterals.history.length - 2]??
+      marketCollaterals.history[marketCollaterals.history.length - 1];
+
+    let totalCollateralDiff = big("0");
+    if(last1DayBefore.total_value != "0"){
+      totalCollateralDiff = big(
+        big(last.total_value).minus(last1DayBefore.total_value),
+      ).div(last1DayBefore.total_value)
+    }
+
+
 
     return {
       mainTotalCollateralValue: last.total_value,
 
-      totalCollateralDiff: big(
-        big(last.total_value).minus(last1DayBefore.total_value),
-      ).div(last1DayBefore.total_value) as Rate<Big>,
+      totalCollateralDiff: totalCollateralDiff as Rate<Big>,
     };
   }, [marketCollaterals]);
 

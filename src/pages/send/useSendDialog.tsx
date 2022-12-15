@@ -268,7 +268,7 @@ function ComponentBase({
       toAddress: string,
       currency: CurrencyInfo,
       amount: Token,
-      estimatedFee: EstimatedFee | null,
+      estimatedFee: EstimatedFee | undefined,
       memo: string,
     ) => {
       if (!connected || !send || !estimatedFee) {

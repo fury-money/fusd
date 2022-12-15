@@ -2,6 +2,7 @@ import {
   MarketStableCoin,
   marketStableCoinQuery,
 } from '@anchor-protocol/app-fns';
+import { useTerraNativeBalances } from '@libs/app-provider';
 import { createQueryFn } from '@libs/react-query-utils';
 import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
@@ -16,14 +17,16 @@ export function useMarketStableCoinQuery(): UseQueryResult<
   const { queryClient, contractAddress, queryErrorReporter } =
     useAnchorWebapp();
 
-  const { data: { marketState, marketBalances } = {} } = useMarketStateQuery();
+  const { data: { marketState } = {} } = useMarketStateQuery();
+
+  const {uUST} = useTerraNativeBalances(contractAddress.moneyMarket.market);
 
   const result = useQuery(
     [
       ANCHOR_QUERY_KEY.MARKET_STABLE_COIN,
       contractAddress.moneyMarket.interestModel,
       contractAddress.moneyMarket.overseer,
-      marketBalances?.uUST,
+      uUST,
       marketState?.total_reserves,
       marketState?.total_liabilities,
       queryClient,

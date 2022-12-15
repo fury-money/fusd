@@ -85,7 +85,7 @@ function RepayDialogBase(props: RepayDialogProps) {
 
     estimateFee([
       new MsgExecuteContract(
-        terraWalletAddress,
+        terraWalletAddress as string,
         contractAddress.moneyMarket.market,
         {
           // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L74
