@@ -14,8 +14,8 @@ export function NotConnectedButtonBase({
   return (
     <BorderButton {...buttonProps}>
       <IconSpan>
-        <span className="wallet-icon">
-          <Wallet />
+        <span className="wallet-icon-container">
+          <Wallet className='wallet-icon'/>
         </span>
         {children}
       </IconSpan>
@@ -31,9 +31,9 @@ export const NotConnectedButton = styled(NotConnectedButtonBase)`
     font-size: 12px;
     font-weight: 700;
 
-    .wallet-icon {
+    .wallet-icon-container {
       svg {
-        transform: scale(1.2) translateY(0.15em);
+        transform: scale(1.2) translateY(0.5px);
       }
 
       margin-right: 17px;
@@ -48,6 +48,9 @@ export const NotConnectedButton = styled(NotConnectedButtonBase)`
         right: -11px;
         border-left: 1px solid ${({ theme }) => theme.header.textColor};
       }
+    }
+    .wallet-icon{
+      width: 18px;
     }
 
     color: ${({ theme }) => theme.header.textColor};
