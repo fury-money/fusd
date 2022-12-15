@@ -122,12 +122,12 @@ export function earnWithdrawTx($: {
             withdrawAmount && {
               name: 'Withdraw Amount',
               value:
-                formatUSTWithPostfixUnits(demicrofy(withdrawAmount)) + ' UST',
+                formatUSTWithPostfixUnits(demicrofy(withdrawAmount)) + ' axlUSDC',
             },
             burnAmount && {
               name: 'Returned Amount',
               value:
-                formatAUSTWithPostfixUnits(demicrofy(burnAmount)) + ' aUST',
+                formatAUSTWithPostfixUnits(demicrofy(burnAmount)) + ' aUSDC',
             },
             exchangeRate && {
               name: 'Exchange Rate',

@@ -8,8 +8,8 @@ export function nativeTokenInfoQuery<T extends Token>(
     case 'uusd':
       return {
         decimals: 6,
-        name: 'UST',
-        symbol: 'UST',
+        name: 'alxUSDC',
+        symbol: 'alxUSDC',
         total_supply: '0' as u<T>,
       };
     case 'uluna':

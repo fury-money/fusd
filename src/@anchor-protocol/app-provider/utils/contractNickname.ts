@@ -50,7 +50,7 @@ export function useContractNickname(): (addr: HumanAddr | CW20Addr) => string {
       case address.cw20.bLuna:
         return `bLUNA`;
       case address.cw20.aUST:
-        return `aUST`;
+        return `aUSDC`;
       case address.cw20.ANC:
         return `ANC`;
       case address.cw20.AncUstLP:

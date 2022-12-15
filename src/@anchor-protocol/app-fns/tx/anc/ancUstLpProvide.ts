@@ -165,7 +165,7 @@ export function ancAncUstLpProvideTx($: {
           receipts: [
             received && {
               name: 'Received',
-              value: formatLP(demicrofy(received)) + ' ANC-UST LP',
+              value: formatLP(demicrofy(received)) + ' ANC-alxUSDC LP',
             },
             !!depositedAnc &&
               !!depositedUst && {
@@ -174,7 +174,7 @@ export function ancAncUstLpProvideTx($: {
                   formatANCWithPostfixUnits(demicrofy(depositedAnc)) +
                   ' ANC + ' +
                   formatUSTWithPostfixUnits(demicrofy(depositedUst)) +
-                  ' UST',
+                  ' alxUSDC',
               },
             helper.txHashReceipt(),
             helper.txFeeReceipt(txFee ? txFee : undefined),

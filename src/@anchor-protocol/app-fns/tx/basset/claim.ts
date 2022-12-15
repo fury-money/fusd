@@ -113,14 +113,14 @@ export function bAssetClaimTx($: {
               value:
                 formatUSTWithPostfixUnits(
                   demicrofy(rewardLog.rewards as u<UST>),
-                ) + ' UST',
+                ) + ' axlUSDC',
             })),
             total && {
               name: 'Total Rewards',
               value:
                 formatUSTWithPostfixUnits(
                   demicrofy(total.toString() as u<UST>),
-                ) + ' UST',
+                ) + ' alxUSDC',
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),

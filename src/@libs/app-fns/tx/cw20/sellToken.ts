@@ -143,11 +143,11 @@ export function cw20SellTokenTx<T extends Token>(
             },
             pricePerToken && {
               name: `Price per ${$.tokenSymbol}`,
-              value: `${formatTokenIntegerWithPostfixUnits(pricePerToken)} UST`,
+              value: `${formatTokenIntegerWithPostfixUnits(pricePerToken)} axlUSDC`,
             },
             tradingFee && {
               name: 'Trading Fee',
-              value: `${formatUTokenIntegerWithPostfixUnits(tradingFee)} UST`,
+              value: `${formatUTokenIntegerWithPostfixUnits(tradingFee)} axlUSDC`,
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(txFee),

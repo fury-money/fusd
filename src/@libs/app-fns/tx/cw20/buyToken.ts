@@ -125,11 +125,11 @@ export function cw20BuyTokenTx(
             },
             offer_amount && {
               name: 'Paid',
-              value: `${formatUTokenIntegerWithPostfixUnits(offer_amount)} UST`,
+              value: `${formatUTokenIntegerWithPostfixUnits(offer_amount)} axlUSDC`,
             },
             pricePerToken && {
               name: 'Paid/Bought',
-              value: `${formatTokenWithPostfixUnits(pricePerToken)} UST`,
+              value: `${formatTokenWithPostfixUnits(pricePerToken)} axlUSDC`,
             },
             tradingFee && {
               name: 'Trading Fee',

@@ -130,7 +130,7 @@ function DashboardBase({ className }: DashboardProps) {
       borrowAPRDiff: 'TODO: API not ready...',
     };
   }, [blocksPerYear, marketDepositAndBorrow, marketUST]);
-
+  console.log(totalValueLocked)
   return (
     <div className={className}>
       <main>

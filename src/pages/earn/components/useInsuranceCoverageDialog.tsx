@@ -33,27 +33,6 @@ function ComponentBase({
         <h1>Protect Your Deposit</h1>
 
         <section>
-          <h2>UST Peg</h2>
-
-          <EmbossButton
-            component="a"
-            href="https://unslashed.finance/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span>
-              Unslashed{' '}
-              <sub>
-                <Launch />
-              </sub>
-            </span>
-            <i>
-              <img src={unslashed} alt="Unslashed" />
-            </i>
-          </EmbossButton>
-        </section>
-
-        <section>
           <h2>Smart Contracts</h2>
 
           <EmbossButton

@@ -128,7 +128,7 @@ export function borrowRepayTx($: {
             repaidAmount && {
               name: 'Repaid Amount',
               value:
-                formatUSTWithPostfixUnits(demicrofy(repaidAmount)) + ' UST',
+                formatUSTWithPostfixUnits(demicrofy(repaidAmount)) + ' axlUSDC',
             },
             ltv && {
               name: 'New Borrow Usage',
@@ -137,7 +137,7 @@ export function borrowRepayTx($: {
             outstandingLoan && {
               name: 'Outstanding Loan',
               value:
-                formatUSTWithPostfixUnits(demicrofy(outstandingLoan)) + ' UST',
+                formatUSTWithPostfixUnits(demicrofy(outstandingLoan)) + ' axlUSDC',
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),

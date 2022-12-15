@@ -152,7 +152,7 @@ export class ANCPriceChart extends Component<ANCPriceChartProps> {
                   const item = this.props.data[i];
                   const price = formatUSTWithPostfixUnits(item.anc_price);
                   const date = isLast ? 'Now' : mediumDay(item.timestamp);
-                  div1.innerHTML = `${price} UST <span>${date}</span>`;
+                  div1.innerHTML = `${price} axlUSDC <span>${date}</span>`;
                 } catch {}
               }
 

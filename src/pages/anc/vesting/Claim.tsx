@@ -42,7 +42,7 @@ const ClaimableList = (props: ClaimableListProps) => {
         {formatANCWithPostfixUnits(demicrofy(claimableAmount))} ANC
       </TxFeeListItem>
       <TxFeeListItem label="Tx fee">
-        {formatUST(demicrofy(fixedFee))} UST
+        {formatUST(demicrofy(fixedFee))} axlUSDC
       </TxFeeListItem>
     </TxFeeList>
   );

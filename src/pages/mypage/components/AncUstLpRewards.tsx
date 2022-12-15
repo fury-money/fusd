@@ -21,7 +21,7 @@ export const AncUstLpRewards = ({
       <SumOfTokens tokens={rewards} />
       <p className="subtext">
         <IconSpan>
-          ≈ {formatUSTWithPostfixUnits(demicrofy(rewardsAmountInUst))} UST
+          ≈ {formatUSTWithPostfixUnits(demicrofy(rewardsAmountInUst))} axlUSDC
         </IconSpan>
       </p>
     </>

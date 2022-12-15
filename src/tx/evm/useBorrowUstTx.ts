@@ -120,7 +120,7 @@ export function useBorrowUstTx():
   const displayTx = useCallback(
     (txParams: BorrowUstTxParams) => ({
       txKind: TxKind.BorrowUst,
-      amount: `${formatOutput(demicrofy(txParams.borrowAmount))} UST`,
+      amount: `${formatOutput(demicrofy(txParams.borrowAmount))} USDC`,
       timestamp: Date.now(),
     }),
     [formatOutput, demicrofy],

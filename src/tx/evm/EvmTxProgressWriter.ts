@@ -78,7 +78,7 @@ export class EvmTxProgressWriter<
     this.write((current) => {
       return {
         ...current,
-        message: 'Depositing your UST',
+        message: 'Depositing your USDC',
         description: this._description,
         receipts: this.mergeEventKind(current.receipts, map, event),
       };
@@ -94,7 +94,7 @@ export class EvmTxProgressWriter<
     this.write((current) => {
       return {
         ...current,
-        message: 'Withdrawing your UST',
+        message: 'Withdrawing your USDC',
         description: this._description,
         receipts: this.mergeEventKind(current.receipts, map, event),
       };
@@ -117,7 +117,7 @@ export class EvmTxProgressWriter<
     this.write((current) => {
       return {
         ...current,
-        message: 'Borrowing UST',
+        message: 'Borrowing USDC',
         description: this._description,
         receipts: this.mergeEventKind(current.receipts, map, event),
       };

@@ -52,8 +52,31 @@ export const globalStyle = css`
     font-feature-settings: 'tnum';
   }
 
-  ::-webkit-scrollbar {
-    display: none;
+  *::-webkit-scrollbar {
+    width: 0.4em;
+    height: 0.3em;
+    background-color: ${({theme})=> theme.backgroundColor};
+  }
+
+  *::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.00);
+    border-radius: 10px;
+    background-color: ${({theme})=> theme.backgroundColor};
+  }
+
+
+  *::-webkit-scrollbar-track:hover {
+    background-color: ${({theme})=> theme.skeleton.backgroundColor};
+  }
+
+  *::-webkit-scrollbar-thumb {
+    transition: background-color 0.5s ease;
+    background-color: ${({theme})=> theme.skeleton.backgroundColor};
+    border-radius: 10px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: ${({theme})=> theme.label.borderColor};
   }
 
   input::-webkit-outer-spin-button,

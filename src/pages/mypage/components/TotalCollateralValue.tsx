@@ -86,7 +86,7 @@ function TotalCollateralValueBase({
                   <span>{label}</span>
                 </th>
                 <td>
-                  <p>{formatUSTWithPostfixUnits(demicrofy(ust))} UST</p>
+                  <p>{formatUSTWithPostfixUnits(demicrofy(ust))} axlUSDC</p>
                   <p>
                     {formatRate(ratio)}% (
                     {formatBAssetWithPostfixUnits(demicrofy(asset))} {label})

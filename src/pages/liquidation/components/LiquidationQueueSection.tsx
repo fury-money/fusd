@@ -108,7 +108,7 @@ function Component({ className, setClickedBar }: LiquidationQueueProps) {
             usePointStyle: true,
             color: theme.palette.text.primary,
           },
-          title: { text: 'UST positions' },
+          title: { text: 'axlUSDC positions' },
         },
         title: {
           display: false,

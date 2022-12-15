@@ -125,8 +125,8 @@ export class StablecoinChart extends Component<StablecoinChartProps> {
                   );
                   const date = isLast ? 'Now' : mediumDay(item.timestamp);
 
-                  div1.innerHTML = `${deposits} UST <span>${date}</span>`;
-                  div2.innerHTML = `${borrows} UST <span>${date}</span>`;
+                  div1.innerHTML = `${deposits} axlUSDC <span>${date}</span>`;
+                  div2.innerHTML = `${borrows} axlUSDC <span>${date}</span>`;
                 } catch {}
               }
 
