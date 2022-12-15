@@ -4,7 +4,7 @@ import { max, min } from '@libs/big-math';
 import { microfy } from '@libs/formatter';
 import { FormReturn } from '@libs/use-form';
 import big, { Big } from 'big.js';
-const _ = require('lodash');
+import _ from'lodash';
 
 export interface LiquidationDepositFormInput {
   depositAmount: UST;
