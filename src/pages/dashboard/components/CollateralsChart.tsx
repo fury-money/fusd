@@ -113,7 +113,7 @@ export class CollateralsChart extends Component<CollateralsChartProps> {
                     demicrofy(item.total_value),
                   );
                   const date = isLast ? 'Now' : mediumDay(item.timestamp);
-                  div1.innerHTML = `${price} UST <span>${date}</span>`;
+                  div1.innerHTML = `${price} axlUSDC <span>${date}</span>`;
                 } catch (error) {
                   console.error(error);
                 }

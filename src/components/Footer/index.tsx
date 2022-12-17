@@ -3,7 +3,7 @@ import {
   useNetwork,
 } from '@anchor-protocol/app-provider';
 import { IconButton } from '@mui/material';
-import { Brightness3, Brightness5 } from '@mui/icons-material';
+import { Brightness3, Brightness5, GitHub, Telegram, Twitter } from '@mui/icons-material';
 import { useTheme } from 'contexts/theme';
 import { screen } from 'env';
 import c from 'color';
@@ -56,17 +56,9 @@ function FooterBase({ className, style }: FooterProps) {
         {/* <Link to="/terms">Terms</Link> */}
       </Info>
       <div>
-        {/* <IconButton
-          component="a"
-          href="https://discord.gg/9aUYgpKZ9c"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Discord />
-        </IconButton>
         <IconButton
           component="a"
-          href="https://twitter.com/anchor_protocol"
+          href="https://twitter.com/CavernProtocol"
           target="_blank"
           rel="noreferrer"
         >
@@ -74,7 +66,7 @@ function FooterBase({ className, style }: FooterProps) {
         </IconButton>
         <IconButton
           component="a"
-          href="https://t.me/anchor_official"
+          href="https://t.me/cavernprotocolofficial"
           target="_blank"
           rel="noreferrer"
         >
@@ -82,12 +74,12 @@ function FooterBase({ className, style }: FooterProps) {
         </IconButton>
         <IconButton
           component="a"
-          href="https://github.com/Anchor-Protocol"
+          href="https://github.com/CavernPerson"
           target="_blank"
           rel="noreferrer"
         >
           <GitHub />
-        </IconButton> */}
+        </IconButton>
         {/* Forcing the dark theme, no change possible*/}
         {switchable && (
           <IconButton

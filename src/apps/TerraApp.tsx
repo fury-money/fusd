@@ -6,7 +6,8 @@ import { BlunaConvert, BLunaMint, BLunaBurn } from 'pages/basset/bluna.convert';
 import { BlunaWithdraw } from 'pages/basset/bluna.withdraw';
 import { BAssetClaim } from 'pages/basset/claim';
 import { BAssetMain } from 'pages/basset/main';
-import { Earn as Liquidate } from 'pages/liquidation';
+import { Liquidate } from 'pages/liquidation';
+import { History } from 'pages/history';
 import { WormholeConvert } from 'pages/basset/wh.convert';
 import { WormholeConvertToBAsset } from 'pages/basset/wh.convert.to-basset';
 import { WormholeConvertToWBAsset } from 'pages/basset/wh.convert.to-wbasset';
@@ -63,6 +64,8 @@ export function TerraApp({ chainOptions }: TerraAppProps) {
             <Route path={`/anc/vesting/claim`} element={<AncVestingClaim />} />
 
             <Route path="/liquidation" element={<Liquidate />} />
+
+            <Route path="/history" element={<History />} />
 
             <Route path="/mypage" element={<Mypage />} />
             <Route path="/terms" element={<TermsOfService />} />

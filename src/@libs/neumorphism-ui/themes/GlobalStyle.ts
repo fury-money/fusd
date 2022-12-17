@@ -40,6 +40,11 @@ export const globalStyle = css`
     box-sizing: border-box;
   }
 
+  html, body, #root, .App {
+    background-color: ${({ theme }) => theme.backgroundColor} !important; 
+  }
+
+
   *,
   *::before,
   *::after {

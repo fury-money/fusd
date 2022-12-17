@@ -36,6 +36,11 @@ const liquidation: RouteMenu = {
   title: 'LIQUIDATE',
 };
 
+const history: RouteMenu = {
+  to: '/history',
+  title: 'HISTORY',
+};
+
 const useMenus = (): RouteMenu[] => {
   const {
     target: { isEVM },
@@ -44,7 +49,7 @@ const useMenus = (): RouteMenu[] => {
     if (isEVM) {
       return [dashboard, myPage, earn, borrow];
     }
-    return [dashboard, myPage, earn, borrow, bAsset, liquidation];
+    return [dashboard, myPage, earn, borrow, bAsset, liquidation, history];
   }, [isEVM]);
 };
 

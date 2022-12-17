@@ -102,6 +102,7 @@ const PHOENIX_CONTRACT_ADDRESS = {
   vesting: 'terra13v4ln23tmfs2zk4nh5dw5mzufckekp4fpafpcy',
   astroUstPair: 'terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7',
   usd: 'ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4',
+  documentsMain: 'terra180dgfkn37te0lrcpqxxqlfxjuhe5kl27gd309uhqvj2qjaae3ngsz7dcsj',
 };
 
 const PISCO_CONTRACT_ADDRESS = {
@@ -144,6 +145,7 @@ const PISCO_CONTRACT_ADDRESS = {
   vesting: '',
   astroUstPair: '',
   usd: 'ibc/D70F005DE981F6EFFB3AD1DF85601258D1C01B9DEDC1F7C1B95C0993E83CF389',
+  documentsMain: 'terra180dgfkn37te0lrcpqxxqlfxjuhe5kl27gd309uhqvj2qjaae3ngsz7dcsj',
 };
 
 export const ANCHOR_CONTRACT_ADDRESS = (
@@ -204,6 +206,12 @@ export const ANCHOR_CONTRACT_ADDRESS = (
     native: {
       usd: addressMap.usd as NativeDenom,
     },
+    documents: {
+      mainAddress: addressMap.documentsMain as string,
+      tokens:{
+        whitepaper: "whitepaper-for-review"
+      }
+    }
   };
 };
 

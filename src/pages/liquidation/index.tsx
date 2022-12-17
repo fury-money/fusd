@@ -245,4 +245,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const Earn = fixHMR(StyledComponent);
+export const Liquidate = fixHMR(StyledComponent);
