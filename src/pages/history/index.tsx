@@ -17,7 +17,7 @@ import 'katex/dist/katex.min.css' // `rehype-katex` does not import the CSS for 
 import rehypeRaw from 'rehype-raw'
 import remarkEmoji from "remark-emoji";
 import { useWhitePaperQuery } from './queries/useWhitePaperQuery';
-const { decompressFromUTF16 } = require('lz-string');
+import { decompressFromUTF16 } from 'lz-string';
 import {markdownString} from "./markdown"
 
 export interface HistoryProps {
