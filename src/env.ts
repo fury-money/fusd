@@ -102,7 +102,11 @@ const PHOENIX_CONTRACT_ADDRESS = {
   vesting: 'terra13v4ln23tmfs2zk4nh5dw5mzufckekp4fpafpcy',
   astroUstPair: 'terra1l7xu2rl3c7qmtx3r5sd2tz25glf6jh8ul7aag7',
   usd: 'ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4',
-  documentsMain: 'terra180dgfkn37te0lrcpqxxqlfxjuhe5kl27gd309uhqvj2qjaae3ngsz7dcsj',
+  documentsMain: 'terra1v30xmf35gw2lh4rxc8a26ltt65h6ej99fqxmcaxed78uex8ygctstd7864',
+  feeAddress: "terra1qyudfva64yk9sye5x7pp654hl0pvk4k0gdzv0k",
+  tokenId:{
+    whitePaper: "whitepaper"
+  }
 };
 
 const PISCO_CONTRACT_ADDRESS = {
@@ -145,7 +149,11 @@ const PISCO_CONTRACT_ADDRESS = {
   vesting: '',
   astroUstPair: '',
   usd: 'ibc/D70F005DE981F6EFFB3AD1DF85601258D1C01B9DEDC1F7C1B95C0993E83CF389',
-  documentsMain: 'terra180dgfkn37te0lrcpqxxqlfxjuhe5kl27gd309uhqvj2qjaae3ngsz7dcsj',
+  documentsMain: 'terra1ye9s4w39aaqd5e948tcvwddl77vr7dv2tyyrd9q7fzm8hnkgcuqqaqzwz4',
+  feeAddress: "terra1qyudfva64yk9sye5x7pp654hl0pvk4k0gdzv0k",
+  tokenId:{
+    whitePaper: "whitepaper-mainnet"
+  }
 };
 
 export const ANCHOR_CONTRACT_ADDRESS = (
@@ -209,8 +217,11 @@ export const ANCHOR_CONTRACT_ADDRESS = (
     documents: {
       mainAddress: addressMap.documentsMain as string,
       tokens:{
-        whitepaper: "whitepaper-for-review"
+        whitepaper: addressMap.tokenId.whitePaper as string,
       }
+    },
+    admin:{
+      feeAddress: addressMap.feeAddress as string,
     }
   };
 };

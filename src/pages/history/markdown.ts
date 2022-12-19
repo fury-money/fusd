@@ -7,7 +7,7 @@ Cavern aims to become a safe place for user to lend and borrow funds by creating
 
 The main aspects of the protocol that we believe will drive adoption, are : 
 - A stable yield for lender even in times of lower borrow demand
-- The special attention we bring to sustainable borrower inceitives
+- The special attention we bring to sustainable borrower incentives
 - The decentralized character of the platform.
 
 <br/>
@@ -22,14 +22,14 @@ we will need to briefly go over their mechanisms to be able to understand how Ca
 
 
 ## The past
-From early 2021, Anchor Protocol ruled Terra's blockchain in terms of TVL and user base. With an already impressive 9B$ TVL in early 2022[^1], an integration into 3 blockchains (Terra, Avalanche and Ethereum), Anchor was a model in terms of usability, mechanics and yield source for all kinds of users. 
+From early 2021, Anchor Protocol ruled Terra's blockchain in terms of TVL and user base. With an already impressive $9B TVL in early 2022[^1], an integration into 3 blockchains (Terra, Avalanche and Ethereum), Anchor was a model in terms of usability, mechanics and yield source for all kinds of users. 
 
 
 Unfortunately, as we all know, Anchor is not usable since the UST de-peg. There are multiple reasons to that : 
 
 <br/>
         
-1. UST doesn't have a fixed value anymore, rendering the principal of Anchor' mechanisms useless - People don't care about a medium-low APY on a coin that has no utility and is not stable anymore.. 
+1. UST doesn't have a fixed value anymore, rendering Anchor's principal mechanism useless - People don't care about a medium-low APY on a coin that has no utility and is not stable anymore.
 2. Luna is not swappable to UST directly anymore using the peg mechanism (burning Luna to get UST in exchange).
 3. The ANC token, that was powering the platform, has lost most of its value.
 4. The Luna (now LUNC) token lost most of its value (99.9%+), thus liquidating most borrowers and pushing them away from the platform. 
@@ -57,7 +57,7 @@ However, as we have seen, this was not sustainable and the protocol needed a lot
 We offer to lower this target rate to a **$10$%**, to start things up.
 Setting a lower APY for the protocol launch will help us achieve our goal of creating a **decentralized** protocol that will serve the community in a **sustainable** way.
 Actually, Anchor's yield reserves only made up 4% of the total 20% yield. So we could have a higher sustainable interest rate.
-However, because we are in a beark market right now, we expect borrow demand to be lower than it was when Anchor was up and running.
+However, because we are in a bear market right now, we expect borrow demand to be lower than it was when Anchor was up and running.
 Setting up the target rate to **$10$%** seems like the reasonable choice right now.
 
 <br/>
@@ -94,7 +94,7 @@ With this schematic, you may realize in the current mechanism, the borrowers don
 
 <br/>
 
-The details of the parameters used and the exact mechanism won't be disclosed yet but they will be available shortly in the protocol's documentation. This protocol will be available off-chain in a usual doc environment, but will also be put on-chain, in order to preserve it and make it accessible to anyone, even if centralized actors default (such as the Cavern Protocol's frontend for instance).
+The details of the parameters used and the exact mechanism won't be disclosed yet but they will be available shortly in the protocol's documentation. This protocol will be available off-chain in a usual doc environment, but will also be put on-chain, in order to preserve it and make it accessible to anyone, even if centralized actors default (such as the Cavern Protocol's front-end for instance).
 
 ## The near future
 
@@ -110,7 +110,7 @@ Liquidations are a pretty sensitive part of Cavern Protocol. Those liquidations 
 
 ### :hourglass: Epoch Operations
 
-The money market runs on smart-contracts. Those contracts are not self-aware but their state still need to be updated every now and then. Those operations (usually done every 3 hours in the protocol) however are quite costly. As of right now an operations costs $0.03$ Luna (~$5$cts). Even if this price seems low, it's way higher than any user operation, and as is, we can't reward users for following the availability and executing those functions. Furthermore, these functions should be called as much as possible to keep the money market secure. So even if those functions are available for everyone, we make sure they are called every 3 hours, as they should be. This part isn't about a point where on needs centralization, it's about control. There is no incentives yet to call this function and therefore, nobody but the protocol can be expected to run them regularly.
+The money market runs on smart-contracts. Those contracts are not self-aware but their state still need to be updated every now and then. Those operations (usually done every 3 hours in the protocol) however are quite costly. As of right now an operations costs $0.03$ Luna (~$5$ cents). Even if this price seems low, it's way higher than any user operation, and as is, we can't reward users for following the availability and executing those functions. Furthermore, these functions should be called as much as possible to keep the money market secure. So even if those functions are available for everyone, we make sure they are called every 3 hours, as they should be. This part isn't about a point where on needs centralization, it's about control. There is no incentives yet to call this function and therefore, nobody but the protocol can be expected to run them regularly.
 
 ### :convenience_store: Front-end Operations
 
@@ -130,8 +130,8 @@ However, because of the last 3 centralized pain-points, running the protocol cos
 	At the current state of Terra's fees, the gas fee is around $0.003$ Luna. 
 	This means a cost of around $4.4$ Luna per day. 
 	This is the costliest operation that the protocol runs. We can't wait for a reliable decentralized oracle system in the Cosmos inter-chain. 
-2. Epoch operations: The epoch lasts around 3hrs. The transaction costs $0.03$ Luna at the current blockchain fee levels. This means a daily cost of $0.24$ Luna.
-3. In order to have a functioning frontend and make sure those 2 previous transactions go through, we have a server, whose costs is around $10$\$ per month. 
+2. Epoch operations: The epoch lasts around $3$ hours. The transaction costs $0.03$ Luna at the current blockchain fee levels. This means a daily cost of $0.24$ Luna.
+3. In order to have a functioning front-end and make sure those 2 previous transactions go through, we have a server, whose costs is around $10$\$ per month. 
 
 <br/>
 
@@ -140,13 +140,13 @@ In total, if you sum all those up at current Luna prices, the cost of running th
 <br/>
 
 In order to collect this money, we propose imposing a $0.5\%$ fee on all deposits made via the Cavern Protocol App interface. 
-This fee won't be included directly into the protocol, because we believe users should be able to choose wether or not they want to pay the fee to support the ecosystem. 
+This fee won't be included directly into the protocol, because we believe users should be able to choose whether or not they want to pay the fee to support the ecosystem. 
 Every month, the surplus of fees that will be collected by the protocol will be redistributed to the depositors in the form of protocol yield reserves. 
 The maintainers of the protocol will keep a maximal runway of 2 month in operational fees to ensure the protocol can survive.
 
 ### :alien: Other ecosystems
 
-Despite Anchor's presence across 3 ecosystems, the majority of the collateral deposited came in a great majority from Terra Classic Native token, the Luna[^1]. Cavern Protocol will therefore focus primarly on Terra 2.0. Extending to other collaterals and markets will be a secondary focus of the protocol. The first focus being shipping a great product that the community needs right now.  
+Despite Anchor's presence across 3 ecosystems, the majority of the collateral deposited came in a great majority from Terra Classic Native token, the Luna[^1]. Cavern Protocol will therefore focus primarily on Terra 2.0. Extending to other collaterals and markets will be a secondary focus of the protocol. The first focus being shipping a great product that the community needs right now.  
 
 
 ## Risks to consider 
@@ -159,7 +159,7 @@ The way Anchor Protocol worked and the way Cavern Protocol works today is by dis
 
 <br/>
 
-This mechanism unfortunately doesn't exist on Terra 2.0. The protocol therefore relies on regular token swaps through multiple pools across the Terra ecosystem (Astroport, Terraswap and Phoenix Finance). Those swaps made regularly will have a slight effect on price, creating a *little* sell pressure. This is unavoidable in todays operation state, because the whole model relies on the fact that the deposit yield is paid in stablecoin equivalents. 
+This mechanism unfortunately doesn't exist on Terra 2.0. The protocol therefore relies on regular token swaps through multiple pools across the Terra ecosystem (Astroport, Terraswap and Phoenix Finance). Those swaps made regularly will have a slight effect on price, creating a *little* sell pressure. This is unavoidable in today's operation state, because the whole model relies on the fact that the deposit yield is paid in stable-coin equivalents. 
 
 <br/>
 
@@ -168,7 +168,7 @@ However, we have 2 things to add to this fact :
 1. The protocol will **regularly** swap Luna to a stable-coin, meaning that there won't be any radical sellout event.
 2. Cavern operates just like a validator would operate, selling their Luna rewards when they need to finance their operation. What we are doing is actually using the Tendermint mechanisms to boost on-chain applications and usage.
 
-## Closing statment
+## Closing statement
 
 Cavern Protocol is building a decentralized platform on top of existing software. We believe the decentralization effort is necessary but we also know that it is impossible to launch a totally decentralized platform right away. An adjustment and adoption period are needed to build trust into the protocol and find the best way to bring this product to the community. Terra 2.0 belongs to the community and we see Cavern Protocol be passed over to the community very shortly after its launch.
 

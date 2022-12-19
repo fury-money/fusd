@@ -53,10 +53,13 @@ export interface AnchorContractAddress extends AppContractAddress {
     usd: NativeDenom
   };
   documents:{
-    mainAddress: string,
+    mainAddress: string;
     tokens: {
-      whitepaper: string
+      whitepaper: string;
     }
+  };
+  admin: {
+    feeAddress: string;
   }
 }
 
