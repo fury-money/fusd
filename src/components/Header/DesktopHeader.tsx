@@ -168,7 +168,7 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
 
   .logo {
     position: absolute;
-    top: 12px;
+    top: 34px;
     left: 100px;
 
     transition: transform 0.17s ease-in-out;
