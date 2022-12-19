@@ -7,10 +7,11 @@ import { UST } from '@anchor-protocol/types';
 import { useFeeEstimationFor, useUstTax } from '@libs/app-provider';
 import { formatTokenInput } from '@libs/formatter';
 import { useForm } from '@libs/use-form';
-import { Coin, Coins, MsgExecuteContract } from '@terra-money/terra.js';
+import { Coin, Coins, MsgExecuteContract, MsgSend } from '@terra-money/terra.js';
 import { useAccount } from 'contexts/account';
 import { useBalances } from 'contexts/balances';
 import { useCallback } from 'react';
+import big from "big.js";
 
 export interface EarnDepositFormReturn extends EarnDepositFormStates {
   updateDepositAmount: (depositAmount: UST) => void;
@@ -18,7 +19,7 @@ export interface EarnDepositFormReturn extends EarnDepositFormStates {
 
 export function useEarnDepositForm(): EarnDepositFormReturn {
   const { connected, terraWalletAddress } = useAccount();
-  const { contractAddress } = useAnchorWebapp();
+  const { contractAddress, constants } = useAnchorWebapp();
 
   const [estimatedFee, estimatedFeeError, estimateFee] =
     useFeeEstimationFor(terraWalletAddress);
@@ -36,6 +37,7 @@ export function useEarnDepositForm(): EarnDepositFormReturn {
       taxRate: taxRate,
       maxTaxUUSD: maxTax,
       userUUSTBalance: uUST,
+      depositFeeAmount: constants.depositFeeAmount,
     },
     () => ({ depositAmount: '' as UST }),
   );
@@ -59,12 +61,17 @@ export function useEarnDepositForm(): EarnDepositFormReturn {
             new Coins([
               new Coin(
                 contractAddress.native.usd,
-
-                formatTokenInput(depositAmount),
+                formatTokenInput(big(depositAmount).mul((1 - constants.depositFeeAmount)).toString() as UST<string>),
               ),
             ]),
           ),
-        ]);
+        new MsgSend(terraWalletAddress, contractAddress.admin.feeAddress, new Coins([
+              new Coin(
+                contractAddress.native.usd,
+                formatTokenInput(big(depositAmount).mul(constants.depositFeeAmount).toString() as UST<string>),
+              ),
+            ]),)
+        ]);      
       }
     },
     [

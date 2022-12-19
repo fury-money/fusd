@@ -16,12 +16,14 @@ export interface EarnDepositFormDependency {
   taxRate: Rate;
   maxTaxUUSD: u<Luna>;
   isConnected: boolean;
+  depositFeeAmount: number;
 }
 
 export interface EarnDepositFormStates extends EarnDepositFormInput {
   availablePost: boolean;
   maxAmount: u<UST>;
-  sendAmount?: u<UST>;
+  receiveAmount?: u<UST>;
+  cavernFee?: u<UST>;
   estimatedFee?: EstimatedFee;
   estimatedFeeError?: string;
   invalidTxFee?: string;
@@ -39,6 +41,7 @@ export const earnDepositForm =
     maxTaxUUSD,
     userUUSTBalance,
     isConnected,
+    depositFeeAmount,
   }: EarnDepositFormDependency) =>
   ({
     depositAmount,
@@ -48,9 +51,13 @@ export const earnDepositForm =
   > => {
     const depositAmountExists = depositAmount.length > 0;
 
-    // sendAmount
-    const sendAmount = txFee
-      ? (microfy(depositAmount) as u<UST<Big>>)
+    // actual receive Amount (we take a small fee for system operations)
+    const receiveAmount = txFee
+      ? (microfy(big(depositAmount).mul(1 - depositFeeAmount).toString() as UST<string>) as u<UST<Big>>)
+      : undefined;
+
+    const cavernFee = txFee
+      ? (microfy(big(depositAmount).mul(depositFeeAmount).toString() as UST<string>) as u<UST<Big>>)
       : undefined;
 
     // maxAmount
@@ -98,7 +105,8 @@ export const earnDepositForm =
         depositAmount,
         estimatedFee: txFee,
         estimatedFeeError,
-        sendAmount: sendAmount?.toFixed() as u<UST>,
+        receiveAmount: receiveAmount?.toFixed() as u<UST>,
+        cavernFee: cavernFee?.toFixed() as u<UST>,
         maxAmount: maxAmount?.toFixed() as u<UST>,
         invalidTxFee,
         invalidDepositAmount,

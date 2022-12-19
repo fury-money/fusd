@@ -39,6 +39,7 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
+  MsgSend,
 } from '@terra-money/terra.js';
 import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
 import big, { BigSource } from 'big.js';
@@ -49,6 +50,8 @@ export function earnDepositTx($: {
   marketAddr: HumanAddr;
   depositAmount: UST;
   stableDenom: NativeDenom;
+  depositFeeAmount: number;
+  depositFeeAddress: HumanAddr;
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -76,11 +79,16 @@ export function earnDepositTx($: {
           new Coins([
             new Coin(
               $.stableDenom,
-
-              formatTokenInput($.depositAmount),
+              formatTokenInput(big($.depositAmount).mul((1 - $.depositFeeAmount)).toString() as UST<string>),
             ),
           ]),
         ),
+        new MsgSend($.walletAddr, $.depositFeeAddress, new Coins([
+              new Coin(
+                $.stableDenom,
+              formatTokenInput(big($.depositAmount).mul($.depositFeeAmount).toString() as UST<string>),
+              ),
+            ]),)     
       ],
       fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
       gasAdjustment: $.gasAdjustment,

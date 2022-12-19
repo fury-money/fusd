@@ -158,7 +158,7 @@ function Component({ className }: HistoryProps) {
         <br/>
         This is what you could call our <strong>Whitepaper</strong>. 
       </PaddingSection>
-      <PaddingSection id="whitepaper-document" className="latex-reader" padding="20px 50px" style={{margin: "50px 30px"}}>
+      <PaddingSection id="whitepaper-document" className="latex-reader">
         <ReactMarkdown 
           remarkPlugins={[remarkMath,remarkGfm, remarkEmoji as any]}
           rehypePlugins={[rehypeKatex, rehypeRaw]}
@@ -215,6 +215,26 @@ const StyledComponent = styled(Component)`
       color: ${({ theme }) => theme.backgroundColor};
       border-radius: 3px;
       padding: 0px 3px;
+    }
+  }
+
+  @media (min-width: ${screen.monitor.min}px) {
+    #whitepaper-document{
+      padding: 20px 50px;
+      margin: 50px 30px;
+    }
+  }
+
+
+  @media (max-width: ${screen.pc.max}px) {
+    #whitepaper-document, .introductory-text{
+      padding: 0px !important;
+      margin: 20px -10px !important;
+    }
+
+    img{
+      width: 100%;
+      margin: -30px;
     }
 
   }
@@ -302,24 +322,7 @@ const StyledComponent = styled(Component)`
   // ---------------------------------------------
   // layout
   // ---------------------------------------------
-  .liquidation-stats,
-  .my-bids {
-    h2 {
-      margin-bottom: 15px;
-    }
-  }
-
-  .place-bid {
-    h2 {
-      margin-bottom: 10px;
-    }
-  }
-
-  .liquidation-graph {
-    h2 {
-      margin-bottom: 15px;
-    }
-  }
+  
 
   // pc
   @media (min-width: ${screen.monitor.min}px) {

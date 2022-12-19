@@ -83,21 +83,22 @@ export function useFeeEstimationFor(
         setEstimatedFeeError(undefined);
         setEstimatedFee(undefined);
         if (!msgs) {
-          setEstimatedFee(undefined);
           return;
         }
 
         estimateFee(msgs)
           .then((estimated) => {
             if (estimated) {
+              setEstimatedFeeError(undefined);
               setEstimatedFee(estimated);
             } else {
+              setEstimatedFeeError(() => 'Error when estimating the Fee'); 
               setEstimatedFee(undefined);
-              setEstimatedFeeError(() => 'Error when estimating the Fee');
             }
           })
           .catch(() => {
             setEstimatedFeeError(() => 'Error when estimating the Fee');
+            setEstimatedFee(undefined);
           })
           .then((ui) => {});
       }, 500);

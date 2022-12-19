@@ -59,7 +59,7 @@ export interface AnchorContractAddress extends AppContractAddress {
     }
   };
   admin: {
-    feeAddress: string;
+    feeAddress: HumanAddr;
   }
 }
 
@@ -68,4 +68,5 @@ export interface AnchorConstants extends AppConstants {
   airdropGas: Gas;
   bondGasWanted: Gas;
   astroportGasWanted: Gas;
+  depositFeeAmount: number;
 }

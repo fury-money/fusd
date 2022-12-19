@@ -44,6 +44,8 @@ function DepositDialogBase(props: DepositDialogProps) {
     txResult,
     closeDialog,
     depositAmount,
+    receiveAmount,
+    cavernFee,
     estimatedFee,
     estimatedFeeError,
     maxAmount,
@@ -162,6 +164,16 @@ function DepositDialogBase(props: DepositDialogProps) {
             <TxFeeListItem label="Send Amount">
               {`${depositAmount} ${symbol}`}
             </TxFeeListItem>
+            {receiveAmount &&
+              <TxFeeListItem label="Receive Amount">
+                {`${formatOutput(demicrofy(receiveAmount))} ${symbol}`}
+              </TxFeeListItem>
+            }
+            {cavernFee &&
+              <TxFeeListItem label="Cavern Protocol Fee">
+                {`${formatOutput(demicrofy(cavernFee))} ${symbol}`}
+              </TxFeeListItem>
+            }
           </TxFeeList>
         )}
 

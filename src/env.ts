@@ -63,6 +63,7 @@ export function ANCHOR_CONSTANTS(network: NetworkInfo): AnchorConstants {
     airdropGas: 334_211 as Gas,
     bondGasWanted: 1_600_000 as Gas,
     astroportGasWanted: 1_600_000 as Gas,
+    depositFeeAmount: 0.005
   };
 }
 
@@ -221,7 +222,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
       }
     },
     admin:{
-      feeAddress: addressMap.feeAddress as string,
+      feeAddress: addressMap.feeAddress as HumanAddr,
     }
   };
 };
