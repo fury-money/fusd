@@ -223,6 +223,9 @@ const StyledComponent = styled(Component)`
       padding: 20px 50px;
       margin: 50px 30px;
     }
+    .historyTitle{
+      margin-left:30px;
+    }
   }
 
 
