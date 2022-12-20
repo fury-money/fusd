@@ -63,6 +63,8 @@ export async function marketDepositAndBorrowQuery({
     `${endpoint}/v1/deposit/1d`,
   ).then((res) => res.json());
 
+  console.log(depositHistory, "deptsii")
+
   const borrow: MarketBorrowRaw = await fetch(`${endpoint}/v1/borrow`).then(
     (res) => res.json(),
   );

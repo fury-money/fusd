@@ -163,7 +163,7 @@ function Component({ className }: HistoryProps) {
           remarkPlugins={[remarkMath,remarkGfm, remarkEmoji as any]}
           rehypePlugins={[rehypeKatex, rehypeRaw]}
         >
-          {/*markdownString ||*/ whitePaperMarkdownText || ""}
+          {markdownString || whitePaperMarkdownText || ""}
         </ReactMarkdown>
         {/*<TeX math={tex} block />*/}
 

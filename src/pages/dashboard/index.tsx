@@ -101,6 +101,7 @@ function DashboardBase({ className }: DashboardProps) {
   }, [marketCollaterals?.now, marketDepositAndBorrow?.now, marketUST]);
 
   const stableCoin = useMemo(() => {
+
     if (
       !marketUST ||
       !marketDepositAndBorrow ||
@@ -112,7 +113,8 @@ function DashboardBase({ className }: DashboardProps) {
     const last = marketDepositAndBorrow.now;
     const last1DayBefore =
       marketDepositAndBorrow.history.find(findPrevDay(last.timestamp)) ??
-      marketDepositAndBorrow.history[marketDepositAndBorrow.history.length - 2];
+      marketDepositAndBorrow.history[marketDepositAndBorrow.history.length - 2] ??
+      marketDepositAndBorrow.history[marketDepositAndBorrow.history.length - 1];
     return {
       totalDeposit: last.total_ust_deposits,
       totalBorrow: last.total_borrowed,
@@ -130,7 +132,7 @@ function DashboardBase({ className }: DashboardProps) {
       borrowAPRDiff: 'TODO: API not ready...',
     };
   }, [blocksPerYear, marketDepositAndBorrow, marketUST]);
-  console.log(totalValueLocked)
+
   return (
     <div className={className}>
       <main>
