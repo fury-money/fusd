@@ -47,7 +47,6 @@ export function InterestSection({ className }: InterestSectionProps) {
         ).toNumber() as Rate<number>,
       }))
       .reverse();
-
     return history && overseerEpochState
       ? [
           ...history,

@@ -18,7 +18,6 @@ export class CollateralsChart extends Component<CollateralsChartProps> {
   private canvasRef = createRef<HTMLCanvasElement>();
   private tooltipRef = createRef<HTMLDivElement>();
   private chart!: Chart;
-
   render() {
     return (
       <Container>

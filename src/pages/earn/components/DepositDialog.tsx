@@ -170,7 +170,7 @@ function DepositDialogBase(props: DepositDialogProps) {
               </TxFeeListItem>
             }
             {cavernFee &&
-              <TxFeeListItem label="Cavern Protocol Fee">
+              <TxFeeListItem label="Cavern Protocol Fee (0.5% - 18 days APR)">
                 {`${formatOutput(demicrofy(cavernFee))} ${symbol}`}
               </TxFeeListItem>
             }

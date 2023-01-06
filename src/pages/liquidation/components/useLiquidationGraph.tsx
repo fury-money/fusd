@@ -121,7 +121,7 @@ export const useMyLiquidationStats = () => {
         {
           title: 'LUNA Price',
           value: lunaPrice ?? 0,
-          format_func: (v: any) => v.toString() as UST,
+          format_func: (v: any) => formatUST(v.toString() as UST),
         },
       ],
     };

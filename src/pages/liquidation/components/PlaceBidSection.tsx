@@ -254,7 +254,7 @@ export function PlaceBidSectionBase({
    * ******************************/
 
   useEffect(() => {
-    if (!clickedBar) {
+    if (clickedBar == undefined) {
       return;
     }
     handleSliderChange(clickedBar);

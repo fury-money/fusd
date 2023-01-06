@@ -48,7 +48,6 @@ export async function borrowAPYQuery(
   // Now we convert to an APY (block to year)
   const rewardsAPY = blockRewards.mul(blocksPerYear).div(epochPeriod);
 
-  console.log(marketState)
   /*await fetch(
     `${endpoint}/v2/distribution-apy`,
   )
