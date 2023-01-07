@@ -17,14 +17,13 @@ export function useBorrowAPYQuery(): UseQueryResult<BorrowAPYData | undefined> {
 
   const { data: marketState } = useMarketStateQuery();
 
-
   const { data: { overseerConfig, overseerEpochState } = {} } =
     useEarnEpochStatesQuery();
 
      
 
   return useQuery(
-    [ANCHOR_QUERY_KEY.BORROW_APY, marketState, blocksPerYear, lastSyncedHeight,  overseerConfig?.epoch_period ?? 1],
+    [ANCHOR_QUERY_KEY.BORROW_APY, marketState, blocksPerYear, lastSyncedHeight,  overseerConfig?.epoch_period ?? 1, overseerEpochState?.last_executed_height ?? 0],
     queryFn,
     {
       refetchInterval: 1000 * 60 * 5,

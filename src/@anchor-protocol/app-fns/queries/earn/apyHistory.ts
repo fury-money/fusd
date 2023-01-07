@@ -21,7 +21,6 @@ export async function earnAPYHistoryQuery(
           deposit_rate: Rate;
         }>,
       ) => {
-        console.log(data)
         return data.map(({ deposit_rate, height, timestamp }) => ({
           Timestamp: timestamp,
           Height: height,

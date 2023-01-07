@@ -28,6 +28,7 @@ export async function borrowAPYQuery(
   blocksPerYear: number,
   lastSyncedHeight: () => Promise<number>,
   epochPeriod: number,
+  lastEpochBlock: number,
 ): Promise<BorrowAPYData> {
   const blockHeight = await lastSyncedHeight();
 
@@ -46,7 +47,7 @@ export async function borrowAPYQuery(
     );
   }
   // Now we convert to an APY (block to year)
-  const rewardsAPY = blockRewards.mul(blocksPerYear).div(epochPeriod);
+  const rewardsAPY = blockRewards.div(blockHeight - lastEpochBlock).mul(blocksPerYear);
 
   /*await fetch(
     `${endpoint}/v2/distribution-apy`,
