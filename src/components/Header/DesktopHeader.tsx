@@ -1,3 +1,4 @@
+import { useNetwork } from '@anchor-protocol/app-provider';
 import { DeploymentSwitch } from 'components/layouts/DeploymentSwitch';
 import { useMenus, RouteMenu } from 'configurations/menu';
 import { screen } from 'env';
@@ -18,9 +19,20 @@ export interface DesktopHeaderProps {
 }
 
 function DesktopHeaderBase({ className }: DesktopHeaderProps) {
-  const menus = useMenus();
+  const menus = useMenus(); 
+
+  const {network} = useNetwork();
+
   return (
-    <header className={className}>
+    <>
+      {
+        network.name != "mainnet" && 
+        <div style={{color: "white", backgroundColor:"red", textAlign:"center", padding: "5px"}}> 
+          You are not on Terra Mainnet. 
+          You can still interact with the platform if it exists on the chain you are using
+        </div>
+      }
+    <header className={className} style={{position: "relative"}}>
       <a
         className="logo"
         href="https://cavernprotocol.com/"
@@ -58,6 +70,7 @@ function DesktopHeaderBase({ className }: DesktopHeaderProps) {
 
       <GlobalStyle />
     </header>
+    </>
   );
 }
 
@@ -89,6 +102,10 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
   // style
   // ---------------------------------------------
   background-color: ${({ theme }) => theme.header.backgroundColor};
+
+  header {
+    position: relative;
+  }
 
   a {
     text-decoration: none;
@@ -168,7 +185,7 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
 
   .logo {
     position: absolute;
-    top: 40px;
+    top: 10px;
     left: 100px;
 
     transition: transform 0.17s ease-in-out;

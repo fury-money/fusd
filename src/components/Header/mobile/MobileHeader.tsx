@@ -11,6 +11,7 @@ import LogoTerra from '../assets/LogoTerra.svg';
 import { DeploymentSwitch } from 'components/layouts/DeploymentSwitch';
 import { TransactionWidget } from '../transactions/TransactionWidget';
 import { ChainSelector } from '../chain/ChainSelector';
+import { useAnchorWebapp, useNetwork } from '@anchor-protocol/app-provider';
 
 export interface MobileHeaderProps {
   open: boolean;
@@ -36,8 +37,17 @@ function MobileHeaderBase({
   const menus = useMenus();
   const theme = useTheme();
 
+  const {network} = useNetwork();
+
   return (
     <>
+    { 
+      network.name != "mainnet" && 
+      <div style={{color: "white", backgroundColor:"red", textAlign:"center", padding: "5px"}}> 
+        You are not on Terra Mainnet. 
+        You can still interact with the platform if it exists on the chain you are using
+      </div>
+    }
       <header className={className} data-open={open}>
         {open && (
           <nav>
