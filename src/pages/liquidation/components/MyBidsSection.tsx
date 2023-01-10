@@ -351,7 +351,7 @@ export function MyBidsSection({ className }: MyBidsSectionProps) {
               <HeaderCell>Premium</HeaderCell>
               <HeaderCell align="right">Bid Remaining (axlUSDC)</HeaderCell>
               <HeaderCell align="right">Bid Status</HeaderCell>
-              <HeaderCell align="right">Amount filled (bLuna)</HeaderCell>
+              <HeaderCell align="right">Amount filled (aLuna)</HeaderCell>
               <HeaderCell align="right"></HeaderCell>
             </TableRow>
           </TableHead>

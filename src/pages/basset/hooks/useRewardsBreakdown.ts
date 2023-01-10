@@ -51,7 +51,7 @@ const bLunaRewardBreakdown = (
   );
 
   return {
-    symbol: 'bLuna',
+    symbol: 'aLuna',
     tokenRewardUST,
     tokenPriceUST,
     tokenReward: (tokenPriceUST.gt(big(0))

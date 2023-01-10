@@ -66,7 +66,7 @@ function Component({ className }: ClaimableProps) {
         <div>
           <Heading
             title="WITHDRAWABLE LUNA"
-            tooltip="bLuna that has been burned and has surpassed the undelegation period can be withdrawn. Because burn requests are processed in 3-day batches, requests that are not yet included in a batch are shown as pending."
+            tooltip="aLuna that has been burned and has surpassed the undelegation period can be withdrawn. Because burn requests are processed in 3-day batches, requests that are not yet included in a batch are shown as pending."
           />
           <p>
             <AnimateNumber format={formatUTokenDecimal2}>

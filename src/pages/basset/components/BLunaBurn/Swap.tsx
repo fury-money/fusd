@@ -416,14 +416,14 @@ export function Component({
                   )
                 }
               >
-                {formatLuna(demicrofy(bank.tokenBalances.ubLuna))} bLuna
+                {formatLuna(demicrofy(bank.tokenBalances.ubLuna))} aLuna
               </span>
             </span>
           )
         }
       >
         <SelectAndTextInputContainerLabel>
-          <TokenIcon token="bluna" /> bLuna
+          <TokenIcon token="bluna" /> aLuna
         </SelectAndTextInputContainerLabel>
         <NumberMuiInput
           placeholder="0.00"
