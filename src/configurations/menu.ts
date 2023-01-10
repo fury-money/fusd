@@ -28,7 +28,7 @@ const borrow: RouteMenu = {
 
 const bAsset: RouteMenu = {
   to: '/aasset',
-  title: 'aASSET',
+  title: 'MINT & BURN',
 };
 
 const liquidation: RouteMenu = {

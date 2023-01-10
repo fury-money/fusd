@@ -17,7 +17,7 @@ function Component({ className }: BAssetMainProps) {
   return (
     <CenteredLayout className={className} maxWidth={1440}>
       <TitleContainer>
-        <PageTitle title="aASSET" docs={links.docs.bond} />
+        <PageTitle title="MINT & BURN" docs={links.docs.bond} />
       </TitleContainer>
 
       <Claimable className="claimable-section" />
