@@ -68,6 +68,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
 
   const { data } = useEarnEpochStatesQuery();
 
+
   const { totalDeposit } = useMemo(() => {
     return {
       totalDeposit: computeTotalDeposit(uaUST, data?.moneyMarketEpochState),

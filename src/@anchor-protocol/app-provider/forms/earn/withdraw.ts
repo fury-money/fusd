@@ -2,9 +2,10 @@ import {
   computeTotalDeposit,
   earnWithdrawForm,
   EarnWithdrawFormStates,
+  useConvertToAUst,
 } from '@anchor-protocol/app-fns';
 import { useAnchorWebapp } from '@anchor-protocol/app-provider/contexts/context';
-import { UST } from '@anchor-protocol/types';
+import { u, UST } from '@anchor-protocol/types';
 import { createHookMsg } from '@libs/app-fns/tx/internal';
 import { useFeeEstimationFor } from '@libs/app-provider';
 import { formatTokenInput } from '@libs/formatter';
@@ -37,6 +38,8 @@ export function useEarnWithdrawForm(): EarnWithdrawFormReturn {
     };
   }, [data?.moneyMarketEpochState, uaUST]);
 
+  const convertToAUst = useConvertToAUst();
+
   const [input, states] = useForm(
     earnWithdrawForm,
     {
@@ -54,6 +57,7 @@ export function useEarnWithdrawForm(): EarnWithdrawFormReturn {
       input({
         withdrawAmount,
       });
+
       if (terraWalletAddress) {
         estimateFee([
           new MsgExecuteContract(
@@ -62,7 +66,7 @@ export function useEarnWithdrawForm(): EarnWithdrawFormReturn {
             {
               send: {
                 contract: contractAddress.moneyMarket.market,
-                amount: formatTokenInput(withdrawAmount),
+                amount: formatTokenInput(convertToAUst(withdrawAmount)),
                 msg: createHookMsg({
                   redeem_stable: {},
                 }),
