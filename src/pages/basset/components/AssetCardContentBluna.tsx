@@ -37,7 +37,7 @@ export function AssetCardContentBluna() {
           <td>{formatUToken(tokenBalances.uLuna)}</td>
         </tr>
         <tr>
-          <th>bLUNA</th>
+          <th>aLUNA</th>
           <td>{formatUToken(tokenBalances.ubLuna)}</td>
         </tr>
         <tr>
