@@ -10,7 +10,7 @@ export function validateBurnAmount(
   if (burnAmount.length === 0) {
     return undefined;
   } else if (microfy(burnAmount).gt(bank.tokenBalances.ubLuna ?? 0)) {
-    return `Not enough bAssets`;
+    return `Not enough aAssets`;
   }
   return undefined;
 }

@@ -44,7 +44,7 @@ export async function bAssetInfoByTokenAddrQuery(
   );
 
   if (!bAsset) {
-    throw new Error(`Can't find bAssetInfo of "${tokenAddr}"`);
+    throw new Error(`Can't find aAssetInfo of "${tokenAddr}"`);
   }
 
   return bAssetInfoQuery(bAsset, queryClient);
@@ -66,7 +66,7 @@ export async function bAssetInfoByTokenSymbolQuery(
   );
 
   if (!bAsset) {
-    throw new Error(`Can't find bAssetInfo of "${tokenSymbol}"`);
+    throw new Error(`Can't find aAssetInfo of "${tokenSymbol}"`);
   }
 
   return bAssetInfoQuery(bAsset, queryClient);

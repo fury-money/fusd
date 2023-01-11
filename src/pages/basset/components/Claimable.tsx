@@ -48,7 +48,7 @@ function Component({ className }: ClaimableProps) {
         <div>
           <Heading
             title="CLAIMABLE REWARDS"
-            tooltip="Claim staking rewards from minted bAssets that have not been provided as collateral. If the user’s claimable reward is smaller than the tx fee, the rewards are not claimable."
+            tooltip="Claim staking rewards from minted aAssets that have not been provided as collateral. If the user’s claimable reward is smaller than the tx fee, the rewards are not claimable."
           />
           <p>
             <AnimateNumber format={formatUTokenDecimal2}>

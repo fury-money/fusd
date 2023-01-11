@@ -153,7 +153,7 @@ export const borrowBorrowForm = ({
       : undefined;
 
     const warningOverSafeLtv = nextLtv?.gt(ANCHOR_SAFE_RATIO)
-      ? 'WARNING: Are you sure you want to borrow above the recommended borrow usage? Crypto markets can be very volatile and you may be subject to liquidation in events of downward price swings of the bAsset.'
+      ? 'WARNING: Are you sure you want to borrow above the recommended borrow usage? Crypto markets can be very volatile and you may be subject to liquidation in events of downward price swings of the aAsset.'
       : undefined;
 
     const availablePost =
