@@ -98,14 +98,14 @@ export function bondMintTx($: {
             },
             mintedAmount && {
               name: 'Minted Amount',
-              value: `${formatLuna(demicrofy(mintedAmount))} bLUNA`,
+              value: `${formatLuna(demicrofy(mintedAmount))} aLUNA`,
             },
             {
               name: 'Exchange Rate',
               value: `${formatFluidDecimalPoints(
                 $.exchangeRate,
                 6,
-              )} bLUNA per LUNA`,
+              )} aLUNA per LUNA`,
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),
