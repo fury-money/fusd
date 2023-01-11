@@ -330,7 +330,7 @@ export function PlaceBidSectionBase({
               Premium (Luna discount)
             </Typography>
             <Grid container spacing={2} alignItems="center">
-              <Grid xs={12} sm={9}>
+              <Grid xs={12} sm={8}>
                 <CavernSlider
                   value={state.premium || 0}
                   defaultValue={5}
@@ -349,7 +349,7 @@ export function PlaceBidSectionBase({
                   valueLabelFormat={(value) => `${value}%`}
                 />
               </Grid>
-              <Grid xs={12} sm={3}>
+              <Grid xs={12} sm={4}>
                 <TextInput
                   InputProps={{
                     endAdornment: (
