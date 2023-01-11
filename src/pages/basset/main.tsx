@@ -25,7 +25,7 @@ function Component({ className }: BAssetMainProps) {
       <ul className="asset-list">
         <AssetCard
           to="/aasset/aluna"
-          title="LUNA/aLUNA"
+          title={<p>LUNA/aLUNA<span style={{fontSize: "0.7em"}}> (mint here)</span></p>}
           bAssetIcon={<TokenIcon token="bluna" />}
           originAssetIcon={<TokenIcon token="luna" />}
           hoverText="MINT & BURN"
