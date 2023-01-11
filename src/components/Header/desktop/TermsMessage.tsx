@@ -9,7 +9,7 @@ interface TermsMessageBaseProps {
 function TermsMessageBase({ className }: TermsMessageBaseProps) {
   return (
     <p className={className}>
-      By connecting, I accept Anchor's <Link to="/terms">Terms of Service</Link>
+      By connecting, I accept Cavern's <Link to="/terms">Terms of Service</Link>
     </p>
   );
 }

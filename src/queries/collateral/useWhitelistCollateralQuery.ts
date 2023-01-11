@@ -106,7 +106,7 @@ function useLocalTokenInformation(){
   // We return the bLuna token information
   return {
     [contractAddress.cw20.bLuna]: {
-      protocol: 'Anchor',
+      protocol: 'Cavern',
       symbol: 'aLuna',
       token: contractAddress.cw20.bLuna,
       icon: 'assets/tokens/bluna.svg',

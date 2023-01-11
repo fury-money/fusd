@@ -45,7 +45,7 @@ function BorrowedValueBase({
           <h4>
             <IconSpan>
               BORROWED VALUE{' '}
-              <InfoTooltip>The total value borrowed from Anchor</InfoTooltip>
+              <InfoTooltip>The total value borrowed from Cavern</InfoTooltip>
             </IconSpan>
           </h4>
           <p>

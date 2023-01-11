@@ -32,7 +32,7 @@ function NotificationContentBase({ className }: NotificationContentProps) {
   const sliderClasses = useSliderStyle();
 
   const testNotifications = useCallback(() => {
-    new Notification('Anchor Borrow Usage Notification', {
+    new Notification('Cavern Borrow Usage Notification', {
       body: 'Notifications have been enabled.',
     });
   }, []);
@@ -51,7 +51,7 @@ function NotificationContentBase({ className }: NotificationContentProps) {
       </h2>
 
       <div className="switch">
-        <p>Anchor Borrow Usage</p>
+        <p>Cavern Borrow Usage</p>
         <Switch
           focusVisibleClassName={focusVisible}
           classes={switchClasses}

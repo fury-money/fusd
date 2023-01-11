@@ -36,7 +36,7 @@ export function useLiquidationAlert({ enabled, ratio }: LiquidationAlert) {
         const notification = create(
           `Borrow Usage is ${formatRate(ltv as Rate<Big>)}%`,
           {
-            body: `Lower borrow usage on Anchor webapp to prevent liquidation.`,
+            body: `Lower borrow usage on Cavern webapp to prevent liquidation.`,
             icon: '/logo.png',
           },
         );

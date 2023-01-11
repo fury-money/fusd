@@ -36,12 +36,12 @@ function Component({ className }: UIElementProps) {
         label: `to ${bAssetSymbol}`,
         value: 'to-basset',
         tooltip:
-          'Convert wormhole tokens into bAssets that are useable on Anchor.',
+          'Convert wormhole tokens into aAssets that are useable on Cavern.',
       },
       {
         label: `to ${whAssetSymbol}`,
         value: 'to-wbasset',
-        tooltip: 'Convert bAssets useable on Anchor into wormhole tokens.',
+        tooltip: 'Convert aAssets useable on Cavern into wormhole tokens.',
       },
     ];
   }, [bAssetInfo]);
@@ -62,7 +62,7 @@ function Component({ className }: UIElementProps) {
       <TitleContainer>
         <PageTitle
           title="CONVERT"
-          tooltip="Tokens transferred to the terra chain through wormhole must be converted to bAssets useable on Anchor to be deposited as collateral."
+          tooltip="Tokens transferred to the terra chain through wormhole must be converted to aAssets useable on Cavern to be deposited as collateral."
         />
       </TitleContainer>
       <Tab
