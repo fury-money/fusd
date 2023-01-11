@@ -145,7 +145,7 @@ export function CollateralList(props: UIElementProps) {
               <IconSpan>
                 Price{' '}
                 <InfoTooltip>
-                  Current price of bAsset / Price of bAsset that will trigger
+                  Current price of aAsset / Price of aAsset that will trigger
                   liquidation of current loan
                 </InfoTooltip>
               </IconSpan>
@@ -154,8 +154,8 @@ export function CollateralList(props: UIElementProps) {
               <IconSpan>
                 Provided{' '}
                 <InfoTooltip>
-                  Value of bAsset collateral deposited by user / Amount of
-                  bAsset collateral deposited by user
+                  Value of aAsset collateral deposited by user / Amount of
+                  aAsset collateral deposited by user
                 </InfoTooltip>
               </IconSpan>
             </th>
