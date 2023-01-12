@@ -79,7 +79,7 @@ const PHOENIX_CONTRACT_ADDRESS = {
 
   mmCustody: "terra1ly8gd96kc8rwhjhpvx64jr9qd3nkn8yrm0gflplk5vhyff0fllxqc43w3k",
 
-  mmLiquidationQueue: "terra1vl3dwfdqh9vw9g5ta5290wuzkywvxgn4zn8smq27wny05yzgpt2s8xfn48",
+  mmLiquidationQueue: "terra12p4rhaywjdm8wtyrkdj6z2ley53sl8dkc38mv3p4jvnjqp4we7pqd0526w",
   aUSDC: "terra1gwdxyqtu75es0x5l6cd9flqhh87zjtj7qdankayyr0vtt7s9w4ssm7ds8m",
   mmInterestModel: "terra12m5q4cs22dj9sz5k56cdnwr48mzjqqf7w8sxsg35vxmk2gdtf2fssgduva",
   mmDistributionModel: "terra175xavlptc4fhgtvzmq95z6s7wnt4larh5xp6nufz6xwwec7gygpsjw08v6",
