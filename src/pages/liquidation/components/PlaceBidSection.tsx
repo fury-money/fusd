@@ -123,8 +123,7 @@ export function PlaceBidSectionBase({
       txFee: EstimatedFee | undefined,
       confirm: ReactNode,
     ) => {
-      return;
-
+      
       setIsSubmittingBidTx(true);
       if (!connected || !placeBid) {
         return;
