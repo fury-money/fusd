@@ -9,8 +9,8 @@ export function computeNetAPR(
   borrowAPR: Rate<BigSource>,
 ): Rate<BigSource> {
   return borrowerDistributionAPYs && borrowerDistributionAPYs.length > 0
-    ? (big(borrowerDistributionAPYs[0].DistributionAPY).minus(
-        borrowAPR,
+    ? (big(borrowAPR).minus(
+        big(borrowerDistributionAPYs[0].DistributionAPY),
       ) as Rate<Big>)
     : (0 as Rate<number>);
 }

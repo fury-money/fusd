@@ -135,9 +135,9 @@ function Component({ className }: OverviewProps) {
             <IconSpan>
               NET APR{' '}
               <InfoTooltip>
-                Distribution APR - Borrow APR. The stablecoin reserves are
+                Borrow APR - Distribution APR. The stablecoin reserves are
                 partially used to incentivize borrowers when the borrowing rate
-                is above 10%. This APR is thus always negative.
+                is above 10%. This APR is thus always positive, you pay for borrowing assets on Cavern.
               </InfoTooltip>
             </IconSpan>
           </h3>
