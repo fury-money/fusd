@@ -13,7 +13,7 @@ import { formatUST, formatBAsset } from '@anchor-protocol/notation';
 import { useTotalCollateralsQuery } from '@anchor-protocol/app-provider/queries/liquidate/totalLiquidations';
 
 export const useLiquidationGraph = () => {
-  const labels = useMemo(() => [...Array(30).keys()], []);
+  const labels = useMemo(() => [...Array(31).keys()], []);
 
   const network = useNetwork();
   const { data: { bidPoolsByCollateral } = {} } = useBidPoolsByCollateralQuery(
