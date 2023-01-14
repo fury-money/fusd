@@ -2,12 +2,12 @@
 <svg
    width="771"
    zoomAndPan="magnify"
-   viewBox="0 0 578.25 428.99999"
-   height="572"
+   viewBox="0 0 578.25 578.24999"
+   height="771"
    preserveAspectRatio="xMidYMid meet"
    version="1.0"
    id="svg135"
-   sodipodi:docname="logo.svg"
+   sodipodi:docname="logo-favicon.svg"
    inkscape:export-filename="/mnt/2dd228b3-3582-4b04-aa75-e78393a66661/anchor/webapp/public/logo.png"
    inkscape:export-xdpi="124.47697"
    inkscape:export-ydpi="124.47697"
@@ -366,59 +366,63 @@
     </pattern>
   </defs>
   <g
-     clip-path="url(#b6f193e07d)"
-     id="g115"
-     transform="translate(-115.98047,-190.69141)">
+     id="g1304"
+     transform="translate(0,74.249999)">
     <g
-       clip-path="url(#785e6e3246)"
-       id="g113">
-      <path
-         fill="url(#c9faebfdb0)"
-         d="m 339.94922,190.69141 h 354.0625 v 279.66796 h -354.0625 z m 0,0"
-         fill-rule="nonzero"
-         id="path111" />
+       clip-path="url(#b6f193e07d)"
+       id="g115"
+       transform="translate(-115.98047,-190.69141)">
+      <g
+         clip-path="url(#785e6e3246)"
+         id="g113">
+        <path
+           fill="url(#c9faebfdb0)"
+           d="m 339.94922,190.69141 h 354.0625 v 279.66796 h -354.0625 z m 0,0"
+           fill-rule="nonzero"
+           id="path111" />
+      </g>
     </g>
-  </g>
-  <g
-     clip-path="url(#d49d8b9245)"
-     id="g121"
-     transform="translate(-115.98047,-190.69141)">
     <g
-       clip-path="url(#56686fa729)"
-       id="g119">
-      <path
-         fill="url(#129ec08749)"
-         d="m 339.94922,341.44922 h 354.0625 v 277.48437 h -354.0625 z m 0,0"
-         fill-rule="nonzero"
-         id="path117" />
+       clip-path="url(#d49d8b9245)"
+       id="g121"
+       transform="translate(-115.98047,-190.69141)">
+      <g
+         clip-path="url(#56686fa729)"
+         id="g119">
+        <path
+           fill="url(#129ec08749)"
+           d="m 339.94922,341.44922 h 354.0625 v 277.48437 h -354.0625 z m 0,0"
+           fill-rule="nonzero"
+           id="path117" />
+      </g>
     </g>
-  </g>
-  <g
-     clip-path="url(#284a1ebac9)"
-     id="g127"
-     transform="translate(-115.98047,-190.69141)">
     <g
-       clip-path="url(#bdabd6880d)"
-       id="g125">
-      <path
-         fill="url(#9acbefc3c4)"
-         d="M 470.04297,619.30078 H 115.98047 V 339.63281 h 354.0625 z m 0,0"
-         fill-rule="nonzero"
-         id="path123" />
+       clip-path="url(#284a1ebac9)"
+       id="g127"
+       transform="translate(-115.98047,-190.69141)">
+      <g
+         clip-path="url(#bdabd6880d)"
+         id="g125">
+        <path
+           fill="url(#9acbefc3c4)"
+           d="M 470.04297,619.30078 H 115.98047 V 339.63281 h 354.0625 z m 0,0"
+           fill-rule="nonzero"
+           id="path123" />
+      </g>
     </g>
-  </g>
-  <g
-     clip-path="url(#093d4d1984)"
-     id="g133"
-     transform="translate(-115.98047,-190.69141)">
     <g
-       clip-path="url(#d763a6bae0)"
-       id="g131">
-      <path
-         fill="url(#d8c783d8bf)"
-         d="M 470.04297,468.54297 H 115.98047 V 191.05859 h 354.0625 z m 0,0"
-         fill-rule="nonzero"
-         id="path129" />
+       clip-path="url(#093d4d1984)"
+       id="g133"
+       transform="translate(-115.98047,-190.69141)">
+      <g
+         clip-path="url(#d763a6bae0)"
+         id="g131">
+        <path
+           fill="url(#d8c783d8bf)"
+           d="M 470.04297,468.54297 H 115.98047 V 191.05859 h 354.0625 z m 0,0"
+           fill-rule="nonzero"
+           id="path129" />
+      </g>
     </g>
   </g>
 </svg>

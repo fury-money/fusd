@@ -40,7 +40,7 @@ function DesktopHeaderBase({ className }: DesktopHeaderProps) {
         rel="noreferrer"
       >
         <DeploymentSwitch
-          terra={() => <img src={LogoTerra} alt="terraLogo" />}
+          terra={() => <img src={LogoTerra} alt="terraLogo" height="30px"/>}
           ethereum={() => <img src={LogoEth} alt="ethLogo" />}
           avalanche={() => <img src={LogoAvax} alt="avaxLogo" />}
         />
@@ -187,6 +187,8 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
     position: absolute;
     top: 10px;
     left: 100px;
+    height: 50px;
+    width: 70px;
 
     transition: transform 0.17s ease-in-out;
     transform-origin: center;

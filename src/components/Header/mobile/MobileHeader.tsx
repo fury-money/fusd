@@ -213,8 +213,8 @@ export const MobileHeader = styled(MobileHeaderBase)`
 
     a.logo {
       img {
-        width: 28px;
-        height: 28px;
+        width: 50px;
+        height: 50px;
       }
     }
 
