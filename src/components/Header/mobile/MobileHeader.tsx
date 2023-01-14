@@ -214,8 +214,7 @@ export const MobileHeader = styled(MobileHeaderBase)`
     a.logo {
       img {
         margin-top: 7px;
-        width: 40px;
-        height: 40px;
+        height: 30px;
       }
     }
 
