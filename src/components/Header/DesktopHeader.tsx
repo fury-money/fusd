@@ -187,9 +187,7 @@ export const DesktopHeader = styled(DesktopHeaderBase)`
     position: absolute;
     top: 10px;
     left: 100px;
-    height: 50px;
-    width: 70px;
-
+    
     transition: transform 0.17s ease-in-out;
     transform-origin: center;
 
