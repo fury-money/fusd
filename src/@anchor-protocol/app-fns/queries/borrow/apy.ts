@@ -1,4 +1,4 @@
-import { DateTime, Rate } from '@anchor-protocol/types';
+import { DateTime, moneyMarket, Rate } from '@anchor-protocol/types';
 import big from 'big.js';
 import { MarketState } from '../market/state';
 
@@ -25,6 +25,7 @@ type LPReward = {
 
 export async function borrowAPYQuery(
   marketState: MarketState | undefined,
+  moneyMarketEpochState: moneyMarket.market.EpochStateResponse | undefined,
   blocksPerYear: number,
   lastSyncedHeight: () => Promise<number>,
   epochPeriod: number,
@@ -40,9 +41,9 @@ export async function borrowAPYQuery(
   let blockRewards = big('0');
   if (
     marketState?.marketState?.total_liabilities &&
-    marketState?.marketState?.prev_borrower_incentives
+    moneyMarketEpochState?.prev_borrower_incentives
   ) {
-    blockRewards = big(marketState?.marketState?.prev_borrower_incentives).div(
+    blockRewards = big(moneyMarketEpochState?.prev_borrower_incentives).div(
       marketState?.marketState.total_liabilities,
     );
   }
