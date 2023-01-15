@@ -7,6 +7,7 @@ import { TokenIcon } from '@anchor-protocol/token-icons';
 import { Rate, u, UST } from '@anchor-protocol/types';
 import {
   useAnchorWebapp,
+  useBorrowAPYQuery,
   useEarnEpochStatesQuery,
   useMarketCollateralsQuery,
   useMarketDepositAndBorrowQuery,
@@ -36,6 +37,7 @@ import { StablecoinChart } from './components/StablecoinChart';
 import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoughnutChart';
 import { CollateralMarket } from './components/CollateralMarket';
 import { useDepositApy } from 'hooks/useDepositApy';
+import { useBorrowOverviewData } from 'pages/borrow/logics/useBorrowOverviewData';
 
 export interface DashboardProps {
   className?: string;
@@ -67,16 +69,19 @@ function DashboardBase({ className }: DashboardProps) {
 
   const { data: { borrowRate, epochState } = {} } = useMarketStableCoinQuery();
 
+  const { netAPR } = useBorrowOverviewData();
+
+
   const depositApy = useDepositApy();
 
   const stableCoinLegacy = useMemo(() => {
-    if (!borrowRate || !epochState) {
+    if (!borrowRate || !epochState || !netAPR) {
       return undefined;
     }
 
     return {
       depositRate: depositApy,
-      borrowRate: big(borrowRate.rate).mul(blocksPerYear) as Rate<Big>,
+      borrowRate: netAPR,
     };
   }, [blocksPerYear, borrowRate, epochState, depositApy]);
 
