@@ -17,15 +17,15 @@ export type CW20Balance<T extends Token> = WasmQueryData<
 >;
 
 export async function cw20BalanceQuery<T extends Token>(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   tokenAddr: CW20Addr | undefined,
-  queryClient: QueryClient,
 ): Promise<CW20Balance<T> | undefined> {
   if (!walletAddr || !tokenAddr) {
     return undefined;
   }
 
-  const { tokenInfo } = await cw20TokenInfoQuery(tokenAddr, queryClient);
+  const { tokenInfo } = await cw20TokenInfoQuery(queryClient, tokenAddr);
 
   const result = await wasmFetch<CW20BalanceWasmQuery<T>>({
     ...queryClient,

@@ -95,13 +95,13 @@ const computeNewRate = (
 };
 
 const earnApyProjectionQuery = async (
+  queryClient: QueryClient,
   blocksPerYear: number,
   overseerContract: HumanAddr,
-  queryClient: QueryClient,
 ) => {
   const { uUST } = await terraNativeBalancesQuery(
-    overseerContract,
     queryClient,
+    overseerContract,
   );
 
   const { overseerDynRateState, overseerConfig } =
@@ -136,8 +136,6 @@ const earnApyProjectionQuery = async (
   };
 };
 
-const earnApyProjectionQueryFn = createQueryFn(earnApyProjectionQuery);
-
 interface EarnApyProjection {
   height: number;
   rate: Rate<big>;
@@ -156,9 +154,8 @@ export const useEarnApyProjectionQuery =
         ANCHOR_QUERY_KEY.PROJECTED_EARN_APY,
         blocksPerYear,
         contractAddress.moneyMarket.overseer,
-        queryClient,
       ],
-      earnApyProjectionQueryFn,
+      createQueryFn(earnApyProjectionQuery, queryClient),
       {
         refetchOnMount: false,
         refetchInterval: 1000 * 60 * 5,

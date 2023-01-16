@@ -2,12 +2,12 @@ import {
   EarnAPYHistoryData,
   earnAPYHistoryQuery,
 } from '@anchor-protocol/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
+import { createSimpleQueryFn } from '@libs/react-query-utils';
 import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(earnAPYHistoryQuery);
+const queryFn = createSimpleQueryFn(earnAPYHistoryQuery);
 
 export function useEarnAPYHistoryQuery(): UseQueryResult<
   EarnAPYHistoryData | undefined

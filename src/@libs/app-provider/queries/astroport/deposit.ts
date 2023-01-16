@@ -6,8 +6,6 @@ import { useAccount } from 'contexts/account';
 import { useApp } from '../../contexts/app';
 import { TERRA_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(astroportDepositQuery);
-
 export function useAstroportDepositQuery<T extends Token>(
   lpTokenAddr: CW20Addr,
   walletAddress?: HumanAddr,
@@ -22,13 +20,13 @@ export function useAstroportDepositQuery<T extends Token>(
       walletAddress ?? terraWalletAddress,
       lpTokenAddr,
       contractAddress.astroport.generator,
-      queryClient,
     ],
-    queryFn as any,
+    createQueryFn(astroportDepositQuery, queryClient),
     {
       refetchInterval: connected && 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

@@ -12,8 +12,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useApp } from '../../contexts/app';
 import { TERRA_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(terraNativeBalancesQuery);
-
 export function useTerraNativeBalancesQuery(
   walletAddr?: HumanAddr,
 ): UseQueryResult<NativeBalances | undefined> {
@@ -25,13 +23,13 @@ export function useTerraNativeBalancesQuery(
     [
       TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES,
       walletAddr ?? terraWalletAddress,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(terraNativeBalancesQuery, queryClient),
     {
       refetchInterval: connected && 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
       placeholderData: () => EMPTY_NATIVE_BALANCES,
     },
   );

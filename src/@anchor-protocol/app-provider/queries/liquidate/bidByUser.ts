@@ -6,8 +6,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(bidsByUserQuery);
-
 export function useBidByUserByCollateralQuery(
   collateralToken: CW20Addr,
   startAfter?: HumanAddr,
@@ -21,18 +19,18 @@ export function useBidByUserByCollateralQuery(
   const bidsByUserByCollateral = useQuery(
     [
       ANCHOR_QUERY_KEY.BID_POOLS_BY_USER,
-      queryClient,
       contractAddress.liquidation.liquidationQueueContract,
       collateralToken,
       terraWalletAddress,
       startAfter,
       limit,
     ],
-    queryFn,
+    createQueryFn(bidsByUserQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

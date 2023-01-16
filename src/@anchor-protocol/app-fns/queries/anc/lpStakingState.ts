@@ -16,8 +16,8 @@ interface AncLpStakingStateWasmQuery {
 export type AncLpStakingState = WasmQueryData<AncLpStakingStateWasmQuery>;
 
 export async function ancLpStakingStateQuery(
-  ancStakingAddr: HumanAddr,
   queryClient: QueryClient,
+  ancStakingAddr: HumanAddr,
 ): Promise<AncLpStakingState> {
   return wasmFetch<AncLpStakingStateWasmQuery>({
     ...queryClient,

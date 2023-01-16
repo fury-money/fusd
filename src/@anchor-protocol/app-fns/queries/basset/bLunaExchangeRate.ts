@@ -15,8 +15,8 @@ export type BondBLunaExchangeRate =
   WasmQueryData<BondBLunaExchangeRateWasmQuery>;
 
 export async function bondBLunaExchangeRateQuery(
-  bLunaHubContract: HumanAddr,
   queryClient: QueryClient,
+  bLunaHubContract: HumanAddr,
 ): Promise<BondBLunaExchangeRate> {
   return wasmFetch<BondBLunaExchangeRateWasmQuery>({
     ...queryClient,

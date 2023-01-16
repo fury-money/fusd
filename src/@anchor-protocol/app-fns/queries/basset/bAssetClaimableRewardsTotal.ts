@@ -12,9 +12,9 @@ export interface BAssetClaimableRewardsTotal {
 }
 
 export async function bAssetClaimableRewardsTotalQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   rewardContracts: HumanAddr[],
-  queryClient: QueryClient,
 ): Promise<BAssetClaimableRewardsTotal> {
   if (!walletAddr || rewardContracts.length === 0) {
     return {
@@ -25,7 +25,7 @@ export async function bAssetClaimableRewardsTotalQuery(
 
   const rewards = await Promise.all(
     rewardContracts.map((rewardContract) =>
-      bAssetClaimableRewardsQuery(walletAddr, rewardContract, queryClient),
+      bAssetClaimableRewardsQuery(queryClient, walletAddr, rewardContract),
     ),
   ).then((arr) => {
     return arr.map(

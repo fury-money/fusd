@@ -43,13 +43,14 @@ export type BatchQuery = QueryClient &
     TenderMintExtension;
 
 
-export function useBatchQuery(rpc: string): BatchQueryClient {
+export function useBatchQuery(rpc: string): BatchQueryClient | undefined{
 
   const [batchQuery, setBatchQuery] = useState<BatchQuery | undefined>();
 
   useEffect(() => {
     const createBatchQuery = async () => {
       if(rpc){
+        console.log("try to create client")
         const httpBatch = new HttpBatchClient(rpc, {
           dispatchInterval: 500,
           batchSizeLimit: 100,
@@ -57,14 +58,16 @@ export function useBatchQuery(rpc: string): BatchQueryClient {
         const tendermint = await Tendermint34Client.create(httpBatch);
         console.log("client created")
         // We create the query client
-        setBatchQuery(
-          QueryClient.withExtensions(
+        const client = QueryClient.withExtensions(
             tendermint,
             setupWasmExtension,
             setupBankExtension,
             setupTxExtension,
             setupTendermintExtension,
-          )
+          );
+
+        setBatchQuery(
+          client
         );
       }else{
         console.log("No rpc set for network", rpc)
@@ -73,9 +76,9 @@ export function useBatchQuery(rpc: string): BatchQueryClient {
     createBatchQuery();
   }, [rpc])
 
-  return {
+  return batchQuery ? {
     batchFetcher: batchQuery,
-  }
+  } : undefined;
 }
 
 

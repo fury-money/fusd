@@ -20,12 +20,12 @@ interface MarketStableCoinWasmQuery {
 export type MarketStableCoin = WasmQueryData<MarketStableCoinWasmQuery>;
 
 export async function marketStableCoinQuery(
+  queryClient: QueryClient,
   interestContract: HumanAddr,
   overseerContract: HumanAddr,
   uUSTBalance: u<UST> | undefined,
   totalReserves: u<UST> | undefined,
   totalLiabilities: u<UST> | undefined,
-  queryClient: QueryClient,
 ): Promise<MarketStableCoin | undefined> {
   if (!uUSTBalance || !totalReserves || !totalLiabilities) {
     return undefined;

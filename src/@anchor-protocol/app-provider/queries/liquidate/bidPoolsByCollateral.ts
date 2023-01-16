@@ -8,8 +8,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(bidPoolsByCollateralQuery);
-
 export function useBidPoolsByCollateralQuery(
   collateralToken: CW20Addr,
   startAfter?: HumanAddr,
@@ -21,17 +19,17 @@ export function useBidPoolsByCollateralQuery(
   const bidPoolsByCollateral = useQuery(
     [
       ANCHOR_QUERY_KEY.BID_POOLS_BY_COLLATERAL,
-      queryClient,
       contractAddress.liquidation.liquidationQueueContract,
       collateralToken,
       startAfter,
       limit,
     ],
-    queryFn,
+    createQueryFn(bidPoolsByCollateralQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

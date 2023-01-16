@@ -17,9 +17,9 @@ export type BAssetClaimableRewards =
   WasmQueryData<BAssetClaimableRewardsWasmQuery>;
 
 export async function bAssetClaimableRewardsQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   bAssetRewardAddr: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<BAssetClaimableRewards | undefined> {
   if (!walletAddr) {
     return undefined;

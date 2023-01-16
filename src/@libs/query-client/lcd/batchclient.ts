@@ -39,7 +39,7 @@ export async function batchFetch<WasmQueries>({
     }
 
     //@ts-ignore
-    resultObject[key] = lcdResult.data;
+    resultObject[key] = lcdResult
 
     return resultObject;
   }, {} as WasmQueryData<WasmQueries>);

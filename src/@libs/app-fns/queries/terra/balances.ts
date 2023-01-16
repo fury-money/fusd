@@ -43,9 +43,9 @@ export type TerraBalances = {
 };
 
 export async function terraBalancesQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   assets: terraswap.AssetInfo[],
-  queryClient: QueryClient,
 ): Promise<TerraBalances> {
   type CW20Query = Record<
     string,
@@ -139,7 +139,7 @@ export async function terraBalancesQuery(
 
     }else {
       balancesPromise = Promise.all([
-          queryClient.batchFetcher.bank.allBalances(walletAddr),
+          queryClient.batchFetcher?.bank.allBalances(walletAddr),
           batchFetch<any>({
             ...queryClient,
             id: `terra-balances=${walletAddr}`,
@@ -153,7 +153,7 @@ export async function terraBalancesQuery(
               return { asset, balance: cw20Balance.balance as u<Token<string>> };
             }
 
-            const nativeAsset = nativeTokenBalances.find(
+            const nativeAsset = nativeTokenBalances?.find(
               ({ denom }) => asset.native_token.denom === denom,
             );
 

@@ -5,7 +5,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useApp } from '../../contexts/app';
 import { TERRA_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(cw20PoolInfoQuery);
 
 export function useCW20PoolInfoQuery<T extends Token>(
   tokenAddr: CW20Addr,
@@ -17,13 +16,13 @@ export function useCW20PoolInfoQuery<T extends Token>(
       TERRA_QUERY_KEY.STAKING_POOL_INFO,
       tokenAddr,
       contractAddress.terraswap.factory,
-      queryClient,
     ],
-    queryFn as any,
+    createQueryFn(cw20PoolInfoQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

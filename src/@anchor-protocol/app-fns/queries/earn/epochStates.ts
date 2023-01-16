@@ -24,10 +24,10 @@ interface EarnEpochStatesWasmQuery {
 export type EarnEpochStates = WasmQueryData<EarnEpochStatesWasmQuery>;
 
 export async function earnEpochStatesQuery(
+  queryClient: QueryClient,
   moneyMarketContract: HumanAddr,
   overseerContract: HumanAddr,
   lastSyncedHeight: () => Promise<number>,
-  queryClient: QueryClient,
 ): Promise<EarnEpochStates> {
   const blockHeight = await lastSyncedHeight();
 

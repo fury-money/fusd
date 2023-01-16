@@ -34,9 +34,9 @@ export type BLunaWithdrawableAmount = Omit<
 };
 
 export async function bLunaWithdrawableAmountQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   bLunaHubContract: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<BLunaWithdrawableAmount | undefined> {
   if (!walletAddr) {
     return undefined;

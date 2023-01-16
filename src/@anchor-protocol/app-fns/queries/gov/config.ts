@@ -13,8 +13,8 @@ interface GovConfigWasmQuery {
 export type GovConfig = WasmQueryData<GovConfigWasmQuery>;
 
 export async function govConfigQuery(
-  govContract: HumanAddr,
   queryClient: QueryClient,
+  govContract: HumanAddr,
 ): Promise<GovConfig> {
   return wasmFetch<GovConfigWasmQuery>({
     ...queryClient,

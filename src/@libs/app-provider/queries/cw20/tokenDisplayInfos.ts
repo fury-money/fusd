@@ -3,12 +3,12 @@ import {
   CW20TokenDisplayInfos,
   cw20TokenDisplayInfosQuery,
 } from '@libs/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
+import { createSimpleQueryFn } from '@libs/react-query-utils';
 import { useAnchorQuery } from 'queries';
 import { UseQueryResult } from 'react-query';
 import { TERRA_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(cw20TokenDisplayInfosQuery);
+const queryFn = createSimpleQueryFn(cw20TokenDisplayInfosQuery);
 
 export function useCW20TokenDisplayInfosQuery(): UseQueryResult<CW20TokenDisplayInfos> {
   const {

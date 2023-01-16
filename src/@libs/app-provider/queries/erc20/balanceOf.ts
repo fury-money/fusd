@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from 'react-query';
 import { useEvmWallet } from '@libs/evm-wallet';
-import { createQueryFn } from '@libs/react-query-utils';
+import { createQueryFn, createSimpleQueryFn } from '@libs/react-query-utils';
 import { ERC20Addr, EVMAddr, Token, u } from '@libs/types';
 import { useAccount } from 'contexts/account';
 import { useApp } from '../../contexts/app';
@@ -8,7 +8,7 @@ import { EVM_QUERY_KEY, REFETCH_INTERVAL } from '../../env';
 import { erc2020BalanceQuery } from '../../../app-fns/queries/erc20/balanceOf';
 import { useEvmCrossAnchorSdk } from 'crossanchor';
 
-const queryFn = createQueryFn(erc2020BalanceQuery);
+const queryFn = createSimpleQueryFn(erc2020BalanceQuery);
 
 export function useERC20BalanceQuery<T extends Token>(
   tokenAddress: string | undefined,

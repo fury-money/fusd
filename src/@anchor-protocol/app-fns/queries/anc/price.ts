@@ -29,8 +29,8 @@ export interface AncPriceData {
 }
 
 export async function ancPriceQuery(
-  ancUstPairAddr: HumanAddr,
   queryClient: QueryClient,
+  ancUstPairAddr: HumanAddr,
 ): Promise<AncPriceData> {
   const {
     ancPrice: { assets, total_share },

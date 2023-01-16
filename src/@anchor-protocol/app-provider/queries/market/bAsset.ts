@@ -4,7 +4,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(marketBAssetQuery);
 
 export function useMarketBAssetQuery(): UseQueryResult<
   MarketBAsset | undefined
@@ -19,13 +18,13 @@ export function useMarketBAssetQuery(): UseQueryResult<
       contractAddress.moneyMarket.oracle,
       contractAddress.bluna.custody,
       contractAddress.native.usd,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(marketBAssetQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
   return result;

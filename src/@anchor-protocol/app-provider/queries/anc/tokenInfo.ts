@@ -4,8 +4,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(ancTokenInfoQuery);
-
 export function useAncTokenInfoQuery(): UseQueryResult<
   AncTokenInfo | undefined
 > {
@@ -13,12 +11,13 @@ export function useAncTokenInfoQuery(): UseQueryResult<
     useAnchorWebapp();
 
   const result = useQuery(
-    [ANCHOR_QUERY_KEY.ANC_TOKEN_INFO, contractAddress.cw20.ANC, queryClient],
-    queryFn,
+    [ANCHOR_QUERY_KEY.ANC_TOKEN_INFO, contractAddress.cw20.ANC],
+    createQueryFn(ancTokenInfoQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 10,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

@@ -9,7 +9,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(rewardsUstBorrowRewardsQuery);
 
 export function useRewardsUstBorrowRewardsQuery(): UseQueryResult<
   RewardsUstBorrowRewards | undefined
@@ -24,14 +23,13 @@ export function useRewardsUstBorrowRewardsQuery(): UseQueryResult<
       ANCHOR_QUERY_KEY.REWARDS_UST_BORROW_REWARDS,
       terraWalletAddress,
       contractAddress.moneyMarket.market,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(rewardsUstBorrowRewardsQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 1,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient,
     },
   );
 

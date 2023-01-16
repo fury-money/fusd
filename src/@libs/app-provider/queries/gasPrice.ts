@@ -1,9 +1,9 @@
 import { GasPrice, gasPriceQuery } from '@libs/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
+import { createSimpleQueryFn } from '@libs/react-query-utils';
 import { useQuery, UseQueryResult } from 'react-query';
 import { TERRA_QUERY_KEY } from '../env';
 
-const queryFn = createQueryFn((gasPriceEndpoint: string) => {
+const queryFn = createSimpleQueryFn((gasPriceEndpoint: string) => {
   return gasPriceQuery(gasPriceEndpoint);
 });
 

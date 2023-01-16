@@ -107,8 +107,8 @@ export const EMPTY_NATIVE_BALANCES: NativeBalances = {
 };
 
 export async function terraNativeBalancesQuery(
-  walletAddr: HumanAddr | undefined,
   queryClient: QueryClient,
+  walletAddr: HumanAddr | undefined,
 ): Promise<NativeBalances> {
   if (!walletAddr) {
     return EMPTY_NATIVE_BALANCES;
@@ -162,7 +162,7 @@ export async function terraNativeBalancesQuery(
           }));
         });
     }else {
-      balancesPromise = queryClient.batchFetcher.bank.allBalances(walletAddr)
+      balancesPromise = queryClient.batchFetcher?.bank.allBalances(walletAddr)
       .then((coins) => {
           return coins.map(({ denom, amount }) => ({
             denom: denom.replace(
@@ -174,7 +174,7 @@ export async function terraNativeBalancesQuery(
             ) as NativeDenom,
             amount: amount as u<Token<string>>,
           }));
-        });
+        }) ?? [];
     }
 
 

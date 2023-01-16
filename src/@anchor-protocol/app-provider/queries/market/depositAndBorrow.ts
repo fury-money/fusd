@@ -2,12 +2,12 @@ import {
   MarketDepositAndBorrowData,
   marketDepositAndBorrowQuery,
 } from '@anchor-protocol/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
+import { createSimpleQueryFn } from '@libs/react-query-utils';
 import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn((endpoint: string) => {
+const queryFn = createSimpleQueryFn((endpoint: string) => {
   return marketDepositAndBorrowQuery({ endpoint });
 });
 

@@ -17,8 +17,8 @@ interface AssetPriceWasmQuery {
 }
 
 const assetPriceQuery = async (
-  assetUstPairAddress: HumanAddr,
   queryClient: QueryClient,
+  assetUstPairAddress: HumanAddr,
 ): Promise<UST> => {
   const {
     assetPrice: {
@@ -47,7 +47,6 @@ const assetPriceQuery = async (
   return assetPrice.toString() as UST;
 };
 
-const queryFn = createQueryFn(assetPriceQuery);
 
 type AssetWithAstroportPool = 'anc' | 'astro';
 
@@ -68,12 +67,13 @@ export function useAssetPriceInUstQuery(
   };
 
   return useQuery(
-    [ANCHOR_QUERY_KEY.ASTRO_PRICE, astroportAddress[asset], queryClient],
-    queryFn,
+    [ANCHOR_QUERY_KEY.ASTRO_PRICE, astroportAddress[asset]],
+    createQueryFn(assetPriceQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 }

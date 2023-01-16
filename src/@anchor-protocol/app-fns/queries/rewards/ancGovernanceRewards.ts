@@ -25,10 +25,10 @@ export type RewardsAncGovernanceRewards =
   WasmQueryData<RewardsAncGovernanceRewardsWasmQuery>;
 
 export async function rewardsAncGovernanceRewardsQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   govContract: HumanAddr,
   ancContract: CW20Addr,
-  queryClient: QueryClient,
 ): Promise<RewardsAncGovernanceRewards | undefined> {
   if (!walletAddr) {
     return undefined;

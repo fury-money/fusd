@@ -6,8 +6,6 @@ import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(borrowBorrowerQuery);
-
 export function useBorrowBorrowerQuery(): UseQueryResult<
   BorrowBorrower | undefined
 > {
@@ -27,14 +25,13 @@ export function useBorrowBorrowerQuery(): UseQueryResult<
       lastSyncedHeight,
       moneyMarket.market,
       moneyMarket.overseer,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(borrowBorrowerQuery, queryClient),
     {
       refetchInterval: connected && 1000 * 60 * 5,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient,
     },
   );
 

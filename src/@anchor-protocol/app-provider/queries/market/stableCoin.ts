@@ -9,8 +9,6 @@ import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 import { useMarketStateQuery } from './state';
 
-const queryFn = createQueryFn(marketStableCoinQuery);
-
 export function useMarketStableCoinQuery(): UseQueryResult<
   MarketStableCoin | undefined
 > {
@@ -29,13 +27,13 @@ export function useMarketStableCoinQuery(): UseQueryResult<
       uUST,
       marketState?.total_reserves,
       marketState?.total_liabilities,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(marketStableCoinQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

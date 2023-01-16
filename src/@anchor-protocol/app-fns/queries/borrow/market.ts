@@ -58,14 +58,15 @@ type MarketStateWasmQuery = Pick<BorrowMarketWasmQuery, 'marketState'>;
 type MarketWasmQuery = Omit<BorrowMarketWasmQuery, 'marketState'>;
 
 export async function borrowMarketQuery(
+  queryClient: QueryClient,
   marketContract: HumanAddr,
   interestContract: HumanAddr,
   oracleContract: HumanAddr,
   overseerContract: HumanAddr,
   stableDenom: NativeDenom,
-  queryClient: QueryClient,
 ): Promise<BorrowMarket> {
   const _marketBalances = await terraBalancesQuery(
+    queryClient,
     marketContract,
     [
       {
@@ -79,7 +80,6 @@ export async function borrowMarketQuery(
         },
       },
     ],
-    queryClient,
   );
 
   const { marketState } = await wasmFetch<MarketStateWasmQuery>({

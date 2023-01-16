@@ -6,7 +6,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useApp } from '../../contexts/app';
 import { TERRA_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(cw20BalanceQuery);
 
 export function useCW20BalanceQuery<T extends Token>(
   tokenAddr: CW20Addr | undefined,
@@ -15,12 +14,13 @@ export function useCW20BalanceQuery<T extends Token>(
   const { queryClient, queryErrorReporter } = useApp();
 
   const result = useQuery(
-    [TERRA_QUERY_KEY.CW20_BALANCE, walletAddr, tokenAddr, queryClient],
-    queryFn as any,
+    [TERRA_QUERY_KEY.CW20_BALANCE, walletAddr, tokenAddr],
+    createQueryFn(cw20BalanceQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

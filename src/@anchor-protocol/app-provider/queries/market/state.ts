@@ -4,8 +4,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(marketStateQuery);
-
 export function useMarketStateQuery(): UseQueryResult<MarketState | undefined> {
   const { queryClient, contractAddress, queryErrorReporter } =
     useAnchorWebapp();
@@ -14,13 +12,13 @@ export function useMarketStateQuery(): UseQueryResult<MarketState | undefined> {
     [
       ANCHOR_QUERY_KEY.MARKET_STATE,
       contractAddress.moneyMarket.market,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(marketStateQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

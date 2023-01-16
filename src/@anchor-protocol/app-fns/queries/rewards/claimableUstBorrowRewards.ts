@@ -28,11 +28,11 @@ export type RewardsClaimableUstBorrowRewards =
   WasmQueryData<RewardsClaimableUstBorrowRewardsWasmQuery>;
 
 export async function rewardsClaimableUstBorrowRewardsQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   ancContract: CW20Addr,
   marketContract: HumanAddr,
   lastSyncedHeight: () => Promise<number>,
-  queryClient: QueryClient,
 ): Promise<RewardsClaimableUstBorrowRewards | undefined> {
   if (!walletAddr) {
     return undefined;

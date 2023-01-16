@@ -6,7 +6,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(ancBalanceQuery);
 
 export function useAncBalanceQuery(
   walletAddress: HumanAddr | undefined | null,
@@ -19,14 +18,13 @@ export function useAncBalanceQuery(
       ANCHOR_QUERY_KEY.ANC_BALANCE,
       walletAddress ?? undefined,
       contractAddress.cw20.ANC,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(ancBalanceQuery, queryClient),
     {
       refetchInterval: !!walletAddress && 1000 * 60 * 2,
-      enabled: !!walletAddress,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !! walletAddress && !!queryClient,
     },
   );
 

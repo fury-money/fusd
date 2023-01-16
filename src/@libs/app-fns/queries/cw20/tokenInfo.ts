@@ -16,8 +16,8 @@ export type CW20TokenInfo<T extends Token> = WasmQueryData<
 >;
 
 export async function cw20TokenInfoQuery<T extends Token>(
-  tokenAddr: CW20Addr,
   queryClient: QueryClient,
+  tokenAddr: CW20Addr,
   ignoreCache: boolean = false,
 ): Promise<CW20TokenInfo<T>> {
   if (!ignoreCache && cw20TokenInfoCache.has(tokenAddr)) {
