@@ -1,4 +1,5 @@
-import { DateTime, moneyMarket, Rate } from '@anchor-protocol/types';
+import { DateTime, HumanAddr, moneyMarket, Rate } from '@anchor-protocol/types';
+import { QueryClient, wasmFetch, WasmQuery } from '@libs/query-client';
 import big from 'big.js';
 import { MarketState } from '../market/state';
 
@@ -23,55 +24,42 @@ type LPReward = {
   apy: Rate<number>;
 };
 
+interface MarketBorrowIncentivesWasmQuery {
+  borrowIncentives: WasmQuery<moneyMarket.market.BorrowerIncentives, moneyMarket.market.BorrowRateResponse>;
+}
+
+
 export async function borrowAPYQuery(
-  marketState: MarketState | undefined,
-  moneyMarketEpochState: moneyMarket.market.EpochStateResponse | undefined,
   blocksPerYear: number,
   lastSyncedHeight: () => Promise<number>,
-  epochPeriod: number,
-  lastEpochBlock: number,
+  mmMarketContract: HumanAddr,
+  queryClient: QueryClient,
 ): Promise<BorrowAPYData> {
-  const blockHeight = await lastSyncedHeight();
 
   // We simply need to query the chain to get the borrower rewards that were just distributed
   // And compare that to the total liabilities
   // Those informations are located in the state variable of the market function
 
-  // We compute the rewards percentage for this block
-  let blockRewards = big('0');
-  if (
-    marketState?.marketState?.total_liabilities &&
-    moneyMarketEpochState?.prev_borrower_incentives
-  ) {
-    blockRewards = big(moneyMarketEpochState?.prev_borrower_incentives).div(
-      marketState?.marketState.total_liabilities,
-    );
-  }
-  // Now we convert to an APY (block to year)
-  const rewardsAPY = blockRewards.div(blockHeight - lastEpochBlock).mul(blocksPerYear);
+  // Now we evolve from that and rather compute the future APY, 
+  // We can simply query the market contract, we added a function just for that. 
 
-  /*await fetch(
-    `${endpoint}/v2/distribution-apy`,
-  )
-    .then((res) => res.json())
-    .then(
-      ({
-        height,
-        timestamp,
-        distribution_apy,
-      }: {
-        height: number;
-        timestamp: DateTime;
-        distribution_apy: Rate;
-      }) => {
-        return {
-          DistributionAPY: distribution_apy,
-          Height: height,
-          Timestamp: timestamp,
-        };
+
+  let { borrowIncentives } = await wasmFetch<MarketBorrowIncentivesWasmQuery>({
+    ...queryClient,
+    id: `market--borrow-incentives`,
+    wasmQuery: {
+      borrowIncentives: {
+        contractAddress: mmMarketContract,
+        query: {
+          borrower_incentives: {},
+        },
       },
-    );
-    */
+    },
+  });
+
+  // Now we convert to an APY (block to year)
+  const rewardsAPY = big(borrowIncentives.rate).mul(blocksPerYear);
+
 
   const govRewards = {
     CurrentAPY: '0' as Rate<string>,
@@ -79,53 +67,19 @@ export async function borrowAPYQuery(
     Height: 1,
   };
 
-  /*await fetch(`${endpoint}/v2/gov-reward`)
-    .then((res) => res.json())
-    .then(
-      ({
-        height,
-        timestamp,
-        current_apy,
-      }: {
-        height: number;
-        timestamp: DateTime;
-        current_apy: Rate;
-      }) => {
-        return {
-          CurrentAPY: current_apy,
-          Timestamp: timestamp,
-          Height: height,
-        };
-      },
-    );
-    */
+
 
   const ancAstroLPRewards = {
     apr: 0 as Rate<number>,
     apy: 0 as Rate<number>,
   };
 
-  /*await hiveFetch<any, {}, LpRewardsQueryResult>({
-    hiveEndpoint: 'https://api.astroport.fi/graphql',
-    variables: {
-      address: ancUstPair,
-    },
-    wasmQuery: {},
-    query: LP_REWARDS_QUERY,
-  }).then((res) => {
-    if (!res.pool) {
-      return { apr: 0, apy: 0 };
-    }
-    return res.pool.total_rewards;
-  });
-  
-  */
   return {
     borrowerDistributionAPYs: [
       {
         DistributionAPY: rewardsAPY.toString() as Rate,
         Timestamp: Date.now() as DateTime,
-        Height: blockHeight,
+        Height: await lastSyncedHeight()
       },
     ],
     govRewards: [govRewards],

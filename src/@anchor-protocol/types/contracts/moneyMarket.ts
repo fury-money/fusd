@@ -276,6 +276,14 @@ export namespace moneyMarket {
         distribution_model?: HumanAddr;
       };
     }
+    
+    export interface BorrowerIncentives {
+      borrower_incentives: { };
+    }
+
+    export interface BorrowRateResponse {
+      rate: Rate;
+    }
   }
 
   export namespace oracle {
