@@ -85,49 +85,70 @@ export async function txInfoQuery({
   queryClient,
   txhash,
 }: TxInfoQueryParams): Promise<TxInfoData> {
-  const fetchTxInfo: Promise<TxInfoData> =
-    'lcdEndpoint' in queryClient
-      ? queryClient
-          .lcdFetcher<LcdTxs | LcdTxsFail>(
-            `${queryClient.lcdEndpoint}/cosmos/tx/v1beta1/txs/${txhash}`,
-          )
-          .then((result) => {
-            if ('tx_response' in result) {
-              return [
-                {
-                  TxHash: result.tx_response.txhash,
-                  Success: true,
-                  RawLog: result.tx_response.raw_log,
-                },
-              ];
-            } else {
-              return [];
-            }
-          })
-          .catch((error) => {
+  let fetchTxInfo: Promise<TxInfoData>;
+
+  if('lcdEndpoint' in queryClient){
+      fetchTxInfo = queryClient
+        .lcdFetcher<LcdTxs | LcdTxsFail>(
+          `${queryClient.lcdEndpoint}/cosmos/tx/v1beta1/txs/${txhash}`,
+        )
+        .then((result) => {
+          if ('tx_response' in result) {
+            return [
+              {
+                TxHash: result.tx_response.txhash,
+                Success: true,
+                RawLog: result.tx_response.raw_log,
+              },
+            ];
+          } else {
             return [];
-          })
-      : queryClient
-          .hiveFetcher<TxInfoVariables, TxInfoRawData>(
-            TX_INFO_QUERY,
-            { txhash },
-            `${queryClient.hiveEndpoint}?txinfo&txhash=${txhash}`,
-          )
-          .then(({ TxInfos }) => {
-            return TxInfos.map(({ TxHash, Success, RawLog: _RawLog }) => {
-              let RawLog: TxInfoData[number]['RawLog'] = _RawLog;
+          }
+        })
+        .catch((error) => {
+          return [];
+        })
+    }else if("hiveEndpoint" in queryClient){
+      fetchTxInfo = queryClient
+        .hiveFetcher<TxInfoVariables, TxInfoRawData>(
+          TX_INFO_QUERY,
+          { txhash },
+          `${queryClient.hiveEndpoint}?txinfo&txhash=${txhash}`,
+        )
+        .then(({ TxInfos }) => {
+          return TxInfos.map(({ TxHash, Success, RawLog: _RawLog }) => {
+            let RawLog: TxInfoData[number]['RawLog'] = _RawLog;
 
-              try {
-                RawLog = JSON.parse(_RawLog) ?? _RawLog;
-              } catch {}
+            try {
+              RawLog = JSON.parse(_RawLog) ?? _RawLog;
+            } catch {}
 
-              return {
-                TxHash,
-                Success,
-                RawLog,
-              };
-            });
+            return {
+              TxHash,
+              Success,
+              RawLog,
+            };
           });
+        });
+    }else{
+      fetchTxInfo = queryClient.batchFetcher.tx.getTx(txhash)
+        .then((result) => {
+          if (result && 'txResponse' in result && result.txResponse) {
+            return [
+              {
+                TxHash: result.txResponse.txhash,
+                Success: true,
+                RawLog: result.txResponse.rawLog ,
+              },
+            ];
+          } else {
+            return [];
+          }
+        })
+        .catch((error) => {
+          return [];
+        })
+    }
 
   return fetchTxInfo;
 }

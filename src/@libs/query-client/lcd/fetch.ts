@@ -13,7 +13,7 @@ export type LcdFetcher = <Data>(
   requestInit?: Omit<RequestInit, 'method' | 'body'>,
 ) => Promise<Data>;
 
-export function defaultLcdFetcher<Data>(
+export async function defaultLcdFetcher<Data>(
   endpoint: string,
   requestInit?: RequestInit,
 ): Promise<Data> {

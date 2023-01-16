@@ -1,19 +1,18 @@
 import { LcdFault } from '../errors';
 import { WasmFetchBaseParams, WasmQueryData } from '../interface';
+import { BatchQuery } from './batchfetch';
 import { defaultLcdFetcher, LcdFetcher, LcdResult } from './fetch';
 
 export interface LcdFetchParams<WasmQueries>
   extends WasmFetchBaseParams<WasmQueries> {
-  lcdFetcher?: LcdFetcher;
-  lcdEndpoint: string;
+  batchFetcher?: BatchQuery,
   requestInit?: Omit<RequestInit, 'method' | 'body'>;
 }
 
-export async function lcdFetch<WasmQueries>({
+export async function batchFetch<WasmQueries>({
   id,
   wasmQuery,
-  lcdEndpoint,
-  lcdFetcher = defaultLcdFetcher,
+  batchFetcher,
   requestInit,
 }: LcdFetchParams<WasmQueries>): Promise<WasmQueryData<WasmQueries>> {
   const wasmKeys: Array<keyof WasmQueries> = Object.keys(wasmQuery) as Array<
@@ -21,16 +20,13 @@ export async function lcdFetch<WasmQueries>({
   >;
 
   // Here we want to map that 
-
   const rawData = await Promise.all(
     wasmKeys.map((key) => {
       const { query, contractAddress } = wasmQuery[key];
-      const endpoint = `${lcdEndpoint}/cosmwasm/wasm/v1/contract/${contractAddress}/smart/${Buffer.from(
-        JSON.stringify(query),
-        'utf8',
-      ).toString('base64')}${id ? '?' + id : ''}`;
+      console.log("batch fetching" , query)
 
-      return lcdFetcher<LcdResult<any>>(endpoint, requestInit);
+      return batchFetcher?.wasm.queryContractSmart(contractAddress, query);
+
     }),
   );
   console.log(rawData)

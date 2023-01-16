@@ -50,7 +50,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-bluna-specific#config-1
      */
     export interface Config {
-      config: {};
+      config: Record<string, never>;
     }
 
     /**
@@ -95,7 +95,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/distribution-model#config-1
      */
     export interface Config {
-      config: {};
+      config: Record<string, never>;
     }
 
     /**
@@ -143,7 +143,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/interest-model#config-1
      */
     export interface Config {
-      config: {};
+      config: Record<string, never>;
     }
 
     /**
@@ -207,7 +207,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/market#config-1
      */
     export interface Config {
-      config: {};
+      config: Record<string, never>;
     }
 
     /**
@@ -249,7 +249,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/market#state
      */
     export interface State {
-      state: {};
+      state: Record<string, never>;
     }
 
     /**
@@ -278,7 +278,7 @@ export namespace moneyMarket {
     }
     
     export interface BorrowerIncentives {
-      borrower_incentives: { };
+      borrower_incentives: Record<string, never>;
     }
 
     export interface BorrowRateResponse {
@@ -291,7 +291,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/oracle#config-1
      */
     export interface Config {
-      config: {};
+      config: Record<string, never>;
     }
 
     /**
@@ -425,7 +425,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/overseer#config-1
      */
     export interface Config {
-      config: {};
+      config: Record<string, never>;
     }
 
     /**
@@ -456,7 +456,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/overseer#distributionparams
      */
     export interface DistributionParams {
-      distribution_params: {};
+      distribution_params: Record<string, never>;
     }
 
     /**
@@ -472,7 +472,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/overseer#epochstate
      */
     export interface EpochState {
-      epoch_state: {};
+      epoch_state: Record<string, never>;
     }
 
     /**
@@ -486,7 +486,7 @@ export namespace moneyMarket {
     }
 
     export interface DynRateState {
-      dynrate_state: {};
+      dynrate_state: Record<string, never>;
     }
 
     export interface DynRateStateResponse {

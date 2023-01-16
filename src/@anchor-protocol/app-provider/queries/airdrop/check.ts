@@ -8,7 +8,6 @@ import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(airdropCheckQuery);
 
 export function useAirdropCheckQuery(): UseQueryResult<Airdrop | undefined> {
   const { queryClient, contractAddress, queryErrorReporter } =
@@ -24,9 +23,8 @@ export function useAirdropCheckQuery(): UseQueryResult<Airdrop | undefined> {
       terraWalletAddress,
       contractAddress.bluna.airdropRegistry,
       network.chainID,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(airdropCheckQuery, queryClient),
     {
       enabled: connected,
       keepPreviousData: false,
