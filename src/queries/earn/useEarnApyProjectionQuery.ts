@@ -160,6 +160,7 @@ export const useEarnApyProjectionQuery =
         refetchOnMount: false,
         refetchInterval: 1000 * 60 * 5,
         keepPreviousData: true,
+        enabled: !!queryClient
       },
     );
   };

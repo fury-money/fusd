@@ -162,7 +162,7 @@ export async function terraNativeBalancesQuery(
           }));
         });
     }else {
-      balancesPromise = queryClient.batchFetcher?.bank.allBalances(walletAddr)
+      balancesPromise = queryClient.batchFetcher!.bank.allBalances(walletAddr)
       .then((coins) => {
           return coins.map(({ denom, amount }) => ({
             denom: denom.replace(
@@ -174,7 +174,7 @@ export async function terraNativeBalancesQuery(
             ) as NativeDenom,
             amount: amount as u<Token<string>>,
           }));
-        }) ?? [];
+        });
     }
 
 

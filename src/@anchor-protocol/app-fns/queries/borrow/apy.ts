@@ -32,7 +32,7 @@ interface MarketBorrowIncentivesWasmQuery {
 export async function borrowAPYQuery(
   queryClient: QueryClient,
   blocksPerYear: number,
-  lastSyncedHeight: () => Promise<number>,
+  lastSyncedHeight: number,
   mmMarketContract: HumanAddr,
 ): Promise<BorrowAPYData> {
   console.log("For borrow : try to fetch")
@@ -74,12 +74,13 @@ export async function borrowAPYQuery(
     apy: 0 as Rate<number>,
   };
 
+  console.log("computing apy", queryClient)
   return {
     borrowerDistributionAPYs: [
       {
         DistributionAPY: rewardsAPY.toString() as Rate,
         Timestamp: Date.now() as DateTime,
-        Height: await lastSyncedHeight()
+        Height: lastSyncedHeight,
       },
     ],
     govRewards: [govRewards],

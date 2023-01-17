@@ -13,25 +13,22 @@ const storageKey = (mantleEndpoint: string) =>
 export function useLastSyncedHeightQuery(): UseQueryResult<number> {
   const { network } = useNetwork();
   const { queryClient, queryErrorReporter } = useAnchorWebapp();
-
+  console.log("for synced height", queryClient)
   const result = useQuery(
     [ANCHOR_QUERY_KEY.TERRA_LAST_SYNCED_HEIGHT, network.chainID],
-    createQueryFn((queryClient: QueryClient, chainID: string) => {
-      return lastSyncedHeightQuery(queryClient).then((blockHeight) => {
-        localStorage.setItem(storageKey(chainID), blockHeight.toString());
-        return blockHeight;
-      });
-    }, queryClient),
+    createQueryFn(
+      (queryClient: QueryClient, chainID: string) => lastSyncedHeightQuery(queryClient),
+       queryClient!
+    ),
     {
       refetchInterval: 1000 * 60,
+      staleTime: 1000 * 6,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient,
-      placeholderData: () => {
-        return +(localStorage.getItem(storageKey(network.chainID)) ?? '0');
-      },
     },
   );
+  console.log("for synced height", result)
 
   return result;
 }

@@ -7,6 +7,7 @@ import { lcdFetch } from './lcd/client';
 import { LcdFetcher } from './lcd/fetch';
 
 export class BatchQueryClient {
+  batchEndpoint: string | undefined;
   batchFetcher: BatchQuery | undefined;
   requestInit?: Omit<RequestInit, 'method' | 'body'>;
 };

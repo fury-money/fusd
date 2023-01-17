@@ -67,8 +67,8 @@ export interface App<
   lastSyncedHeight: () => Promise<number>;
 
   // wasm
-  batchQueryClient: BatchQueryClient;
-  queryClient: QueryClient;
+  batchQueryClient: BatchQueryClient | undefined;
+  queryClient: QueryClient | undefined;
   lcdQueryClient: LcdQueryClient;
   hiveQueryClient: HiveQueryClient;
 
@@ -151,7 +151,7 @@ export function AppProvider<
     _hiveQueryClient,
     _lcdQueryClient,
     constants,
-    contractAddress,
+    contractAddress,  
     defaultQueryClient,
     network,
     batchQueryClient

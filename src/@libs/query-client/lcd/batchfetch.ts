@@ -45,7 +45,7 @@ export type BatchQuery = QueryClient &
 
 export function useBatchQuery(rpc: string): BatchQueryClient | undefined{
 
-  const [batchQuery, setBatchQuery] = useState<BatchQuery | undefined>();
+  const [batchQuery, setBatchQuery] = useState<BatchQuery>();
 
   useEffect(() => {
     const createBatchQuery = async () => {
@@ -76,7 +76,8 @@ export function useBatchQuery(rpc: string): BatchQueryClient | undefined{
     createBatchQuery();
   }, [rpc])
 
-  return batchQuery ? {
+  return batchQuery && rpc ? {
+    batchEndpoint: rpc,
     batchFetcher: batchQuery,
   } : undefined;
 }

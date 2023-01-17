@@ -24,9 +24,9 @@ export function useAirdropCheckQuery(): UseQueryResult<Airdrop | undefined> {
       contractAddress.bluna.airdropRegistry,
       network.chainID,
     ],
-    createQueryFn(airdropCheckQuery, queryClient),
+    createQueryFn(airdropCheckQuery, queryClient!),
     {
-      enabled: connected,
+      enabled: connected && !!queryClient,
       keepPreviousData: false,
       onError: queryErrorReporter,
     },

@@ -82,7 +82,7 @@ export async function terraBalancesQuery(
   }, {} as CW20Query);
 
   let balancesPromise: Promise<TerraBalances['balances']>;
-
+  if(queryClient){
     if('lcdEndpoint' in queryClient){
       balancesPromise = Promise.all([
           queryClient.lcdFetcher<LcdBankBalances>(
@@ -161,6 +161,11 @@ export async function terraBalancesQuery(
           });
         })
     }
+  }else{
+    balancesPromise = new Promise((resolve, reject) => {
+      resolve([])
+    });
+  }
 
 
   const balances = await balancesPromise;

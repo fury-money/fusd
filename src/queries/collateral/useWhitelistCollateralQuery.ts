@@ -136,10 +136,11 @@ export function useWhitelistCollateralQuery(): UseQueryResult<
       network,
       {...(tokens && tokens[network.name]), ...localTokenInformation},
     ],
-    createQueryFn(whitelistCollateralQuery, queryClient),
+    createQueryFn(whitelistCollateralQuery, queryClient!),
     {
       refetchOnMount: false,
       keepPreviousData: true,
+      enabled: !!queryClient
     },
   );
 

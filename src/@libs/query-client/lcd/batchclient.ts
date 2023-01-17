@@ -23,26 +23,22 @@ export async function batchFetch<WasmQueries>({
   const rawData = await Promise.all(
     wasmKeys.map((key) => {
       const { query, contractAddress } = wasmQuery[key];
-      console.log("batch fetching" , query)
+      console.log("batch fetching" , contractAddress, query)
 
       return batchFetcher?.wasm.queryContractSmart(contractAddress, query);
 
     }),
   );
-  console.log(rawData)
 
   const result = wasmKeys.reduce((resultObject, key, i) => {
     const lcdResult = rawData[i];
-
-    if ('error' in lcdResult) {
-      throw new LcdFault('Unknown error: ' + String(lcdResult));
-    }
-
+    console.log(lcdResult)
     //@ts-ignore
     resultObject[key] = lcdResult
 
     return resultObject;
   }, {} as WasmQueryData<WasmQueries>);
 
+  console.log(result)
   return result;
 }

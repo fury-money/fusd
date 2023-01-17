@@ -27,9 +27,9 @@ export async function earnEpochStatesQuery(
   queryClient: QueryClient,
   moneyMarketContract: HumanAddr,
   overseerContract: HumanAddr,
-  lastSyncedHeight: () => Promise<number>,
+  blockHeight: number,
 ): Promise<EarnEpochStates> {
-  const blockHeight = await lastSyncedHeight();
+
 
   return wasmFetch<EarnEpochStatesWasmQuery>({
     ...queryClient,
@@ -39,7 +39,7 @@ export async function earnEpochStatesQuery(
         contractAddress: moneyMarketContract,
         query: {
           epoch_state: {
-            block_height: blockHeight + 1,
+            block_height: blockHeight + 2,
           },
         },
       },

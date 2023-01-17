@@ -25,11 +25,12 @@ export function useBorrowMarketQuery(): UseQueryResult<
       contractAddress.moneyMarket.overseer,
       contractAddress.native.usd,
     ],
-    createQueryFn(borrowMarketQuery, queryClient),
+    createQueryFn(borrowMarketQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: false,
       onError: queryErrorReporter,
+      enabled: !!queryClient
     },
   );
 
