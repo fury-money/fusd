@@ -157,7 +157,7 @@ function Component({ className }: BAssetClaimProps) {
         <TxFeeList className="receipt">
           {totalRewardsUST && (
             <TxFeeListItem label="Estimated Amount">
-              {formatUST(demicrofy(totalRewardsUST))} Luna
+              {formatUST(demicrofy(totalRewardsUST))} axlUSDC
             </TxFeeListItem>
           )}
           <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>

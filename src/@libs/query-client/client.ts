@@ -12,10 +12,6 @@ export class BatchQueryClient {
   requestInit?: Omit<RequestInit, 'method' | 'body'>;
 };
 
-BatchQueryClient.prototype.toString = function() {
-  return `BatchQueryClient`;
-}
-
 export type LcdQueryClient = {
   lcdEndpoint: string;
   lcdFetcher: LcdFetcher;
