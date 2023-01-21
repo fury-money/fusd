@@ -85,7 +85,7 @@ export function useWithdrawUstTx():
   const displayTx = useCallback(
     (txParams: WithdrawUstTxParams) => ({
       txKind: TxKind.WithdrawUst,
-      amount: `${formatOutput(txParams.withdrawAmount as aUST)} aUST`,
+      amount: `${formatOutput(txParams.withdrawAmount as aUST)} aUSDC`,
       timestamp: Date.now(),
     }),
     [formatOutput],

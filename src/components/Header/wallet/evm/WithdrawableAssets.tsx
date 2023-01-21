@@ -33,12 +33,12 @@ const WithdrawableAssetsBase = (props: WithdrawableAssetsProps) => {
     return [
       {
         tokenContract: contractAddress.cw20.aUST,
-        symbol: 'aUST',
+        symbol: 'aUSDC',
         balance: aUstBalance,
       },
       {
         tokenContract: 'uusd',
-        symbol: 'UST',
+        symbol: 'axlUSDC',
         balance: ustBalance,
       },
     ].filter(

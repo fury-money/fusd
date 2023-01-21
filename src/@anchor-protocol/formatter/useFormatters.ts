@@ -34,7 +34,7 @@ const useFormatters = (): Formatters => {
     const tokens = {
       axlUSDC: createFormatter<UST>('axlUSDC', 6),
       ust: createFormatter<UST>('axlUSDC', 6),
-      aUST: createFormatter<aUST>('aUST', 6),
+      aUST: createFormatter<aUST>('aUSDC', 6),
       anc: createFormatter<ANC>('ANC', 6),
       luna: createFormatter<Luna>('Luna', 6),
       bLuna: createFormatter<bLuna>('aLuna', 6),
