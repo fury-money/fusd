@@ -7,13 +7,15 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material';
+import { Divider, Grid, styled } from '@mui/material';
 import { PaddingSection } from './PaddingSection';
 import { useLiquidationHistoryQuery } from '@anchor-protocol/app-provider/queries/liquidate/history';
 import { LiquidationData } from '@anchor-protocol/app-fns/queries/liquidate/history';
 import { useFormatters } from '@anchor-protocol/formatter';
 import { u, UST } from '@libs/types';
 import { bLuna } from '@anchor-protocol/types';
+import { useMediaQuery } from 'react-responsive';
+import { useTheme } from 'styled-components';
 
 export interface LiquidationStatsSectionProps {
   className?: string;
@@ -46,11 +48,9 @@ export function LiquidationStatsSection({
       }) ?? [],
     [liquidationHistory, bluna, ust],
   );
-
-  const LowPaddingTableCell = styled(TableCell)({
-    padding: '5px 10px',
-    backgroundColor: 'unset',
-  });
+  
+  const theme = useTheme();
+  const isVerySmall = useMediaQuery({ maxWidth: 755 });
 
   return (
     <PaddingSection className={className}>
@@ -63,6 +63,7 @@ export function LiquidationStatsSection({
         </IconSpan>
       </h2>
 
+      {!isVerySmall && 
       <TableContainer style={{ maxHeight: 300, overflow: 'scroll' }}>
         <Table
           sx={{ minWidth: 650, padding: '5px 10px' }}
@@ -106,6 +107,52 @@ export function LiquidationStatsSection({
           </TableBody>
         </Table>
       </TableContainer>
+    }
+    {isVerySmall && 
+        <Grid container spacing={2} sx={{padding: "16px 16px", maxHeight: "300px", marginTop: "10px",marginLeft:0, overflowY: "scroll"}}>
+        {liquidations.map((liquidation, index: number) => (
+          <Grid container spacing={2} key={index} >
+                <Grid item xs={6}>
+                  Time
+                </Grid> 
+                <Grid item xs={6} sx={{fontWeight: "bold"}}>
+                  {liquidation.time}
+                </Grid> 
+                <Grid item xs={6}>
+                  aLuna Liquidated
+                </Grid>
+                <Grid item xs={6}>
+                  {liquidation.collateral}
+                </Grid> 
+                <Grid item xs={6}>
+                  axlUSDC Paid
+                </Grid>
+                <Grid item xs={6} sx={{color: theme.colors.positive}}>
+                  {liquidation.axlUSDC}
+                </Grid> 
+                <Grid item xs={6}>
+                  Average Price
+                </Grid>
+                <Grid item xs={6}>
+                  {liquidation.price}
+                </Grid> 
+                <Grid item xs={12} sx={{textAlign:"center", margin: "10px" }}>
+
+                </Grid>
+                <Grid item xs={12}>
+                  {index != (liquidations.length - 1) && <Divider orientation="horizontal" flexItem variant="middle"sx ={{backgroundColor: "white"}}/>}
+                </Grid> 
+          </Grid>
+              
+              ))}
+        </Grid>
+      }
     </PaddingSection>
   );
 }
+
+
+  const LowPaddingTableCell = styled(TableCell)({
+    padding: '5px 10px',
+    backgroundColor: 'unset',
+  });
