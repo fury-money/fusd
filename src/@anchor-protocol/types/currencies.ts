@@ -22,3 +22,7 @@ export type Eth<T = string> = T & NominalType<'eth'>;
 export type bEth<T = string> = T & NominalType<'beth'>;
 export type aToken<T = string> = T & NominalType<'aust'>;
 export type bAsset<T = string> = T & NominalType<'bluna' | 'basset'>;
+
+
+// LSD Tokens.
+export type LSD<lsd extends string, T = string> = T & NominalType<lsd>;

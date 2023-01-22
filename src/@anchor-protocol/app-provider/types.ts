@@ -1,6 +1,7 @@
 import { Gas } from '@anchor-protocol/types';
 import { AppConstants, AppContractAddress } from '@libs/app-provider';
 import { CW20Addr, HumanAddr, NativeDenom } from '@libs/types';
+import { RegisteredLSDs } from 'env';
 
 export interface AnchorContractAddress extends AppContractAddress {
   bluna: {
@@ -60,6 +61,9 @@ export interface AnchorContractAddress extends AppContractAddress {
   };
   admin: {
     feeAddress: HumanAddr;
+  },
+  lsds:{
+    [key in RegisteredLSDs]: LSDContracts;
   }
 }
 
@@ -69,4 +73,18 @@ export interface AnchorConstants extends AppConstants {
   bondGasWanted: Gas;
   astroportGasWanted: Gas;
   depositFeeAmount: number;
+}
+
+
+export interface LSDContracts {
+  info: {
+    tokenAddress: string;
+    hubAddress: string;
+    protocol: string;
+    icon: string;
+  };
+  hub: string;
+  reward: string;
+  token: string;
+  custody: string;
 }

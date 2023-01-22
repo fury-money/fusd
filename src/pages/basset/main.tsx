@@ -7,7 +7,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { AssetCard } from './components/AssetCard';
 import { AssetCardContentBluna } from './components/AssetCardContentBluna';
+import { AssetCardContentLSD } from './components/AssetCardContentLSD';
 import { Claimable } from './components/Claimable';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Box } from '@mui/material';
 
 export interface BAssetMainProps {
   className?: string;
@@ -31,6 +34,15 @@ function Component({ className }: BAssetMainProps) {
           hoverText="MINT & BURN"
         >
           <AssetCardContentBluna />
+        </AssetCard>
+        <AssetCard
+          to="https://www.erisprotocol.com/terra/amplifier"
+          title={<p>ampLuna (Eris Protocol)</p>}
+          bAssetIcon={<TokenIcon token="ampLuna" />}
+          originAssetIcon={<TokenIcon token="luna" />}
+          hoverText={<Box sx={{gap: "5px",display: "flex", alignItems: "center"}}>MINT & BURN <OpenInNewIcon/> </Box>}
+        >
+          <AssetCardContentLSD asset="ampLuna" />
         </AssetCard>
       </ul>
     </CenteredLayout>

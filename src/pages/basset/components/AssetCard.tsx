@@ -28,17 +28,32 @@ function Component({
 }: AssetCardProps) {
   return (
     <li className={className}>
-      <Link to={to}>
-        <h3>
-          <i>
-            {originAssetIcon}
-            {bAssetIcon}
-          </i>
-          <p>{title}</p>
-        </h3>
+      {to.includes("http") &&
+       <a href={to} target={"_blank"}>
+          <h3>
+            <i>
+              {originAssetIcon}
+              {bAssetIcon}
+            </i>
+            <p>{title}</p>
+          </h3>
 
-        <div>{children}</div>
-      </Link>
+          <div>{children}</div>
+        </a>}
+      {!to.includes("https") && 
+        <Link to={to}>
+          <h3>
+            <i>
+              {originAssetIcon}
+              {bAssetIcon}
+            </i>
+            <p>{title}</p>
+          </h3>
+
+          <div>{children}</div>
+        </Link>
+      }
+      
 
       <div className="hover">
         <Icon />

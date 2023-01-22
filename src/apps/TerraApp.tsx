@@ -61,6 +61,7 @@ export function TerraApp({ chainOptions }: TerraAppProps) {
               <Route path="*" element={<Navigate to="to-aasset" />} />
             </Route>
 
+
             <Route path={`/anc/vesting/claim`} element={<AncVestingClaim />} />
 
             <Route path="/liquidation" element={<Liquidate />} />

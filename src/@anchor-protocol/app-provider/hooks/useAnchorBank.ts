@@ -9,6 +9,10 @@ import {
   aUST,
   bLuna,
   bLunaLunaLP,
+  CW20Addr,
+  LSD,
+  NominalType,
+  u,
 } from '@anchor-protocol/types';
 import {
   useCW20Balance,
@@ -18,6 +22,7 @@ import {
 import { useMemo } from 'react';
 import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../contexts/context';
+import { RegisteredLSDs } from 'env';
 
 export interface AnchorBank {
   tax: AnchorTax;
@@ -58,6 +63,16 @@ export function useAnchorBank(): AnchorBank {
     terraWalletAddress,
   );
 
+
+  let lsdBalances: Record<RegisteredLSDs, u<LSD<RegisteredLSDs>>> = {} as Record<RegisteredLSDs, u<LSD<RegisteredLSDs>>>
+  Object.values(RegisteredLSDs).forEach((lsd: RegisteredLSDs) => {
+    
+    lsdBalances[lsd] = useCW20Balance<LSD<typeof lsd>>(
+      contractAddress.lsds[lsd]?.info.tokenAddress as CW20Addr,
+      terraWalletAddress,
+    )
+  })
+
   return useMemo(() => {
     return {
       tax: {
@@ -73,7 +88,8 @@ export function useAnchorBank(): AnchorBank {
         ubLuna,
         ubLunaLunaLP,
         uLuna,
-      },
+        uLSDs: lsdBalances
+      }
     };
   }, [
     maxTax,
@@ -85,5 +101,6 @@ export function useAnchorBank(): AnchorBank {
     uaUST,
     ubLuna,
     ubLunaLunaLP,
+    lsdBalances
   ]);
 }

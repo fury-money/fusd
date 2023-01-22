@@ -765,11 +765,9 @@ const StyledDashboard = styled(DashboardBase)`
         margin-bottom: 0;
       }
 
-      height: 586px;
-
       display: grid;
       grid-template-columns: 500px 1fr 1fr;
-      grid-template-rows: repeat(5, 1fr);
+      grid-template-rows: repeat(1fr);
 
       .total-value-locked {
         grid-column: 1/2;
