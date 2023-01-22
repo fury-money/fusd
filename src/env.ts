@@ -116,7 +116,18 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
     whitePaper: "whitepaper"
   },
   LSDs:{
-
+    ampLuna: {
+      info: {
+        tokenAddress: "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
+        hubAddress: "terra10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaqyd3enk",
+        protocol : "Eris Protocol",
+        icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
+      },
+      hub: undefined,
+      reward: undefined,
+      token: undefined,
+      custody: undefined,
+    },
   }
 };
 
