@@ -10,26 +10,25 @@ const queryFn = createQueryFn(borrowAPYQuery);
 
 export function useBorrowAPYQuery(): UseQueryResult<BorrowAPYData | undefined> {
   const {
+    queryClient, 
     queryErrorReporter,
     constants: { blocksPerYear },
     lastSyncedHeight,
+    contractAddress: {
+      moneyMarket
+    }
   } = useAnchorWebapp();
-
-  const { data: marketState } = useMarketStateQuery();
-
-  const { data: { overseerConfig, overseerEpochState } = {} } =
-    useEarnEpochStatesQuery();
 
      
 
   return useQuery(
-    [ANCHOR_QUERY_KEY.BORROW_APY, marketState, blocksPerYear, lastSyncedHeight,  overseerConfig?.epoch_period ?? 1, overseerEpochState?.last_executed_height ?? 0],
+    [ANCHOR_QUERY_KEY.BORROW_APY, blocksPerYear, lastSyncedHeight,  moneyMarket?.market, queryClient],
     queryFn,
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
-      enabled: !!marketState,
+      enabled: !!moneyMarket?.market && !!queryClient,
     },
   );
 }

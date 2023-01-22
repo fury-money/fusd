@@ -241,6 +241,8 @@ export namespace moneyMarket {
     export interface EpochStateResponse {
       exchange_rate: UST;
       aterra_supply: Num;
+      reserves_rate_used_for_borrowers: Num;
+      prev_borrower_incentives: Num;
     }
 
     /**
@@ -273,6 +275,14 @@ export namespace moneyMarket {
         interest_model?: HumanAddr;
         distribution_model?: HumanAddr;
       };
+    }
+    
+    export interface BorrowerIncentives {
+      borrower_incentives: { };
+    }
+
+    export interface BorrowRateResponse {
+      rate: Rate;
     }
   }
 

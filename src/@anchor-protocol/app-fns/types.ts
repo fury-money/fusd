@@ -12,8 +12,10 @@ import {
   u,
   CollateralAmount,
   UST,
+  LSD,
 } from '@anchor-protocol/types';
 import Big from 'big.js';
+import { RegisteredLSDs } from 'env';
 import { WhitelistCollateral } from 'queries';
 
 /**
@@ -35,6 +37,9 @@ export interface AnchorTokenBalances {
   uANC: u<ANC>;
   uAncUstLP: u<AncUstLP>;
   ubLunaLunaLP: u<bLunaLunaLP>;
+  uLSDs: {
+    [key in RegisteredLSDs]: string
+  }
 }
 
 export const DefaultAnchorTokenBalances = {

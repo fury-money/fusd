@@ -17,7 +17,12 @@ import ust2x from './assets/ust@2x.png';
 import ust3x from './assets/ust@3x.png';
 import ust4x from './assets/ust@4x.png';
 
-export const tokens = ['ust', 'aust', 'luna', 'bluna'] as const;
+import ampLuna from './assets/ampLuna.svg';
+import ampLuna2x from './assets/ampLuna@2x.png';
+import ampLuna3x from './assets/ampLuna@3x.png';
+import ampLuna4x from './assets/ampLuna@4x.png';
+
+export const tokens = ['ust', 'aust', 'luna', 'bluna', 'ampLuna'] as const;
 export const variants = ['svg', '@2x', '@3x', '@4x'] as const;
 
 export type Tokens = typeof tokens[number];
@@ -56,6 +61,12 @@ export const tokenImages: Record<Tokens, Record<IconVariant, TokenImage>> = {
     '@3x': convert(bluna3x),
     '@4x': convert(bluna4x),
   },
+  ampLuna: {
+    'svg': convert(ampLuna),
+    '@2x': convert(ampLuna2x),
+    '@3x': convert(ampLuna3x),
+    '@4x': convert(ampLuna4x),
+  }
 };
 
 export interface IconProps

@@ -8,13 +8,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Table, Modal } from '@mui/material';
+import { Table, Modal, Box, Grid, Divider } from '@mui/material';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { PaddingSection } from './PaddingSection';
 import {
   useAnchorWebapp,
@@ -37,9 +37,10 @@ import {
 import debounce from 'lodash.debounce';
 import { Msg, MsgExecuteContract } from '@terra-money/terra.js';
 import { CircleSpinner } from 'react-spinners-kit';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { Mutex } from 'async-mutex';
 import { useActivateLiquidationBidTx } from '@anchor-protocol/app-provider/tx/liquidate/activate';
+import { useMediaQuery } from 'react-responsive';
 
 export interface MyBidsSectionProps {
   className?: string;
@@ -62,13 +63,10 @@ export function MyBidsSection({ className }: MyBidsSectionProps) {
           status: 'Active',
           idx: bid.idx,
           filled: formatUToken(bid.pending_liquidated_collateral),
-        })),
+        }))
+        .filter((bid, index) => bid.remaining != "0"),
     [bidByUser],
   );
-
-  const HeaderCell = styled(TableCell)({
-    backgroundColor: 'unset',
-  });
 
   // We check if there is an inactive bid in the mix that can be activated
 
@@ -261,6 +259,9 @@ export function MyBidsSection({ className }: MyBidsSectionProps) {
   ////////////////////////////////// Visuals //////////////////////////////
   const theme = useTheme();
 
+  const isVerySmall = useMediaQuery({ maxWidth: 755 });
+
+
   const renderBroadcastTx = useMemo(() => {
     return (
       <TxResultRenderer
@@ -339,61 +340,123 @@ export function MyBidsSection({ className }: MyBidsSectionProps) {
         </Button>
       )}
       {!!estimatedFeeError && <>Can't activate bids : {estimatedFeeError}</>}
-      <TableContainer style={{ maxHeight: 300, overflow: 'scroll' }}>
-        <Table
-          sx={{ minWidth: 650 }}
-          aria-label="simple table"
-          size="small"
-          stickyHeader
-        >
-          <TableHead>
-            <TableRow>
-              <HeaderCell>Premium</HeaderCell>
-              <HeaderCell align="right">Bid Remaining (axlUSDC)</HeaderCell>
-              <HeaderCell align="right">Bid Status</HeaderCell>
-              <HeaderCell align="right">Amount filled (aLuna)</HeaderCell>
-              <HeaderCell align="right"></HeaderCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {myBids.map((bid, index) => (
-              <TableRow
-                key={index}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell>{bid.premium}</TableCell>
-                <TableCell align="right">{bid.remaining}</TableCell>
-                <TableCell align="right">{bid.status}</TableCell>
-                <TableCell align="right">{bid.filled}</TableCell>
-                <TableCell align="right">
-                  {!!feeEstimates[bid.idx] && (
-                    <Button
-                      style={{ height: 35, padding: '10px 10px' }}
-                      onClick={async () => {
-                        state.updateBidIdx(bid.idx);
-                        withdrawBid(
-                          bid.idx,
-                          feeEstimates[bid.idx],
-                          state.invalidNextTxFee,
-                        );
-                      }}
-                      color="primary"
-                      variant="outlined"
-                    >
-                      Retract
-                    </Button>
-                  )}
-                  {!feeEstimates[bid.idx] && (
-                    <CircleSpinner size={14} color={theme.colors.positive} />
-                  )}
-                </TableCell>
+      {!isVerySmall && 
+        <TableContainer style={{ maxHeight: 300, overflow: 'scroll' }}>
+          <Table
+            sx={{ minWidth: 650 }}
+            aria-label="simple table"
+            size="small"
+            stickyHeader
+          >
+            <TableHead>
+              <TableRow>
+                <HeaderCell>Premium</HeaderCell>
+                <HeaderCell align="right">Bid Remaining (axlUSDC)</HeaderCell>
+                <HeaderCell align="right">Bid Status</HeaderCell>
+                <HeaderCell align="right">Amount filled (aLuna)</HeaderCell>
+                <HeaderCell align="right"></HeaderCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+
+            <TableBody>
+              {myBids.map((bid, index) => (
+                <TableRow
+                  key={index}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell>{bid.premium}</TableCell>
+                  <TableCell align="right">{bid.remaining}</TableCell>
+                  <TableCell align="right">{bid.status}</TableCell>
+                  <TableCell align="right">{bid.filled}</TableCell>
+                  <TableCell align="right">
+                    {!!feeEstimates[bid.idx] && (
+                      <Button
+                        style={{ height: 35, padding: '10px 10px' }}
+                        onClick={async () => {
+                          state.updateBidIdx(bid.idx);
+                          withdrawBid(
+                            bid.idx,
+                            feeEstimates[bid.idx],
+                            state.invalidNextTxFee,
+                          );
+                        }}
+                        color="primary"
+                        variant="outlined"
+                      >
+                        Retract
+                      </Button>
+                    )}
+                    {!feeEstimates[bid.idx] && (
+                      <CircleSpinner size={14} color={theme.colors.positive} />
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>}
+      {isVerySmall && 
+        <Grid container spacing={2} sx={{padding: "16px 16px", maxHeight: "300px", marginTop: "10px",marginLeft:0, overflowY: "scroll"}}>
+        {myBids.map((bid, index) => (
+          <Grid container spacing={2} key={index} >
+                <Grid item xs={6}>
+                  Premium
+                </Grid> 
+                <Grid item xs={6} sx={{fontWeight: "bold"}}>
+                  {bid.premium}
+                </Grid> 
+                <Grid item xs={6}>
+                  Bid Remaining (axlUSDC)
+                </Grid>
+                <Grid item xs={6}>
+                  {bid.remaining}
+                </Grid> 
+                <Grid item xs={6}>
+                  Bid Status
+                </Grid>
+                <Grid item xs={6} sx={{color: theme.colors.positive}}>
+                  {bid.status}
+                </Grid> 
+                <Grid item xs={6}>
+                  Amount filled (aLuna)
+                </Grid>
+                <Grid item xs={6}>
+                  {bid.filled}
+                </Grid> 
+                <Grid item xs={12} sx={{textAlign:"center", margin: "10px" }}>
+                {!!feeEstimates[bid.idx] && (
+                      <Button
+                        style={{ height: 35, padding: '10px 30px'}}
+                        onClick={async () => {
+                          state.updateBidIdx(bid.idx);
+                          withdrawBid(
+                            bid.idx,
+                            feeEstimates[bid.idx],
+                            state.invalidNextTxFee,
+                          );
+                        }}
+                        color="primary"
+                        variant="outlined"
+                      >
+                        Retract
+                      </Button>
+                    )}
+                  {!feeEstimates[bid.idx] && (
+                    <CircleSpinner size={14} color={theme.colors.positive}/>
+                  )}
+                </Grid>
+                <Grid item xs={12}>
+                  {index != (myBids.length - 1) && <Divider orientation="horizontal" flexItem variant="middle"sx ={{backgroundColor: "white"}}/>}
+                </Grid> 
+          </Grid>
+              
+              ))}
+        </Grid>
+      }
       {confirmElement}
     </PaddingSection>
   );
 }
+  const HeaderCell = styled(TableCell)({
+    background: 'unset !important',
+  });

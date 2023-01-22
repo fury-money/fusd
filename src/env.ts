@@ -3,6 +3,7 @@ import {
   ANCHOR_TX_KEY,
   AnchorConstants,
   AnchorContractAddress,
+  LSDContracts,
 } from '@anchor-protocol/app-provider';
 import { CW20Addr, HumanAddr } from '@anchor-protocol/types';
 import { TERRA_QUERY_KEY, TxRefetchMap } from '@libs/app-provider';
@@ -67,7 +68,11 @@ export function ANCHOR_CONSTANTS(network: NetworkInfo): AnchorConstants {
   };
 }
 
-const PHOENIX_CONTRACT_ADDRESS = {
+export enum RegisteredLSDs {
+  ampLuna = "ampLuna",
+}
+
+const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
 
   bLunaHub: "terra1c4x3x5ptxw4yy436rvz5u9cru6868ksxr95gsyya55ycgll0xdas0g7htx",
   bLunaReward: "terra1w7ssgvtetdzczyl98pdxvs79nw9g6rjejt0urxegm30dukddyesqy0g95n",
@@ -109,10 +114,24 @@ const PHOENIX_CONTRACT_ADDRESS = {
   feeAddress: "terra1ytj0hhw39j88qsx4yapsr6ker83jv3aj354gmj",
   tokenId:{
     whitePaper: "whitepaper"
+  },
+  LSDs:{
+    ampLuna: {
+      info: {
+        tokenAddress: "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
+        hubAddress: "terra10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaqyd3enk",
+        protocol : "Eris Protocol",
+        icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
+      },
+      hub: undefined,
+      reward: undefined,
+      token: undefined,
+      custody: undefined,
+    },
   }
 };
 
-const PISCO_CONTRACT_ADDRESS = {
+const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
   bLunaHub: 'terra1m8unfkpp4kdnc693yxnl6wgvu5wkeps9ages9p4034gjgtvmk22qg9le2l',
   bLunaToken:
     'terra1wmmjpacj6c7eeacyk0jnugtqe24cxw7mvq0zwvc7l3ke2au8u4nqfnd76k',
@@ -156,7 +175,21 @@ const PISCO_CONTRACT_ADDRESS = {
   feeAddress: "terra1qyudfva64yk9sye5x7pp654hl0pvk4k0gdzv0k",
   tokenId:{
     whitePaper: "whitepaper"
-  }
+  },
+  LSDs: {
+    ampLuna: {
+      info: {
+          tokenAddress: "terra1xgvp6p0qml53reqdyxgcl8ttl0pkh0n2mtx2n7tzfahn6e0vca7s0g7sg6",
+          hubAddress: "terra1kye343r8hl7wm6f3uzynyyzl2zmcm2sqmvvzwzj7et2j5jj7rjkqa2ue88",
+        protocol : "Eris Protocol",
+        icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
+      },
+      hub: "terra1gxvlzg6dqzst4kvj8he8ygrd98rmt3q3dqcx02r3ffcm697s5khs4whyt6",
+      reward: "terra1awg3jvhzp0maxkghpjarg72ykxxqs9wfusajsdml6n8k0pgan9asg3pugh",
+      token: "terra1vj7nl20agm0qa5xyqpq77rhuywetphq8thx6phs4q2ejcexrqhtsad5cku",
+      custody: "terra1vpeunamrv0wkemg23x9ac5awshsjqx2ks8q9tnvrfn6ug840c0fs228gk0"
+    },
+  },
 };
 
 export const ANCHOR_CONTRACT_ADDRESS = (
@@ -225,7 +258,23 @@ export const ANCHOR_CONTRACT_ADDRESS = (
     },
     admin:{
       feeAddress: addressMap.feeAddress as HumanAddr,
-    }
+    },
+    lsds: Object.assign(
+      {},
+       ...Object.values(RegisteredLSDs).map((lsd: RegisteredLSDs): ({[lsd] : LSDContracts } | {}) => {
+        if(!addressMap.LSDs[lsd as string]){
+          return {};
+        }
+        return ({
+      [lsd]: {
+        info: addressMap.LSDs[lsd as string].info,
+        hub: addressMap.LSDs[lsd as string].hub,
+        reward: addressMap.LSDs[lsd as string].reward,
+        token: addressMap.LSDs[lsd as string].token,
+        custody: addressMap.LSDs[lsd as string].custody
+      }
+    })
+      }))
   };
 };
 
