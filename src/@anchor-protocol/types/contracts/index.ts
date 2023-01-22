@@ -5,3 +5,4 @@ export * from './common';
 export * from './liquidation';
 export * from './moneyMarket';
 export * from './crossAnchor';
+export * from './lsdWrapper';

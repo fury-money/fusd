@@ -123,6 +123,7 @@ function useLocalTokenInformation(){
           protocol: contracts.info.protocol,
           token: contracts.token,
           icon: contracts.info.icon,
+          info: contracts
         }
       })})
     )
@@ -142,8 +143,6 @@ export function useWhitelistCollateralQuery(): UseQueryResult<
   const { data: tokens } = useCW20TokenDisplayInfosQuery();
 
   const localTokenInformation = useLocalTokenInformation();
-
-  console.log({...(tokens && tokens[network.name]), ...localTokenInformation},)
 
   const query = useAnchorQuery(
     [

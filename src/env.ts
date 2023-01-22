@@ -179,9 +179,10 @@ const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
   LSDs: {
     ampLuna: {
       info: {
-          tokenAddress: "terra1xgvp6p0qml53reqdyxgcl8ttl0pkh0n2mtx2n7tzfahn6e0vca7s0g7sg6",
-          hubAddress: "terra1kye343r8hl7wm6f3uzynyyzl2zmcm2sqmvvzwzj7et2j5jj7rjkqa2ue88",
+        tokenAddress: "terra1xgvp6p0qml53reqdyxgcl8ttl0pkh0n2mtx2n7tzfahn6e0vca7s0g7sg6",
+        hubAddress: "terra1kye343r8hl7wm6f3uzynyyzl2zmcm2sqmvvzwzj7et2j5jj7rjkqa2ue88",
         protocol : "Eris Protocol",
+        symbol: "ampLuna",
         icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
       },
       hub: "terra1gxvlzg6dqzst4kvj8he8ygrd98rmt3q3dqcx02r3ffcm697s5khs4whyt6",

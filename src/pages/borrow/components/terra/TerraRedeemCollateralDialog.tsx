@@ -8,6 +8,7 @@ import { useCallback } from 'react';
 import { RedeemCollateralDialog } from '../RedeemCollateralDialog';
 import { RedeemCollateralFormParams } from '../types';
 import { normalize } from '@anchor-protocol/formatter';
+import { RedeemWrappedCollateralDialog } from '../RedeemWrappedCollateralDialog (copie)';
 
 export const TerraRedeemCollateralDialog = (
   props: DialogProps<RedeemCollateralFormParams>,
@@ -34,7 +35,7 @@ export const TerraRedeemCollateralDialog = (
     [connected, postTx],
   );
 
-  return (
+  return collateral.protocol == "Cavern" ? (
     <RedeemCollateralDialog
       {...props}
       txResult={txResult}
@@ -43,5 +44,12 @@ export const TerraRedeemCollateralDialog = (
       proceedable={postTx !== undefined}
       onProceed={proceed}
     />
-  );
+  ) : <RedeemWrappedCollateralDialog
+      {...props}
+      txResult={txResult}
+      collateral={collateral}
+      uTokenBalance={uTokenBalance}
+      proceedable={postTx !== undefined}
+      onProceed={proceed}
+    />;
 };

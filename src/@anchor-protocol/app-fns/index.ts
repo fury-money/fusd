@@ -4,6 +4,7 @@ export * from './env';
 export * from './types';
 export * from './caches/airdropStage';
 export * from './forms/borrow/borrow';
+export * from './forms/borrow/provideWrapperCollateral';
 export * from './forms/borrow/provideCollateral';
 export * from './forms/borrow/redeemCollateral';
 export * from './forms/borrow/repay';

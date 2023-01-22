@@ -54,6 +54,7 @@ export function borrowProvideCollateralTx($: {
   collateral: WhitelistCollateral;
   walletAddr: HumanAddr;
   depositAmount: bAsset;
+  lunaAmount: u<bAsset>;
   overseerAddr: HumanAddr;
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -74,13 +75,40 @@ export function borrowProvideCollateralTx($: {
 
   return pipe(
     _createTxOptions({
-      msgs: [
+      msgs: [  
+
+      // Raise allowance on the actual token
+      new MsgExecuteContract($.walletAddr,
+        $.collateral.info.info.tokenAddress,
+        {
+          increase_allowance: {
+            spender: $.collateral.collateral_token,
+            amount: formatInput(
+              microfy($.depositAmount, $.collateral.decimals),
+              $.collateral.decimals,
+            ),
+          },
+        },
+      ),
+      // Wrap the tokens
+      new MsgExecuteContract($.walletAddr,
+        $.collateral.collateral_token,
+        {
+          mint: {
+            recipient: $.walletAddr,
+            lsd_amount: formatInput(
+              $.lunaAmount,
+              $.collateral.decimals,
+            ),
+          },
+        },
+      ),
         // provide_collateral call
         new MsgExecuteContract($.walletAddr, $.collateral.collateral_token, {
           send: {
             contract: $.collateral.custody_contract,
             amount: formatInput(
-              microfy($.depositAmount, $.collateral.decimals),
+              $.lunaAmount,
               $.collateral.decimals,
             ),
             msg: createHookMsg({
@@ -96,7 +124,7 @@ export function borrowProvideCollateralTx($: {
               [
                 $.collateral.collateral_token,
                 formatInput(
-                  microfy($.depositAmount, $.collateral.decimals),
+                  $.lunaAmount,
                   $.collateral.decimals,
                 ),
               ],

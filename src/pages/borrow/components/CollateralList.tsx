@@ -66,11 +66,13 @@ export function CollateralList(props: UIElementProps) {
 
   const { data: borrowBorrower } = useBorrowBorrowerQuery();
 
+  // For aLuna and usual collateral tokens that suffice for providing
   const [openProvideCollateralDialog, provideCollateralDialogElement] =
     useProvideCollateralDialog();
 
   const [openRedeemCollateralDialog, redeemCollateralDialogElement] =
     useRedeemCollateralDialog();
+
 
   const { data: whitelist } = useWhitelistCollateralQuery();
 
@@ -126,6 +128,7 @@ export function CollateralList(props: UIElementProps) {
       .filter((collateral) => Number(collateral.price) !== 0);
   }, [borrowBorrower, borrowMarket, whitelist]);
 
+  console.log(collaterals)
   // ---------------------------------------------
   // presentation
   // ---------------------------------------------
@@ -213,11 +216,11 @@ export function CollateralList(props: UIElementProps) {
                     onClick={() =>
                       borrowMarket &&
                       borrowBorrower &&
-                      openProvideCollateralDialog({
-                        collateral,
-                        fallbackBorrowMarket: borrowMarket,
-                        fallbackBorrowBorrower: borrowBorrower,
-                      })
+                        openProvideCollateralDialog({
+                          collateral,
+                          fallbackBorrowMarket: borrowMarket,
+                          fallbackBorrowBorrower: borrowBorrower,
+                        })
                     }
                   >
                     Provide

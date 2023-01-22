@@ -82,6 +82,7 @@ export interface LSDContracts {
     hubAddress: string;
     protocol: string;
     icon: string;
+    symbol: string;
   };
   hub: string;
   reward: string;

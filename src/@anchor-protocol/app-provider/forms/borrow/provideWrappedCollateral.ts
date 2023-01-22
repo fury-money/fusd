@@ -1,6 +1,6 @@
 import {
   BorrowBorrower,
-  borrowProvideCollateralForm,
+  borrowProvideWrappedCollateralForm,
 } from '@anchor-protocol/app-fns';
 import {
   BorrowMarketWithDisplay,
@@ -9,14 +9,14 @@ import {
 import { useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
 import { bAsset } from '@anchor-protocol/types';
 import { useFixedFee } from '@libs/app-provider';
-import { u } from '@libs/types';
+import { Rate, u } from '@libs/types';
 import { useForm } from '@libs/use-form';
 import { useAccount } from 'contexts/account';
 import { WhitelistCollateral } from 'queries';
 import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
 import { useBorrowMarketQuery } from '../../queries/borrow/market';
 
-export function useBorrowProvideCollateralForm(
+export function useBorrowProvideWrappedCollateralForm(
   collateral: WhitelistCollateral,
   balance: u<bAsset>,
   fallbackBorrowMarket: BorrowMarketWithDisplay,
@@ -37,8 +37,11 @@ export function useBorrowProvideCollateralForm(
     data: { marketBorrowerInfo, overseerCollaterals } = fallbackBorrowBorrower,
   } = useBorrowBorrowerQuery();
 
+  const {data: details} = useWrappedTokenDetails(collateral);
+  console.log("details", details?.hubState)
+
   return useForm(
-    borrowProvideCollateralForm,
+    borrowProvideWrappedCollateralForm,
     {
       collateral,
       userBAssetBalance: balance,
@@ -50,6 +53,7 @@ export function useBorrowProvideCollateralForm(
       marketBorrowerInfo,
       fixedFee,
       bAssetLtvs,
+      exchangeRate: details?.hubState.exchange_rate ?? "0" as Rate
     },
     () => ({ depositAmount: '' as bAsset }),
   );

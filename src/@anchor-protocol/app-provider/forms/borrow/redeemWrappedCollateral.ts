@@ -1,22 +1,21 @@
 import {
   BorrowBorrower,
-  borrowProvideCollateralForm,
+  borrowRedeemCollateralForm,
 } from '@anchor-protocol/app-fns';
+import { useBorrowBorrowerQuery } from '@anchor-protocol/app-provider/queries/borrow/borrower';
+import { useBorrowMarketQuery } from '@anchor-protocol/app-provider/queries/borrow/market';
 import {
   BorrowMarketWithDisplay,
   useAnchorBank,
 } from '@anchor-protocol/app-provider';
-import { useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
 import { bAsset } from '@anchor-protocol/types';
 import { useFixedFee } from '@libs/app-provider';
 import { u } from '@libs/types';
 import { useForm } from '@libs/use-form';
 import { useAccount } from 'contexts/account';
 import { WhitelistCollateral } from 'queries';
-import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
-import { useBorrowMarketQuery } from '../../queries/borrow/market';
 
-export function useBorrowProvideCollateralForm(
+export function useBorrowRedeemWrappedCollateralForm(
   collateral: WhitelistCollateral,
   balance: u<bAsset>,
   fallbackBorrowMarket: BorrowMarketWithDisplay,
@@ -38,7 +37,7 @@ export function useBorrowProvideCollateralForm(
   } = useBorrowBorrowerQuery();
 
   return useForm(
-    borrowProvideCollateralForm,
+    borrowRedeemCollateralForm,
     {
       collateral,
       userBAssetBalance: balance,
@@ -51,6 +50,6 @@ export function useBorrowProvideCollateralForm(
       fixedFee,
       bAssetLtvs,
     },
-    () => ({ depositAmount: '' as bAsset }),
+    () => ({ redeemAmount: '' as bAsset }),
   );
 }

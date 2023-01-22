@@ -8,6 +8,8 @@ export * from './contexts/target';
 export * from './forms/borrow/borrow';
 export * from './forms/borrow/provideCollateral';
 export * from './forms/borrow/redeemCollateral';
+export * from './forms/borrow/redeemWrappedCollateral';
+export * from './forms/borrow/provideWrappedCollateral';
 export * from './forms/borrow/repay';
 export * from './forms/earn/deposit';
 export * from './forms/earn/withdraw';
