@@ -63,13 +63,10 @@ export function MyBidsSection({ className }: MyBidsSectionProps) {
           status: 'Active',
           idx: bid.idx,
           filled: formatUToken(bid.pending_liquidated_collateral),
-        })),
+        }))
+        .filter((bid, index) => bid.remaining != "0"),
     [bidByUser],
   );
-
-  const HeaderCell = styled(TableCell)({
-    backgroundColor: 'unset',
-  });
 
   // We check if there is an inactive bid in the mix that can be activated
 
@@ -402,31 +399,31 @@ export function MyBidsSection({ className }: MyBidsSectionProps) {
         <Grid container spacing={2} sx={{padding: "16px 16px", maxHeight: "300px", marginTop: "10px",marginLeft:0, overflowY: "scroll"}}>
         {myBids.map((bid, index) => (
           <Grid container spacing={2} key={index} >
-                <Grid xs={6}>
+                <Grid item xs={6}>
                   Premium
                 </Grid> 
-                <Grid xs={6} sx={{fontWeight: "bold"}}>
+                <Grid item xs={6} sx={{fontWeight: "bold"}}>
                   {bid.premium}
                 </Grid> 
-                <Grid xs={6} key={index} >
+                <Grid item xs={6}>
                   Bid Remaining (axlUSDC)
                 </Grid>
-                <Grid xs={6}>
+                <Grid item xs={6}>
                   {bid.remaining}
                 </Grid> 
-                <Grid xs={6} key={index}>
+                <Grid item xs={6}>
                   Bid Status
                 </Grid>
-                <Grid xs={6} sx={{color: theme.colors.positive}}>
+                <Grid item xs={6} sx={{color: theme.colors.positive}}>
                   {bid.status}
                 </Grid> 
-                <Grid xs={6} key={index}>
+                <Grid item xs={6}>
                   Amount filled (aLuna)
                 </Grid>
-                <Grid xs={6}>
+                <Grid item xs={6}>
                   {bid.filled}
                 </Grid> 
-                <Grid xs={12} sx={{textAlign:"center", margin: "10px" }}>
+                <Grid item xs={12} sx={{textAlign:"center", margin: "10px" }}>
                 {!!feeEstimates[bid.idx] && (
                       <Button
                         style={{ height: 35, padding: '10px 30px'}}
@@ -448,7 +445,7 @@ export function MyBidsSection({ className }: MyBidsSectionProps) {
                     <CircleSpinner size={14} color={theme.colors.positive}/>
                   )}
                 </Grid>
-                <Grid xs={12}>
+                <Grid item xs={12}>
                   {index != (myBids.length - 1) && <Divider orientation="horizontal" flexItem variant="middle"sx ={{backgroundColor: "white"}}/>}
                 </Grid> 
           </Grid>
@@ -460,3 +457,6 @@ export function MyBidsSection({ className }: MyBidsSectionProps) {
     </PaddingSection>
   );
 }
+  const HeaderCell = styled(TableCell)({
+    background: 'unset !important',
+  });
