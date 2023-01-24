@@ -5,7 +5,7 @@ import { createContext, useContext } from 'react';
 export const TESTNET: NetworkInfo = {
   name: 'testnet',
   chainID: 'pisco-1',
-  lcd: 'https://pisco-lcd.terra.dev',
+  lcd: 'https://pisco-lcd.erisprotocol.com/',
   walletconnectID: 0,
 };
 
@@ -19,7 +19,7 @@ export const CLASSIC: NetworkInfo = {
 export const MAINNET: NetworkInfo = {
   name: 'mainnet',
   chainID: 'phoenix-1',
-  lcd: 'https://phoenix-lcd.terra.dev',
+  lcd: 'https://phoenix-lcd.erisprotocol.com/',
   walletconnectID: 0,
 };
 
