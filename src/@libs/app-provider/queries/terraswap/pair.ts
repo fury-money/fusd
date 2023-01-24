@@ -5,7 +5,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useApp } from '../../contexts/app';
 import { TERRA_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(terraswapPairQuery);
 
 export function useTerraswapPairQuery(
   assetInfos: [terraswap.AssetInfo, terraswap.AssetInfo],
@@ -17,13 +16,13 @@ export function useTerraswapPairQuery(
       TERRA_QUERY_KEY.TERRASWAP_PAIR,
       contractAddress.terraswap.factory,
       assetInfos,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(terraswapPairQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

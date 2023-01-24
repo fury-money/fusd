@@ -1,4 +1,5 @@
 import { hiveFetch, lcdFetch, QueryClient } from '@libs/query-client';
+import { batchFetch } from '@libs/query-client/lcd/batchclient';
 import {
   cw20,
   HumanAddr,
@@ -42,9 +43,9 @@ export type TerraBalances = {
 };
 
 export async function terraBalancesQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   assets: terraswap.AssetInfo[],
-  queryClient: QueryClient,
 ): Promise<TerraBalances> {
   type CW20Query = Record<
     string,
@@ -80,9 +81,10 @@ export async function terraBalancesQuery(
     return wq;
   }, {} as CW20Query);
 
-  const balancesPromise: Promise<TerraBalances['balances']> =
-    'lcdEndpoint' in queryClient
-      ? Promise.all([
+  let balancesPromise: Promise<TerraBalances['balances']>;
+  if(queryClient){
+    if('lcdEndpoint' in queryClient){
+      balancesPromise = Promise.all([
           queryClient.lcdFetcher<LcdBankBalances>(
             `${queryClient.lcdEndpoint}/bank/balances/${walletAddr}`,
             queryClient.requestInit,
@@ -107,7 +109,8 @@ export async function terraBalancesQuery(
             return { asset, balance: nativeAsset?.amount ?? ('0' as u<Token>) };
           });
         })
-      : hiveFetch<any, NativeBalancesQueryVariables, NativeBalancesQueryResult>(
+    }else if ("hiveEndpoint" in queryClient){
+      balancesPromise = hiveFetch<any, NativeBalancesQueryVariables, NativeBalancesQueryResult>(
           {
             ...queryClient,
             id: `terra-balances=${walletAddr}`,
@@ -133,6 +136,37 @@ export async function terraBalancesQuery(
             return { asset, balance: nativeAsset?.Amount ?? ('0' as u<Token>) };
           });
         });
+
+    }else {
+      balancesPromise = Promise.all([
+          queryClient.batchFetcher?.bank.allBalances(walletAddr),
+          batchFetch<any>({
+            ...queryClient,
+            id: `terra-balances=${walletAddr}`,
+            wasmQuery,
+          }),
+        ]).then(([nativeTokenBalances, cw20TokenBalances]) => {
+          return assets.map((asset, i) => {
+            if ('token' in asset) {
+              const cw20Balance: cw20.BalanceResponse<Token> =
+                cw20TokenBalances['asset' + i] as any;
+              return { asset, balance: cw20Balance.balance as u<Token<string>> };
+            }
+
+            const nativeAsset = nativeTokenBalances?.find(
+              ({ denom }) => asset.native_token.denom === denom,
+            );
+
+            return { asset, balance: (nativeAsset?.amount ?? '0' ) as u<Token> };
+          });
+        })
+    }
+  }else{
+    balancesPromise = new Promise((resolve, reject) => {
+      resolve([])
+    });
+  }
+
 
   const balances = await balancesPromise;
 

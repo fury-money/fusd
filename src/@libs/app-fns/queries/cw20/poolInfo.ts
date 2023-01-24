@@ -13,9 +13,9 @@ export type CW20PoolInfo<T extends Token> = {
 };
 
 export async function cw20PoolInfoQuery<T extends Token>(
+  queryClient: QueryClient,
   tokenAddr: CW20Addr,
   terraswapFactoryAddr: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<CW20PoolInfo<T>> {
   const { terraswapPair } = await terraswapPairQuery(
     terraswapFactoryAddr,

@@ -10,8 +10,6 @@ import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(bAssetClaimableRewardsTotalQuery);
-
 export function useBAssetClaimableRewardsTotalQuery(): UseQueryResult<
   BAssetClaimableRewardsTotal | undefined
 > {
@@ -26,14 +24,13 @@ export function useBAssetClaimableRewardsTotalQuery(): UseQueryResult<
       ANCHOR_QUERY_KEY.BOND_BETH_CLAIMABLE_REWARDS_TOTAL,
       terraWalletAddress,
       bAssetInfoList.map(({ custodyConfig }) => custodyConfig.reward_contract),
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(bAssetClaimableRewardsTotalQuery, queryClient),
     {
       refetchInterval: connected && 1000 * 60 * 5,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient,
     },
   );
 

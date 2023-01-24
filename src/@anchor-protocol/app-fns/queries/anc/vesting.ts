@@ -11,9 +11,9 @@ interface AncVestingAccountWasmQuery {
 export type AncVestingAccount = WasmQueryData<AncVestingAccountWasmQuery>;
 
 export async function ancVestingAccountQuery(
+  queryClient: QueryClient,
   address: HumanAddr | undefined,
   ancVestingAddr: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<AncVestingAccount | undefined> {
   return undefined;
 

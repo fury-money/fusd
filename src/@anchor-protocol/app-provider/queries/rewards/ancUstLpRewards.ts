@@ -9,7 +9,6 @@ import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(rewardsAncUstLpRewardsQuery);
 
 export function useRewardsAncUstLpRewardsQuery(): UseQueryResult<
   RewardsAncUstLpRewards | undefined
@@ -25,14 +24,13 @@ export function useRewardsAncUstLpRewardsQuery(): UseQueryResult<
       terraWalletAddress,
       contractAddress.cw20.AncUstLP,
       contractAddress.astroport.generator,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(rewardsAncUstLpRewardsQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient,
     },
   );
 

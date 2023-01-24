@@ -3,6 +3,7 @@ import { patchReactQueryFocusRefetching } from '@libs/patch-react-query-focus-re
 import { UIElementProps } from '@libs/ui';
 import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 patchReactQueryFocusRefetching();
 
@@ -16,6 +17,9 @@ export const QueryProvider = ({ children }: UIElementProps) => {
   }, [network.chainID]);
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>   
+      {children}   
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };

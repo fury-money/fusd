@@ -18,10 +18,10 @@ export interface Airdrop {
 }
 
 export async function airdropCheckQuery(
+  queryClient: QueryClient,
   walletAddress: HumanAddr | undefined,
   airdropContract: HumanAddr,
   chainId: string,
-  queryClient: QueryClient,
 ): Promise<Airdrop | undefined> {
   if (!walletAddress || !chainId.startsWith('columbus')) {
     return undefined;

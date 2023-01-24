@@ -107,18 +107,19 @@ export const EMPTY_NATIVE_BALANCES: NativeBalances = {
 };
 
 export async function terraNativeBalancesQuery(
-  walletAddr: HumanAddr | undefined,
   queryClient: QueryClient,
+  walletAddr: HumanAddr | undefined,
 ): Promise<NativeBalances> {
   if (!walletAddr) {
     return EMPTY_NATIVE_BALANCES;
   }
 
-  const balancesPromise: Promise<
+  let balancesPromise: Promise<
     Array<{ denom: NativeDenom; amount: u<Token> }>
-  > =
-    'lcdEndpoint' in queryClient
-      ? queryClient
+  >;
+
+    if('lcdEndpoint' in queryClient){
+      balancesPromise = queryClient
           .lcdFetcher<LcdBankBalances>(
             `${queryClient.lcdEndpoint}/bank/balances/${walletAddr}`,
             queryClient.requestInit,
@@ -137,7 +138,8 @@ export async function terraNativeBalancesQuery(
                 ) as NativeDenom,
             }));
           })
-      : hiveFetch<any, NativeBalancesQueryVariables, NativeBalancesQueryResult>(
+    }else if ("hiveEndpoint" in queryClient){
+      balancesPromise = hiveFetch<any, NativeBalancesQueryVariables, NativeBalancesQueryResult>(
           {
             ...queryClient,
             id: `native-balances=${walletAddr}`,
@@ -159,6 +161,22 @@ export async function terraNativeBalancesQuery(
             amount: Amount,
           }));
         });
+    }else {
+      balancesPromise = queryClient.batchFetcher!.bank.allBalances(walletAddr)
+      .then((coins) => {
+          return coins.map(({ denom, amount }) => ({
+            denom: denom.replace(
+              'ibc/D70F005DE981F6EFFB3AD1DF85601258D1C01B9DEDC1F7C1B95C0993E83CF389',
+              'uusd',
+            ).replace(
+              'ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4',
+              'uusd',
+            ) as NativeDenom,
+            amount: amount as u<Token<string>>,
+          }));
+        });
+    }
+
 
   const balances = await balancesPromise;
 

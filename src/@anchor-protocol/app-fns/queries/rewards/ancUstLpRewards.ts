@@ -29,10 +29,10 @@ export type RewardsAncUstLpRewards =
   WasmQueryData<RewardsAncUstLpRewardsWasmQuery>;
 
 export async function rewardsAncUstLpRewardsQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   ancUstLpContract: CW20Addr,
   astroportGeneratorAddr: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<RewardsAncUstLpRewards | undefined> {
   if (!walletAddr) {
     return undefined;

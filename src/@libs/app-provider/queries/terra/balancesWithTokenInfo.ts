@@ -9,7 +9,6 @@ import { useAccount } from 'contexts/account';
 import { useApp } from '../../contexts/app';
 import { TERRA_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(terraBalancesWithTokenInfoQuery);
 
 export function useTerraBalancesWithTokenInfoQuery(
   assets: terraswap.AssetInfo[],
@@ -24,13 +23,13 @@ export function useTerraBalancesWithTokenInfoQuery(
       TERRA_QUERY_KEY.TERRA_BALANCES_WITH_TOKEN_INFO,
       walletAddress ?? terraWalletAddress,
       assets,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(terraBalancesWithTokenInfoQuery, queryClient),
     {
       refetchInterval: connected && 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

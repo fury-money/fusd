@@ -10,8 +10,6 @@ import {
 
 import { useQueryWithTokenDisplay } from '../utils/tokenDisplay';
 
-const queryFn = createQueryFn(borrowMarketQuery);
-
 export function useBorrowMarketQuery(): UseQueryResult<
   BorrowMarketWithDisplay | undefined
 > {
@@ -26,13 +24,13 @@ export function useBorrowMarketQuery(): UseQueryResult<
       contractAddress.moneyMarket.oracle,
       contractAddress.moneyMarket.overseer,
       contractAddress.native.usd,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(borrowMarketQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: false,
       onError: queryErrorReporter,
+      enabled: !!queryClient
     },
   );
 

@@ -38,11 +38,21 @@ const LCDClients: Record<string, LCDClient> = {
   }),
 };
 
-export const NetworkContext = createContext<NetworkInfo>(TESTNET);
+
+const settenConfig = {
+  settenProject: "676b0ca2cce04dd1ac44cf9ebd1b565b", 
+  settenKey: "1c2184e6bc954e619615d2c460054504"
+}
+const RPCClients: Record<string, string> =  {
+  mainnet: `https://rpc.phoenix.terra.setten.io/${settenConfig.settenProject}/?key=${settenConfig.settenKey}`,
+}
+
+export const NetworkContext = createContext<NetworkInfo>(MAINNET);
 
 type UseNetworkReturn = {
   network: NetworkInfo;
   lcdClient: LCDClient;
+  rpcClient: string;
 };
 
 const useNetwork = (): UseNetworkReturn => {
@@ -53,6 +63,7 @@ const useNetwork = (): UseNetworkReturn => {
   return {
     network: context,
     lcdClient: LCDClients[context.name ?? 'mainnet'],
+    rpcClient: RPCClients[context.name ?? 'mainnet'],
   };
 };
 

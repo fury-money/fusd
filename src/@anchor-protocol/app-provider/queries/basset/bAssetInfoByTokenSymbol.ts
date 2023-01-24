@@ -9,8 +9,6 @@ import {
   withBAssetInfoTokenDisplay,
 } from './utils/tokenDisplay';
 
-const queryFn = createQueryFn(bAssetInfoByTokenSymbolQuery);
-
 export function useBAssetInfoByTokenSymbolQuery(
   tokenSymbol: string | undefined,
 ): UseQueryResult<BAssetInfoWithDisplay | undefined> {
@@ -22,13 +20,13 @@ export function useBAssetInfoByTokenSymbolQuery(
       ANCHOR_QUERY_KEY.ANCHOR_QUERY_BASSET_INFO_BY_TOKEN_SYMBOL,
       contractAddress.moneyMarket.overseer,
       tokenSymbol,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(bAssetInfoByTokenSymbolQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

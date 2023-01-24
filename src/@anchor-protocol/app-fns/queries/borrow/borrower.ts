@@ -34,13 +34,12 @@ export type BorrowBorrower = WasmQueryData<BorrowBorrowerWasmQuery> & {
 };
 
 export async function borrowBorrowerQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  lastSyncedHeight: () => Promise<number>,
+  blockHeight: number,
   marketContract: HumanAddr,
   overseerContract: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<BorrowBorrower | undefined> {
-  const blockHeight = await lastSyncedHeight();
 
   if (!walletAddr) {
     return {

@@ -79,11 +79,11 @@ const mapBridgedAssets = async (
 };
 
 async function whitelistCollateralQuery(
+  queryClient: QueryClient,
   overseerContract: HumanAddr,
   target: DeploymentTarget,
   network: NetworkInfo,
   tokenInformation: Record<string, CW20TokenDisplayInfo> | undefined,
-  queryClient: QueryClient,
 ): Promise<WhitelistCollateral[]> {
   const whitelist = await fetchWhitelistCollateral(
     overseerContract,
@@ -128,8 +128,6 @@ function useLocalTokenInformation(){
     )
 }
 
-const queryFn = createQueryFn(whitelistCollateralQuery);
-
 export function useWhitelistCollateralQuery(): UseQueryResult<
   WhitelistCollateral[]
 > {
@@ -150,12 +148,12 @@ export function useWhitelistCollateralQuery(): UseQueryResult<
       target,
       network,
       {...(tokens && tokens[network.name]), ...localTokenInformation},
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(whitelistCollateralQuery, queryClient!),
     {
       refetchOnMount: false,
       keepPreviousData: true,
+      enabled: !!queryClient
     },
   );
 

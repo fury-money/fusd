@@ -7,8 +7,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(bondBLunaExchangeRateQuery);
-
 export function useBLunaExchangeRateQuery(): UseQueryResult<
   BondBLunaExchangeRate | undefined
 > {
@@ -20,13 +18,13 @@ export function useBLunaExchangeRateQuery(): UseQueryResult<
     [
       ANCHOR_QUERY_KEY.BOND_BLUNA_EXCHANGE_RATE,
       contractAddress.bluna.hub,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(bondBLunaExchangeRateQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 }

@@ -13,9 +13,9 @@ interface AncBalanceWasmQuery {
 export type AncBalance = WasmQueryData<AncBalanceWasmQuery>;
 
 export async function ancBalanceQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   ancTokenAddr: CW20Addr,
-  queryClient: QueryClient,
 ): Promise<AncBalance | undefined> {
   if (!walletAddr) {
     return undefined;

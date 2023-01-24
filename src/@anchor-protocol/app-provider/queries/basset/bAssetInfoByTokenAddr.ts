@@ -10,7 +10,6 @@ import {
   withBAssetInfoTokenDisplay,
 } from './utils/tokenDisplay';
 
-const queryFn = createQueryFn(bAssetInfoByTokenAddrQuery);
 
 export function useBAssetInfoByTokenAddrQuery(
   tokenAddr: CW20Addr | undefined,
@@ -23,13 +22,13 @@ export function useBAssetInfoByTokenAddrQuery(
       ANCHOR_QUERY_KEY.BASSET_INFO_BY_TOKEN_ADDR,
       contractAddress.moneyMarket.overseer,
       tokenAddr,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(bAssetInfoByTokenAddrQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

@@ -15,9 +15,9 @@ export type BLunaClaimableRewards =
   WasmQueryData<BLunaClaimableRewardsWasmQuery>;
 
 export async function bLunaClaimableRewardsQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   bAssetRewardContract: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<BLunaClaimableRewards | undefined> {
   if (!walletAddr) {
     return undefined;

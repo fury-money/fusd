@@ -69,7 +69,7 @@ export namespace liquidation {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/liquidations/liquidation-contract#config-1
      */
     export interface Config {
-      config: {};
+      config:  Record<string, never>;
     }
 
     /**

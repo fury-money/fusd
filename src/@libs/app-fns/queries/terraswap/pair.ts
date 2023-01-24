@@ -16,9 +16,9 @@ export interface TerraswapPairWasmQuery {
 export type TerraswapPair = WasmQueryData<TerraswapPairWasmQuery>;
 
 export async function terraswapPairQuery(
+  queryClient: QueryClient,
   terraswapFactoryAddr: HumanAddr,
   assetInfos: [terraswap.AssetInfo, terraswap.AssetInfo],
-  queryClient: QueryClient,
 ): Promise<TerraswapPair> {
   const urlQuery = assetInfos
     .reduce((urlQueries, asset, i) => {

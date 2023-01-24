@@ -4,8 +4,7 @@ import { CW20Addr, Token } from '@libs/types';
 import { useQuery, UseQueryResult } from 'react-query';
 import { useApp } from '../../contexts/app';
 import { TERRA_QUERY_KEY } from '../../env';
-
-const queryFn = createQueryFn(cw20TokenInfoQuery);
+ 
 
 export function useCW20TokenInfoQuery<T extends Token>(
   tokenAddr: CW20Addr,
@@ -14,12 +13,13 @@ export function useCW20TokenInfoQuery<T extends Token>(
   const { queryClient, queryErrorReporter } = useApp();
 
   const result = useQuery(
-    [TERRA_QUERY_KEY.CW20_TOKEN_INFO, tokenAddr, queryClient, ignoreCache],
-    queryFn as any,
+    [TERRA_QUERY_KEY.CW20_TOKEN_INFO, tokenAddr, ignoreCache],
+    createQueryFn(cw20TokenInfoQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

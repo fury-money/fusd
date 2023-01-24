@@ -13,9 +13,9 @@ interface GovPollWasmQuery {
 export type GovPoll = WasmQueryData<GovPollWasmQuery>;
 
 export async function govPollQuery(
+  queryClient: QueryClient,
   govContract: HumanAddr,
   pollId: number,
-  queryClient: QueryClient,
 ): Promise<GovPoll> {
   return wasmFetch<GovPollWasmQuery>({
     ...queryClient,

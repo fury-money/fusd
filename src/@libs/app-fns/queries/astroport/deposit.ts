@@ -19,10 +19,10 @@ export type AstroportDeposit<T extends Token> = WasmQueryData<
 >;
 
 export async function astroportDepositQuery<T extends Token>(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   lpTokenAddr: CW20Addr,
   generatorAddr: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<AstroportDeposit<T> | undefined> {
   if (!walletAddr) {
     return undefined;

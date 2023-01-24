@@ -4,8 +4,6 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(ancPriceQuery);
-
 export function useAncPriceQuery(): UseQueryResult<AncPriceData | undefined> {
   const { queryClient, contractAddress, queryErrorReporter } =
     useAnchorWebapp();
@@ -14,13 +12,13 @@ export function useAncPriceQuery(): UseQueryResult<AncPriceData | undefined> {
     [
       ANCHOR_QUERY_KEY.ANC_PRICE,
       contractAddress.astroport.ancUstPair,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(ancPriceQuery,queryClient,),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

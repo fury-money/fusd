@@ -17,9 +17,9 @@ export async function bAssetInfoAndBalanceQuery(
   }
 
   const result = await cw20BalanceQuery<bAsset>(
+    queryClient,
     walletAddr,
     bAsset.collateral_token,
-    queryClient,
   );
 
   if (!result) {

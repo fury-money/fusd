@@ -23,19 +23,19 @@ export async function userLtvQuery({
 }: UserLtvQueryParams) {
   const [{ oraclePrices, bAssetLtvs }, borrowerResult] = await Promise.all([
     borrowMarketQuery(
+      hiveQueryClient,
       address.moneyMarket.market,
       address.moneyMarket.interestModel,
       address.moneyMarket.oracle,
       address.moneyMarket.overseer,
       address.native.usd,
-      hiveQueryClient,
     ),
     borrowBorrowerQuery(
+      hiveQueryClient,
       walletAddress,
       () => lastSyncedHeightQuery(hiveQueryClient),
       address.moneyMarket.market,
       address.moneyMarket.overseer,
-      hiveQueryClient,
     ),
   ]);
 

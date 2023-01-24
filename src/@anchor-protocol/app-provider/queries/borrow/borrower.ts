@@ -5,17 +5,17 @@ import { useQuery, UseQueryResult } from 'react-query';
 import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
-
-const queryFn = createQueryFn(borrowBorrowerQuery);
+import { useLastSyncedHeightQuery } from '../terra/lastSyncedHeight';
 
 export function useBorrowBorrowerQuery(): UseQueryResult<
   BorrowBorrower | undefined
 > {
   const { connected, terraWalletAddress } = useAccount();
 
-  const { queryClient, lastSyncedHeight, queryErrorReporter } =
+  const { queryClient, queryErrorReporter } =
     useAnchorWebapp();
 
+  const {data: lastSyncedHeight} = useLastSyncedHeightQuery();
   const {
     contractAddress: { moneyMarket },
   } = useAnchorWebapp();
@@ -24,17 +24,16 @@ export function useBorrowBorrowerQuery(): UseQueryResult<
     [
       ANCHOR_QUERY_KEY.BORROW_BORROWER,
       terraWalletAddress,
-      lastSyncedHeight,
+      lastSyncedHeight!,
       moneyMarket.market,
       moneyMarket.overseer,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(borrowBorrowerQuery, queryClient!),
     {
       refetchInterval: connected && 1000 * 60 * 5,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient && !!lastSyncedHeight,
     },
   );
 

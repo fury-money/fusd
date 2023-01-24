@@ -1,5 +1,5 @@
 import { ANCHOR_QUERY_KEY } from '@anchor-protocol/app-provider';
-import { createQueryFn } from '@libs/react-query-utils';
+import { createSimpleQueryFn } from '@libs/react-query-utils';
 import { UseQueryResult } from 'react-query';
 import { useAnchorQuery } from './useAnchorQuery';
 import { LcdQueryClient } from '@libs/query-client';
@@ -38,7 +38,7 @@ export const lastSyncedBlockQuery = async (
   };
 };
 
-const lastSyncedBlockQueryFn = createQueryFn(lastSyncedBlockQuery);
+const lastSyncedBlockQueryFn = createSimpleQueryFn(lastSyncedBlockQuery);
 
 export const useLastSyncedBlock = (): UseQueryResult<Block> => {
   const { lcdQueryClient } = useApp();

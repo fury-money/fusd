@@ -13,14 +13,14 @@ export type TerraBalancesWithTokenInfo = {
 };
 
 export async function terraBalancesWithTokenInfoQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   assets: terraswap.AssetInfo[],
-  queryClient: QueryClient,
 ): Promise<TerraBalancesWithTokenInfo> {
   const { balances } = await terraBalancesQuery(
+    queryClient,
     walletAddr,
     assets,
-    queryClient,
   );
 
   const tokenInfos = await Promise.all(
@@ -28,7 +28,7 @@ export async function terraBalancesWithTokenInfoQuery(
       if ('native_token' in asset) {
         return Promise.resolve(nativeTokenInfoQuery(asset.native_token.denom));
       } else {
-        return cw20TokenInfoQuery(asset.token.contract_addr, queryClient).then(
+        return cw20TokenInfoQuery(queryClient, asset.token.contract_addr).then(
           ({ tokenInfo }) => tokenInfo,
         );
       }

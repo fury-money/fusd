@@ -10,6 +10,8 @@ export const useDepositApy = () => {
   const { data: { overseerConfig, overseerEpochState } = {} } =
     useEarnEpochStatesQuery();
 
+    console.log(overseerConfig)
+
   return useMemo(() => {
     return computeApy(
       overseerEpochState?.deposit_rate,

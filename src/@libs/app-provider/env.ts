@@ -5,6 +5,7 @@ import {
   HiveQueryClient,
   LcdQueryClient,
 } from '@libs/query-client';
+import { useBatchQuery } from '@libs/query-client/lcd/batchfetch';
 import { NetworkInfo } from '@terra-money/wallet-provider';
 import { UseQueryResult } from 'react-query';
 
@@ -25,6 +26,7 @@ export function DEFAULT_HIVE_WASM_CLIENT(
 }
 
 export function DEFAULT_LCD_WASM_CLIENT(network: NetworkInfo): LcdQueryClient {
+
   return {
     lcdEndpoint: network.lcd,
     lcdFetcher: defaultLcdFetcher,

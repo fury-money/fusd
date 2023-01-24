@@ -17,8 +17,8 @@ export type GovDistributionModelUpdateConfig =
   WasmQueryData<GovDistributionModelUpdateConfigWasmQuery>;
 
 export async function govDistributionModelUpdateConfigQuery(
-  distributionModelContract: HumanAddr,
   queryClient: QueryClient,
+  distributionModelContract: HumanAddr,
 ): Promise<GovDistributionModelUpdateConfig> {
   return wasmFetch<GovDistributionModelUpdateConfigWasmQuery>({
     ...queryClient,

@@ -62,8 +62,6 @@ export async function whitePaperQuery(
 }
 
 
-const queryFn = createQueryFn(whitePaperQuery);
-
 export function useWhitePaperQuery(): UseQueryResult<NftInfo | undefined> {
   const { queryClient, queryErrorReporter, contractAddress } =
     useAnchorWebapp();
@@ -72,15 +70,15 @@ export function useWhitePaperQuery(): UseQueryResult<NftInfo | undefined> {
   const whitePaperInfo = useQuery(
     [
       ANCHOR_QUERY_KEY.WHITEPAPER_QUERY,
-      queryClient,
       contractAddress.documents.mainAddress,
       contractAddress.documents.tokens.whitepaper,
     ],
-    queryFn,
+    createQueryFn(whitePaperQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

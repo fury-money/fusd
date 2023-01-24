@@ -10,7 +10,6 @@ import {
   withBAssetInfoAndBalancesTotalTokenDisplay,
 } from './utils';
 
-const queryFn = createQueryFn(bAssetInfoAndBalanceTotalQuery);
 
 export function useBAssetInfoAndBalanceTotalQuery(): UseQueryResult<
   BAssetInfoAndBalancesTotalWithDisplay | undefined
@@ -26,14 +25,13 @@ export function useBAssetInfoAndBalanceTotalQuery(): UseQueryResult<
       terraWalletAddress,
       contractAddress.moneyMarket.overseer,
       contractAddress.moneyMarket.oracle,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(bAssetInfoAndBalanceTotalQuery, queryClient),
     {
       refetchInterval: connected && 1000 * 60 * 5,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient,
     },
   );
 

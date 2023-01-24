@@ -1,11 +1,11 @@
 import { terraTreasuryTaxCapQuery } from '@libs/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
+import { createQueryFn, createSimpleQueryFn } from '@libs/react-query-utils';
 import { NativeDenom, Token, u } from '@libs/types';
 import { useQuery, UseQueryResult } from 'react-query';
 import { useApp } from '../../contexts/app';
 import { TERRA_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(terraTreasuryTaxCapQuery);
+const queryFn = createSimpleQueryFn(terraTreasuryTaxCapQuery);
 
 export function useTerraTreasuryTaxCapQuery<T extends Token>(
   denom: NativeDenom,

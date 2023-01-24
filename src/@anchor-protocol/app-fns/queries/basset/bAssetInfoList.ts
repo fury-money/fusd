@@ -12,8 +12,8 @@ interface WhitelistWasmQuery {
 }
 
 export async function bAssetInfoListQuery(
-  overseerContract: HumanAddr,
   queryClient: QueryClient,
+  overseerContract: HumanAddr,
 ): Promise<BAssetInfo[]> {
   const { whitelist } = await wasmFetch<WhitelistWasmQuery>({
     ...queryClient,

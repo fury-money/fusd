@@ -14,9 +14,9 @@ interface StakerWasmQuery {
 }
 
 export async function govMyPollsQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   govContract: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<MyPoll[]> {
   if (!walletAddr) {
     return [];

@@ -5,8 +5,6 @@ import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(govMyPollsQuery);
-
 export function useGovMyPollsQuery(): UseQueryResult<MyPoll[]> {
   const { terraWalletAddress } = useAccount();
 
@@ -18,13 +16,13 @@ export function useGovMyPollsQuery(): UseQueryResult<MyPoll[]> {
       ANCHOR_QUERY_KEY.GOV_MYPOLLS,
       terraWalletAddress,
       contractAddress.anchorToken.gov,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(govMyPollsQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

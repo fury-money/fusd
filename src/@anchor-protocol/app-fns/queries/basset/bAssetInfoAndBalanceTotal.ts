@@ -34,10 +34,10 @@ export interface BAssetInfoAndBalancesTotal {
 }
 
 export async function bAssetInfoAndBalanceTotalQuery(
+  queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   overseerContract: HumanAddr,
   oracleContract: HumanAddr,
-  queryClient: QueryClient,
 ): Promise<BAssetInfoAndBalancesTotal | undefined> {
   if (!walletAddr) {
     return undefined;

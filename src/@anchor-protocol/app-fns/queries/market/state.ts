@@ -34,8 +34,8 @@ export const MARKET_STATE_QUERY = `
 `;
 
 export async function marketStateQuery(
-  marketContract: HumanAddr,
   queryClient: QueryClient,
+  marketContract: HumanAddr,
 ): Promise<MarketState> {
   const marketState = await wasmFetch<MarketStateWasmQuery>({
     ...queryClient,

@@ -30,12 +30,12 @@ interface MarketBorrowIncentivesWasmQuery {
 
 
 export async function borrowAPYQuery(
-  blocksPerYear: number,
-  lastSyncedHeight: () => Promise<number>,
-  mmMarketContract: HumanAddr,
   queryClient: QueryClient,
+  blocksPerYear: number,
+  lastSyncedHeight: number,
+  mmMarketContract: HumanAddr,
 ): Promise<BorrowAPYData> {
-
+  console.log("For borrow : try to fetch")
   // We simply need to query the chain to get the borrower rewards that were just distributed
   // And compare that to the total liabilities
   // Those informations are located in the state variable of the market function
@@ -74,12 +74,13 @@ export async function borrowAPYQuery(
     apy: 0 as Rate<number>,
   };
 
+  console.log("computing apy", queryClient)
   return {
     borrowerDistributionAPYs: [
       {
         DistributionAPY: rewardsAPY.toString() as Rate,
         Timestamp: Date.now() as DateTime,
-        Height: await lastSyncedHeight()
+        Height: lastSyncedHeight,
       },
     ],
     govRewards: [govRewards],

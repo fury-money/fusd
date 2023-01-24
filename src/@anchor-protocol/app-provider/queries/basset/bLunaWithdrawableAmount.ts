@@ -9,7 +9,6 @@ import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(bLunaWithdrawableAmountQuery);
 
 export function useBLunaWithdrawableAmount(): UseQueryResult<
   BLunaWithdrawableAmount | undefined
@@ -24,14 +23,13 @@ export function useBLunaWithdrawableAmount(): UseQueryResult<
       ANCHOR_QUERY_KEY.BOND_WITHDRAWABLE_AMOUNT,
       terraWalletAddress,
       contractAddress.bluna.hub,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(bLunaWithdrawableAmountQuery, queryClient),
     {
       refetchInterval: connected && 1000 * 60 * 5,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient,
     },
   );
 

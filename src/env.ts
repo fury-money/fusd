@@ -50,8 +50,8 @@ export const links = {
 // ---------------------------------------------
 // chain
 // ---------------------------------------------
-export function ANCHOR_QUERY_CLIENT(network: NetworkInfo): 'lcd' | 'hive' {
-  return 'lcd';
+export function ANCHOR_QUERY_CLIENT(network: NetworkInfo): 'lcd' | 'hive' | 'batch' {
+  return 'batch';
 }
 
 export function ANCHOR_CONSTANTS(network: NetworkInfo): AnchorConstants {

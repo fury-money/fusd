@@ -24,11 +24,11 @@ interface MarketBAssetWasmQuery {
 export type MarketBAsset = WasmQueryData<MarketBAssetWasmQuery>;
 
 export async function marketBAssetQuery(
+  queryClient: QueryClient,
   bLunaContract: CW20Addr,
   oracleContract: HumanAddr,
   custodyContract: HumanAddr,
   nativeDenom: NativeDenom,
-  queryClient: QueryClient,
 ): Promise<MarketBAsset> {
   return wasmFetch<MarketBAssetWasmQuery>({
     ...queryClient,

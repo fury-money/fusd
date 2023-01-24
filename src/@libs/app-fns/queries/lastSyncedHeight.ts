@@ -88,12 +88,14 @@ class BlockHeightFetcher {
     if (this.fetched) {
       return;
     }
+    console.log("start fetch", this.client)
 
     this.fetched = true;
 
-    const fetchLatestBlock: Promise<number> =
-      'lcdEndpoint' in this.client
-        ? this.client
+    let fetchLatestBlock;
+
+    if('lcdEndpoint' in this.client){
+      fetchLatestBlock = this.client
             .lcdFetcher<LcdBlocksLatest>(
               `${this.client.lcdEndpoint}/blocks/latest`,
               this.client.requestInit,
@@ -101,16 +103,29 @@ class BlockHeightFetcher {
             .then(({ block }) => {
               return +block.header.height;
             })
-        : this.client
+    }else if ("hiveEndpoint" in this.client){
+      fetchLatestBlock = this.client
             .hiveFetcher<{}, LastSyncedHeight>(
               LAST_SYNCED_HEIGHT_QUERY,
               {},
               this.client.hiveEndpoint + '?last-synced-height',
             )
             .then(({ LastSyncedHeight }) => LastSyncedHeight);
+    }else{
+      fetchLatestBlock = this.client
+          .batchFetcher!.tendermint.latestBlock()
+          .then((response) => {
+
+            console.log("fetched block", response.block.header.height)
+            return response.block.header.height.toNumber()
+          });
+    }
+
 
     fetchLatestBlock
       .then((blockHeight) => {
+        console.log("fetched block")
+        console.log(blockHeight, "fetched block")
         for (const [resolve] of this.resolvers) {
           resolve(blockHeight);
         }
@@ -119,6 +134,7 @@ class BlockHeightFetcher {
         this.failedCount = 0;
       })
       .catch((error) => {
+        console.log(error, "fetched block")
         if (this.failedCount > 4) {
           for (const [, reject] of this.resolvers) {
             reject(error);
@@ -144,12 +160,19 @@ const fetchers: Map<string, BlockHeightFetcher> = new Map<
 >();
 
 export function lastSyncedHeightQuery(client: QueryClient): Promise<number> {
-  const endpoint: string =
-    'lcdEndpoint' in client ? client.lcdEndpoint : client.hiveEndpoint;
+  console.log("for synced enter");
+  let endpoint;
+  if('lcdEndpoint' in client){
+    endpoint = client.lcdEndpoint;
+  }else if ("hiveEndpoint" in client){
+    endpoint = client.hiveEndpoint;
+  }else {
+    endpoint = client.batchEndpoint ?? "batch querier endpoint";
+  }
 
   if (!fetchers.has(endpoint)) {
     fetchers.set(endpoint, new BlockHeightFetcher(client));
-  }
+  }  
 
   return fetchers.get(endpoint)!.fetchBlockHeight();
 }

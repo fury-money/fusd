@@ -9,8 +9,6 @@ import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(bLunaClaimableRewardsQuery);
-
 export function useBLunaClaimableRewards(): UseQueryResult<
   BLunaClaimableRewards | undefined
 > {
@@ -24,14 +22,13 @@ export function useBLunaClaimableRewards(): UseQueryResult<
       ANCHOR_QUERY_KEY.BOND_CLAIMABLE_REWARDS,
       terraWalletAddress,
       contractAddress.bluna.reward,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(bLunaClaimableRewardsQuery,queryClient),
     {
       refetchInterval: connected && 1000 * 60 * 5,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient,
     },
   );
 

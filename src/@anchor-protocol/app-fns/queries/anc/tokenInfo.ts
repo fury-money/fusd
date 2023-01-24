@@ -14,8 +14,8 @@ export type AncTokenInfo = WasmQueryData<AncTokenInfoWasmQuery>;
 
 /** @deprecated */
 export async function ancTokenInfoQuery(
-  ancTokenAddr: CW20Addr,
   queryClient: QueryClient,
+  ancTokenAddr: CW20Addr,
 ): Promise<AncTokenInfo> {
   return wasmFetch<AncTokenInfoWasmQuery>({
     ...queryClient,

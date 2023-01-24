@@ -9,8 +9,6 @@ import {
 } from '@anchor-protocol/app-fns/queries/anc/vesting';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 
-const queryFn = createQueryFn(ancVestingAccountQuery);
-
 export function useAncVestingAccountQuery(): UseQueryResult<
   AncVestingAccount | undefined
 > {
@@ -24,13 +22,13 @@ export function useAncVestingAccountQuery(): UseQueryResult<
       ANCHOR_QUERY_KEY.ANC_VESTING_ACCOUNT,
       connectedWallet?.walletAddress ?? undefined,
       contractAddress.anchorToken.vesting,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(ancVestingAccountQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 2,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!queryClient,
     },
   );
 

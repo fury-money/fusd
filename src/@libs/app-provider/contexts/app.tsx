@@ -1,10 +1,12 @@
 import { useNetwork } from '@anchor-protocol/app-provider';
 import { GasPrice, lastSyncedHeightQuery } from '@libs/app-fns';
 import {
+    BatchQueryClient,
   HiveQueryClient,
   LcdQueryClient,
   QueryClient,
 } from '@libs/query-client';
+import { useBatchQuery } from '@libs/query-client/lcd/batchfetch';
 import { NetworkInfo } from '@terra-money/wallet-provider';
 import React, {
   Consumer,
@@ -35,7 +37,8 @@ export interface AppProviderProps<
   defaultQueryClient?:
     | 'lcd'
     | 'hive'
-    | ((network: NetworkInfo) => 'lcd' | 'hive');
+    | 'batch'
+    | ((network: NetworkInfo) => 'lcd' | 'hive' | 'batch');
   lcdQueryClient?: (network: NetworkInfo) => LcdQueryClient;
   hiveQueryClient?: (network: NetworkInfo) => HiveQueryClient;
 
@@ -64,7 +67,8 @@ export interface App<
   lastSyncedHeight: () => Promise<number>;
 
   // wasm
-  queryClient: QueryClient;
+  batchQueryClient: BatchQueryClient | undefined;
+  queryClient: QueryClient | undefined;
   lcdQueryClient: LcdQueryClient;
   hiveQueryClient: HiveQueryClient;
 
@@ -100,7 +104,8 @@ export function AppProvider<
   txErrorReporter,
   refetchMap,
 }: AppProviderProps<ContractAddress, Constants>) {
-  const { network } = useNetwork();
+  const { network, rpcClient } = useNetwork();
+  const batchQueryClient = useBatchQuery(rpcClient);
 
   const networkBoundStates = useMemo<
     Pick<
@@ -114,12 +119,26 @@ export function AppProvider<
   >(() => {
     const lcdQueryClient = _lcdQueryClient(network);
     const hiveQueryClient = _hiveQueryClient(network);
-    const queryClientType =
+    let queryClientType =
       typeof defaultQueryClient === 'function'
         ? defaultQueryClient(network)
         : defaultQueryClient;
-    const queryClient =
-      queryClientType === 'lcd' ? lcdQueryClient : hiveQueryClient;
+
+
+    let queryClient;
+    switch(queryClientType){
+      case 'lcd':
+        queryClient = lcdQueryClient;
+        break;
+      case "hive":
+        queryClient = hiveQueryClient;
+        break;
+      case "batch":
+        queryClient = batchQueryClient
+        break;
+    };
+
+
 
     return {
       contractAddress: contractAddress(network),
@@ -132,9 +151,10 @@ export function AppProvider<
     _hiveQueryClient,
     _lcdQueryClient,
     constants,
-    contractAddress,
+    contractAddress,  
     defaultQueryClient,
     network,
+    batchQueryClient
   ]);
 
   const lastSyncedHeight = useMemo(() => {
@@ -156,6 +176,7 @@ export function AppProvider<
       queryErrorReporter,
       gasPrice,
       refetchMap,
+      batchQueryClient
     };
   }, [
     gasPrice,
@@ -164,6 +185,7 @@ export function AppProvider<
     queryErrorReporter,
     refetchMap,
     txErrorReporter,
+    batchQueryClient
   ]);
 
   return <AppContext.Provider value={states}>{children}</AppContext.Provider>;

@@ -9,8 +9,6 @@ import { useAccount } from 'contexts/account';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
-const queryFn = createQueryFn(rewardsClaimableUstBorrowRewardsQuery);
-
 export function useRewardsClaimableUstBorrowRewardsQuery(): UseQueryResult<
   RewardsClaimableUstBorrowRewards | undefined
 > {
@@ -26,14 +24,13 @@ export function useRewardsClaimableUstBorrowRewardsQuery(): UseQueryResult<
       contractAddress.cw20.ANC,
       contractAddress.moneyMarket.market,
       lastSyncedHeight,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(rewardsClaimableUstBorrowRewardsQuery, queryClient),
     {
       refetchInterval: 1000 * 60 * 5,
-      enabled: connected,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: connected && !!queryClient,
     },
   );
 

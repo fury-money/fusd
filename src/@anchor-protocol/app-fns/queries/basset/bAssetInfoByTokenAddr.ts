@@ -33,9 +33,9 @@ async function bAssetInfoByTokenQuery(
 }
 
 export async function bAssetInfoByTokenAddrQuery(
+  queryClient: QueryClient,
   overseerContract: HumanAddr,
   tokenAddr: CW20Addr | undefined,
-  queryClient: QueryClient,
 ): Promise<BAssetInfo | undefined> {
   const bAsset = await bAssetInfoByTokenQuery(
     overseerContract,
@@ -51,9 +51,9 @@ export async function bAssetInfoByTokenAddrQuery(
 }
 
 export async function bAssetInfoByTokenSymbolQuery(
+  queryClient: QueryClient,
   overseerContract: HumanAddr,
   tokenSymbol: string | undefined,
-  queryClient: QueryClient,
 ): Promise<BAssetInfo | undefined> {
   if (tokenSymbol === undefined) {
     return undefined;

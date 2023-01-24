@@ -28,8 +28,8 @@ export type TerraswapPool<T extends Token> = WasmQueryData<
 };
 
 export async function terraswapPoolQuery<T extends Token>(
-  ustPairAddr: HumanAddr,
   queryClient: QueryClient,
+  ustPairAddr: HumanAddr,
 ): Promise<TerraswapPool<T>> {
   const { terraswapPool } = await wasmFetch<TerraswapPoolWasmQuery<T>>({
     ...queryClient,
