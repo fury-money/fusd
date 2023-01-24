@@ -40,7 +40,7 @@ function Component({ className }: BAssetMainProps) {
           title={<p>ampLuna (Eris Protocol)</p>}
           bAssetIcon={<TokenIcon token="ampLuna" />}
           originAssetIcon={<TokenIcon token="luna" />}
-          hoverText={<Box sx={{gap: "5px",display: "flex", alignItems: "center"}}>MINT & BURN <OpenInNewIcon/> </Box>}
+          hoverText={<Box sx={{gap: "5px",display: "flex", alignItems: "center", fontSize: "1em !important"}}>MINT & BURN <OpenInNewIcon/> </Box>}
         >
           <AssetCardContentLSD asset="ampLuna" />
         </AssetCard>

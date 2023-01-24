@@ -44,7 +44,7 @@ export function placeLiquidationBidTx($: {
   liquidationQueueAddr: HumanAddr;
   depositAmount: UST;
   premium: number;
-  bLunaAddr: CW20Addr;
+  collateralAddr: CW20Addr;
   stableDenom: NativeDenom;
 
   gasFee: Gas;
@@ -67,7 +67,7 @@ export function placeLiquidationBidTx($: {
           {
             // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L65
             submit_bid: {
-              collateral_token: $.bLunaAddr,
+              collateral_token: $.collateralAddr,
               premium_slot: $.premium,
             },
           },

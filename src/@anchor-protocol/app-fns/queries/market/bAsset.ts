@@ -15,9 +15,9 @@ import {
 
 interface MarketBAssetWasmQuery {
   bLunaBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<bLuna>>;
-  oraclePrice: WasmQuery<
-    moneyMarket.oracle.Price,
-    moneyMarket.oracle.PriceResponse
+  oraclePrices: WasmQuery<
+    moneyMarket.oracle.Prices,
+    moneyMarket.oracle.PricesResponse
   >;
 }
 
@@ -42,13 +42,10 @@ export async function marketBAssetQuery(
           },
         },
       },
-      oraclePrice: {
+      oraclePrices: {
         contractAddress: oracleContract,
         query: {
-          price: {
-            base: bLunaContract,
-            quote: nativeDenom,
-          },
+          prices: {},
         },
       },
     },

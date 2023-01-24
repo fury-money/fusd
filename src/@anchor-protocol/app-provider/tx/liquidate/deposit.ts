@@ -3,6 +3,7 @@ import { UST } from '@anchor-protocol/types';
 import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { WhitelistCollateral } from 'queries';
 import { useCallback } from 'react';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_TX_KEY } from '../../env';
@@ -14,7 +15,9 @@ export interface PlaceLiquidationBidTxParams {
   onTxSucceed?: () => void;
 }
 
-export function usePlaceLiquidationBidTx() {
+export function usePlaceLiquidationBidTx(
+  collateral: WhitelistCollateral | undefined
+) {
   const connectedWallet = useConnectedWallet();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
@@ -29,7 +32,7 @@ export function usePlaceLiquidationBidTx() {
       txFee,
       onTxSucceed,
     }: PlaceLiquidationBidTxParams) => {
-      if (!connectedWallet || !connectedWallet.availablePost) {
+      if (!connectedWallet || !connectedWallet.availablePost || !collateral) {
         throw new Error('Can not post!');
       }
 
@@ -38,7 +41,7 @@ export function usePlaceLiquidationBidTx() {
         walletAddr: connectedWallet.walletAddress,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
-        bLunaAddr: contractAddress.cw20.bLuna,
+        collateralAddr: collateral.collateral_token,
         depositAmount,
         premium,
         stableDenom: contractAddress.native.usd,
@@ -55,14 +58,14 @@ export function usePlaceLiquidationBidTx() {
         // side effect
         onTxSucceed: () => {
           onTxSucceed?.();
-          refetchQueries(ANCHOR_TX_KEY.EARN_DEPOSIT);
+          refetchQueries(ANCHOR_TX_KEY.LIQUIDATION_DEPOSIT);
         },
       });
     },
     [
       connectedWallet,
       contractAddress.liquidation.liquidationQueueContract,
-      contractAddress.cw20.bLuna,
+      collateral,
       contractAddress.native.usd,
       constants.gasAdjustment,
       queryClient,

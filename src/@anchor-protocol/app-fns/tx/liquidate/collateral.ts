@@ -63,7 +63,7 @@ export function liquidationWithdrawCollateralTx($: {
   walletAddr: HumanAddr;
   liquidationQueueAddr: HumanAddr;
 
-  bLunaAddr: CW20Addr;
+  collateralAddr: CW20Addr;
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -80,7 +80,7 @@ export function liquidationWithdrawCollateralTx($: {
       msgs: getLiquidationWithdrawCollateralMsg({
         walletAddr: $.walletAddr,
         liquidationQueueAddr : $.liquidationQueueAddr ,
-        collateralToken : $.bLunaAddr
+        collateralToken : $.collateralAddr
       }),
       fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
       gasAdjustment: $.gasAdjustment,

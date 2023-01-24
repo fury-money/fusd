@@ -20,7 +20,7 @@ export const TerraProvideCollateralDialog = (
 
 
   // In the normal collateral case
-  if(!collateral.info){
+  if(!("info" in collateral)){
      const cw20Balance = useCW20Balance<bAsset>(
       collateral.collateral_token,
       terraWalletAddress,
@@ -60,12 +60,13 @@ export const TerraProvideCollateralDialog = (
     const [postTx, txResult] = useBorrowProvideWrappedCollateralTx(collateral);
 
     const proceed = useCallback(
-      (depositAmount: bAsset, txFee: EstimatedFee, lunaAmount : u<bAsset>) => {
+      (depositAmount: bAsset, txFee: EstimatedFee, lunaAmount : u<bAsset>, exchangeRate: Rate) => {
         if (connected && postTx) {
           postTx({
             depositAmount,
             txFee,
-            lunaAmount
+            lunaAmount,
+            exchangeRate
           });
         }
       },

@@ -6,7 +6,7 @@ import { BlunaConvert, BLunaMint, BLunaBurn } from 'pages/basset/bluna.convert';
 import { BlunaWithdraw } from 'pages/basset/bluna.withdraw';
 import { BAssetClaim } from 'pages/basset/claim';
 import { BAssetMain } from 'pages/basset/main';
-import { Liquidate } from 'pages/liquidation';
+import { LiquidateList } from 'pages/liquidation';
 import { History } from 'pages/history';
 import { WormholeConvert } from 'pages/basset/wh.convert';
 import { WormholeConvertToBAsset } from 'pages/basset/wh.convert.to-basset';
@@ -22,6 +22,7 @@ import { TerraAppProviders } from 'providers/terra/TerraAppProviders';
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import '../configurations/chartjs';
+import { LiquidationInterface } from 'pages/liquidation/LiquidationInterface';
 
 type TerraAppProps = {
   chainOptions: WalletControllerChainOptions | null;
@@ -64,7 +65,9 @@ export function TerraApp({ chainOptions }: TerraAppProps) {
 
             <Route path={`/anc/vesting/claim`} element={<AncVestingClaim />} />
 
-            <Route path="/liquidation" element={<Liquidate />} />
+            <Route path="/liquidation" element={<LiquidateList />} />
+
+            <Route path="/liquidation/:tokenSymbol" element={<LiquidationInterface />} />
 
             <Route path="/history" element={<History />} />
 

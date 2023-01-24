@@ -20,6 +20,7 @@ import {
 } from '@anchor-protocol/types';
 import {
   pickAttributeValue,
+  pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
@@ -43,17 +44,21 @@ import {
   MsgExecuteContract,
 } from '@terra-money/terra.js';
 import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { WhitelistCollateral } from 'queries';
+import { WhitelistCollateral, WhitelistWrappedCollateral } from 'queries';
 import { QueryObserverResult } from 'react-query';
 import { Observable } from 'rxjs';
 import { BorrowBorrower } from '../../queries/borrow/borrower';
 import { BorrowMarket } from '../../queries/borrow/market';
 import { _fetchBorrowData } from './_fetchBorrowData';
+import big from "big.js";
 
-export function borrowProvideCollateralTx($: {
-  collateral: WhitelistCollateral;
+
+export function borrowProvideWrappedCollateralTx($: {
+  collateral: WhitelistWrappedCollateral;
   walletAddr: HumanAddr;
   depositAmount: bAsset;
+  lunaAmount: u<bAsset>;
+  exchangeRate: Rate;
   overseerAddr: HumanAddr;
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -76,12 +81,38 @@ export function borrowProvideCollateralTx($: {
     _createTxOptions({
       msgs: [  
 
+      // Raise allowance on the actual token
+      new MsgExecuteContract($.walletAddr,
+        $.collateral.info.info.tokenAddress,
+        {
+          increase_allowance: {
+            spender: $.collateral.collateral_token,
+            amount: formatInput(
+              microfy($.depositAmount, $.collateral.decimals),
+              $.collateral.decimals,
+            ),
+          },
+        },
+      ),
+      // Wrap the tokens
+      new MsgExecuteContract($.walletAddr,
+        $.collateral.collateral_token,
+        {
+          mint: {
+            recipient: $.walletAddr,
+            amount: formatInput(
+              $.lunaAmount,
+              $.collateral.decimals,
+            ),
+          },
+        },
+      ),
         // provide_collateral call
         new MsgExecuteContract($.walletAddr, $.collateral.collateral_token, {
           send: {
             contract: $.collateral.custody_contract,
             amount: formatInput(
-              microfy($.depositAmount, $.collateral.decimals),
+              $.lunaAmount,
               $.collateral.decimals,
             ),
             msg: createHookMsg({
@@ -97,7 +128,7 @@ export function borrowProvideCollateralTx($: {
               [
                 $.collateral.collateral_token,
                 formatInput(
-                  microfy($.depositAmount, $.collateral.decimals),
+                  $.lunaAmount,
                   $.collateral.decimals,
                 ),
               ],
@@ -118,7 +149,7 @@ export function borrowProvideCollateralTx($: {
         );
       }
 
-      const rawLog = pickRawLog(txInfo, 1);
+      const rawLog = pickRawLog(txInfo, 3);
 
       if (!rawLog) {
         return helper.failedToFindRawLog();
@@ -131,10 +162,12 @@ export function borrowProvideCollateralTx($: {
       }
 
       try {
-        const collateralizedAmount = pickAttributeValue<u<bLuna>>(
+        const collateralizedAmount = pickAttributeValueByKey<u<bLuna>>(
           fromContract,
-          7,
+          "amount"
         );
+        const depositedAmount = big(collateralizedAmount ?? "0").div($.exchangeRate).toString() as u<bLuna>
+
 
         const ltv = computeLtv(
           computeBorrowLimit(
@@ -150,6 +183,13 @@ export function borrowProvideCollateralTx($: {
 
           phase: TxStreamPhase.SUCCEED,
           receipts: [
+            depositedAmount && {
+              name: 'Deposited Amount',
+              value: `${formatOutput(
+                demicrofy(depositedAmount, $.collateral.decimals),
+                { decimals: $.collateral.decimals },
+              )} ${$.collateral.info.info.symbol}`,
+            },
             collateralizedAmount && {
               name: 'Collateralized Amount',
               value: `${formatOutput(

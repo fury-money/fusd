@@ -27,7 +27,6 @@ function createIndex(packageRoot: string, addedExports: string[]) {
   fs.writeFile(path.resolve(packageRoot, 'index.ts'), index, {
     encoding: 'utf8',
   }).then(() => {
-    console.log(`👍 ${path.resolve(packageRoot, 'index.ts')}`);
   });
 }
 

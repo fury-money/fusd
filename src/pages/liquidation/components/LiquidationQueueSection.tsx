@@ -31,57 +31,23 @@ import {
 import { Bar } from 'react-chartjs-2';
 import { useMediaQuery } from '@mui/material';
 import { AnimateNumber } from '@libs/ui';
+import { WhitelistCollateral } from 'queries';
+import { HumanAddr } from '@libs/types';
 
 export interface LiquidationQueueProps {
   className?: string;
+  collateral: WhitelistCollateral | undefined;
   setClickedBar: Dispatch<SetStateAction<number | undefined>>;
 }
 
-function Component({ className, setClickedBar }: LiquidationQueueProps) {
-  // ---------------------------------------------
-  // dependencies
-  // ---------------------------------------------
-  //const { connected } = useAccount();
-
-  /*
-  // ---------------------------------------------
-  // queries
-  // ---------------------------------------------
-  const { uUST, uaUST } = useBalances();
-
-  const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
-
-  // ---------------------------------------------
-  // computes
-  // ---------------------------------------------
-  const { totalDeposit } = useMemo(() => {
-    return {
-      totalDeposit: computeTotalDeposit(uaUST, moneyMarketEpochState),
-    };
-  }, [moneyMarketEpochState, uaUST]);
-
-  // ---------------------------------------------
-  // dialogs
-  // ---------------------------------------------
-  const [openDepositDialog, depositDialogElement] = useDepositDialog();
-
-  const [openWithdrawDialog, withdrawDialogElement] = useWithdrawDialog();
-
-  const openDeposit = useCallback(async () => {
-    await openDepositDialog();
-  }, [openDepositDialog]);
-
-  const openWithdraw = useCallback(async () => {
-    await openWithdrawDialog();
-  }, [openWithdrawDialog]);
-  */
+function Component({ className, collateral, setClickedBar }: LiquidationQueueProps) {
 
   // ---------------------------------------------
   // Graph imports
   // ---------------------------------------------
 
   const theme = useTheme();
-  const graphData = useLiquidationGraph();
+  const graphData = useLiquidationGraph(collateral?.collateral_token);
 
   const chartRef = useRef<ChartJS<'bar', number[], number>>(null);
 
@@ -240,7 +206,11 @@ function Component({ className, setClickedBar }: LiquidationQueueProps) {
   // Liquidation Stats
   // ---------------------------------------------
 
-  const liquidationStats = useMyLiquidationStats();
+  const liquidationStats = useMyLiquidationStats(
+    collateral?.collateral_token, 
+    collateral?.symbol, 
+    collateral && "info" in collateral ? collateral.info.info.hubAddress as HumanAddr : undefined
+  );
 
   // ---------------------------------------------
   // presentation

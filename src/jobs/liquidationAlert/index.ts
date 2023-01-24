@@ -72,7 +72,6 @@ export function useLiquidationAlert({ enabled, ratio }: LiquidationAlert) {
 
   useEffect(() => {
     if (terraWalletAddress && permission === 'granted' && enabled) {
-      //console.log('LIQUIDATION ALERT: ON');
       const intervalId = setInterval(() => {
         jobCallbackRef.current();
       }, 1000 * 60);
@@ -83,6 +82,5 @@ export function useLiquidationAlert({ enabled, ratio }: LiquidationAlert) {
         clearInterval(intervalId);
       };
     }
-    //console.log('LIQUIDATION ALERT: OFF');
   }, [enabled, permission, terraWalletAddress]);
 }

@@ -1,5 +1,6 @@
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
+import { screen } from 'env';
 
 import React, {
   ChangeEvent,
@@ -59,9 +60,12 @@ import { TextInput } from '@libs/neumorphism-ui/components/TextInput';
 import { Coin, Coins, MsgExecuteContract } from '@terra-money/terra.js';
 import { formatTokenInput } from '@libs/formatter';
 import { CircleSpinner } from 'react-spinners-kit';
+import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
+import { useMediaQuery } from 'react-responsive';
 
 export interface PlaceBidSectionProps {
   className?: string;
+  collateral: WhitelistCollateral | undefined
   clickedBarState: [
     number | undefined,
     Dispatch<SetStateAction<number | undefined>>,
@@ -71,6 +75,7 @@ export interface PlaceBidSectionProps {
 export function PlaceBidSectionBase({
   className,
   clickedBarState: [clickedBar, setClickedBar],
+  collateral
 }: PlaceBidSectionProps) {
   const { connected, terraWalletAddress } = useAccount();
   const { contractAddress } = useAnchorWebapp();
@@ -78,8 +83,9 @@ export function PlaceBidSectionBase({
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const { data: { bidByUser } = {} } = useBidByUserByCollateralQuery(
-    contractAddress.cw20.bLuna,
+    collateral?.collateral_token
   );
+
   const {
     axlUSDC: { formatInput, formatOutput, demicrofy, symbol },
     luna,
@@ -98,7 +104,7 @@ export function PlaceBidSectionBase({
     if (parsedWithdrawal === '0') {
       parsedWithdrawal = '0.000000';
     }
-    const withdrawable = `${parsedWithdrawal} aLuna`;
+    const withdrawable = `${parsedWithdrawal} ${collateral && "info" in collateral ? collateral?.info.info.symbol : collateral?.symbol}`;
     return [withdrawable_number, withdrawable];
   }, [bidByUser, bluna]);
 
@@ -110,7 +116,7 @@ export function PlaceBidSectionBase({
 
   const state = useLiquidationDepositForm();
   const [openConfirm, confirmElement] = useConfirm();
-  const [placeBid, placeBidTxResult] = usePlaceLiquidationBidTx();
+  const [placeBid, placeBidTxResult] = usePlaceLiquidationBidTx(collateral);
   const [estimatedFee, estimatedFeeError, estimateFee] =
     useFeeEstimationFor(terraWalletAddress);
   const [isSubmittingBidTx, setIsSubmittingBidTx] = useState(false);
@@ -157,7 +163,7 @@ export function PlaceBidSectionBase({
 
   // Update fee estimate Effect
   useEffect(() => {
-    if (!connected || !state.depositAmount) {
+    if (!connected || !state.depositAmount || !collateral) {
       return;
     }
     estimateFee([
@@ -166,7 +172,7 @@ export function PlaceBidSectionBase({
         contractAddress.liquidation.liquidationQueueContract,
         {
           submit_bid: {
-            collateral_token: contractAddress.cw20.bLuna,
+            collateral_token: collateral?.collateral_token,
             premium_slot: state.premium,
           },
         },
@@ -206,7 +212,7 @@ export function PlaceBidSectionBase({
 
   const collateralState = useLiquidationWithdrawCollateralForm();
   const [withdrawCollateralTx, withdrawCollateralTxResult] =
-    useLiquidationWithdrawCollateralTx();
+    useLiquidationWithdrawCollateralTx(collateral);
   const [isSubmittingCollateralTx, setIsSubmittingCollateralTx] =
     useState(false);
 
@@ -268,6 +274,7 @@ export function PlaceBidSectionBase({
    *********************************/
 
   const theme = useTheme();
+  const isVeryLarge = useMediaQuery({minWidth: screen.monitor.min})
 
   const renderBroadcastCollateralTx = useMemo(() => {
     return (
@@ -328,7 +335,7 @@ export function PlaceBidSectionBase({
         <Grid container spacing={3}>
           <Grid xs={12}>
             <Typography id="input-slider" gutterBottom>
-              Premium (Luna discount)
+              Premium ({collateral?.symbol} discount)
             </Typography>
             <Grid container spacing={2} alignItems="center">
               <Grid xs={12} sm={8}>
@@ -525,7 +532,9 @@ export function PlaceBidSectionBase({
                 <OutlinedInput
                   fullWidth
                   value={withdrawable_balance}
-                  style={{ fontSize: '3em', caretColor: 'transparent' }}
+                  sx={{
+                    fontSize: isVeryLarge ? "30px" : "3em",
+                    caretColor: 'transparent' }}
                 />
               </Grid>
               <TxFeeList className="receipt">

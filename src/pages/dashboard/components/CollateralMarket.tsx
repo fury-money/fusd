@@ -12,6 +12,7 @@ import { CollateralsChart } from './CollateralsChart';
 import { CollateralMarketTable } from './CollateralMarketTable';
 import { findPrevDay } from './internal/axisUtils';
 import { useWhitelistCollateralQuery } from 'queries';
+import { useLSDCollateralQuery } from '@anchor-protocol/app-provider/queries/borrow/useLSDCollateralQuery';
 
 function CollateralMarketBase(props: UIElementProps) {
   const { className, isMobile } = props;
@@ -21,6 +22,8 @@ function CollateralMarketBase(props: UIElementProps) {
   const { data: whitelistCollateral = [] } = useWhitelistCollateralQuery();
 
   const { data: marketCollaterals } = useMarketCollateralsQuery();
+
+  const additionalLSDInfo = useLSDCollateralQuery(); 
 
   const collaterals = useMemo(() => {
     if (!marketCollaterals || marketCollaterals.history.length === 0) {
@@ -87,6 +90,7 @@ function CollateralMarketBase(props: UIElementProps) {
         className="basset-market"
         whitelistCollateral={whitelistCollateral}
         marketData={marketCollaterals?.now}
+        additionalLSDInfo={additionalLSDInfo}
       />
     </Section>
   );

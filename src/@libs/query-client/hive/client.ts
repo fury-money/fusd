@@ -43,12 +43,6 @@ export async function hiveFetch<
 
   const graphqlQuery = print(document);
 
-  try {
-    if (process.env.HIVE_GRAPHQL_PRINT) {
-      console.log(graphqlQuery);
-    }
-  } catch {}
-
   const wasmKeys: Array<keyof WasmQueries> = Object.keys(wasmQuery) as Array<
     keyof WasmQueries
   >;

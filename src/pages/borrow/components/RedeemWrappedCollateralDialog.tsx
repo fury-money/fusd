@@ -2,6 +2,7 @@ import { ANCHOR_SAFE_RATIO } from '@anchor-protocol/app-fns';
 import {
   useAnchorWebapp,
   useBorrowRedeemCollateralForm,
+  useBorrowRedeemWrappedCollateralForm,
 } from '@anchor-protocol/app-provider';
 import {
   formatLuna,
@@ -50,7 +51,7 @@ export interface RedeemCollateralDialogParams
   txResult: StreamResult<TxResultRendering> | null;
   uTokenBalance: u<bAsset>;
   proceedable: boolean;
-  onProceed: (amount: bAsset & NoMicro, txFee: EstimatedFee) => void;
+  onProceed: (amount: u<bAsset>, txFee: EstimatedFee, exchangeRate: Rate) => void;
 }
 
 export type RedeemCollateralDialogProps =
@@ -79,7 +80,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
     ust: { formatInput: formatUSTInput, demicrofy: demicrofyUST },
   } = useFormatters();
 
-  const [input, states] = useBorrowRedeemCollateralForm(
+  const [input, states] = useBorrowRedeemWrappedCollateralForm(
     collateral,
     uTokenBalance,
     fallbackBorrowMarket,
@@ -97,7 +98,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
     useFeeEstimationFor(terraWalletAddress);
 
   useEffect(() => {
-    if (!connected || !states.redeemAmount || !terraWalletAddress) {
+    if (!connected || !states.redeemWrappedAmount || !terraWalletAddress) {
       return;
     }
 
@@ -113,7 +114,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
               [
                 props.collateral.collateral_token,
                 formatInput(
-                  microfy(states.redeemAmount, props.collateral.decimals),
+                  states.redeemWrappedAmount,
                   props.collateral.decimals,
                 ),
               ],
@@ -130,7 +131,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
           // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
           withdraw_collateral: {
             amount: formatInput(
-              microfy(states.redeemAmount, props.collateral.decimals),
+              states.redeemWrappedAmount,
               props.collateral.decimals,
             ),
           },
@@ -143,7 +144,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
     props.collateral,
     estimateFee,
     connected,
-    states.redeemAmount,
+    states.redeemWrappedAmount,
   ]);
 
   const onLtvChange = useCallback(
@@ -219,7 +220,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                {states.collateral.symbol}
+                {states.collateral.info.info.symbol}
               </InputAdornment>
             ),
           }}
@@ -252,7 +253,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
                     },
                   )
                 : 0}{' '}
-              {states.collateral.symbol}
+              {states.collateral.info.info.symbol}
             </span>
           </span>
         </div>
@@ -329,15 +330,17 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
               !connected ||
               !states.availablePost ||
               !proceedable ||
-              !estimatedFee
+              !estimatedFee ||
+              !states.exchangeRate
             }
             onClick={() =>
               estimatedFee &&
               onProceed(
-                states.redeemAmount.length > 0
-                  ? states.redeemAmount
-                  : ('0' as bAsset),
+                states.redeemWrappedAmount.length > 0
+                  ? states.redeemWrappedAmount
+                  : ('0' as u<bAsset>),
                 estimatedFee,
+                states.exchangeRate,
               )
             }
           >

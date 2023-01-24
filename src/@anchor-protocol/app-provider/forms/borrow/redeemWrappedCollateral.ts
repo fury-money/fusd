@@ -1,6 +1,6 @@
 import {
   BorrowBorrower,
-  borrowRedeemCollateralForm,
+  borrowRedeemWrappedCollateralForm,
 } from '@anchor-protocol/app-fns';
 import { useBorrowBorrowerQuery } from '@anchor-protocol/app-provider/queries/borrow/borrower';
 import { useBorrowMarketQuery } from '@anchor-protocol/app-provider/queries/borrow/market';
@@ -10,13 +10,14 @@ import {
 } from '@anchor-protocol/app-provider';
 import { bAsset } from '@anchor-protocol/types';
 import { useFixedFee } from '@libs/app-provider';
-import { u } from '@libs/types';
+import { Rate, u } from '@libs/types';
 import { useForm } from '@libs/use-form';
 import { useAccount } from 'contexts/account';
-import { WhitelistCollateral } from 'queries';
+import { WhitelistCollateral, WhitelistWrappedCollateral } from 'queries';
+import { useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
 
 export function useBorrowRedeemWrappedCollateralForm(
-  collateral: WhitelistCollateral,
+  collateral: WhitelistWrappedCollateral,
   balance: u<bAsset>,
   fallbackBorrowMarket: BorrowMarketWithDisplay,
   fallbackBorrowBorrower: BorrowBorrower,
@@ -36,10 +37,14 @@ export function useBorrowRedeemWrappedCollateralForm(
     data: { marketBorrowerInfo, overseerCollaterals } = fallbackBorrowBorrower,
   } = useBorrowBorrowerQuery();
 
+  const {data: details} = useWrappedTokenDetails(collateral.info);
+
+
   return useForm(
-    borrowRedeemCollateralForm,
+    borrowRedeemWrappedCollateralForm,
     {
       collateral,
+      exchangeRate: details?.hubState.exchange_rate ?? "0" as Rate,
       userBAssetBalance: balance,
       userUSTBalance: uUST,
       userLunaBalance: uLuna,

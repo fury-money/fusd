@@ -7,6 +7,7 @@ import { UST } from '@anchor-protocol/types';
 import { defaultFee, EstimatedFee } from '@libs/app-provider';
 import { useForm } from '@libs/use-form';
 import { useAccount } from 'contexts/account';
+import { WhitelistCollateral } from 'queries';
 import { useCallback } from 'react';
 
 export interface LiquidationDepositFormReturn

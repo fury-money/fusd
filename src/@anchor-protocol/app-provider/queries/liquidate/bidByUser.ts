@@ -9,7 +9,7 @@ import { ANCHOR_QUERY_KEY } from '../../env';
 const queryFn = createQueryFn(bidsByUserQuery);
 
 export function useBidByUserByCollateralQuery(
-  collateralToken: CW20Addr,
+  collateralToken: CW20Addr | undefined,
   startAfter?: HumanAddr,
   limit?: number,
 ): UseQueryResult<BidByUser | undefined> {
@@ -23,7 +23,7 @@ export function useBidByUserByCollateralQuery(
       ANCHOR_QUERY_KEY.BID_POOLS_BY_USER,
       queryClient,
       contractAddress.liquidation.liquidationQueueContract,
-      collateralToken,
+      collateralToken!,
       terraWalletAddress,
       startAfter,
       limit,
@@ -33,6 +33,7 @@ export function useBidByUserByCollateralQuery(
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!collateralToken
     },
   );
 

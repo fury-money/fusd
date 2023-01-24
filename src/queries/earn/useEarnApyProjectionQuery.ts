@@ -65,11 +65,6 @@ const computeNewRate = (
 ) => {
   const { threshold_deposit_rate, dyn_rate_min, dyn_rate_max } = config;
 
-  console.log(
-    computeApy(dyn_rate_max, blocksPerYear, config.epoch_period).toString(),
-    computeApy(dyn_rate_min, blocksPerYear, config.epoch_period).toString(),
-  );
-  console.log(blocksPerYear, config.epoch_period);
   const bound = (rate: Big) => {
     return max(
       min(rate, computeApy(dyn_rate_max, blocksPerYear, config.epoch_period)),
@@ -125,7 +120,6 @@ const earnApyProjectionQuery = async (
     overseerConfig,
     big(uUST),
   );
-  console.log(overseerDynRateState, overseerConfig, change, blocksPerYear);
 
   const rate = computeNewRate(overseerConfig, change, blocksPerYear);
 

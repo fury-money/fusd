@@ -41,16 +41,18 @@ import styled, { useTheme } from 'styled-components';
 import { Mutex } from 'async-mutex';
 import { useActivateLiquidationBidTx } from '@anchor-protocol/app-provider/tx/liquidate/activate';
 import { useMediaQuery } from 'react-responsive';
+import { WhitelistCollateral } from 'queries';
 
 export interface MyBidsSectionProps {
   className?: string;
+  collateral: WhitelistCollateral | undefined
 }
 
-export function MyBidsSection({ className }: MyBidsSectionProps) {
+export function MyBidsSection({ className, collateral }: MyBidsSectionProps) {
   const { connected, terraWalletAddress } = useAccount();
   const { contractAddress } = useAnchorWebapp();
   const { data: { bidByUser } = {} } = useBidByUserByCollateralQuery(
-    contractAddress.cw20.bLuna,
+    collateral?.collateral_token
   );
 
   const myBids = useMemo(

@@ -1,4 +1,4 @@
-import { borrowProvideWrappedCollateralTx } from '@anchor-protocol/app-fns';
+import { borrowRedeemWrappedCollateralTx } from '@anchor-protocol/app-fns';
 import { bAsset, Rate, u } from '@anchor-protocol/types';
 import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
@@ -9,17 +9,16 @@ import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_TX_KEY } from '../../env';
 import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
 import { useBorrowMarketQuery } from '../../queries/borrow/market';
-import { WhitelistCollateral } from 'queries';
+import { WhitelistWrappedCollateral } from 'queries';
 
-export interface BorrowProvideCollateralTxParams {
-  depositAmount: bAsset;
-  txFee: EstimatedFee;
-  lunaAmount: u<bAsset>;
+export interface BorrowRedeemWrappedCollateralTxParams {
+  redeemWrappedAmount: u<bAsset>;
   exchangeRate: Rate;
+  txFee: EstimatedFee;
   onTxSucceed?: () => void;
 }
 
-export function useBorrowProvideWrappedCollateralTx(collateral: WhitelistCollateral) {
+export function useBorrowRedeemWrappedCollateralTx(collateral: WhitelistWrappedCollateral) {
   const { availablePost, connected, terraWalletAddress } = useAccount();
 
   const connectedWallet = useConnectedWallet();
@@ -33,29 +32,24 @@ export function useBorrowProvideWrappedCollateralTx(collateral: WhitelistCollate
   const refetchQueries = useRefetchQueries();
 
   const stream = useCallback(
-    ({
-      depositAmount,
-      txFee,
-      lunaAmount,
-      exchangeRate,
-      onTxSucceed,
-    }: BorrowProvideCollateralTxParams) => {
+    ({ redeemWrappedAmount, txFee, exchangeRate, onTxSucceed }: BorrowRedeemWrappedCollateralTxParams) => {
       if (
         !connectedWallet ||
         !connected ||
         !availablePost ||
-        !collateral ||
-        !terraWalletAddress
+        !terraWalletAddress ||
+        !collateral 
       ) {
         throw new Error('Can not post!');
       }
-      return borrowProvideWrappedCollateralTx({
+
+      return borrowRedeemWrappedCollateralTx({
         collateral,
-        walletAddr: terraWalletAddress,
-        depositAmount,
-        lunaAmount,
         exchangeRate,
+        walletAddr: terraWalletAddress,
+        redeemWrappedAmount,
         overseerAddr: contractAddress.moneyMarket.overseer,
+        // post
         network: connectedWallet.network,
         post: connectedWallet.post,
         fixedGas: txFee.txFee,
@@ -70,15 +64,15 @@ export function useBorrowProvideWrappedCollateralTx(collateral: WhitelistCollate
         // side effect
         onTxSucceed: () => {
           onTxSucceed?.();
-          refetchQueries(ANCHOR_TX_KEY.BORROW_PROVIDE_COLLATERAL);
+          refetchQueries(ANCHOR_TX_KEY.BORROW_REDEEM_COLLATERAL);
         },
       });
     },
     [
       collateral,
-      availablePost,
       borrowBorrowerQuery,
       borrowMarketQuery,
+      availablePost,
       connected,
       connectedWallet,
       constants.gasAdjustment,

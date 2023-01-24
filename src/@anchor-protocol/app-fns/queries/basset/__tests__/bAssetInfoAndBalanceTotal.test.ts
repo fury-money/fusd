@@ -14,6 +14,5 @@ describe('bAssetAndBalanceTotal()', () => {
       TEST_LCD_CLIENT,
     );
 
-    console.log('bAssetInfoAndBalanceTotal.test.ts..()', result);
   });
 });

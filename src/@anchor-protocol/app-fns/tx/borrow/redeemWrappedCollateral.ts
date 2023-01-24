@@ -20,6 +20,7 @@ import {
 } from '@anchor-protocol/types';
 import {
   pickAttributeValue,
+  pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
@@ -30,7 +31,6 @@ import {
   _createTxOptions,
   _pollTxInfo,
   _postTx,
-  createHookMsg,
   TxHelper,
 } from '@libs/app-fns/tx/internal';
 import { floor } from '@libs/big-math';
@@ -43,17 +43,19 @@ import {
   MsgExecuteContract,
 } from '@terra-money/terra.js';
 import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { WhitelistCollateral } from 'queries';
+import { WhitelistWrappedCollateral } from 'queries';
 import { QueryObserverResult } from 'react-query';
 import { Observable } from 'rxjs';
 import { BorrowBorrower } from '../../queries/borrow/borrower';
 import { BorrowMarket } from '../../queries/borrow/market';
 import { _fetchBorrowData } from './_fetchBorrowData';
+import big from "big.js"
 
-export function borrowProvideCollateralTx($: {
-  collateral: WhitelistCollateral;
+export function borrowRedeemWrappedCollateralTx($: {
+  collateral: WhitelistWrappedCollateral;
+  exchangeRate: Rate;
   walletAddr: HumanAddr;
-  depositAmount: bAsset;
+  redeemWrappedAmount: u<bAsset>;
   overseerAddr: HumanAddr;
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -74,34 +76,42 @@ export function borrowProvideCollateralTx($: {
 
   return pipe(
     _createTxOptions({
-      msgs: [  
-
-        // provide_collateral call
-        new MsgExecuteContract($.walletAddr, $.collateral.collateral_token, {
-          send: {
-            contract: $.collateral.custody_contract,
-            amount: formatInput(
-              microfy($.depositAmount, $.collateral.decimals),
-              $.collateral.decimals,
-            ),
-            msg: createHookMsg({
-              deposit_collateral: {},
-            }),
-          },
-        }),
-        // lock_collateral call
+      msgs: [
+        // unlock collateral
         new MsgExecuteContract($.walletAddr, $.overseerAddr, {
-          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L75
-          lock_collateral: {
+          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L78
+          unlock_collateral: {
             collaterals: [
               [
                 $.collateral.collateral_token,
                 formatInput(
-                  microfy($.depositAmount, $.collateral.decimals),
+                  $.redeemWrappedAmount,
                   $.collateral.decimals,
                 ),
               ],
             ],
+          },
+        }),
+
+        // withdraw from custody
+        new MsgExecuteContract($.walletAddr, $.collateral.custody_contract, {
+          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
+          withdraw_collateral: {
+            amount: formatInput(
+              $.redeemWrappedAmount,
+              $.collateral.decimals,
+            ),
+          },
+        }),
+
+        // Burn the tokens to get back the underlying token
+        new MsgExecuteContract($.walletAddr, $.collateral.info.token, {
+          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
+          burn: {
+            amount: formatInput(
+              $.redeemWrappedAmount,
+              $.collateral.decimals,
+            ),
           },
         }),
       ],
@@ -131,10 +141,8 @@ export function borrowProvideCollateralTx($: {
       }
 
       try {
-        const collateralizedAmount = pickAttributeValue<u<bLuna>>(
-          fromContract,
-          7,
-        );
+        const redeemedAmount = pickAttributeValueByKey<u<bLuna>>(fromContract, "amount");
+        const withdrawnAmount = big(redeemedAmount ?? "0").div($.exchangeRate).toString() as u<bLuna>
 
         const ltv = computeLtv(
           computeBorrowLimit(
@@ -150,12 +158,19 @@ export function borrowProvideCollateralTx($: {
 
           phase: TxStreamPhase.SUCCEED,
           receipts: [
-            collateralizedAmount && {
-              name: 'Collateralized Amount',
+            redeemedAmount && {
+              name: 'Redeemed Amount',
               value: `${formatOutput(
-                demicrofy(collateralizedAmount, $.collateral.decimals),
+                demicrofy(redeemedAmount, $.collateral.decimals),
                 { decimals: $.collateral.decimals },
               )} ${$.collateral.symbol}`,
+            },
+            withdrawnAmount && {
+              name: 'Withdrawn Amount',
+              value: `${formatOutput(
+                demicrofy(withdrawnAmount, $.collateral.decimals),
+                { decimals: $.collateral.decimals },
+              )} ${$.collateral.info.info.symbol}`,
             },
             ltv && {
               name: 'New Borrow Usage',

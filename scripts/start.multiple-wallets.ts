@@ -1,5 +1,6 @@
 import path from 'path';
 import puppeteer from 'puppeteer';
+import {log} from "console";
 
 const extension = [
   process.env.TERRA_EXTENSION!,
@@ -29,7 +30,7 @@ const userDataDir = path.resolve(
   const [page] = await browser.pages();
   await page.goto(`https://localhost:3000`);
 
-  console.log(
+  log(
     `🌏 Test Chromium is ready. A shortcut "Ctrl + C" is close the browser.`,
   );
 })();

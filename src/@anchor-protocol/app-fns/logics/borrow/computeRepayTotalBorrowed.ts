@@ -34,7 +34,6 @@ export function computeRepayTotalBorrowed(
     big(1).plus(bufferInterestFactor),
   );
 
-  //console.log('useRepayDialog.tsx..()', totalBorrows.toString(), marketUserOverview.loanAmount.loan_amount);
 
   return (totalBorrows.lt(1000) ? big(1000) : totalBorrows.plus(1000)) as u<
     UST<Big>

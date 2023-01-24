@@ -169,7 +169,6 @@ export async function pollTxInfo({
       const fail = txInfo.find(({ RawLog }) => !RawLog);
 
       if (fail) {
-        console.log('txInfo.ts..pollTxInfo()', fail);
         const message =
           typeof fail.RawLog === 'string'
             ? fail.RawLog

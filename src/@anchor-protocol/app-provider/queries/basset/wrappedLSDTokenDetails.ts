@@ -1,15 +1,13 @@
-import { borrowMarketQuery } from '@anchor-protocol/app-fns';
 import { createQueryFn } from '@libs/react-query-utils';
 import { useQuery, UseQueryResult } from 'react-query';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_QUERY_KEY } from '../../env';
 
 
-import { useQueryWithTokenDisplay } from '../utils/tokenDisplay';
 import { HumanAddr } from '@libs/types';
 import { QueryClient, wasmFetch, WasmQuery, WasmQueryData } from '@libs/query-client';
 import { lsdWrapper } from '@anchor-protocol/types/contracts/lsdWrapper';
-import { WhitelistCollateral, WhitelistWrappedCollateral } from 'queries';
+import { LSDContracts } from '@anchor-protocol/app-provider';
 
 // Here we need : 
 // The collateral exchange rate (how much we mint when wrapping a certain amount of underlying tokens)
@@ -49,16 +47,39 @@ export async function underlyingHubStateQuery(
 
 const queryFn = createQueryFn(underlyingHubStateQuery);
 
-export function useWrappedTokenDetails(
-  collateral: WhitelistWrappedCollateral
+
+export function useExlicitWrappedTokenDetails(
+  hubAddress: HumanAddr | undefined
 ): UseQueryResult<UnderlyingHubState> {
-  const { contractAddress, queryClient, queryErrorReporter } =
+  const { queryClient, queryErrorReporter } =
     useAnchorWebapp();
 
   return useQuery(
     [
-      ANCHOR_QUERY_KEY.BORROW_MARKET,
-      collateral.info.info.hubAddress as HumanAddr,
+      ANCHOR_QUERY_KEY.WRAPPED_TOKEN_HUB,
+      hubAddress!,
+      queryClient,
+    ],
+    queryFn,
+    {
+      refetchInterval: 1000 * 60 * 5,
+      keepPreviousData: false,
+      onError: queryErrorReporter,
+      enabled: !!hubAddress
+    },
+  );
+}
+
+export function useWrappedTokenDetails(
+  collateral: LSDContracts
+): UseQueryResult<UnderlyingHubState> {
+  const { queryClient, queryErrorReporter } =
+    useAnchorWebapp();
+
+  return useQuery(
+    [
+      ANCHOR_QUERY_KEY.WRAPPED_TOKEN_HUB,
+      collateral.info.hubAddress as HumanAddr,
       queryClient,
     ],
     queryFn,

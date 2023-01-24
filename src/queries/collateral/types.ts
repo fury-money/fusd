@@ -24,4 +24,4 @@ export type WhitelistNormalCollateral =
     bridgedAddress?: CW20Addr | ERC20Addr;
   };
 
-export type WhitelistCollateral = WhitelistWrappedCollateral | WhitelistWrappedCollateral;
+export type WhitelistCollateral = WhitelistNormalCollateral | WhitelistWrappedCollateral;

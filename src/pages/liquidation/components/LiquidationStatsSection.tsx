@@ -16,17 +16,22 @@ import { u, UST } from '@libs/types';
 import { bLuna } from '@anchor-protocol/types';
 import { useMediaQuery } from 'react-responsive';
 import { useTheme } from 'styled-components';
+import { WhitelistCollateral } from 'queries';
 
 export interface LiquidationStatsSectionProps {
   className?: string;
+  collateral: WhitelistCollateral | undefined;
 }
 
 export type Period = 'total' | 'year' | 'month' | 'week' | 'day';
 
 export function LiquidationStatsSection({
   className,
+  collateral,
 }: LiquidationStatsSectionProps) {
   const { data: liquidationHistory } = useLiquidationHistoryQuery();
+
+  console.log(liquidationHistory, "history data")
 
   const { bLuna: bluna, ust } = useFormatters();
 

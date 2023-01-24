@@ -54,8 +54,6 @@ export function useCheckTerraswapLpBalance() {
           : 'bombay-12'
       ];
 
-    //console.log('checkTerraswapLpBalance.ts..()', connectedWallet.network.chainID === 'columbus-5', connectedWallet.network.chainID, terraswapAncUstLPToken, staking);
-
     rewardsAncUstLpRewardsQuery(
       terraWalletAddress,
       staking,

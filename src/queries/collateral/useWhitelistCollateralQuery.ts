@@ -44,7 +44,6 @@ const mapTokenInformation = (
   tokenInformation: Record<string, CW20TokenDisplayInfo>,
 ): WhitelistCollateral[] => {
   return whitelist.map((collateral) => {
-    console.log(collateral, tokenInformation)
     if (collateral && tokenInformation[collateral.collateral_token]) {
       const token = tokenInformation[collateral.collateral_token];
 

@@ -1,26 +1,30 @@
-import { useMemo } from 'react';
 import {
-  useAnchorWebapp,
-  useBidByUserByCollateralQuery,
-  useBidPoolsByCollateralQuery,
-  useMarketBAssetQuery,
-  useNetwork,
+    LSDContracts,
+    useAnchorWebapp,
+    useBidByUserByCollateralQuery,
+    useBidPoolsByCollateralQuery,
+    useMarketBAssetQuery,
+    useNetwork
 } from '@anchor-protocol/app-provider';
-import { ANCHOR_CONTRACT_ADDRESS } from 'env';
-import { UST, bLuna, liquidation, u } from '@anchor-protocol/types/';
-import { demicrofy } from '@libs/formatter';
-import { formatUST, formatBAsset } from '@anchor-protocol/notation';
+import { useExlicitWrappedTokenDetails, useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
 import { useTotalCollateralsQuery } from '@anchor-protocol/app-provider/queries/liquidate/totalLiquidations';
+import { formatBAsset, formatUST } from '@anchor-protocol/notation';
+import { bAsset, bLuna, CW20Addr, HumanAddr, liquidation, u, UST } from '@anchor-protocol/types/';
+import { demicrofy } from '@libs/formatter';
+import { RegisteredLSDs } from 'env';
+import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
+import { useMemo } from 'react';
+import big, { Big } from "big.js";
 
-export const useLiquidationGraph = () => {
+export const useLiquidationGraph = (contractAddress: CW20Addr | undefined) => {
   const labels = useMemo(() => [...Array(31).keys()], []);
 
-  const network = useNetwork();
   const { data: { bidPoolsByCollateral } = {} } = useBidPoolsByCollateralQuery(
-    ANCHOR_CONTRACT_ADDRESS(network.network).cw20.bLuna,
+    contractAddress,
     undefined,
     31,
   );
+
 
   const data = useMemo(
     () =>
@@ -41,19 +45,31 @@ export const useLiquidationGraph = () => {
   }, [labels, data]);
 };
 
-export const useMyLiquidationStats = () => {
+export type LiquidationStats = {
+  ratio: number,
+  otherStats: 
+    {
+      id: string;
+      title: string;
+      value: number;
+      format_func: (v: any) => string;
+    }[]
+}
+
+export const useMyLiquidationStats = (tokenAddress?: CW20Addr, symbol?:string, hubAddress?: HumanAddr): LiquidationStats => {
   const network = useNetwork();
-  const { contractAddress } = useAnchorWebapp();
+
+
   const { data: { bidPoolsByCollateral } = {} } = useBidPoolsByCollateralQuery(
-    ANCHOR_CONTRACT_ADDRESS(network.network).cw20.bLuna,
+    tokenAddress,
     undefined,
     31,
   );
   const { data: { bidByUser } = {} } = useBidByUserByCollateralQuery(
-    contractAddress.cw20.bLuna,
+    tokenAddress,
   );
 
-  const { data: { oraclePrice } = {} } = useMarketBAssetQuery();
+  const { data: { oraclePrices } = {} } = useMarketBAssetQuery();
 
   const poolValue = useMemo(
     () =>
@@ -67,11 +83,11 @@ export const useMyLiquidationStats = () => {
 
   const { data: lockedCollaterals } = useTotalCollateralsQuery();
 
-  const lockedCollateralLUNA = useMemo(
+  const thisLockedCollateral = useMemo(
     () =>
-      lockedCollaterals?.find((col) => col.token === contractAddress.cw20.bLuna)
+      lockedCollaterals?.find((col) => col.token === tokenAddress)
         ?.computed_total_collateral,
-    [lockedCollaterals, contractAddress.cw20.bLuna],
+    [lockedCollaterals, tokenAddress],
   );
 
   const activeBids = useMemo(
@@ -84,46 +100,90 @@ export const useMyLiquidationStats = () => {
     [bidByUser],
   );
 
-  const lunaPrice = useMemo(() => oraclePrice?.rate, [oraclePrice]);
+  const collateralPrice = useMemo(
+    () => oraclePrices?.prices.find((price) => price.asset == tokenAddress)?.price, 
+  [oraclePrices, tokenAddress]);
+
+  // Echange rate for assets not 1-1
+  const {data: wrappedTokenDetails} = useExlicitWrappedTokenDetails(hubAddress);
 
   return useMemo(() => {
     let lockedCollateralUSD =
-      (lockedCollateralLUNA ?? 1) * parseFloat(lunaPrice ?? '1');
-    if (lockedCollateralUSD === 0) {
-      lockedCollateralUSD = 1;
-    }
-    let ratio = (poolValue ?? 0) / lockedCollateralUSD;
+      (thisLockedCollateral ?? 0) * parseFloat(collateralPrice ?? '1');
+    let ratio = lockedCollateralUSD ? (poolValue ?? 0) / lockedCollateralUSD : 0;
+    let lsdExchangeRate = wrappedTokenDetails?.hubState.exchange_rate ?? "1";
 
     return {
       ratio,
       otherStats: [
         {
+          id: "locked_collateral_stable",
           title: 'Total locked Collateral Value (axlUSDC)',
           value: lockedCollateralUSD,
           format_func: (v: any) => formatUST(demicrofy(v.toString() as u<UST>)),
         },
         {
+          id: "pool_value_stable",
           title: 'Total Pool Value (axlUSDC)',
           value: poolValue ?? 0,
           format_func: (v: any) => formatUST(demicrofy(v.toString() as u<UST>)),
         },
         {
-          title: 'Total locked Collateral (LUNA)',
-          value: lockedCollateralLUNA ?? 0,
+          id: "locked_collateral_raw",
+          title: `Total locked Collateral (${symbol})`,
+          value: thisLockedCollateral ?? 0,
           format_func: (v: any) =>
-            formatBAsset(demicrofy(v.toString() as u<bLuna>)),
+            formatBAsset(big(demicrofy(v.toString() as u<bLuna>)).div(lsdExchangeRate) as bAsset<Big>),
         },
         {
+          id: "my_bids_stable",
           title: 'My Total active Bids (axlUSDC)',
           value: activeBids ?? 0,
           format_func: (v: any) => formatUST(demicrofy(v.toString() as u<UST>)),
         },
         {
-          title: 'LUNA Price',
-          value: lunaPrice ?? 0,
+          id: "price",
+          title: `${symbol} Price`,
+          value: parseFloat(collateralPrice ?? "0")*parseFloat(lsdExchangeRate),
           format_func: (v: any) => formatUST(v.toString() as UST),
         },
       ],
     };
-  }, [poolValue, activeBids, lunaPrice, lockedCollateralLUNA]);
+  }, [poolValue, activeBids, collateralPrice, thisLockedCollateral, symbol, wrappedTokenDetails?.hubState.exchange_rate]);
 };
+
+
+export type LiquidationStatsResponse = {
+  name: RegisteredLSDs | "aLuna"
+  info: Partial<LSDContracts>,
+  liquidationStats: LiquidationStats | undefined,
+}[]
+
+export const useAllLiquidationStats = () : LiquidationStatsResponse => {
+
+  const {contractAddress} = useAnchorWebapp();
+
+  const {data: collaterals} = useWhitelistCollateralQuery();
+
+  // First bLuna    
+  let bLunaStats = useMyLiquidationStats(contractAddress.cw20.bLuna, "aLuna");
+
+  // Then LSDs
+  let lsdStats = Object.entries(contractAddress.lsds).map(([key, contracts] ) => {
+        const liquidationStats = useMyLiquidationStats(contracts.token as CW20Addr, contracts.info.symbol);
+        return {
+          name: key as RegisteredLSDs,
+          liquidationStats,
+          info: contracts
+        }
+    })
+
+  return [...lsdStats, {
+    name: "aLuna", 
+    liquidationStats: bLunaStats,
+    info: {
+      token: contractAddress.cw20.bLuna
+    }
+  }]
+
+}

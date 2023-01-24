@@ -8,7 +8,6 @@ export default {
 const someFetch = (value: string) =>
   new Promise<number>((resolve) =>
     setTimeout(() => {
-      console.log('fetch result is', value);
       resolve(parseInt(value));
     }, Math.random() * 3000),
   );

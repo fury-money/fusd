@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
+import {log} from "console";
 
 declare global {
   interface Window {
@@ -36,7 +37,7 @@ export function useGoogleAnalytics(
 
       document.body.appendChild(script2);
     } else {
-      console.log('GTAG INIT:', trackingIdRef.current);
+      log('GTAG INIT:', trackingIdRef.current);
     }
   }, []);
 
@@ -47,7 +48,7 @@ export function useGoogleAnalytics(
         page_path: location.pathname,
       });
     } else if (debugRef.current) {
-      console.log('GTAG PUSH: ', location.pathname + location.search);
+      log('GTAG PUSH: ', location.pathname + location.search);
     }
   }, [location]);
 }

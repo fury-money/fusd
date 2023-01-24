@@ -2,6 +2,7 @@ import { liquidationWithdrawCollateralTx } from '@anchor-protocol/app-fns/tx/liq
 import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { WhitelistCollateral } from 'queries';
 import { useCallback } from 'react';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_TX_KEY } from '../../env';
@@ -11,7 +12,9 @@ export interface LiquidationWithdrawCollateralTxParams {
   onTxSucceed?: () => void;
 }
 
-export function useLiquidationWithdrawCollateralTx() {
+export function useLiquidationWithdrawCollateralTx(
+  collateral: WhitelistCollateral | undefined
+) {
   const connectedWallet = useConnectedWallet();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
@@ -21,7 +24,7 @@ export function useLiquidationWithdrawCollateralTx() {
 
   const stream = useCallback(
     ({ txFee, onTxSucceed }: LiquidationWithdrawCollateralTxParams) => {
-      if (!connectedWallet || !connectedWallet.availablePost) {
+      if (!connectedWallet || !connectedWallet.availablePost || !collateral) {
         throw new Error('Can not post!');
       }
 
@@ -29,7 +32,7 @@ export function useLiquidationWithdrawCollateralTx() {
         // fabricateMarketDepositStableCoin
         walletAddr: connectedWallet.walletAddress,
         liquidationQueueAddr: contractAddress.liquidation.liquidationQueueContract,
-        bLunaAddr: contractAddress.cw20.bLuna,
+        collateralAddr: collateral.collateral_token,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
@@ -43,14 +46,14 @@ export function useLiquidationWithdrawCollateralTx() {
         // side effect
         onTxSucceed: () => {
           onTxSucceed?.();
-          refetchQueries(ANCHOR_TX_KEY.EARN_DEPOSIT);
+          refetchQueries(ANCHOR_TX_KEY.LIQUIDATION_WITHDRAW_COLLATERAL);
         },
       });
     },
     [
       connectedWallet,
       contractAddress.liquidation.liquidationQueueContract,
-      contractAddress.cw20.bLuna,
+      collateral,
       constants.gasAdjustment,
       queryClient,
       txErrorReporter,

@@ -1,4 +1,5 @@
 import { MarketCollateralsHistory } from '@anchor-protocol/app-fns';
+import { LSDCollateralResponse } from '@anchor-protocol/app-provider/queries/borrow/useLSDCollateralQuery';
 import {
   formatUST,
   formatUSTWithPostfixUnits,
@@ -16,14 +17,16 @@ import Big from 'big.js';
 import { UIElementProps } from 'components/layouts/UIElementProps';
 import { WhitelistCollateral } from 'queries';
 import React, { useMemo } from 'react';
+import big from "big.js";
 
 interface CollateralMarketTableProps extends UIElementProps {
   whitelistCollateral: WhitelistCollateral[];
   marketData: MarketCollateralsHistory | undefined;
+  additionalLSDInfo: LSDCollateralResponse | undefined;
 }
 
 export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
-  const { className, whitelistCollateral, marketData } = props;
+  const { className, whitelistCollateral, marketData, additionalLSDInfo } = props;
 
   const collaterals = useMemo(() => {
     const array = whitelistCollateral.map((collateral) => {
@@ -31,9 +34,23 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
         (c) => c.token === collateral.collateral_token,
       );
 
-      const price = data?.price ?? (0 as UST<number>);
+      const additionalInfo = additionalLSDInfo?.find(
+        (c) => c.info?.token === collateral.collateral_token
+      );
 
-      const value = data ? demicrofy(data.collateral) : (0 as bAsset<number>);
+      // We exchange the token values with the one in memory for LSD
+      if(additionalInfo?.info?.info?.symbol){
+        collateral.symbol = additionalInfo?.info?.info?.symbol;
+      }
+      if(additionalInfo?.info?.info?.name){
+        collateral.name = additionalInfo?.info?.info?.name;
+      }
+
+      const exchangeRate = parseFloat(additionalInfo?.additionalInfo?.hubState?.exchange_rate ?? "1");
+
+      const price = (parseFloat(data?.price ?? "0") * exchangeRate) as UST<number>;
+
+      const value = (data ? demicrofy(data.collateral) : big(0 as bAsset<number>)).div(exchangeRate) as bAsset<Big>;
 
       const tvl = data
         ? demicrofy(Big(data.collateral).mul(data.price).toString() as u<UST>)

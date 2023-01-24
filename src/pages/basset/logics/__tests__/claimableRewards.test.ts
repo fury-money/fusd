@@ -1,5 +1,6 @@
 import { bluna } from '@anchor-protocol/types';
 import { Dec, Int } from '@terra-money/terra.js';
+import {log} from "console";
 
 test('claimable rewards error case 1', () => {
   const data = {
@@ -24,7 +25,7 @@ test('claimable rewards error case 1', () => {
     data.data.rewardState.Result,
   );
 
-  console.log(
+  log(
     'claimableRewards.test.ts..()',
     new Int(
       new Int(holder.balance).mul(

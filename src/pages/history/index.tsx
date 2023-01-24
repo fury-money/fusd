@@ -43,7 +43,6 @@ function Component({ className }: HistoryProps) {
 
   function getElAndScroll() {
     let element = null;
-    console.log(hashFragment)
     if (hashFragment === '#') {
       // use document.body instead of document.documentElement because of a bug in smoothscroll-polyfill in safari
       // see https://github.com/iamdustan/smoothscroll/issues/138
@@ -103,7 +102,6 @@ function Component({ className }: HistoryProps) {
         elClone.addEventListener("click", function handleClick(e: any) {
           e.preventDefault();
           hashFragment = elClone.href.match(footnoteRegex)[1];
-          console.log(hashFragment)
           if (
             hashFragment !== '' &&
             // ignore non-vanilla click events, same as react-router

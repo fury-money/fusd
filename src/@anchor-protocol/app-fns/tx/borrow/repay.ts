@@ -144,7 +144,6 @@ export function borrowRepayTx($: {
           ],
         } as TxResultRendering;
       } catch (error) {
-        console.log('receipts error', error);
         return helper.failedToParseTxResult();
       }
     },

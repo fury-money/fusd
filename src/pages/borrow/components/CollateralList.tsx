@@ -3,6 +3,7 @@ import {
   useBorrowBorrowerQuery,
   useBorrowMarketQuery,
 } from '@anchor-protocol/app-provider';
+import { LSDCollateralResponse, useLSDCollateralQuery } from '@anchor-protocol/app-provider/queries/borrow/useLSDCollateralQuery';
 import {
   useFormatters,
   formatOutput,
@@ -26,7 +27,7 @@ import { microfyPrice } from 'utils/microfyPrice';
 import { useProvideCollateralDialog } from './useProvideCollateralDialog';
 import { useRedeemCollateralDialog } from './useRedeemCollateralDialog';
 
-const renderBuyLink = (collateral: WhitelistCollateral) => {
+export const renderBuyLink = (collateral: WhitelistCollateral) => {
   // TODO: think of a sustainable way to do this
   const href =
     collateral.symbol === 'bETH'
@@ -76,6 +77,8 @@ export function CollateralList(props: UIElementProps) {
 
   const { data: whitelist } = useWhitelistCollateralQuery();
 
+  const additionalLSDInfo = useLSDCollateralQuery(); 
+
   const {
     ust: { formatOutput: formatUSTOutput, demicrofy: demicrofyUST },
   } = useFormatters();
@@ -97,14 +100,27 @@ export function CollateralList(props: UIElementProps) {
               collateral.collateral_token === collateralToken,
           );
 
+        const additionalInfo = additionalLSDInfo?.find(
+          (c) => c.info?.token === collateral.collateral_token
+        );
+      const exchangeRate = parseFloat(additionalInfo?.additionalInfo?.hubState?.exchange_rate ?? "1");
+
+      // We exchange the token values with the one in memory for LSD
+      if(additionalInfo?.info?.info?.symbol){
+        collateral.symbol = additionalInfo?.info?.info?.symbol;
+      }
+      if(additionalInfo?.info?.info?.name){
+        collateral.name = additionalInfo?.info?.info?.name;
+      }
+
         return {
           collateral,
-          price: microfyPrice(oracle?.price, collateral.decimals),
+          price: big(microfyPrice(oracle?.price, collateral.decimals)).mul(exchangeRate).toString() as UST,
           liquidationPrice:
             borrowBorrower &&
             borrowBorrower.overseerCollaterals.collaterals.length === 1 &&
             collateral
-              ? microfyPrice(
+              ? big(microfyPrice(
                   computeLiquidationPrice(
                     collateral.collateral_token,
                     borrowBorrower.marketBorrowerInfo,
@@ -114,9 +130,9 @@ export function CollateralList(props: UIElementProps) {
                     borrowMarket.oraclePrices,
                   ),
                   collateral.decimals,
-                )
+                )).mul(exchangeRate).toString() as UST
               : undefined,
-          lockedAmount: collateralAmount?.[1] ?? ('0' as u<bAsset>),
+          lockedAmount: big(collateralAmount?.[1] ?? ('0' as u<bAsset>)).div(exchangeRate).toString() as u<bAsset>,
           lockedAmountInUST: big(collateralAmount?.[1] ?? 0).mul(
             oracle?.price ?? 1,
           ) as u<UST<Big>>,
@@ -128,7 +144,6 @@ export function CollateralList(props: UIElementProps) {
       .filter((collateral) => Number(collateral.price) !== 0);
   }, [borrowBorrower, borrowMarket, whitelist]);
 
-  console.log(collaterals)
   // ---------------------------------------------
   // presentation
   // ---------------------------------------------
@@ -201,7 +216,7 @@ export function CollateralList(props: UIElementProps) {
                     {formatOutput(
                       demicrofy(lockedAmount, collateral.decimals),
                       {
-                        decimals: collateral.decimals,
+                        decimals: 3,
                       },
                     )}{' '}
                     {collateral.symbol}

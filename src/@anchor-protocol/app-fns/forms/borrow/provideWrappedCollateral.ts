@@ -46,6 +46,7 @@ export interface BorrowProvideWrappedCollateralFormDependency {
 export interface BorrowProvideWrappedCollateralFormStates
   extends BorrowProvideWrappedCollateralFormInput {
   lunaAmount: u<bAsset>;
+  exchangeRate: Rate;
   amountToLtv: (depositAmount: u<bAsset>) => Rate<Big>;
   ltvToAmount: (ltv: Rate<Big>) => u<bAsset<Big>>;
   ltvStepFunction: (draftLtv: Rate<Big>) => Rate<Big>;
@@ -171,6 +172,7 @@ export const borrowProvideWrappedCollateralForm = ({
       {
         depositAmount,
         lunaAmount,
+        exchangeRate,
         collateral,
         borrowLimit,
         currentLtv,

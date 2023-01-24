@@ -183,6 +183,7 @@ const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
         hubAddress: "terra1kye343r8hl7wm6f3uzynyyzl2zmcm2sqmvvzwzj7et2j5jj7rjkqa2ue88",
         protocol : "Eris Protocol",
         symbol: "ampLuna",
+        name: "Eris Amplified Luna",
         icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
       },
       hub: "terra1gxvlzg6dqzst4kvj8he8ygrd98rmt3q3dqcx02r3ffcm697s5khs4whyt6",
@@ -281,7 +282,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
 
 export const ANCHOR_INDEXER_API_ENDPOINTS = (network: NetworkInfo): string => {
   if (network.chainID.startsWith('pisco')) {
-    return 'https://api.cavernprotocol.com/api/testnet';
+    return 'http://localhost:3000/api/testnet';
     //return 'http://localhost:3000/api/testnet';
   } else if (network.chainID.startsWith('phoenix')) {
     return 'https://api.cavernprotocol.com/api/mainnet';
@@ -533,6 +534,36 @@ export const ANCHOR_TX_REFETCH_MAP: TxRefetchMap = {
     TERRA_QUERY_KEY.TERRA_BALANCES,
     TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES,
   ],
+
+  [ANCHOR_TX_KEY.LIQUIDATION_WITHDRAW]:[
+    ANCHOR_QUERY_KEY.WRAPPED_TOKEN_HUB,
+    ANCHOR_QUERY_KEY.BID_POOLS_BY_USER,
+    ANCHOR_QUERY_KEY.BID_POOLS_BY_COLLATERAL,
+    TERRA_QUERY_KEY.TOKEN_BALANCES,
+    TERRA_QUERY_KEY.CW20_BALANCE,
+    TERRA_QUERY_KEY.TERRA_BALANCES,
+    TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES,
+  ],
+  [ANCHOR_TX_KEY.LIQUIDATION_WITHDRAW_COLLATERAL]:[
+    ANCHOR_QUERY_KEY.WRAPPED_TOKEN_HUB,
+    ANCHOR_QUERY_KEY.BID_POOLS_BY_USER,
+    ANCHOR_QUERY_KEY.BID_POOLS_BY_COLLATERAL,
+    TERRA_QUERY_KEY.TOKEN_BALANCES,
+    TERRA_QUERY_KEY.CW20_BALANCE,
+    TERRA_QUERY_KEY.TERRA_BALANCES,
+    TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES,
+  ],
+  [ANCHOR_TX_KEY.LIQUIDATION_DEPOSIT]:[
+    ANCHOR_QUERY_KEY.WRAPPED_TOKEN_HUB,
+    ANCHOR_QUERY_KEY.BID_POOLS_BY_USER,
+    ANCHOR_QUERY_KEY.BID_POOLS_BY_COLLATERAL,
+    TERRA_QUERY_KEY.TOKEN_BALANCES,
+    TERRA_QUERY_KEY.CW20_BALANCE,
+    TERRA_QUERY_KEY.TERRA_BALANCES,
+    TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES,
+  ]
+
+
 };
 
 // build: force re-build trigger - 22.01.03-1

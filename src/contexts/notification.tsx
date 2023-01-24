@@ -65,7 +65,6 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     }
 
     getNotificationPermission().then((initialPermission) => {
-      //console.log('Notification.permission is', initialPermission);
       setPermission(initialPermission);
     });
   }, []);

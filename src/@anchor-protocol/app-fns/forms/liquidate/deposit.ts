@@ -5,6 +5,7 @@ import { microfy } from '@libs/formatter';
 import { FormReturn } from '@libs/use-form';
 import big, { Big } from 'big.js';
 import _ from'lodash';
+import { WhitelistCollateral } from 'queries';
 
 export interface LiquidationDepositFormInput {
   depositAmount: UST;

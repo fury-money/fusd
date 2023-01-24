@@ -11,7 +11,7 @@ import { ANCHOR_QUERY_KEY } from '../../env';
 const queryFn = createQueryFn(bidPoolsByCollateralQuery);
 
 export function useBidPoolsByCollateralQuery(
-  collateralToken: CW20Addr,
+  collateralToken: CW20Addr | undefined,
   startAfter?: HumanAddr,
   limit?: number,
 ): UseQueryResult<BidPoolsByCollateral | undefined> {
@@ -23,7 +23,7 @@ export function useBidPoolsByCollateralQuery(
       ANCHOR_QUERY_KEY.BID_POOLS_BY_COLLATERAL,
       queryClient,
       contractAddress.liquidation.liquidationQueueContract,
-      collateralToken,
+      collateralToken!,
       startAfter,
       limit,
     ],
@@ -32,6 +32,7 @@ export function useBidPoolsByCollateralQuery(
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
+      enabled: !!collateralToken,
     },
   );
 

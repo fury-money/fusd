@@ -1,5 +1,6 @@
 import { useLongtimeNoSee } from '@libs/use-longtime-no-see';
 import React, { useCallback } from 'react';
+import {log} from "console";
 
 export default {
   title: 'packages/use-longtime-no-see',
@@ -7,7 +8,7 @@ export default {
 
 export const Basic = () => {
   const onSee = useCallback(() => {
-    console.log('👋 Longtime no see!');
+    log('👋 Longtime no see!');
   }, []);
 
   useLongtimeNoSee({

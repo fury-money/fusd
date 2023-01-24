@@ -47,7 +47,6 @@ function useTxFee() {
           }
           return fee;
         })
-        .catch((error) => console.log(error));
     },
     {
       refetchInterval: 1000 * 60 * 60,

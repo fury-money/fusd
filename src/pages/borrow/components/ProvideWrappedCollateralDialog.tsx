@@ -49,7 +49,7 @@ export interface ProvideCollateralDialogParams
   txResult: StreamResult<TxResultRendering> | null;
   uTokenBalance: u<bAsset>;
   proceedable: boolean;
-  onProceed: (amount: bAsset & NoMicro, txFee: EstimatedFee, lunaAmount: u<bAsset>) => void;
+  onProceed: (amount: bAsset & NoMicro, txFee: EstimatedFee, lunaAmount: u<bAsset>, exchangeRate: Rate) => void;
 }
 
 export type ProvideCollateralDialogProps =
@@ -353,10 +353,11 @@ function ProvideWrappedCollateralDialogBase(props: ProvideCollateralDialogProps)
               !states.availablePost ||
               !proceedable ||
               !estimatedFee ||
-              !states.lunaAmount
+              !states.lunaAmount||
+              !states.exchangeRate
             }
             onClick={() =>
-              estimatedFee && onProceed(states.depositAmount, estimatedFee, states.lunaAmount)
+              estimatedFee && onProceed(states.depositAmount, estimatedFee, states.lunaAmount, states.exchangeRate)
             }
           >
             Proceed
