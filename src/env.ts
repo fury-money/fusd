@@ -282,7 +282,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
 
 export const ANCHOR_INDEXER_API_ENDPOINTS = (network: NetworkInfo): string => {
   if (network.chainID.startsWith('pisco')) {
-    return 'http://localhost:3000/api/testnet';
+    return 'http://api.cavernprotocol.com/api/testnet';
     //return 'http://localhost:3000/api/testnet';
   } else if (network.chainID.startsWith('phoenix')) {
     return 'https://api.cavernprotocol.com/api/mainnet';
