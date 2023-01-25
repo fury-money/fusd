@@ -37,6 +37,7 @@ export async function marketStateQuery(
   queryClient: QueryClient,
   marketContract: HumanAddr,
 ): Promise<MarketState> {
+
   const marketState = await wasmFetch<MarketStateWasmQuery>({
     ...queryClient,
     id: `market--state`,

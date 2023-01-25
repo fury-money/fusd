@@ -20,6 +20,7 @@ export function useBorrowBorrowerQuery(): UseQueryResult<
     contractAddress: { moneyMarket },
   } = useAnchorWebapp();
 
+
   const result = useQuery(
     [
       ANCHOR_QUERY_KEY.BORROW_BORROWER,

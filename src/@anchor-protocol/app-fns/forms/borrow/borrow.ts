@@ -43,8 +43,6 @@ export interface BorrowBorrowFormDependency {
   whitelist: WhitelistCollateral[];
   bAssetLtvs: BAssetLtvs;
   blocksPerYear: number;
-  taxRate: Rate;
-  maxTaxUUSD: u<Luna>;
   connected: boolean;
 }
 
@@ -82,8 +80,6 @@ export const borrowBorrowForm = ({
   whitelist,
   bAssetLtvs,
   blocksPerYear,
-  taxRate,
-  maxTaxUUSD,
   connected,
 }: BorrowBorrowFormDependency) => {
   const borrowedAmount = computeBorrowedAmount(marketBorrowerInfo);
@@ -136,7 +132,7 @@ export const borrowBorrowForm = ({
       : null;
 
     const txFee = target.isNative
-      ? computeBorrowTxFee(borrowAmount, { taxRate, maxTaxUUSD })
+      ? computeBorrowTxFee(borrowAmount)
       : (Big(0) as u<UST<Big>>);
 
     const receiveAmount = computeBorrowReceiveAmount(borrowAmount, txFee);

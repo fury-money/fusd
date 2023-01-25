@@ -1,3 +1,7 @@
+import { GasPrice } from '@cosmjs/stargate';
+import { Rate } from '@libs/types';
+import { LCDClient } from '@terra-money/terra.js';
+import { LcdQueryClient, SimulateFetchParams, SimulateFetchQuery } from '..';
 import { LcdFault } from '../errors';
 import { WasmFetchBaseParams, WasmQueryData } from '../interface';
 import { defaultLcdFetcher, LcdFetcher, LcdResult } from './fetch';
@@ -33,7 +37,6 @@ export async function lcdFetch<WasmQueries>({
       return lcdFetcher<LcdResult<any>>(endpoint, requestInit);
     }),
   );
-  console.log(rawData)
 
   const result = wasmKeys.reduce((resultObject, key, i) => {
     const lcdResult = rawData[i];
@@ -49,4 +52,27 @@ export async function lcdFetch<WasmQueries>({
   }, {} as WasmQueryData<WasmQueries>);
 
   return result;
+}
+
+export type LCDSimulateFetchParams = LcdQueryClient & SimulateFetchQuery & {
+  lcdClient: LCDClient,
+  gasInfo: {
+    gasAdjustment: Rate<number>,
+    gasPrice: GasPrice,
+  }
+}
+
+export async function lcdSimulate({msgs, lcdClient, address, gasInfo}: LCDSimulateFetchParams): Promise<number>{
+
+  const { auth_info } = await lcdClient.tx.create(
+      [{ address: address }],
+      {
+        msgs,
+        gasAdjustment: gasInfo.gasAdjustment,
+        //@ts-ignore
+        gasPrices: gasInfo.gasPrice,
+      },
+    );
+
+  return auth_info.fee.gas_limit
 }

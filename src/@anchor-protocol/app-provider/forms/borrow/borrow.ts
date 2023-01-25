@@ -4,7 +4,7 @@ import {
   useAnchorBank,
   useDeploymentTarget,
 } from '@anchor-protocol/app-provider';
-import { useFixedFee, useUstTax } from '@libs/app-provider';
+import { useFixedFee } from '@libs/app-provider';
 import { UST } from '@libs/types';
 import { useForm } from '@libs/use-form';
 import { useAccount } from 'contexts/account';
@@ -31,8 +31,6 @@ export function useBorrowBorrowForm(
     tokenBalances: { uUST, uLuna },
   } = useAnchorBank();
 
-  const { taxRate, maxTax } = useUstTax();
-
   const { data: whitelist = [] } = useWhitelistCollateralQuery();
 
   const {
@@ -47,8 +45,6 @@ export function useBorrowBorrowForm(
     borrowBorrowForm,
     {
       target,
-      maxTaxUUSD: maxTax,
-      taxRate: taxRate,
       userUSTBalance: uUST,
       userLunaBalance: uLuna,
       connected,

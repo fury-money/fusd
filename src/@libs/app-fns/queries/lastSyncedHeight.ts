@@ -88,7 +88,6 @@ class BlockHeightFetcher {
     if (this.fetched) {
       return;
     }
-    console.log("start fetch", this.client)
 
     this.fetched = true;
 
@@ -116,7 +115,6 @@ class BlockHeightFetcher {
           .batchFetcher!.tendermint.latestBlock()
           .then((response) => {
 
-            console.log("fetched block", response.block.header.height)
             return response.block.header.height.toNumber()
           });
     }
@@ -124,8 +122,6 @@ class BlockHeightFetcher {
 
     fetchLatestBlock
       .then((blockHeight) => {
-        console.log("fetched block")
-        console.log(blockHeight, "fetched block")
         for (const [resolve] of this.resolvers) {
           resolve(blockHeight);
         }
@@ -134,7 +130,6 @@ class BlockHeightFetcher {
         this.failedCount = 0;
       })
       .catch((error) => {
-        console.log(error, "fetched block")
         if (this.failedCount > 4) {
           for (const [, reject] of this.resolvers) {
             reject(error);
@@ -160,7 +155,6 @@ const fetchers: Map<string, BlockHeightFetcher> = new Map<
 >();
 
 export function lastSyncedHeightQuery(client: QueryClient): Promise<number> {
-  console.log("for synced enter");
   let endpoint;
   if('lcdEndpoint' in client){
     endpoint = client.lcdEndpoint;

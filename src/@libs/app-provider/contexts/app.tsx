@@ -7,7 +7,7 @@ import {
   QueryClient,
 } from '@libs/query-client';
 import { useBatchQuery } from '@libs/query-client/lcd/batchfetch';
-import { NetworkInfo } from '@terra-money/wallet-provider';
+import { NetworkInfo, useWallet, WalletStatus } from '@terra-money/wallet-provider';
 import React, {
   Consumer,
   Context,
@@ -105,7 +105,11 @@ export function AppProvider<
   refetchMap,
 }: AppProviderProps<ContractAddress, Constants>) {
   const { network, rpcClient } = useNetwork();
-  const batchQueryClient = useBatchQuery(rpcClient);
+
+  const wallet = useWallet();
+
+  // We wait for wallet init before querying stuff
+  const batchQueryClient = useBatchQuery(wallet.status == WalletStatus.INITIALIZING ? undefined : rpcClient);
 
   const networkBoundStates = useMemo<
     Pick<
@@ -126,17 +130,20 @@ export function AppProvider<
 
 
     let queryClient;
-    switch(queryClientType){
-      case 'lcd':
-        queryClient = lcdQueryClient;
-        break;
-      case "hive":
-        queryClient = hiveQueryClient;
-        break;
-      case "batch":
-        queryClient = batchQueryClient
-        break;
-    };
+      switch(queryClientType){
+        case 'lcd':
+          queryClient = lcdQueryClient;
+          break;
+        case "hive":
+          queryClient = hiveQueryClient;
+          break;
+        case "batch":
+          queryClient = batchQueryClient
+          break;
+      };
+
+
+    
 
 
 

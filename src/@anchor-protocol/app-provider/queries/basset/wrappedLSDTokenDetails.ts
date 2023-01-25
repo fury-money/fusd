@@ -26,8 +26,8 @@ export type UnderlyingHubState =
   WasmQueryData<UnderlyingHubStateWasmQuery>;
 
 export async function underlyingHubStateQuery(
-  hubAddr: HumanAddr,
   queryClient: QueryClient,
+  hubAddr: HumanAddr,
 ): Promise<UnderlyingHubState> {
  
   return wasmFetch< UnderlyingHubStateWasmQuery>({
@@ -45,9 +45,6 @@ export async function underlyingHubStateQuery(
 }
 
 
-const queryFn = createQueryFn(underlyingHubStateQuery);
-
-
 export function useExlicitWrappedTokenDetails(
   hubAddress: HumanAddr | undefined
 ): UseQueryResult<UnderlyingHubState> {
@@ -58,14 +55,13 @@ export function useExlicitWrappedTokenDetails(
     [
       ANCHOR_QUERY_KEY.WRAPPED_TOKEN_HUB,
       hubAddress!,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(underlyingHubStateQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: false,
       onError: queryErrorReporter,
-      enabled: !!hubAddress
+      enabled: !!hubAddress && !!queryClient
     },
   );
 }
@@ -80,13 +76,13 @@ export function useWrappedTokenDetails(
     [
       ANCHOR_QUERY_KEY.WRAPPED_TOKEN_HUB,
       collateral.info.hubAddress as HumanAddr,
-      queryClient,
     ],
-    queryFn,
+    createQueryFn(underlyingHubStateQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: false,
       onError: queryErrorReporter,
+      enabled: !!queryClient
     },
   );
 }

@@ -13,7 +13,6 @@ const storageKey = (mantleEndpoint: string) =>
 export function useLastSyncedHeightQuery(): UseQueryResult<number> {
   const { network } = useNetwork();
   const { queryClient, queryErrorReporter } = useAnchorWebapp();
-  console.log("for synced height", queryClient)
   const result = useQuery(
     [ANCHOR_QUERY_KEY.TERRA_LAST_SYNCED_HEIGHT, network.chainID],
     createQueryFn(
@@ -28,7 +27,6 @@ export function useLastSyncedHeightQuery(): UseQueryResult<number> {
       enabled: !!queryClient,
     },
   );
-  console.log("for synced height", result)
 
   return result;
 }

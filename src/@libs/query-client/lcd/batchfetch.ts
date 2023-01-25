@@ -5,6 +5,8 @@ import {
   createProtobufRpcClient,
   TxExtension,
   setupTxExtension,
+  AuthExtension,
+  setupAuthExtension,
 } from "@cosmjs/stargate";
 import { setupWasmExtension, WasmExtension } from "@cosmjs/cosmwasm-stargate";
 import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
@@ -40,23 +42,22 @@ export type BatchQuery = QueryClient &
     WasmExtension &
     BankExtension &
     TxExtension &
+    AuthExtension &
     TenderMintExtension;
 
 
-export function useBatchQuery(rpc: string): BatchQueryClient | undefined{
+export function useBatchQuery(rpc: string | undefined): BatchQueryClient | undefined{
 
   const [batchQuery, setBatchQuery] = useState<BatchQuery>();
 
   useEffect(() => {
     const createBatchQuery = async () => {
       if(rpc){
-        console.log("try to create client")
         const httpBatch = new HttpBatchClient(rpc, {
           dispatchInterval: 500,
           batchSizeLimit: 100,
         });
         const tendermint = await Tendermint34Client.create(httpBatch);
-        console.log("client created")
         // We create the query client
         const client = QueryClient.withExtensions(
             tendermint,
@@ -64,13 +65,12 @@ export function useBatchQuery(rpc: string): BatchQueryClient | undefined{
             setupBankExtension,
             setupTxExtension,
             setupTendermintExtension,
+            setupAuthExtension,
           );
 
         setBatchQuery(
           client
         );
-      }else{
-        console.log("No rpc set for network", rpc)
       }
     }
     createBatchQuery();

@@ -94,7 +94,6 @@ export async function borrowMarketQuery(
       },
     },
   });
-  console.log("for market", marketState)
 
   const marketBalances: Pick<BorrowMarket, 'marketBalances'>['marketBalances'] =
     {

@@ -33,6 +33,9 @@ export function useLiquidationWithdrawCollateralTx(
         walletAddr: connectedWallet.walletAddress,
         liquidationQueueAddr: contractAddress.liquidation.liquidationQueueContract,
         collateralAddr: collateral.collateral_token,
+        // If the collateral is a lsd, we need to burn tokens
+        tokenWrapperAddr: (collateral && "info" in collateral) ? collateral.collateral_token : undefined, 
+
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,

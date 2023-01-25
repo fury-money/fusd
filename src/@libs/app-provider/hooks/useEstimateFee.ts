@@ -1,10 +1,11 @@
-import { useNetwork } from '@anchor-protocol/app-provider';
+import { useAnchorBank, useAnchorWebapp, useNetwork } from '@anchor-protocol/app-provider';
 import { Gas, HumanAddr, Luna, u } from '@libs/types';
 import { Msg } from '@terra-money/terra.js';
 import big from 'big.js';
 import { useCallback, useMemo, useState } from 'react';
 import { useApp } from '../contexts/app';
 import debounce from 'lodash.debounce';
+import { simulateFetch } from '@libs/query-client';
 
 export interface EstimatedFee {
   gasWanted: Gas;
@@ -28,36 +29,41 @@ export function useEstimateFee(
 ): (msgs: Msg[]) => Promise<EstimatedFee | undefined> {
   const { lcdClient } = useNetwork();
   const { gasPrice, constants } = useApp();
+  const { queryClient } = useAnchorWebapp();
+
   return useCallback(
     async (msgs: Msg[]) => {
       if (!walletAddress) {
         return undefined;
       }
-
       try {
-        const { auth_info } = await lcdClient.tx.create(
-          [{ address: walletAddress }],
-          {
-            msgs,
-            gasAdjustment: constants.gasAdjustment,
+
+        // We first try simulating the fee with the global method
+        const gasWanted = await simulateFetch({
+          ...queryClient,
+          msgs,
+          address: walletAddress,
+          lcdClient,
+          gasInfo: {
+            gasAdjustment: constants.gasAdjustment,  
             //@ts-ignore
-            gasPrices: gasPrice,
-          },
-        );
-        const estimatedFeeGas = auth_info.fee.amount
-          .toArray()
-          .reduce((feeTotal, coin) => {
-            return feeTotal.plus(coin.amount.toString());
-          }, big(0));
+            gasPrice: gasPrice,
+          }
+        })
+        if(!gasWanted){
+          throw "Gas Wanted is zero, tx Fee compute error"
+        }
+
         return {
-          gasWanted: auth_info.fee.gas_limit as Gas,
-          txFee: Math.floor(estimatedFeeGas.toNumber()).toString() as u<Luna>,
+          gasWanted: gasWanted as Gas,
+          txFee: Math.ceil(gasWanted * parseFloat(gasPrice.uluna)).toString() as u<Luna>
         };
       } catch (error) {
+        console.log("Error, noticed", error)
         return undefined;
       }
     },
-    [constants.gasAdjustment, gasPrice, lcdClient.tx, walletAddress],
+    [constants.gasAdjustment, gasPrice, lcdClient, walletAddress, queryClient],
   );
 }
 
@@ -102,6 +108,6 @@ export function useFeeEstimationFor(
           })
           .then((ui) => {});
       }, 500);
-    }, [estimateFee, setEstimatedFeeError]),
+    }, [estimateFee, setEstimatedFeeError, setEstimatedFee]),
   ];
 }

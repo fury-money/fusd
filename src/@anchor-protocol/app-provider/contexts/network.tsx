@@ -38,13 +38,9 @@ const LCDClients: Record<string, LCDClient> = {
   }),
 };
 
-
-const settenConfig = {
-  settenProject: "676b0ca2cce04dd1ac44cf9ebd1b565b", 
-  settenKey: "1c2184e6bc954e619615d2c460054504"
-}
 const RPCClients: Record<string, string> =  {
-  mainnet: `https://rpc.phoenix.terra.setten.io/${settenConfig.settenProject}/?key=${settenConfig.settenKey}`,
+  testnet: "https://pisco-rpc.erisprotocol.com/",
+  mainnet: `https://phoenix-rpc.erisprotocol.com/`,
 }
 
 export const NetworkContext = createContext<NetworkInfo>(MAINNET);

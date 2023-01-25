@@ -37,17 +37,20 @@ import {
 } from '@terra-money/terra.js';
 import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
 import { Observable } from 'rxjs';
-
+import _ from "lodash";
 
 export interface LiquidationWithdrawCollateralMsgArgs {
   walletAddr: HumanAddr,
   liquidationQueueAddr: HumanAddr,
   collateralToken: CW20Addr,
+  tokenWrapperAddr: CW20Addr | undefined,
 }
 
 
-export function getLiquidationWithdrawCollateralMsg({walletAddr, liquidationQueueAddr, collateralToken}: LiquidationWithdrawCollateralMsgArgs){
-   return [new MsgExecuteContract(
+export function getLiquidationWithdrawCollateralMsg({walletAddr, liquidationQueueAddr, collateralToken, tokenWrapperAddr}: LiquidationWithdrawCollateralMsgArgs){
+   return _.compact([
+    // First message to withdraw the token from the liquidation queue
+    new MsgExecuteContract(
       walletAddr,
       liquidationQueueAddr,
       {
@@ -56,7 +59,16 @@ export function getLiquidationWithdrawCollateralMsg({walletAddr, liquidationQueu
           collateral_token : collateralToken,
         }
       },
-    )];
+    ),
+    // Second message to swap back to the LSD token
+    tokenWrapperAddr ? new MsgExecuteContract(
+      walletAddr,
+      tokenWrapperAddr,
+      {
+        burn_all : {}
+      },
+    ) : undefined,
+  ]);
 }
 
 export function liquidationWithdrawCollateralTx($: {
@@ -64,6 +76,8 @@ export function liquidationWithdrawCollateralTx($: {
   liquidationQueueAddr: HumanAddr;
 
   collateralAddr: CW20Addr;
+
+  tokenWrapperAddr: CW20Addr | undefined;
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -80,7 +94,8 @@ export function liquidationWithdrawCollateralTx($: {
       msgs: getLiquidationWithdrawCollateralMsg({
         walletAddr: $.walletAddr,
         liquidationQueueAddr : $.liquidationQueueAddr ,
-        collateralToken : $.collateralAddr
+        collateralToken : $.collateralAddr,
+        tokenWrapperAddr: $.tokenWrapperAddr,
       }),
       fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
       gasAdjustment: $.gasAdjustment,

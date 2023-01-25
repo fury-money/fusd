@@ -31,8 +31,6 @@ export function LiquidationStatsSection({
 }: LiquidationStatsSectionProps) {
   const { data: liquidationHistory } = useLiquidationHistoryQuery();
 
-  console.log(liquidationHistory, "history data")
-
   const { bLuna: bluna, ust } = useFormatters();
 
   const liquidations = useMemo(

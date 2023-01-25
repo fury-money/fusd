@@ -7,7 +7,7 @@ export interface LiquidationWithdrawCollateralFormInput {}
 
 export interface LiquidationWithdrawCollateralFormDependency {
   userULunaBalance: u<UST>;
-  fixedGas: EstimatedFee;
+  fixedGas: EstimatedFee | undefined;
   isConnected: boolean;
 }
 
@@ -32,13 +32,16 @@ export const liquidationWithdrawCollateralForm =
     LiquidationWithdrawCollateralFormAsyncStates
   > => {
     // txFee
-    const txFee = fixedGas.txFee;
+    const txFee = fixedGas?.txFee;
 
     // invalidTxFee
     const invalidTxFee = (() => {
-      return isConnected && txFee && big(userULunaBalance).lt(txFee)
-        ? 'Not enough transaction fees'
-        : undefined;
+      if( isConnected && txFee && big(userULunaBalance).lt(txFee)){
+        return 'Not enough transaction fees'
+      }else if (isConnected){
+        return "Error when computing the tx Fee, invalid TX"
+      }
+      return undefined
     })();
 
     // invalidDepositAmount
@@ -55,7 +58,7 @@ export const liquidationWithdrawCollateralForm =
       if (!isConnected || !!invalidDepositAmount) {
         return undefined;
       }
-      return big(userULunaBalance).lt(big(fixedGas.txFee).mul(2))
+      return big(userULunaBalance).lt(big(fixedGas?.txFee ?? 0).mul(2))
         ? `You don't have enough gas to pay for the transaction`
         : undefined;
     })();

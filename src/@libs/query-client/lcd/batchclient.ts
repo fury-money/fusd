@@ -1,3 +1,6 @@
+import { GasPrice } from '@cosmjs/stargate';
+import { Account, LCDClient, Msg } from '@terra-money/terra.js';
+import { BatchQueryClient, GasInfoParams, QueryClient, SimulateFetchQuery } from '..';
 import { LcdFault } from '../errors';
 import { WasmFetchBaseParams, WasmQueryData } from '../interface';
 import { BatchQuery } from './batchfetch';
@@ -23,7 +26,6 @@ export async function batchFetch<WasmQueries>({
   const rawData = await Promise.all(
     wasmKeys.map((key) => {
       const { query, contractAddress } = wasmQuery[key];
-      console.log("batch fetching" , contractAddress, query)
 
       return batchFetcher?.wasm.queryContractSmart(contractAddress, query);
 
@@ -32,13 +34,34 @@ export async function batchFetch<WasmQueries>({
 
   const result = wasmKeys.reduce((resultObject, key, i) => {
     const lcdResult = rawData[i];
-    console.log(lcdResult)
     //@ts-ignore
     resultObject[key] = lcdResult
 
     return resultObject;
   }, {} as WasmQueryData<WasmQueries>);
 
-  console.log(result)
   return result;
+}
+
+
+export type SimulateParams = BatchQueryClient & SimulateFetchQuery & {
+  lcdClient?: LCDClient;
+} & GasInfoParams;
+
+export async function batchSimulate({msgs, batchFetcher, address, gasInfo:{gasAdjustment}}: SimulateParams): Promise<number | undefined>{
+
+  const distantAccount = await batchFetcher?.auth.account(address);
+  if(!distantAccount){
+    throw "Account not found when simulating the transaction"
+  }
+
+  const account = Account.fromProto(distantAccount);
+  let txSimulateResponse = await batchFetcher?.tx.simulate(msgs.map(msg => msg.packAny()), undefined, account.getPublicKey()?.toAmino()!, account.getSequenceNumber());
+
+  const gasPrice = txSimulateResponse?.gasInfo?.gasUsed;
+  if(!gasPrice){
+     throw "Error estimating the gas fee, gasPrice not parsed"
+  }
+
+  return Number(gasPrice)*gasAdjustment
 }

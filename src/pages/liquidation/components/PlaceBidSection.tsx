@@ -210,7 +210,7 @@ export function PlaceBidSectionBase({
    *
    * *****************************/
 
-  const collateralState = useLiquidationWithdrawCollateralForm();
+  const collateralState = useLiquidationWithdrawCollateralForm(collateral);
   const [withdrawCollateralTx, withdrawCollateralTxResult] =
     useLiquidationWithdrawCollateralTx(collateral);
   const [isSubmittingCollateralTx, setIsSubmittingCollateralTx] =
@@ -241,6 +241,7 @@ export function PlaceBidSectionBase({
     },
     [connected, withdrawCollateralTx, openConfirm],
   );
+
 
   const handleSliderChange = useCallback(
     (newValue: any) => {
@@ -539,12 +540,12 @@ export function PlaceBidSectionBase({
               </Grid>
               <TxFeeList className="receipt">
                 <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-                  {!collateralState.txFee?.txFee ||
+                  {(!collateralState.txFee ||
                     (!big(collateralState.txFee?.txFee ?? ('0' as u<Luna>)).gt(
                       0,
-                    ) && (
+                    ))) && (
                       <CircleSpinner size={14} color={theme.colors.positive} />
-                    ))}
+                    )}
                   {!!collateralState.txFee?.txFee &&
                     big(collateralState.txFee?.txFee).gt(0) &&
                     `${luna.formatOutput(
