@@ -6,16 +6,16 @@ import { AnchorTax } from '../../types';
 
 // Tx_fee = MIN(User_Input/(1+tax_rate) * tax_rate , Max_tax) + Fixed_Gas
 
-export function computeBorrowTxFee(borrowAmount: UST, tax: AnchorTax) {
+export function computeBorrowTxFee(borrowAmount: UST, tax?: AnchorTax) {
   if (borrowAmount.length === 0) {
     return undefined;
   }
 
   const amount = microfy(borrowAmount);
 
-  const userAmountTxFee = big(amount.div(big(1).plus(tax.taxRate))).mul(
-    tax.taxRate,
+  const userAmountTxFee = big(amount.div(big(1).plus(tax?.taxRate ?? "0"))).mul(
+    tax?.taxRate ?? "0",
   );
 
-  return min(userAmountTxFee, tax.maxTaxUUSD) as u<UST<Big>>;
+  return min(userAmountTxFee, tax?.maxTaxUUSD ?? big(0)) as u<UST<Big>>;
 }

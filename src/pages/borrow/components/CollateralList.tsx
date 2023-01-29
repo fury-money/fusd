@@ -160,16 +160,30 @@ export function CollateralList(props: UIElementProps) {
   const [searchParams, setSearchParams] = useSearchParams(); 
 
   useEffect(() => {
-    const collateralAddress = query.get("provide");
-    const collateral = collaterals.find((c) => c.collateral.collateral_token == collateralAddress)
-    if(collateral && !provideCollateralDialogElement && borrowMarket && borrowBorrower){
+    // For providing collateral directly
+    const collateralProvideAddress = query.get("provide");
+    const collateralProvide = collaterals.find((c) => c.collateral.collateral_token == collateralProvideAddress)
+    if(collateralProvide && !provideCollateralDialogElement && borrowMarket && borrowBorrower){
       openProvideCollateralDialog({
-          collateral: collateral.collateral,
+          collateral: collateralProvide.collateral,
           fallbackBorrowMarket: borrowMarket,
           fallbackBorrowBorrower: borrowBorrower,
         })
         setSearchParams()
     }
+
+    // For redeeming collateral directly
+    const collateralRedeemAddress = query.get("redeem");
+    const collateralRedeem = collaterals.find((c) => c.collateral.collateral_token == collateralRedeemAddress)
+    if(collateralRedeem && !provideCollateralDialogElement && borrowMarket && borrowBorrower){
+      openRedeemCollateralDialog({
+          collateral: collateralRedeem.collateral,
+          fallbackBorrowMarket: borrowMarket,
+          fallbackBorrowBorrower: borrowBorrower,
+        })
+        setSearchParams()
+    }
+
   }, [collaterals, query, borrowMarket, borrowBorrower, provideCollateralDialogElement, openProvideCollateralDialog])
 
 

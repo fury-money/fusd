@@ -166,7 +166,6 @@ function BorrowDialogBase(props: BorrowDialogProps) {
     if (!connected || !states.borrowAmount) {
       return;
     }
-
     estimateFee([
       new MsgExecuteContract(
         terraWalletAddress as string,
