@@ -22,7 +22,8 @@ import big, { Big, BigSource } from 'big.js';
 import { BuyLink } from 'components/BuyButton';
 import { useAccount } from 'contexts/account';
 import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { microfyPrice } from 'utils/microfyPrice';
 import { useProvideCollateralDialog } from './useProvideCollateralDialog';
 import { useRedeemCollateralDialog } from './useRedeemCollateralDialog';
@@ -56,6 +57,11 @@ interface CollateralInfo {
   liquidationPrice: UST | undefined;
   lockedAmount: u<bAsset>;
   lockedAmountInUST: u<UST<BigSource>>;
+}
+
+function useQuery() {
+  const { search } = useLocation();
+  return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
 export function CollateralList(props: UIElementProps) {
@@ -143,6 +149,30 @@ export function CollateralList(props: UIElementProps) {
       )
       .filter((collateral) => Number(collateral.price) !== 0);
   }, [borrowBorrower, borrowMarket, whitelist]);
+
+
+
+  // If a user wants to open the provide dialog directly, they need to use
+
+  //  ?provide=${collateral_address}
+
+  const query = useQuery(); // If the provide argument is there, we open the provide dialog
+  const [searchParams, setSearchParams] = useSearchParams(); 
+
+  useEffect(() => {
+    const collateralAddress = query.get("provide");
+    const collateral = collaterals.find((c) => c.collateral.collateral_token == collateralAddress)
+    if(collateral && !provideCollateralDialogElement && borrowMarket && borrowBorrower){
+      openProvideCollateralDialog({
+          collateral: collateral.collateral,
+          fallbackBorrowMarket: borrowMarket,
+          fallbackBorrowBorrower: borrowBorrower,
+        })
+        setSearchParams()
+    }
+  }, [collaterals, query, borrowMarket, borrowBorrower, provideCollateralDialogElement, openProvideCollateralDialog])
+
+
 
   // ---------------------------------------------
   // presentation
