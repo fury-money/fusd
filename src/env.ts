@@ -115,43 +115,42 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
   tokenId:{
     whitePaper: "whitepaper"
   },
-  LSDs:{
+  LSDs: {
     ampLuna: {
       info: {
         tokenAddress: "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
         hubAddress: "terra10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaqyd3enk",
         protocol : "Eris Protocol",
+        symbol: "ampLuna",
+        name: "Eris Amplified Luna",
         icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
       },
-      hub: undefined,
-      reward: undefined,
-      token: undefined,
-      custody: undefined,
+      hub: "terra1neq7ds3cd2rx0ht0fycgqkf26fed2v73g7wrp5xav5dfas0fwcqqy47t5n",
+      reward: "terra1zrgzj7luyw9mtqcwqdtn6p8gwy262upx3p7wa3v3cj07us7j9ztsa8r4n5",
+      token: "terra173z5ggu6k6slyumrrf59rd3ywmpu6hdfftwpqlkc7fp549yk9fmqzqyepj",
+      custody: "terra1tlascrgjzlut6j2g4jlgv54zg3aw3c3whcjusudk24j0d3k5aucswpwzrz",
     },
-  }
+  },
 };
 
 const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
-  bLunaHub: 'terra1m8unfkpp4kdnc693yxnl6wgvu5wkeps9ages9p4034gjgtvmk22qg9le2l',
-  bLunaToken:
-    'terra1wmmjpacj6c7eeacyk0jnugtqe24cxw7mvq0zwvc7l3ke2au8u4nqfnd76k',
-  mmInterestModel:
-    'terra1prajqsqnwpshesf38nh4hhqsjuudczkf6hgw899w8nyd4ll9chuqst4xmd',
-  mmOracle: 'terra1avsapmp5u9g8n9zefqgg0vjcttjtlv02fm7ynr0l6qw0sl736t3s4rcy4v',
-  mmMarket: 'terra1fpvh7a5fe42403w72ggvq2vg963d2vjsgyn2txmplwjvcqp6avpsflckww',
-  mmOverseer:
-    'terra1smv0s7d4g847amtqtgjm2kkkhzgcutmfhpmj6znt5eac8ej0ddvq7s7pcq',
-  mmLiquidationQueue:
-    'terra1k5c0l7t3wvu4vhedv870n9748ycw53h6qmrrr6x76pg7ptdjdw0sudqt3q',
-  aUSDC: 'terra1phktkrnr99m56gqjk37n0xlr7vk2zp3p835tqtu6v2sgzl4tet4srypktp',
+  
+  bLunaHub: "terra100d6vr63p9sm8mlzuqzv0ep83hhhkdglkffzwkmv2ed47tv7tkrsxl8mn8",
+  bLunaToken: "terra134jnnsem9z4us90lcdm6j6mjf70kdcdzkv9mnz8z5ktl9vt0glksr0uau4",
+  mmInterestModel: "terra1k9cn6dqyrdl0tq0rnler0jw8c7dm5gq37xvaksztayez0upkcvdqv7j4at",
+  mmOracle: "terra19hxng7vgnqshlxlc5cvmtuhkzfu7rrr4aj6vjxnxcnfausjse4yqlsw0np",
+  mmMarket: "terra1mz4pt5u9vs72h9tv3l2nug2kx8kmxufyszsyv0qx7p639nl0zews60360g",
+  mmOverseer: "terra1nlj0qj7km9rxh296wns7x2c43dywjfnfccasu35hhp626aw8wccsty4lfn",
+  mmLiquidationQueue: "terra14jj0ganc6m5d0vr39ety8p58nkexldydx7rpawkecfzfdx8dtpmszpnj7l",
+  aUSDC: 'terra1cfh5sw34je6a8kuwdwefcm3xh8935r0md7eyud4rt2nhnvqgh0jsle7h47',
   mmCustody:
-    'terra1gd5wqk7tq66je4y0msd5ftayp3u8yqq3jzj3ryng2lnwr37lk3gq047m3z',
+    'terra16ulj2elu40xquhc3s9w50p288t5wz3xfl59x55m8x992dtk8t0ls2sfl75',
   bLunaReward:
-    'terra1ml375eu9c0k04muchdt3csjwdcmspqz4cn6qkldmfhav0jd60fes7kwn5n',
+    'terra1xzxn94q6nf0y260nz2vwntng76c2jrkrzkj2h9696gd840efxfjshdypph',
   bLunaValidatorsRegistry:
-    'terra1nvwugmg05x29a27pdjztcjmun0st0wc0e5lzfffesn9elgmetvtsx9kkwl',
+    'terra1mw0x5egps68z9e2zwvuk5pevzm4gthd6d4ndscqxfpl5h8f77clq7m6dsy',
   mmDistributionModel:
-    'terra1wf2dx5exzllqznx6yd5ed8kahe006uternlvu752paymy6nnq6as07jdg5',
+    'terra1tkzmmz3x8kuxtcygjvn9tajz7xx4r0n7nw7y3cexgferscuvm6tqul4uuq',
 
   bLunaLunaPair: '',
   bLunaLunaLPToken: '',
@@ -186,10 +185,10 @@ const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
         name: "Eris Amplified Luna",
         icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
       },
-      hub: "terra1gxvlzg6dqzst4kvj8he8ygrd98rmt3q3dqcx02r3ffcm697s5khs4whyt6",
-      reward: "terra1awg3jvhzp0maxkghpjarg72ykxxqs9wfusajsdml6n8k0pgan9asg3pugh",
-      token: "terra1vj7nl20agm0qa5xyqpq77rhuywetphq8thx6phs4q2ejcexrqhtsad5cku",
-      custody: "terra1vpeunamrv0wkemg23x9ac5awshsjqx2ks8q9tnvrfn6ug840c0fs228gk0"
+      "hub": "terra1qnvjpw834f8h7wfmqku43nndjnrh6v6hnggmeng0nafzlkqpnzwqt545cd",
+      "reward": "terra1pmfgs6jekpcjp3rfg3x2dw2whpex3ygms7d3h46axj6q5xs28n7qvk8375",
+      "token": "terra1pw3ta7fzwxzuqut7e4e6uc9824fg8440yczvhvndz99gnfevggeqrqvmxf",
+      "custody": "terra1kqggdw6vkfdznss9tuvrqmkp4h2m7k7wut0egpv697efdh2hvj6sfk9qqf"
     },
   },
 };
@@ -282,8 +281,8 @@ export const ANCHOR_CONTRACT_ADDRESS = (
 
 export const ANCHOR_INDEXER_API_ENDPOINTS = (network: NetworkInfo): string => {
   if (network.chainID.startsWith('pisco')) {
-    return 'http://api.cavernprotocol.com/api/testnet';
-    //return 'http://localhost:3000/api/testnet';
+    //return 'http://api.cavernprotocol.com/api/testnet';
+    return 'http://localhost:3000/api/testnet';
   } else if (network.chainID.startsWith('phoenix')) {
     return 'https://api.cavernprotocol.com/api/mainnet';
   } else {
