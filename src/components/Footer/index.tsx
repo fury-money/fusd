@@ -14,6 +14,7 @@ import { BlockInfo } from './BlockInfo';
 import { Chain } from '@anchor-protocol/app-provider';
 import { EvmBlockInfo } from './EvmBlockInfo';
 import { getBlockUrl } from 'utils/terrascope';
+import { Discord } from '@anchor-protocol/icons';
 
 export interface FooterProps {
   className?: string;
@@ -79,6 +80,14 @@ function FooterBase({ className, style }: FooterProps) {
           rel="noreferrer"
         >
           <GitHub />
+        </IconButton>
+        <IconButton
+          component="a"
+          href="https://discord.com/invite/Bzau2dW9fu"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Discord />
         </IconButton>
         {/* Forcing the dark theme, no change possible*/}
         {switchable && (
