@@ -102,6 +102,7 @@ function DashboardBase({ className }: DashboardProps) {
         marketDepositAndBorrow?.now.total_ust_deposits,
       ).plus(marketCollaterals?.now.total_value) as u<UST<Big>>,
       yieldReserve: marketUST.overseer_ust_balance,
+      borrowReserve: marketUST.borrow_bucket_ust_balance,
     };
   }, [marketCollaterals?.now, marketDepositAndBorrow?.now, marketUST]);
 
@@ -216,7 +217,7 @@ function DashboardBase({ className }: DashboardProps) {
 
               <hr />
 
-              <section>
+              <section className="reserves">
                 <h2>YIELD RESERVE</h2>
                 <p className="amount">
                   <AnimateNumber
@@ -224,6 +225,20 @@ function DashboardBase({ className }: DashboardProps) {
                   >
                     {totalValueLocked
                       ? totalValueLocked.yieldReserve
+                      : (0 as u<UST<number>>)}
+                  </AnimateNumber>
+                  <span>axlUSDC</span>
+                </p>
+              </section>
+
+              <section className='reserves'>
+                <h2>BORROW INCENTIVES RESERVE</h2>
+                <p className="amount">
+                  <AnimateNumber
+                    format={formatUTokenIntegerWithoutPostfixUnits}
+                  >
+                    {totalValueLocked
+                      ? totalValueLocked.borrowReserve
                       : (0 as u<UST<number>>)}
                   </AnimateNumber>
                   <span>axlUSDC</span>
@@ -1030,6 +1045,11 @@ const StyledDashboard = styled(DashboardBase)`
         }
       }
     }
+  }
+
+  .reserves{
+    margin-top: 20px;
+    margin-bottom: 30px
   }
 `;
 

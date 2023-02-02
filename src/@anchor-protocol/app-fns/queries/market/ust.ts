@@ -23,6 +23,8 @@ export interface MarketUstData {
   total_reserves: '5959917018.269984176356009487';
   global_reward_index: Rate;
   global_interest_index: Rate;
+
+  borrow_bucket_ust_balance: u<UST>
 }
 
 export interface MarketUstQueryParams {
