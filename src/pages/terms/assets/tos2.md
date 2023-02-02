@@ -4,7 +4,7 @@ The Interface provides access to a decentralized protocol on the Terra blockchai
 
 Using the Protocol may require that you pay a fee on the Terra network to perform a transaction. You acknowledge and agree that Terra has no control over any transactions, the method of payment of any transactions, or any actual payments of transactions. You must ensure that you have a sufficient balance to complete any transaction on the Protocol before initiating such transaction.
 
-You acknowledge and agree that Terra has no control over any transactions over the Protocol, the method of payment of any transactions or any actual payments of transactions. Accordingly, you must ensure that you have a sufficient balance of the applicable cryptocurrency tokens stored at your Anchor Protocol-compatible wallet address (“Cryptocurrency Wallet”) to complete any transaction on the Protocol or the Terra network before initiating such transaction.
+You acknowledge and agree that Terra has no control over any transactions over the Protocol, the method of payment of any transactions or any actual payments of transactions. Accordingly, you must ensure that you have a sufficient balance of the applicable cryptocurrency tokens stored at your Cavern Protocol-compatible wallet address (“Cryptocurrency Wallet”) to complete any transaction on the Protocol or the Terra network before initiating such transaction.
 
 When used on this Interface, the terms “debt,” “lend,” “borrow,” “collateral”, “credit,” “leverage,” “bank”, “borrow”, “yield”, “invest” and other similar terms are not meant to be interpreted literally. Rather, such terms are being used to draw rough, fuzzy-logic analogies between the heavily automated and mostly deterministic operations of a decentralized-finance smart contract system and the discretionary performance of traditional-finance transactions by people. When the Interface is used by users to access the Protocol and transact using Smart Contracts, there are no legal agreements, promises of payment, or courts of law, and therefore there are no debts, loans, or other traditional finance transactions involved.
 
@@ -28,15 +28,15 @@ We reserve the right, in our sole discretion, to modify this Agreement from time
 
 ### 5. Proprietary Rights
 
-The HTML and other software code and text used in the Site is available at [GITHUB](https://github.com/Anchor-Protocol) and is freely licensed under [Apache License v2](https://www.apache.org/licenses/LICENSE-2.0.txt).
+The HTML and other software code and text used in the Site is available at [GITHUB](https://github.com/CavernPerson) and is freely licensed under [Apache License v2](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
 ### 6. Marks, Logos and Branding
 
-All Anchor-related marks, logos, and branding used on the Site are non-proprietary and freely licensed under the [Creative Commons Attribution-ShareAlike 4.0 International Public License](https://creativecommons.org/licenses/by/4.0/). All other marks, logos and branding appearing on the Site (including token names, symbols and logos that may be identified on the Site) are the property of their respective owners.
+All Cavern-related marks, logos, and branding used on the Site are non-proprietary and freely licensed under the [Creative Commons Attribution-ShareAlike 4.0 International Public License](https://creativecommons.org/licenses/by/4.0/). All other marks, logos and branding appearing on the Site (including token names, symbols and logos that may be identified on the Site) are the property of their respective owners.
 
-### 7. Anchor Smart Contract Protocol
+### 7. Cavern Smart Contract Protocol
 
-The Anchor Smart Contract Protocol is comprised entirely of open-source software running on the public Terra blockchain and is not our proprietary property. The Anchor Smart Contract Protocol is available at [GITHUB](https://github.com/Anchor-Protocol) and is freely licensed under [Apache License v2](https://www.apache.org/licenses/LICENSE-2.0.txt).
+The Cavern Smart Contract Protocol is comprised entirely of open-source software running on the public Terra blockchain and is not our proprietary property. The Cavern Smart Contract Protocol is available at [GITHUB](https://github.com/CavernPerson) and is freely licensed under [Apache License v2](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
 ### 8. Privacy
 
@@ -133,7 +133,7 @@ All disclaimers, indemnities and exclusions in this Agreement shall survive term
 
 ### 22. About Us
 
-Terraform Labs PTE, LTD is a company incorporated in Singapore, with a registered office and principal place of business at 80 Raffles Place #32-01, Singapore 048624.
+Our identity is not disclosed yet, this information will come later.
 
 ### 23. Contacting Us
 

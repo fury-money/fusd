@@ -49,7 +49,7 @@ export interface BorrowRedeemWrappedCollateralFormStates
   amountToLtv: (redeemAmount: u<bAsset>) => Rate<Big>;
   ltvToAmount: (ltv: Rate<Big>) => u<bAsset<Big>>;
   ltvStepFunction: (draftLtv: Rate<Big>) => Rate<Big>;
-  collateral: WhitelistCollateral;
+  collateral: WhitelistWrappedCollateral;
   userMaxLtv: Rate<Big>;
   txFee: u<Luna>;
   currentLtv: Rate<Big> | undefined;

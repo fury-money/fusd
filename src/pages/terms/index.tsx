@@ -32,6 +32,8 @@ function TermsOfServiceBase({ className }: TermsOfServiceProps) {
 export const StyledTermsOfService = styled(TermsOfServiceBase)`
   font-size: 14px;
 
+  color: ${({theme}) => theme.textColor};
+
   section {
     padding: 5.71428571em 100px;
   }

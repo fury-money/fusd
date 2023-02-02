@@ -44,10 +44,12 @@ import big from 'big.js';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
 import { MsgExecuteContract } from '@terra-money/terra.js';
 import { CircleSpinner } from 'react-spinners-kit';
+import { WhitelistWrappedCollateral } from 'queries';
 
 export interface RedeemCollateralDialogParams
   extends UIElementProps,
     RedeemCollateralFormParams {
+  collateral: WhitelistWrappedCollateral
   txResult: StreamResult<TxResultRendering> | null;
   uTokenBalance: u<bAsset>;
   proceedable: boolean;
@@ -137,6 +139,19 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
           },
         },
       ),
+      // Burn the tokens to get back the underlying token
+      new MsgExecuteContract(
+        terraWalletAddress as string, 
+        collateral.info.token,
+         {
+          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
+          burn: {
+            amount: formatInput(
+              states.redeemWrappedAmount,
+              props.collateral.decimals,
+            ),
+          },
+      }),
     ]);
   }, [
     terraWalletAddress,
