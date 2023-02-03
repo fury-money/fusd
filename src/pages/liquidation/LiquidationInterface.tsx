@@ -12,6 +12,7 @@ import { PlaceBidSection } from './components/PlaceBidSection';
 import { MyBidsSection } from './components/MyBidsSection';
 import { useParams } from 'react-router-dom';
 import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
+import { LiquidationQueueHistory } from './components/LiquidationQueueHistory';
 
 export interface LiquidationProps {
   className?: string;
@@ -40,9 +41,6 @@ function Component({ className }: EarnProps) {
 
   }, [whitelist, tokenSymbol])
 
-  if(collateral){
-  }
-
   return (
     <CenteredLayout className={className} maxWidth={2000}>
       <FlexTitleContainer>
@@ -63,6 +61,9 @@ function Component({ className }: EarnProps) {
           collateral={collateral}
           />
         <MyBidsSection className="my-bids"
+          collateral={collateral}
+          />
+        <LiquidationQueueHistory className="liquidation-queue-chart"
           collateral={collateral}
           />
       </section>
@@ -207,6 +208,10 @@ const StyledComponent = styled(Component)`
       .my-bids {
         grid-column: 6/13;
         grid-row: 3/4;
+      }
+      .liquidation-queue-chart {
+        grid-column: 1/13;
+        grid-row: 4/5;
       }
     }
 
