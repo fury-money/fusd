@@ -6,6 +6,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { useApp } from '../contexts/app';
 import debounce from 'lodash.debounce';
 import { simulateFetch } from '@libs/query-client';
+import React from "react";
+import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 
 export interface EstimatedFee {
   gasWanted: Gas;
@@ -36,32 +38,28 @@ export function useEstimateFee(
       if (!walletAddress) {
         return undefined;
       }
-      try {
 
-        // We first try simulating the fee with the global method
-        const gasWanted = await simulateFetch({
-          ...queryClient,
-          msgs,
-          address: walletAddress,
-          lcdClient,
-          gasInfo: {
-            gasAdjustment: constants.gasAdjustment,  
-            //@ts-ignore
-            gasPrice: gasPrice,
-          }
-        })
-        if(!gasWanted){
-          throw "Gas Wanted is zero, tx Fee compute error"
+      // We first try simulating the fee with the global method
+      const gasWanted = await simulateFetch({
+        ...queryClient,
+        msgs,
+        address: walletAddress,
+        lcdClient,
+        gasInfo: {
+          gasAdjustment: constants.gasAdjustment,  
+          //@ts-ignore
+          gasPrice: gasPrice,
         }
-
-        return {
-          gasWanted: gasWanted as Gas,
-          txFee: Math.ceil(gasWanted * parseFloat(gasPrice.uluna)).toString() as u<Luna>
-        };
-      } catch (error) {
-        console.log("Error, noticed", error)
-        return undefined;
+      })
+      if(!gasWanted){
+        throw "Gas Wanted is zero, tx Fee compute error"
       }
+
+      return {
+        gasWanted: gasWanted as Gas,
+        txFee: Math.ceil(gasWanted * parseFloat(gasPrice.uluna)).toString() as u<Luna>
+      };
+      
     },
     [constants.gasAdjustment, gasPrice, lcdClient, walletAddress, queryClient],
   );
@@ -71,12 +69,12 @@ export function useFeeEstimationFor(
   walletAddress: HumanAddr | undefined,
 ): [
   EstimatedFee | undefined,
-  string | undefined,
+  string | JSX.Element | undefined,
   (msgs: Msg[] | null) => void,
 ] {
   const estimateFee = useEstimateFee(walletAddress);
   const [estimatedFeeError, setEstimatedFeeError] = useState<
-    string | undefined
+    string | JSX.Element | undefined
   >();
 
   const [estimatedFee, setEstimatedFee] = useState<EstimatedFee | undefined>();
@@ -94,16 +92,16 @@ export function useFeeEstimationFor(
 
         estimateFee(msgs)
           .then((estimated) => {
-            if (estimated) {
-              setEstimatedFeeError(undefined);
-              setEstimatedFee(estimated);
-            } else {
-              setEstimatedFeeError(() => 'Error when estimating the Fee'); 
-              setEstimatedFee(undefined);
-            }
+            setEstimatedFeeError(undefined);
+            setEstimatedFee(estimated);
           })
-          .catch(() => {
-            setEstimatedFeeError(() => 'Error when estimating the Fee');
+          .catch((error) => {
+            setEstimatedFeeError(() => (<div style={{display:"flex", alignItems: "center"}}>
+                Error estimating the fee
+                <InfoTooltip style={{display: "inline", marginLeft: 10}}>
+                  {error.toString()}
+                </InfoTooltip>
+              </div>)); 
             setEstimatedFee(undefined);
           })
           .then((ui) => {});

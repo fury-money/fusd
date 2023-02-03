@@ -81,6 +81,7 @@ export async function marketDepositAndBorrowQuery({
       depositHistory.total_ust_deposits, (k) =>
       gmt9am(k.timestamp),
     );
+
   deposits.set( Date.now(),[{
         deposit: deposit.total_ust_deposits,
         timestamp: Date.now() as JSDateTime,
@@ -88,16 +89,15 @@ export async function marketDepositAndBorrowQuery({
       }]);
 
 
+
   const borrowings = group(
       borrowHistory,
       (k) => gmt9am(k.timestamp)
     );
-  if(borrow.total_borrowed){
-    borrowings.set(Date.now(), [{
-          total_borrowed: borrow.total_borrowed,
-          timestamp: Date.now() as JSDateTime,
-    }]);
-  }
+  borrowings.set(Date.now(), [{
+        total_borrowed: borrow.total_borrowed,
+        timestamp: Date.now() as JSDateTime,
+  }]);
   
   const combined = Array.from(deposits).map(([timestamp, deposit]) => {
     const borrowing = borrowings.get(timestamp);
