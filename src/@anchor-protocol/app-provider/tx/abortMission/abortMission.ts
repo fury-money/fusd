@@ -1,4 +1,5 @@
-import { withdrawLiquidationBidTx } from '@anchor-protocol/app-fns/tx/liquidate/withdraw';
+import { abortMissionTx } from '@anchor-protocol/app-fns';
+import { UST } from '@anchor-protocol/types';
 import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
@@ -6,13 +7,12 @@ import { useCallback } from 'react';
 import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_TX_KEY } from '../../env';
 
-export interface WithdrawLiquidationBidTxParams {
-  bid_idx: string;
-  estimatedFee: EstimatedFee;
+export interface AbortMissionTxParams {
+  txFee: EstimatedFee;
   onTxSucceed?: () => void;
 }
 
-export function useWithdrawLiquidationBidTx() {
+export function useAbortMissionTx() {
   const connectedWallet = useConnectedWallet();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
@@ -21,27 +21,24 @@ export function useWithdrawLiquidationBidTx() {
   const refetchQueries = useRefetchQueries();
 
   const stream = useCallback(
-    ({
-      bid_idx,
-      onTxSucceed,
-      estimatedFee,
-    }: WithdrawLiquidationBidTxParams) => {
-      if (!connectedWallet || !connectedWallet.availablePost || !queryClient) {
+    ({ txFee, onTxSucceed }: AbortMissionTxParams) => {
+      if (!connectedWallet || !connectedWallet.availablePost || !queryClient ) {
         throw new Error('Can not post!');
       }
 
-      return withdrawLiquidationBidTx({
+      return abortMissionTx({
         // fabricateMarketDepositStableCoin
         walletAddr: connectedWallet.walletAddress,
-        liquidationQueueAddr:
-          contractAddress.liquidation.liquidationQueueContract,
-        bLunaAddr: contractAddress.cw20.bLuna,
-        bid_idx,
+        marketAddr: contractAddress.moneyMarket.market,
+
+        stableDenom: contractAddress.native.usd,
+        depositFeeAmount: constants.depositFeeAmount,
+        depositFeeAddress: contractAddress.admin.feeAddress,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
-        txFee: estimatedFee.txFee,
-        gasFee: estimatedFee.gasWanted,
+        txFee: txFee.txFee,
+        gasFee: txFee.gasWanted,
         gasAdjustment: constants.gasAdjustment,
         // query
         queryClient,
@@ -50,14 +47,14 @@ export function useWithdrawLiquidationBidTx() {
         // side effect
         onTxSucceed: () => {
           onTxSucceed?.();
-          refetchQueries(ANCHOR_TX_KEY.LIQUIDATION_WITHDRAW);
+          refetchQueries(ANCHOR_TX_KEY.EARN_DEPOSIT);
         },
       });
     },
     [
       connectedWallet,
-      contractAddress.liquidation.liquidationQueueContract,
-      contractAddress.cw20.bLuna,
+      contractAddress.moneyMarket.market,
+      contractAddress.native.usd,
       constants.gasAdjustment,
       queryClient,
       txErrorReporter,

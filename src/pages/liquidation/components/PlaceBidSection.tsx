@@ -62,6 +62,7 @@ import { formatTokenInput } from '@libs/formatter';
 import { CircleSpinner } from 'react-spinners-kit';
 import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
 import { useMediaQuery } from 'react-responsive';
+import { useWithdrawDefaultedCollateral } from './useWithdrawDefaultedCollateral';
 
 export interface PlaceBidSectionProps {
   className?: string;
@@ -82,31 +83,13 @@ export function PlaceBidSectionBase({
 
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  const { data: { bidByUser } = {} } = useBidByUserByCollateralQuery(
-    collateral?.collateral_token
-  );
 
   const {
     axlUSDC: { formatInput, formatOutput, demicrofy, symbol },
     luna,
-    bLuna: bluna,
   } = useFormatters();
 
-  const [withdrawable_number, withdrawable_balance] = useMemo(() => {
-    const withdrawable_number = (bidByUser?.bids ?? []).reduce(
-      (filledSum, bid) =>
-        filledSum.plus(big(bid.pending_liquidated_collateral)),
-      big(0),
-    ) as u<bLuna<Big>>;
-    let parsedWithdrawal = bluna?.formatOutput(
-      bluna.demicrofy(withdrawable_number),
-    );
-    if (parsedWithdrawal === '0') {
-      parsedWithdrawal = '0.000000';
-    }
-    const withdrawable = `${parsedWithdrawal} ${collateral && "info" in collateral ? collateral?.info.info.symbol : collateral?.symbol}`;
-    return [withdrawable_number, withdrawable];
-  }, [bidByUser, bluna]);
+  const {withdrawable_number, withdrawable_balance} = useWithdrawDefaultedCollateral(collateral);
 
   /*******************************
    *

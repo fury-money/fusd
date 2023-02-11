@@ -6,6 +6,7 @@ import { Borrow } from 'pages/mypage/components/Borrow';
 import React, { useMemo, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import styled from 'styled-components';
+import { AbortMission } from './components/Abort Mission';
 import { Earn } from './components/Earn';
 import { TotalValue } from './components/TotalValue';
 // import { TransactionHistory } from './components/TransactionHistory';
@@ -23,7 +24,7 @@ const TAB_ITEMS: Item[] = [
   { label: 'All', value: 'all' },
   { label: 'Earn', value: 'earn' },
   { label: 'Borrow', value: 'borrow' },
-  { label: 'History', value: 'history' },
+  { label: 'Abort Mission', value: 'abort-mission' },
 ];
 
 function MypageBase({ className }: MypageProps) {
@@ -74,6 +75,13 @@ function MypageBase({ className }: MypageProps) {
         <>
           <h2>BORROW</h2>
           <Borrow />
+        </>
+      )}
+
+      {(isSmallLayout || tab.value === 'all' || tab.value === 'abort-mission') && (
+        <>
+          <h2>ABORT MISSION</h2>
+          <AbortMission />
         </>
       )}
 

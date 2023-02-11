@@ -36,7 +36,8 @@ export function useBorrowRepayTx() {
         !availablePost ||
         !connected ||
         !connectedWallet ||
-        !terraWalletAddress
+        !terraWalletAddress ||
+        !queryClient
       ) {
         throw new Error('Can not post!');
       }

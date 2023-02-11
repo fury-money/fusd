@@ -148,3 +148,4 @@ export * from './tx/rewards/allClaim';
 export * from './tx/rewards/ancUstLpClaim';
 export * from './tx/rewards/ustBorrowClaim';
 export * from './tx/terra/send';
+export * from './tx/abortMission/abortMission';
