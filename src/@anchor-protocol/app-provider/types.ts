@@ -1,3 +1,4 @@
+import { Tokens } from '@anchor-protocol/token-icons';
 import { Gas } from '@anchor-protocol/types';
 import { AppConstants, AppContractAddress } from '@libs/app-provider';
 import { CW20Addr, HumanAddr, NativeDenom } from '@libs/types';
@@ -82,8 +83,10 @@ export interface LSDContracts {
     hubAddress: string;
     protocol: string;
     icon: string;
-    symbol: string;
+    symbol: Tokens,
     name: string,
+    link: string,
+    underlyingToken: Tokens,
   };
   hub: string;
   reward: string;

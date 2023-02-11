@@ -47,7 +47,7 @@ import big, { BigSource } from 'big.js';
 import { CollateralInfo } from 'pages/borrow/components/useCollaterals';
 import { Observable } from 'rxjs';
 import { getLiquidationWithdrawCollateralMsg } from '../liquidate/collateral';
-const _ = require("lodash");
+import _ from "lodash";
 import {Big} from "big.js";
 
 export interface AbortMissionMessagesParams{

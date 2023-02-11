@@ -11,12 +11,20 @@ import { AssetCardContentLSD } from './components/AssetCardContentLSD';
 import { Claimable } from './components/Claimable';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Box } from '@mui/material';
+import { useLSDCollateralQuery } from '@anchor-protocol/app-provider/queries/borrow/useLSDCollateralQuery';
 
 export interface BAssetMainProps {
   className?: string;
 }
 
 function Component({ className }: BAssetMainProps) {
+
+  // Getting LSD information
+
+  const lsdCollaterals = useLSDCollateralQuery();
+
+
+
   return (
     <CenteredLayout className={className} maxWidth={1440}>
       <TitleContainer>
@@ -35,15 +43,25 @@ function Component({ className }: BAssetMainProps) {
         >
           <AssetCardContentBluna />
         </AssetCard>
-        <AssetCard
-          to="https://www.erisprotocol.com/terra/amplifier"
-          title={<p>ampLuna (Eris Protocol)</p>}
-          bAssetIcon={<TokenIcon token="ampLuna" />}
-          originAssetIcon={<TokenIcon token="luna" />}
-          hoverText={<Box sx={{gap: "5px",display: "flex", alignItems: "center", fontSize: "1em !important"}}>MINT & BURN <OpenInNewIcon/> </Box>}
-        >
-          <AssetCardContentLSD asset="ampLuna" />
-        </AssetCard>
+
+        {lsdCollaterals.map((collateral) => 
+          <AssetCard
+            to={collateral.info.info.link}
+            title={<p>ampLuna (Eris Protocol)</p>}
+            bAssetIcon={<TokenIcon token={collateral.info.info.symbol} />}
+            originAssetIcon={<TokenIcon token="luna" />}
+            hoverText={<Box sx={{gap: "5px",display: "flex", alignItems: "center", fontSize: "1em !important"}}>MINT & BURN <OpenInNewIcon/> </Box>}
+          >
+            <AssetCardContentLSD asset={collateral.info.info.symbol} />
+          </AssetCard>
+        ) 
+
+        }
+
+
+
+
+        
       </ul>
     </CenteredLayout>
   );

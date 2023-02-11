@@ -124,6 +124,7 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         symbol: "ampLuna",
         name: "Eris Amplified Luna",
         icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
+        link: "https://www.erisprotocol.com/terra/amplifier"
       },
       hub: "terra1neq7ds3cd2rx0ht0fycgqkf26fed2v73g7wrp5xav5dfas0fwcqqy47t5n",
       reward: "terra1zrgzj7luyw9mtqcwqdtn6p8gwy262upx3p7wa3v3cj07us7j9ztsa8r4n5",
@@ -184,6 +185,7 @@ const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
         symbol: "ampLuna",
         name: "Eris Amplified Luna",
         icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
+        underlyingToken: "luna",
       },
       "hub": "terra1qnvjpw834f8h7wfmqku43nndjnrh6v6hnggmeng0nafzlkqpnzwqt545cd",
       "reward": "terra1pmfgs6jekpcjp3rfg3x2dw2whpex3ygms7d3h46axj6q5xs28n7qvk8375",
