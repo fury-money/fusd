@@ -3,9 +3,9 @@ import {
   TxStreamPhase,
   TxReceipt,
   TxReceiptLike,
-} from '@libs/app-fns';
-import { formatEllapsed } from '@libs/formatter';
-import { Subject } from 'rxjs';
+} from "@libs/app-fns";
+import { formatEllapsed } from "@libs/formatter";
+import { Subject } from "rxjs";
 
 type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
@@ -13,13 +13,13 @@ type RecursivePartial<T> = {
 
 export const mergeUnique = (arr1: TxReceiptLike[], arr2: TxReceiptLike[]) => {
   const arr = arr2.filter(
-    (receipt: TxReceiptLike): receipt is TxReceipt => !!receipt,
+    (receipt: TxReceiptLike): receipt is TxReceipt => !!receipt
   );
 
   return arr1
     .filter(
       (receipt: TxReceiptLike): receipt is TxReceipt =>
-        !!receipt && arr.find((t) => t.name === receipt.name) === undefined,
+        !!receipt && arr.find((t) => t.name === receipt.name) === undefined
     )
     .concat(arr);
 };
@@ -41,11 +41,11 @@ class TxProgressTimer<T extends TxResultRendering> {
 
       const index = receipts.findIndex(
         (receipt) =>
-          receipt && 'name' in receipt && receipt.name === 'Time Taken',
+          receipt && "name" in receipt && receipt.name === "Time Taken"
       );
 
       receipts[index < 0 ? receipts.length : index] = {
-        name: 'Time Taken',
+        name: "Time Taken",
         value: formatEllapsed(ellapsed),
       };
 
@@ -55,7 +55,7 @@ class TxProgressTimer<T extends TxResultRendering> {
 
   public start(ms: number = 500) {
     if (this._timer !== undefined) {
-      throw Error('The timer must be stopped before it can be restarted.');
+      throw Error("The timer must be stopped before it can be restarted.");
     }
     this._epoch = new Date().getTime();
 
@@ -64,7 +64,7 @@ class TxProgressTimer<T extends TxResultRendering> {
         ...current,
         receipts: [
           ...current.receipts,
-          { name: 'Time Taken', value: formatEllapsed(0) },
+          { name: "Time Taken", value: formatEllapsed(0) },
         ],
       };
     });
@@ -76,7 +76,7 @@ class TxProgressTimer<T extends TxResultRendering> {
 
   public reset() {
     if (this._timer === undefined) {
-      throw Error('The timer must be started before it can be reset.');
+      throw Error("The timer must be started before it can be reset.");
     }
     this._epoch = new Date().getTime();
   }
@@ -104,7 +104,7 @@ export class TxProgressWriter<T extends TxResultRendering> {
   }
 
   public write(tx: RecursivePartial<T> | ((current: T) => T)) {
-    if (typeof tx === 'function') {
+    if (typeof tx === "function") {
       this._current = tx(this._current);
     } else {
       this._current = Object.assign(this._current, tx);

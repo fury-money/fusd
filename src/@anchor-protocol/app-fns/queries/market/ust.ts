@@ -1,4 +1,4 @@
-import { aUST, aLuna, Rate, u, UST } from '@anchor-protocol/types';
+import { aUST, aLuna, Rate, u, UST } from "@anchor-protocol/types";
 
 export interface MarketUstData {
   borrow_rate: Rate;
@@ -14,17 +14,17 @@ export interface MarketUstData {
   market_ust_balance: u<UST>;
   custody_aluna_balance: u<aLuna>;
   exchange_rate: Rate;
-  prev_interest_buffer: '4703286025726';
+  prev_interest_buffer: "4703286025726";
   aterra_supply: u<aUST>;
   overseer_ust_balance: u<UST>;
   anc_emission_rate: Rate;
   real_deposit_rate: Rate;
   interest_multiplier: Rate;
-  total_reserves: '5959917018.269984176356009487';
+  total_reserves: "5959917018.269984176356009487";
   global_reward_index: Rate;
   global_interest_index: Rate;
 
-  borrow_bucket_ust_balance: u<UST>
+  borrow_bucket_ust_balance: u<UST>;
 }
 
 export interface MarketUstQueryParams {

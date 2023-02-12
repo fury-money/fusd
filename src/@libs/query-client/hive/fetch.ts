@@ -1,25 +1,25 @@
-import { HiveFetchError } from '../errors';
+import { HiveFetchError } from "../errors";
 
 export type HiveFetcher = <Variables extends {}, Data>(
   query: string,
   variables: Variables,
   endpoint: string,
-  requestInit?: Omit<RequestInit, 'method' | 'body'>,
+  requestInit?: Omit<RequestInit, "method" | "body">
 ) => Promise<Data>;
 
 export const defaultHiveFetcher: HiveFetcher = <Variables extends {}, Data>(
   query: string,
   variables: Variables,
   endpoint: string,
-  requestInit?: Omit<RequestInit, 'method' | 'body'>,
+  requestInit?: Omit<RequestInit, "method" | "body">
 ) => {
   return fetch(endpoint, {
     ...requestInit,
-    method: 'POST',
+    method: "POST",
     headers: {
       ...requestInit?.headers,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
     },
     body: JSON.stringify({
       query,
@@ -45,7 +45,7 @@ export const webworkerHiveFetcher: HiveFetcher = <Variables extends {}, Data>(
   query: string,
   variables: Variables,
   endpoint: string,
-  requestInit?: Omit<RequestInit, 'method' | 'body'>,
+  requestInit?: Omit<RequestInit, "method" | "body">
 ) => {
   if (!window.Worker) {
     return defaultHiveFetcher(query, variables, endpoint, requestInit);
@@ -59,27 +59,27 @@ export const webworkerHiveFetcher: HiveFetcher = <Variables extends {}, Data>(
 
     const onAbort = () => {
       aborted = true;
-      requestInit?.signal?.removeEventListener('abort', onAbort);
+      requestInit?.signal?.removeEventListener("abort", onAbort);
     };
 
     if (requestInit?.signal) {
-      requestInit.signal.addEventListener('abort', onAbort);
+      requestInit.signal.addEventListener("abort", onAbort);
     }
 
     const worker: Worker =
       workerPool.length > 0
         ? workerPool.pop()!
-        : new Worker('/hiveFetchWorker.js');
+        : new Worker("/hiveFetchWorker.js");
 
     const onMessage = (event: MessageEvent) => {
       if (!aborted) {
-        if ('error' in event.data) {
-          if (event.data.error.type === 'HiveFetchError') {
+        if ("error" in event.data) {
+          if (event.data.error.type === "HiveFetchError") {
             reject(new HiveFetchError(event.data.error.errors));
           } else {
             reject(new Error(event.data.error.error));
           }
-        } else if ('data' in event.data) {
+        } else if ("data" in event.data) {
           resolve(event.data.data);
         } else {
           console.error(event);
@@ -87,17 +87,17 @@ export const webworkerHiveFetcher: HiveFetcher = <Variables extends {}, Data>(
         }
       }
 
-      requestInit?.signal?.removeEventListener('abort', onAbort);
-      worker.removeEventListener('message', onMessage);
+      requestInit?.signal?.removeEventListener("abort", onAbort);
+      worker.removeEventListener("message", onMessage);
 
-      if (process.env.NODE_ENV === 'production' && workerPool.length > 10) {
+      if (process.env.NODE_ENV === "production" && workerPool.length > 10) {
         worker.terminate();
       } else {
         workerPool.push(worker);
       }
     };
 
-    worker.addEventListener('message', onMessage);
+    worker.addEventListener("message", onMessage);
 
     worker.postMessage({
       query,

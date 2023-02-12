@@ -1,32 +1,32 @@
-import { formatANC } from '@anchor-protocol/notation';
-import { ANC, CW20Addr, Gas, HumanAddr, Rate } from '@anchor-protocol/types';
+import { formatANC } from "@anchor-protocol/notation";
+import { ANC, CW20Addr, Gas, HumanAddr, Rate } from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   RawLogEvent,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { demicrofy } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { u, UST } from '@libs/types';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { demicrofy } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { u, UST } from "@libs/types";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import big, { Big } from 'big.js';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import big, { Big } from "big.js";
+import { Observable } from "rxjs";
 
 export function rewardsAllClaimTx($: {
   walletAddr: HumanAddr;
@@ -58,9 +58,9 @@ export function rewardsAllClaimTx($: {
       new MsgExecuteContract($.walletAddr, $.generatorAddr, {
         withdraw: {
           lp_token: $.lpTokenAddr,
-          amount: '0',
+          amount: "0",
         },
-      }),
+      })
     );
   }
 
@@ -68,14 +68,14 @@ export function rewardsAllClaimTx($: {
     msgs.push(
       new MsgExecuteContract($.walletAddr, $.marketAddr, {
         claim_rewards: {},
-      }),
+      })
     );
   }
 
   return pipe(
     _createTxOptions({
       msgs,
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -84,8 +84,8 @@ export function rewardsAllClaimTx($: {
       const fromContracts = txInfo.reduce((fromContracts, { RawLog }) => {
         if (RawLog) {
           for (const rawLog of RawLog) {
-            if (typeof rawLog !== 'string') {
-              const fromContract = pickEvent(rawLog, 'from_contract');
+            if (typeof rawLog !== "string") {
+              const fromContract = pickEvent(rawLog, "from_contract");
               if (fromContract) {
                 fromContracts.push(fromContract);
               }
@@ -96,15 +96,15 @@ export function rewardsAllClaimTx($: {
       }, [] as RawLogEvent[]);
 
       if (fromContracts.length === 0) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
         const claimed = fromContracts.reduce((claimed, fromContract) => {
           const amount = pickAttributeValueByKey<u<ANC>>(
             fromContract,
-            'amount',
-            (attrs) => attrs.reverse()[0],
+            "amount",
+            (attrs) => attrs.reverse()[0]
           );
           return amount ? claimed.plus(amount) : claimed;
         }, big(0)) as u<ANC<Big>>;
@@ -115,8 +115,8 @@ export function rewardsAllClaimTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             claimed && {
-              name: 'Claimed',
-              value: formatANC(demicrofy(claimed)) + ' ANC',
+              name: "Claimed",
+              value: formatANC(demicrofy(claimed)) + " ANC",
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),
@@ -125,6 +125,6 @@ export function rewardsAllClaimTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

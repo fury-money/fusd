@@ -13,10 +13,10 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers';
-import { FunctionFragment, Result, EventFragment } from '@ethersproject/abi';
-import { Listener, Provider } from '@ethersproject/providers';
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
+} from "ethers";
+import { FunctionFragment, Result, EventFragment } from "@ethersproject/abi";
+import { Listener, Provider } from "@ethersproject/providers";
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
 export declare namespace CrossAnchorBridgeV2 {
   export type IncomingTokenTransferInfoStruct = {
@@ -30,7 +30,7 @@ export declare namespace CrossAnchorBridgeV2 {
     number,
     string,
     BigNumber,
-    BigNumber,
+    BigNumber
   ] & {
     chainId: number;
     tokenRecipientAddress: string;
@@ -40,179 +40,179 @@ export declare namespace CrossAnchorBridgeV2 {
 }
 
 export interface CrossAnchorBridgeV2Interface extends utils.Interface {
-  contractName: 'CrossAnchorBridgeV2';
+  contractName: "CrossAnchorBridgeV2";
   functions: {
-    'borrowStable(uint256)': FunctionFragment;
-    'completedTokenTransfers(bytes32)': FunctionFragment;
-    'depositStable(address,uint256)': FunctionFragment;
-    'initialize(uint8,address,address,address[],address,bytes32)': FunctionFragment;
-    'lockCollateral(address,uint256)': FunctionFragment;
-    'owner()': FunctionFragment;
-    'parseIncomingTokenTransferInfo(bytes)': FunctionFragment;
-    'processTokenTransferInstruction(bytes,bytes)': FunctionFragment;
-    'redeemStable(address,uint256)': FunctionFragment;
-    'renounceOwnership()': FunctionFragment;
-    'repayStable(address,uint256)': FunctionFragment;
-    'setVerifier(string)': FunctionFragment;
-    'transferOwnership(address)': FunctionFragment;
-    'unlockCollateral(bytes32,uint128)': FunctionFragment;
-    'upgradeTo(address)': FunctionFragment;
-    'upgradeToAndCall(address,bytes)': FunctionFragment;
-    'verify()': FunctionFragment;
-    'whitelistedAnchorStableTokens(address)': FunctionFragment;
-    'whitelistedCollateralTokens(address)': FunctionFragment;
-    'whitelistedStableTokens(address)': FunctionFragment;
+    "borrowStable(uint256)": FunctionFragment;
+    "completedTokenTransfers(bytes32)": FunctionFragment;
+    "depositStable(address,uint256)": FunctionFragment;
+    "initialize(uint8,address,address,address[],address,bytes32)": FunctionFragment;
+    "lockCollateral(address,uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
+    "parseIncomingTokenTransferInfo(bytes)": FunctionFragment;
+    "processTokenTransferInstruction(bytes,bytes)": FunctionFragment;
+    "redeemStable(address,uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "repayStable(address,uint256)": FunctionFragment;
+    "setVerifier(string)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "unlockCollateral(bytes32,uint128)": FunctionFragment;
+    "upgradeTo(address)": FunctionFragment;
+    "upgradeToAndCall(address,bytes)": FunctionFragment;
+    "verify()": FunctionFragment;
+    "whitelistedAnchorStableTokens(address)": FunctionFragment;
+    "whitelistedCollateralTokens(address)": FunctionFragment;
+    "whitelistedStableTokens(address)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: 'borrowStable',
-    values: [BigNumberish],
+    functionFragment: "borrowStable",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'completedTokenTransfers',
-    values: [BytesLike],
+    functionFragment: "completedTokenTransfers",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'depositStable',
-    values: [string, BigNumberish],
+    functionFragment: "depositStable",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'initialize',
-    values: [BigNumberish, string, string, string[], string, BytesLike],
+    functionFragment: "initialize",
+    values: [BigNumberish, string, string, string[], string, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'lockCollateral',
-    values: [string, BigNumberish],
+    functionFragment: "lockCollateral",
+    values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: 'owner', values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: 'parseIncomingTokenTransferInfo',
-    values: [BytesLike],
-  ): string;
-  encodeFunctionData(
-    functionFragment: 'processTokenTransferInstruction',
-    values: [BytesLike, BytesLike],
+    functionFragment: "parseIncomingTokenTransferInfo",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'redeemStable',
-    values: [string, BigNumberish],
+    functionFragment: "processTokenTransferInstruction",
+    values: [BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'renounceOwnership',
-    values?: undefined,
+    functionFragment: "redeemStable",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: 'repayStable',
-    values: [string, BigNumberish],
-  ): string;
-  encodeFunctionData(functionFragment: 'setVerifier', values: [string]): string;
-  encodeFunctionData(
-    functionFragment: 'transferOwnership',
-    values: [string],
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: 'unlockCollateral',
-    values: [BytesLike, BigNumberish],
+    functionFragment: "repayStable",
+    values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: 'upgradeTo', values: [string]): string;
+  encodeFunctionData(functionFragment: "setVerifier", values: [string]): string;
   encodeFunctionData(
-    functionFragment: 'upgradeToAndCall',
-    values: [string, BytesLike],
-  ): string;
-  encodeFunctionData(functionFragment: 'verify', values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: 'whitelistedAnchorStableTokens',
-    values: [string],
+    functionFragment: "transferOwnership",
+    values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'whitelistedCollateralTokens',
-    values: [string],
+    functionFragment: "unlockCollateral",
+    values: [BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "upgradeTo", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "upgradeToAndCall",
+    values: [string, BytesLike]
+  ): string;
+  encodeFunctionData(functionFragment: "verify", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "whitelistedAnchorStableTokens",
+    values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: 'whitelistedStableTokens',
-    values: [string],
+    functionFragment: "whitelistedCollateralTokens",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "whitelistedStableTokens",
+    values: [string]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: 'borrowStable',
-    data: BytesLike,
+    functionFragment: "borrowStable",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'completedTokenTransfers',
-    data: BytesLike,
+    functionFragment: "completedTokenTransfers",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'depositStable',
-    data: BytesLike,
+    functionFragment: "depositStable",
+    data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'initialize', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'lockCollateral',
-    data: BytesLike,
+    functionFragment: "lockCollateral",
+    data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'owner', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: 'parseIncomingTokenTransferInfo',
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: 'processTokenTransferInstruction',
-    data: BytesLike,
+    functionFragment: "parseIncomingTokenTransferInfo",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'redeemStable',
-    data: BytesLike,
+    functionFragment: "processTokenTransferInstruction",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'renounceOwnership',
-    data: BytesLike,
+    functionFragment: "redeemStable",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'repayStable',
-    data: BytesLike,
+    functionFragment: "renounceOwnership",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'setVerifier',
-    data: BytesLike,
+    functionFragment: "repayStable",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'transferOwnership',
-    data: BytesLike,
+    functionFragment: "setVerifier",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'unlockCollateral',
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(functionFragment: 'upgradeTo', data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: 'upgradeToAndCall',
-    data: BytesLike,
-  ): Result;
-  decodeFunctionResult(functionFragment: 'verify', data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: 'whitelistedAnchorStableTokens',
-    data: BytesLike,
+    functionFragment: "transferOwnership",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'whitelistedCollateralTokens',
-    data: BytesLike,
+    functionFragment: "unlockCollateral",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "upgradeTo", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "upgradeToAndCall",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "verify", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "whitelistedAnchorStableTokens",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'whitelistedStableTokens',
-    data: BytesLike,
+    functionFragment: "whitelistedCollateralTokens",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "whitelistedStableTokens",
+    data: BytesLike
   ): Result;
 
   events: {
-    'AdminChanged(address,address)': EventFragment;
-    'BeaconUpgraded(address)': EventFragment;
-    'OwnershipTransferred(address,address)': EventFragment;
-    'Upgraded(address)': EventFragment;
+    "AdminChanged(address,address)": EventFragment;
+    "BeaconUpgraded(address)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "Upgraded(address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: 'AdminChanged'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'BeaconUpgraded'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'OwnershipTransferred'): EventFragment;
-  getEvent(nameOrSignatureOrTopic: 'Upgraded'): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "AdminChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "BeaconUpgraded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
 }
 
 export type AdminChangedEvent = TypedEvent<
@@ -239,7 +239,7 @@ export type UpgradedEvent = TypedEvent<[string], { implementation: string }>;
 export type UpgradedEventFilter = TypedEventFilter<UpgradedEvent>;
 
 export interface CrossAnchorBridgeV2 extends BaseContract {
-  contractName: 'CrossAnchorBridgeV2';
+  contractName: "CrossAnchorBridgeV2";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -249,15 +249,15 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>,
+    eventFilter?: TypedEventFilter<TEvent>
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>,
+    eventFilter: TypedEventFilter<TEvent>
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -268,18 +268,18 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
   functions: {
     borrowStable(
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     completedTokenTransfers(
       arg0: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     depositStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     initialize(
@@ -289,20 +289,20 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
       _collateralTokens: string[],
       _wormholeTokenBridge: string,
       _terraAnchorBridgeAddress: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     lockCollateral(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     parseIncomingTokenTransferInfo(
       encoded: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<
       [CrossAnchorBridgeV2.IncomingTokenTransferInfoStructOutput] & {
         incomingTokenTransferInfo: CrossAnchorBridgeV2.IncomingTokenTransferInfoStructOutput;
@@ -312,84 +312,84 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
     processTokenTransferInstruction(
       encodedIncomingTokenTransferInfo: BytesLike,
       encodedTokenTransfer: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     redeemStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     repayStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setVerifier(
       _verifier: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     unlockCollateral(
       collateralTokenTerraAddress: BytesLike,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     upgradeTo(
       newImplementation: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     upgradeToAndCall(
       newImplementation: string,
       data: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     verify(overrides?: CallOverrides): Promise<[string]>;
 
     whitelistedAnchorStableTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     whitelistedCollateralTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     whitelistedStableTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<[boolean]>;
   };
 
   borrowStable(
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   completedTokenTransfers(
     arg0: BytesLike,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<boolean>;
 
   depositStable(
     token: string,
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   initialize(
@@ -399,103 +399,103 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
     _collateralTokens: string[],
     _wormholeTokenBridge: string,
     _terraAnchorBridgeAddress: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   lockCollateral(
     token: string,
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   parseIncomingTokenTransferInfo(
     encoded: BytesLike,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<CrossAnchorBridgeV2.IncomingTokenTransferInfoStructOutput>;
 
   processTokenTransferInstruction(
     encodedIncomingTokenTransferInfo: BytesLike,
     encodedTokenTransfer: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   redeemStable(
     token: string,
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   renounceOwnership(
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   repayStable(
     token: string,
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setVerifier(
     _verifier: string,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   unlockCollateral(
     collateralTokenTerraAddress: BytesLike,
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   upgradeTo(
     newImplementation: string,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   upgradeToAndCall(
     newImplementation: string,
     data: BytesLike,
-    overrides?: PayableOverrides & { from?: string | Promise<string> },
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   verify(overrides?: CallOverrides): Promise<string>;
 
   whitelistedAnchorStableTokens(
     arg0: string,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<boolean>;
 
   whitelistedCollateralTokens(
     arg0: string,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<boolean>;
 
   whitelistedStableTokens(
     arg0: string,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<boolean>;
 
   callStatic: {
     borrowStable(
       amount: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     completedTokenTransfers(
       arg0: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<boolean>;
 
     depositStable(
       token: string,
       amount: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     initialize(
@@ -505,32 +505,32 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
       _collateralTokens: string[],
       _wormholeTokenBridge: string,
       _terraAnchorBridgeAddress: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     lockCollateral(
       token: string,
       amount: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     parseIncomingTokenTransferInfo(
       encoded: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<CrossAnchorBridgeV2.IncomingTokenTransferInfoStructOutput>;
 
     processTokenTransferInstruction(
       encodedIncomingTokenTransferInfo: BytesLike,
       encodedTokenTransfer: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     redeemStable(
       token: string,
       amount: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
@@ -538,94 +538,94 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
     repayStable(
       token: string,
       amount: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     setVerifier(_verifier: string, overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     unlockCollateral(
       collateralTokenTerraAddress: BytesLike,
       amount: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     upgradeTo(
       newImplementation: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     upgradeToAndCall(
       newImplementation: string,
       data: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     verify(overrides?: CallOverrides): Promise<string>;
 
     whitelistedAnchorStableTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<boolean>;
 
     whitelistedCollateralTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<boolean>;
 
     whitelistedStableTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<boolean>;
   };
 
   filters: {
-    'AdminChanged(address,address)'(
+    "AdminChanged(address,address)"(
       previousAdmin?: null,
-      newAdmin?: null,
+      newAdmin?: null
     ): AdminChangedEventFilter;
     AdminChanged(
       previousAdmin?: null,
-      newAdmin?: null,
+      newAdmin?: null
     ): AdminChangedEventFilter;
 
-    'BeaconUpgraded(address)'(
-      beacon?: string | null,
+    "BeaconUpgraded(address)"(
+      beacon?: string | null
     ): BeaconUpgradedEventFilter;
     BeaconUpgraded(beacon?: string | null): BeaconUpgradedEventFilter;
 
-    'OwnershipTransferred(address,address)'(
+    "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
-      newOwner?: string | null,
+      newOwner?: string | null
     ): OwnershipTransferredEventFilter;
     OwnershipTransferred(
       previousOwner?: string | null,
-      newOwner?: string | null,
+      newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    'Upgraded(address)'(implementation?: string | null): UpgradedEventFilter;
+    "Upgraded(address)"(implementation?: string | null): UpgradedEventFilter;
     Upgraded(implementation?: string | null): UpgradedEventFilter;
   };
 
   estimateGas: {
     borrowStable(
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     completedTokenTransfers(
       arg0: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     depositStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     initialize(
@@ -635,104 +635,104 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
       _collateralTokens: string[],
       _wormholeTokenBridge: string,
       _terraAnchorBridgeAddress: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     lockCollateral(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     parseIncomingTokenTransferInfo(
       encoded: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     processTokenTransferInstruction(
       encodedIncomingTokenTransferInfo: BytesLike,
       encodedTokenTransfer: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     redeemStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     repayStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setVerifier(
       _verifier: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     unlockCollateral(
       collateralTokenTerraAddress: BytesLike,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     upgradeTo(
       newImplementation: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     upgradeToAndCall(
       newImplementation: string,
       data: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     verify(overrides?: CallOverrides): Promise<BigNumber>;
 
     whitelistedAnchorStableTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     whitelistedCollateralTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     whitelistedStableTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     borrowStable(
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     completedTokenTransfers(
       arg0: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     depositStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     initialize(
@@ -742,86 +742,86 @@ export interface CrossAnchorBridgeV2 extends BaseContract {
       _collateralTokens: string[],
       _wormholeTokenBridge: string,
       _terraAnchorBridgeAddress: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     lockCollateral(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     parseIncomingTokenTransferInfo(
       encoded: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     processTokenTransferInstruction(
       encodedIncomingTokenTransferInfo: BytesLike,
       encodedTokenTransfer: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     redeemStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     repayStable(
       token: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setVerifier(
       _verifier: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     unlockCollateral(
       collateralTokenTerraAddress: BytesLike,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     upgradeTo(
       newImplementation: string,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     upgradeToAndCall(
       newImplementation: string,
       data: BytesLike,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     verify(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     whitelistedAnchorStableTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     whitelistedCollateralTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     whitelistedStableTokens(
       arg0: string,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

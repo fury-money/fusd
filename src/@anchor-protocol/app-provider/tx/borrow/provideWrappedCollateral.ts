@@ -1,15 +1,15 @@
-import { borrowProvideWrappedCollateralTx } from '@anchor-protocol/app-fns';
-import { bAsset, Rate, u } from '@anchor-protocol/types';
-import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
-import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
-import { useBorrowMarketQuery } from '../../queries/borrow/market';
-import { WhitelistCollateral } from 'queries';
+import { borrowProvideWrappedCollateralTx } from "@anchor-protocol/app-fns";
+import { bAsset, Rate, u } from "@anchor-protocol/types";
+import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
+import { useBorrowBorrowerQuery } from "../../queries/borrow/borrower";
+import { useBorrowMarketQuery } from "../../queries/borrow/market";
+import { WhitelistWrappedCollateral } from "queries";
 
 export interface BorrowProvideCollateralTxParams {
   depositAmount: bAsset;
@@ -19,7 +19,9 @@ export interface BorrowProvideCollateralTxParams {
   onTxSucceed?: () => void;
 }
 
-export function useBorrowProvideWrappedCollateralTx(collateral: WhitelistCollateral) {
+export function useBorrowProvideWrappedCollateralTx(
+  collateral: WhitelistWrappedCollateral
+) {
   const { availablePost, connected, terraWalletAddress } = useAccount();
 
   const connectedWallet = useConnectedWallet();
@@ -45,9 +47,10 @@ export function useBorrowProvideWrappedCollateralTx(collateral: WhitelistCollate
         !connected ||
         !availablePost ||
         !collateral ||
-        !terraWalletAddress
+        !terraWalletAddress ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
       return borrowProvideWrappedCollateralTx({
         collateral,
@@ -87,7 +90,7 @@ export function useBorrowProvideWrappedCollateralTx(collateral: WhitelistCollate
       refetchQueries,
       terraWalletAddress,
       txErrorReporter,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

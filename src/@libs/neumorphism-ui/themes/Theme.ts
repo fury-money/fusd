@@ -1,8 +1,8 @@
-import type { Theme } from '@mui/material';
+import type { Theme } from "@mui/material";
 
-export const messageColors = ['normal', 'warning', 'error', 'success'] as const;
+export const messageColors = ["normal", "warning", "error", "success"] as const;
 
-export type MessageColor = typeof messageColors[number];
+export type MessageColor = (typeof messageColors)[number];
 
 export interface DialogTheme {
   backgroundColor: string;

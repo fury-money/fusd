@@ -1,9 +1,9 @@
-import { JSDateTime } from '@libs/types';
-import { format } from 'date-fns';
+import { JSDateTime } from "@libs/types";
+import { format } from "date-fns";
 
 export function dedupeTimestamp<Item extends {}>(
   data: Item[],
-  timestampKey: keyof Item,
+  timestampKey: keyof Item
 ): Item[] {
   const dedupedData: Item[] = [];
   const indicies: Map<string, number> = new Map();
@@ -16,7 +16,7 @@ export function dedupeTimestamp<Item extends {}>(
       continue;
     }
 
-    const dateString = format(timestamp, 'yyyyMMdd');
+    const dateString = format(timestamp, "yyyyMMdd");
     if (indicies.has(dateString)) {
       dedupedData[indicies.get(dateString)!] = item;
     } else {

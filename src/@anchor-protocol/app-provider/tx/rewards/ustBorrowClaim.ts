@@ -1,11 +1,11 @@
-import { rewardsUstBorrowClaimTx } from '@anchor-protocol/app-fns';
-import { useFixedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { rewardsUstBorrowClaimTx } from "@anchor-protocol/app-fns";
+import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface RewardsUstBorrowClaimTxParams {
   onTxSucceed?: () => void;
@@ -29,9 +29,10 @@ export function useRewardsUstBorrowClaimTx() {
         !availablePost ||
         !connected ||
         !connectedWallet ||
-        !terraWalletAddress
+        !terraWalletAddress ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return rewardsUstBorrowClaimTx({
@@ -67,7 +68,7 @@ export function useRewardsUstBorrowClaimTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

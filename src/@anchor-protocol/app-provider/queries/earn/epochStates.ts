@@ -1,13 +1,12 @@
 import {
   EarnEpochStates,
   earnEpochStatesQuery,
-} from '@anchor-protocol/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
-import { useLastSyncedHeightQuery } from '../terra/lastSyncedHeight';
-
+} from "@anchor-protocol/app-fns";
+import { createQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
+import { useLastSyncedHeightQuery } from "../terra/lastSyncedHeight";
 
 export function useEarnEpochStatesQuery(): UseQueryResult<
   EarnEpochStates | undefined
@@ -15,7 +14,7 @@ export function useEarnEpochStatesQuery(): UseQueryResult<
   const { queryClient, contractAddress, queryErrorReporter } =
     useAnchorWebapp();
 
-  const {data: lastSyncedHeight} = useLastSyncedHeightQuery();
+  const { data: lastSyncedHeight } = useLastSyncedHeightQuery();
   const result = useQuery(
     [
       ANCHOR_QUERY_KEY.EARN_EPOCH_STATES,
@@ -23,13 +22,13 @@ export function useEarnEpochStatesQuery(): UseQueryResult<
       contractAddress.moneyMarket.overseer,
       lastSyncedHeight!,
     ],
-    createQueryFn(earnEpochStatesQuery, queryClient),
+    createQueryFn(earnEpochStatesQuery, queryClient!),
     {
       refetchInterval: 1000 * 60,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient && !!lastSyncedHeight,
-    },
+    }
   );
 
   return result;

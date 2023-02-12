@@ -1,1 +1,1 @@
-export * from './FinderAddressLink';
+export * from "./FinderAddressLink";

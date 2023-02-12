@@ -2,7 +2,7 @@ const getTerrascopeUrl = (chainId: string) => `https://terrasco.pe/${chainId}`;
 
 export const getTransactionDetailUrl = (
   chainId: string,
-  transactionHash: string,
+  transactionHash: string
 ) => `${getTerrascopeUrl(chainId)}/tx/${transactionHash}`;
 
 export const getAccountUrl = (chainId: string, address: string) =>

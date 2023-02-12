@@ -1,157 +1,157 @@
-import { cw20, NativeDenom, Token, u } from '@libs/types';
+import { cw20, NativeDenom, Token, u } from "@libs/types";
 
 export function nativeTokenInfoQuery<T extends Token>(
-  denom: NativeDenom,
+  denom: NativeDenom
 ): cw20.TokenInfoResponse<T> | undefined {
   switch (denom) {
-    case 'uust':
-    case 'uusd':
+    case "uust":
+    case "uusd":
       return {
         decimals: 6,
-        name: 'alxUSDC',
-        symbol: 'alxUSDC',
-        total_supply: '0' as u<T>,
+        name: "alxUSDC",
+        symbol: "alxUSDC",
+        total_supply: "0" as u<T>,
       };
-    case 'uluna':
+    case "uluna":
       return {
         decimals: 6,
-        name: 'LUNA',
-        symbol: 'LUNA',
-        total_supply: '0' as u<T>,
+        name: "LUNA",
+        symbol: "LUNA",
+        total_supply: "0" as u<T>,
       };
-    case 'ukrw':
-    case 'ukrt':
+    case "ukrw":
+    case "ukrt":
       return {
         decimals: 6,
-        name: 'KRT',
-        symbol: 'KRT',
-        total_supply: '0' as u<T>,
+        name: "KRT",
+        symbol: "KRT",
+        total_supply: "0" as u<T>,
       };
-    case 'uaud':
+    case "uaud":
       return {
         decimals: 6,
-        name: 'AUD',
-        symbol: 'AUD',
-        total_supply: '0' as u<T>,
+        name: "AUD",
+        symbol: "AUD",
+        total_supply: "0" as u<T>,
       };
-    case 'ucad':
+    case "ucad":
       return {
         decimals: 6,
-        name: 'CAD',
-        symbol: 'CAD',
-        total_supply: '0' as u<T>,
+        name: "CAD",
+        symbol: "CAD",
+        total_supply: "0" as u<T>,
       };
-    case 'uchf':
+    case "uchf":
       return {
         decimals: 6,
-        name: 'CHF',
-        symbol: 'CHF',
-        total_supply: '0' as u<T>,
+        name: "CHF",
+        symbol: "CHF",
+        total_supply: "0" as u<T>,
       };
-    case 'ucny':
+    case "ucny":
       return {
         decimals: 6,
-        name: 'CNY',
-        symbol: 'CNY',
-        total_supply: '0' as u<T>,
+        name: "CNY",
+        symbol: "CNY",
+        total_supply: "0" as u<T>,
       };
-    case 'udkk':
+    case "udkk":
       return {
         decimals: 6,
-        name: 'DKK',
-        symbol: 'DKK',
-        total_supply: '0' as u<T>,
+        name: "DKK",
+        symbol: "DKK",
+        total_supply: "0" as u<T>,
       };
-    case 'ueur':
+    case "ueur":
       return {
         decimals: 6,
-        name: 'EUR',
-        symbol: 'EUR',
-        total_supply: '0' as u<T>,
+        name: "EUR",
+        symbol: "EUR",
+        total_supply: "0" as u<T>,
       };
-    case 'ugbp':
+    case "ugbp":
       return {
         decimals: 6,
-        name: 'GBP',
-        symbol: 'GBP',
-        total_supply: '0' as u<T>,
+        name: "GBP",
+        symbol: "GBP",
+        total_supply: "0" as u<T>,
       };
-    case 'uhkd':
+    case "uhkd":
       return {
         decimals: 6,
-        name: 'HKD',
-        symbol: 'HKD',
-        total_supply: '0' as u<T>,
+        name: "HKD",
+        symbol: "HKD",
+        total_supply: "0" as u<T>,
       };
-    case 'uidr':
+    case "uidr":
       return {
         decimals: 6,
-        name: 'IDR',
-        symbol: 'IDR',
-        total_supply: '0' as u<T>,
+        name: "IDR",
+        symbol: "IDR",
+        total_supply: "0" as u<T>,
       };
-    case 'uinr':
+    case "uinr":
       return {
         decimals: 6,
-        name: 'INR',
-        symbol: 'INR',
-        total_supply: '0' as u<T>,
+        name: "INR",
+        symbol: "INR",
+        total_supply: "0" as u<T>,
       };
-    case 'ujpy':
+    case "ujpy":
       return {
         decimals: 6,
-        name: 'JPY',
-        symbol: 'JPY',
-        total_supply: '0' as u<T>,
+        name: "JPY",
+        symbol: "JPY",
+        total_supply: "0" as u<T>,
       };
-    case 'umnt':
+    case "umnt":
       return {
         decimals: 6,
-        name: 'MNT',
-        symbol: 'MNT',
-        total_supply: '0' as u<T>,
+        name: "MNT",
+        symbol: "MNT",
+        total_supply: "0" as u<T>,
       };
-    case 'unok':
+    case "unok":
       return {
         decimals: 6,
-        name: 'NOK',
-        symbol: 'NOK',
-        total_supply: '0' as u<T>,
+        name: "NOK",
+        symbol: "NOK",
+        total_supply: "0" as u<T>,
       };
-    case 'uphp':
+    case "uphp":
       return {
         decimals: 6,
-        name: 'PHP',
-        symbol: 'PHP',
-        total_supply: '0' as u<T>,
+        name: "PHP",
+        symbol: "PHP",
+        total_supply: "0" as u<T>,
       };
-    case 'usdr':
+    case "usdr":
       return {
         decimals: 6,
-        name: 'SDR',
-        symbol: 'SDR',
-        total_supply: '0' as u<T>,
+        name: "SDR",
+        symbol: "SDR",
+        total_supply: "0" as u<T>,
       };
-    case 'usek':
+    case "usek":
       return {
         decimals: 6,
-        name: 'SEK',
-        symbol: 'SEK',
-        total_supply: '0' as u<T>,
+        name: "SEK",
+        symbol: "SEK",
+        total_supply: "0" as u<T>,
       };
-    case 'usgd':
+    case "usgd":
       return {
         decimals: 6,
-        name: 'SGD',
-        symbol: 'SGD',
-        total_supply: '0' as u<T>,
+        name: "SGD",
+        symbol: "SGD",
+        total_supply: "0" as u<T>,
       };
-    case 'uthb':
+    case "uthb":
       return {
         decimals: 6,
-        name: 'THB',
-        symbol: 'THB',
-        total_supply: '0' as u<T>,
+        name: "THB",
+        symbol: "THB",
+        total_supply: "0" as u<T>,
       };
   }
 

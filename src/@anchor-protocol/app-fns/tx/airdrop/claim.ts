@@ -1,33 +1,33 @@
-import { ANC, Gas, HumanAddr, Rate, u, UST } from '@anchor-protocol/types';
+import { ANC, Gas, HumanAddr, Rate, u, UST } from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
-import big, { Big } from 'big.js';
+} from "@libs/app-fns";
+import big, { Big } from "big.js";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { Observable } from 'rxjs';
-import { airdropStageCache } from '../../caches/airdropStage';
-import { Airdrop } from '../../queries/airdrop/check';
-import { formatANC } from '@anchor-protocol/notation';
-import { demicrofy } from '@libs/formatter';
+} from "@terra-money/terra.js";
+import { Observable } from "rxjs";
+import { airdropStageCache } from "../../caches/airdropStage";
+import { Airdrop } from "../../queries/airdrop/check";
+import { formatANC } from "@anchor-protocol/notation";
+import { demicrofy } from "@libs/formatter";
 
 export function airdropClaimTx($: {
   airdrop: Airdrop;
@@ -59,7 +59,7 @@ export function airdropClaimTx($: {
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -71,23 +71,23 @@ export function airdropClaimTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       const claimedAmount = pickAttributeValueByKey<u<ANC>>(
         fromContract,
-        'amount',
+        "amount"
       );
       const spreadAmount = pickAttributeValueByKey<u<ANC>>(
         fromContract,
-        'spread_amount',
+        "spread_amount"
       );
       const commissionAmount = pickAttributeValueByKey<u<ANC>>(
         fromContract,
-        'commission_amount',
+        "commission_amount"
       );
       const tradingFee =
         commissionAmount &&
@@ -107,12 +107,12 @@ export function airdropClaimTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             claimedAmount && {
-              name: 'Claimed amount',
+              name: "Claimed amount",
               value: `${formatANC(demicrofy(claimedAmount))} ANC`,
             },
             helper.txHashReceipt(),
             tradingFee && {
-              name: 'Trading Fee',
+              name: "Trading Fee",
               value: `${formatANC(demicrofy(tradingFee))} ANC`,
             },
             helper.txFeeReceipt(),
@@ -121,6 +121,6 @@ export function airdropClaimTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

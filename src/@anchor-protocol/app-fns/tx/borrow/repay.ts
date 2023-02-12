@@ -2,8 +2,8 @@ import {
   computeLtv,
   computeBorrowLimit,
   computeBorrowedAmount,
-} from '@anchor-protocol/app-fns';
-import { formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
+} from "@anchor-protocol/app-fns";
+import { formatUSTWithPostfixUnits } from "@anchor-protocol/notation";
 import {
   Gas,
   HumanAddr,
@@ -11,38 +11,38 @@ import {
   Rate,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { demicrofy, formatRate, formatTokenInput } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { demicrofy, formatRate, formatTokenInput } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   Coin,
   Coins,
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { QueryObserverResult } from 'react-query';
-import { Observable } from 'rxjs';
-import { BorrowBorrower } from '../../queries/borrow/borrower';
-import { BorrowMarket } from '../../queries/borrow/market';
-import { _fetchBorrowData } from './_fetchBorrowData';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { QueryObserverResult } from "react-query";
+import { Observable } from "rxjs";
+import { BorrowBorrower } from "../../queries/borrow/borrower";
+import { BorrowMarket } from "../../queries/borrow/market";
+import { _fetchBorrowData } from "./_fetchBorrowData";
 
 export function borrowRepayTx($: {
   walletAddr: HumanAddr;
@@ -77,11 +77,11 @@ export function borrowRepayTx($: {
             repay_stable: {},
           },
           // sending stablecoin
-          new Coins([new Coin($.stableCoin, formatTokenInput($.repayAmount))]),
+          new Coins([new Coin($.stableCoin, formatTokenInput($.repayAmount))])
         ),
       ],
       // FIXME repay's txFee is not fixed_gas (user ust transfer)
-      fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -90,7 +90,7 @@ export function borrowRepayTx($: {
     ({ value: { txInfo, borrowMarket, borrowBorrower } }) => {
       if (!borrowMarket || !borrowBorrower) {
         return helper.failedToCreateReceipt(
-          new Error('Failed to load borrow data'),
+          new Error("Failed to load borrow data")
         );
       }
 
@@ -100,10 +100,10 @@ export function borrowRepayTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
@@ -113,9 +113,9 @@ export function borrowRepayTx($: {
           computeBorrowLimit(
             borrowBorrower.overseerCollaterals,
             borrowMarket.oraclePrices,
-            borrowMarket.bAssetLtvs,
+            borrowMarket.bAssetLtvs
           ),
-          computeBorrowedAmount(borrowBorrower.marketBorrowerInfo),
+          computeBorrowedAmount(borrowBorrower.marketBorrowerInfo)
         );
 
         const outstandingLoan = borrowBorrower.marketBorrowerInfo.loan_amount;
@@ -126,18 +126,19 @@ export function borrowRepayTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             repaidAmount && {
-              name: 'Repaid Amount',
+              name: "Repaid Amount",
               value:
-                formatUSTWithPostfixUnits(demicrofy(repaidAmount)) + ' axlUSDC',
+                formatUSTWithPostfixUnits(demicrofy(repaidAmount)) + " axlUSDC",
             },
             ltv && {
-              name: 'New Borrow Usage',
-              value: formatRate(ltv) + ' %',
+              name: "New Borrow Usage",
+              value: formatRate(ltv) + " %",
             },
             outstandingLoan && {
-              name: 'Outstanding Loan',
+              name: "Outstanding Loan",
               value:
-                formatUSTWithPostfixUnits(demicrofy(outstandingLoan)) + ' axlUSDC',
+                formatUSTWithPostfixUnits(demicrofy(outstandingLoan)) +
+                " axlUSDC",
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),
@@ -146,6 +147,6 @@ export function borrowRepayTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

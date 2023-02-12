@@ -1,10 +1,10 @@
-import { HumanAddr, liquidation } from '@anchor-protocol/types';
+import { HumanAddr, liquidation } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface BidWasmQuery {
   bid: WasmQuery<
@@ -18,7 +18,7 @@ export type Bid = WasmQueryData<BidWasmQuery>;
 export async function bidQuery(
   queryClient: QueryClient,
   liquidationContract: HumanAddr,
-  bidIdx: number,
+  bidIdx: number
 ): Promise<Bid> {
   return wasmFetch<BidWasmQuery>({
     ...queryClient,

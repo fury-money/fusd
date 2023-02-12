@@ -1,11 +1,11 @@
-import { rewardsAncUstLpClaimTx } from '@anchor-protocol/app-fns';
-import { useFixedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { rewardsAncUstLpClaimTx } from "@anchor-protocol/app-fns";
+import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface RewardsAncUstLpClaimTxParams {
   onTxSucceed?: () => void;
@@ -25,8 +25,8 @@ export function useRewardsAncUstLpClaimTx() {
 
   const stream = useCallback(
     ({ onTxSucceed }: RewardsAncUstLpClaimTxParams) => {
-      if (!availablePost || !connected || !connectedWallet) {
-        throw new Error('Can not post!');
+      if (!availablePost || !connected || !connectedWallet || !queryClient) {
+        throw new Error("Can not post!");
       }
 
       return rewardsAncUstLpClaimTx({
@@ -62,7 +62,7 @@ export function useRewardsAncUstLpClaimTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

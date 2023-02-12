@@ -1,4 +1,4 @@
-import { CW20Addr, HumanAddr, u, UST } from '@libs/types';
+import { CW20Addr, HumanAddr, u, UST } from "@libs/types";
 
 export namespace basset {
   export namespace converter {

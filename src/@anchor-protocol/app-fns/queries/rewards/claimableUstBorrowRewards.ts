@@ -4,13 +4,13 @@ import {
   CW20Addr,
   HumanAddr,
   moneyMarket,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface RewardsClaimableUstBorrowRewardsWasmQuery {
   borrowerInfo: WasmQuery<
@@ -32,7 +32,7 @@ export async function rewardsClaimableUstBorrowRewardsQuery(
   walletAddr: HumanAddr | undefined,
   ancContract: CW20Addr,
   marketContract: HumanAddr,
-  lastSyncedHeight: () => Promise<number>,
+  lastSyncedHeight: () => Promise<number>
 ): Promise<RewardsClaimableUstBorrowRewards | undefined> {
   if (!walletAddr) {
     return undefined;

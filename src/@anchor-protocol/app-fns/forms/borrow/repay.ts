@@ -1,27 +1,27 @@
-import { DeploymentTarget } from '@anchor-protocol/app-provider';
-import { moneyMarket, Rate } from '@anchor-protocol/types';
-import { UST, u, Luna } from '@libs/types';
-import { FormReturn } from '@libs/use-form';
-import big, { Big } from 'big.js';
-import { computeBorrowAPR } from '../../logics/borrow/computeBorrowAPR';
-import { computeLtv } from '../../logics/borrow/computeLtv';
-import { computeEstimateLiquidationPrice } from '../../logics/borrow/computeEstimateLiquidationPrice';
-import { computeLtvToRepayAmount } from '../../logics/borrow/computeLtvToRepayAmount';
-import { computeMaxRepayingAmount } from '../../logics/borrow/computeMaxRepayingAmount';
-import { computeRepayAmountToLtv } from '../../logics/borrow/computeRepayAmountToLtv';
-import { computeRepayNextLtv } from '../../logics/borrow/computeRepayNextLtv';
-import { computeRepaySendAmount } from '../../logics/borrow/computeRepaySendAmount';
-import { computeRepayTotalOutstandingLoan } from '../../logics/borrow/computeRepayTotalOutstandingLoan';
-import { computeRepayTxFee } from '../../logics/borrow/computeRepayTxFee';
-import { validateRepayAmount } from '../../logics/borrow/validateRepayAmount';
-import { validateTxFee } from '../../logics/common/validateTxFee';
-import { BAssetLtvs } from '../../queries/borrow/market';
+import { DeploymentTarget } from "@anchor-protocol/app-provider";
+import { moneyMarket, Rate } from "@anchor-protocol/types";
+import { UST, u, Luna } from "@libs/types";
+import { FormReturn } from "@libs/use-form";
+import big, { Big } from "big.js";
+import { computeBorrowAPR } from "../../logics/borrow/computeBorrowAPR";
+import { computeLtv } from "../../logics/borrow/computeLtv";
+import { computeEstimateLiquidationPrice } from "../../logics/borrow/computeEstimateLiquidationPrice";
+import { computeLtvToRepayAmount } from "../../logics/borrow/computeLtvToRepayAmount";
+import { computeMaxRepayingAmount } from "../../logics/borrow/computeMaxRepayingAmount";
+import { computeRepayAmountToLtv } from "../../logics/borrow/computeRepayAmountToLtv";
+import { computeRepayNextLtv } from "../../logics/borrow/computeRepayNextLtv";
+import { computeRepaySendAmount } from "../../logics/borrow/computeRepaySendAmount";
+import { computeRepayTotalOutstandingLoan } from "../../logics/borrow/computeRepayTotalOutstandingLoan";
+import { computeRepayTxFee } from "../../logics/borrow/computeRepayTxFee";
+import { validateRepayAmount } from "../../logics/borrow/validateRepayAmount";
+import { validateTxFee } from "../../logics/common/validateTxFee";
+import { BAssetLtvs } from "../../queries/borrow/market";
 import {
   computeBorrowedAmount,
   computeBorrowLimit,
-} from '@anchor-protocol/app-fns';
-import { computebAssetLtvsAvg } from '@anchor-protocol/app-fns/logics/borrow/computebAssetLtvsAvg';
-import { WhitelistCollateral } from 'queries';
+} from "@anchor-protocol/app-fns";
+import { computebAssetLtvsAvg } from "@anchor-protocol/app-fns/logics/borrow/computebAssetLtvsAvg";
+import { WhitelistCollateral } from "queries";
 
 export interface BorrowRepayFormInput {
   repayAmount: UST;
@@ -90,7 +90,7 @@ export const borrowRepayForm = ({
   const borrowLimit = computeBorrowLimit(
     overseerCollaterals,
     oraclePrices,
-    bAssetLtvs,
+    bAssetLtvs
   );
 
   const amountToLtv = computeRepayAmountToLtv(borrowLimit, borrowedAmount);
@@ -107,7 +107,7 @@ export const borrowRepayForm = ({
     marketBorrowerInfo,
     blockHeight,
     userUSTBalance,
-    fixedFee,
+    fixedFee
   );
 
   const invalidTxFee =
@@ -141,7 +141,7 @@ export const borrowRepayForm = ({
           nextLtv,
           whitelist,
           overseerCollaterals.collaterals,
-          oraclePrices,
+          oraclePrices
         )
       : null;
 
@@ -151,7 +151,7 @@ export const borrowRepayForm = ({
 
     const totalOutstandingLoan = computeRepayTotalOutstandingLoan(
       repayAmount,
-      marketBorrowerInfo,
+      marketBorrowerInfo
     );
 
     const sendAmount = computeRepaySendAmount(repayAmount, txFee);

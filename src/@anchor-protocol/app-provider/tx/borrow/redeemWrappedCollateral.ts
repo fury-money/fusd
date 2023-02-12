@@ -1,15 +1,15 @@
-import { borrowRedeemWrappedCollateralTx } from '@anchor-protocol/app-fns';
-import { bAsset, Rate, u } from '@anchor-protocol/types';
-import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
-import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
-import { useBorrowMarketQuery } from '../../queries/borrow/market';
-import { WhitelistWrappedCollateral } from 'queries';
+import { borrowRedeemWrappedCollateralTx } from "@anchor-protocol/app-fns";
+import { bAsset, Rate, u } from "@anchor-protocol/types";
+import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
+import { useBorrowBorrowerQuery } from "../../queries/borrow/borrower";
+import { useBorrowMarketQuery } from "../../queries/borrow/market";
+import { WhitelistWrappedCollateral } from "queries";
 
 export interface BorrowRedeemWrappedCollateralTxParams {
   redeemWrappedAmount: u<bAsset>;
@@ -18,7 +18,9 @@ export interface BorrowRedeemWrappedCollateralTxParams {
   onTxSucceed?: () => void;
 }
 
-export function useBorrowRedeemWrappedCollateralTx(collateral: WhitelistWrappedCollateral) {
+export function useBorrowRedeemWrappedCollateralTx(
+  collateral: WhitelistWrappedCollateral
+) {
   const { availablePost, connected, terraWalletAddress } = useAccount();
 
   const connectedWallet = useConnectedWallet();
@@ -32,15 +34,21 @@ export function useBorrowRedeemWrappedCollateralTx(collateral: WhitelistWrappedC
   const refetchQueries = useRefetchQueries();
 
   const stream = useCallback(
-    ({ redeemWrappedAmount, txFee, exchangeRate, onTxSucceed }: BorrowRedeemWrappedCollateralTxParams) => {
+    ({
+      redeemWrappedAmount,
+      txFee,
+      exchangeRate,
+      onTxSucceed,
+    }: BorrowRedeemWrappedCollateralTxParams) => {
       if (
         !connectedWallet ||
         !connected ||
         !availablePost ||
         !terraWalletAddress ||
-        !collateral 
+        !collateral ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return borrowRedeemWrappedCollateralTx({
@@ -81,7 +89,7 @@ export function useBorrowRedeemWrappedCollateralTx(collateral: WhitelistWrappedC
       refetchQueries,
       terraWalletAddress,
       txErrorReporter,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

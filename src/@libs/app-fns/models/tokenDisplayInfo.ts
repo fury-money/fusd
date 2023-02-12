@@ -1,4 +1,4 @@
-import { terraswap } from '@libs/types';
+import { terraswap } from "@libs/types";
 
 export interface TokenDisplayInfo {
   protocol: string;

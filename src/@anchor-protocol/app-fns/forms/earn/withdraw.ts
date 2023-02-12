@@ -1,8 +1,8 @@
-import { UST, Luna, u } from '@anchor-protocol/types';
-import { EstimatedFee } from '@libs/app-provider';
-import { microfy } from '@libs/formatter';
-import { FormReturn } from '@libs/use-form';
-import big, { Big, BigSource } from 'big.js';
+import { UST, Luna, u } from "@anchor-protocol/types";
+import { EstimatedFee } from "@libs/app-provider";
+import { microfy } from "@libs/formatter";
+import { FormReturn } from "@libs/use-form";
+import big, { Big, BigSource } from "big.js";
 
 export interface EarnWithdrawFormInput {
   withdrawAmount: UST;
@@ -11,7 +11,7 @@ export interface EarnWithdrawFormInput {
 export interface EarnWithdrawFormDependency {
   userUUSTBalance: u<Luna<BigSource>>;
   txFee?: EstimatedFee;
-  estimatedFeeError?: string;
+  estimatedFeeError?: string | JSX.Element;
   totalDeposit: u<UST<BigSource>>;
   isConnected: boolean;
 }
@@ -20,7 +20,7 @@ export interface EarnWithdrawFormStates extends EarnWithdrawFormInput {
   receiveAmount?: u<UST<BigSource>>;
   invalidTxFee?: string;
   estimatedFee?: EstimatedFee;
-  estimatedFeeError?: string;
+  estimatedFeeError?: string | JSX.Element;
   invalidWithdrawAmount?: string;
   availablePost: boolean;
 }
@@ -44,7 +44,7 @@ export const earnWithdrawForm =
     if (withdrawAmount.length === 0) {
       return [
         {
-          withdrawAmount: '' as UST,
+          withdrawAmount: "" as UST,
           availablePost: false,
         },
         undefined,
@@ -56,7 +56,7 @@ export const earnWithdrawForm =
       // invalidTxFee
       const invalidTxFee = (() => {
         return isConnected && txFee && big(userUUSTBalance).lt(0)
-          ? 'Not enough transaction fees'
+          ? "Not enough transaction fees"
           : undefined;
       })();
 

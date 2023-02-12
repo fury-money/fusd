@@ -1,28 +1,28 @@
-import { useNetwork } from '@anchor-protocol/app-provider/contexts/network';
-import { CW20TokenDisplayInfo } from '@libs/app-fns';
-import { useCW20TokenDisplayInfosQuery } from '@libs/app-provider';
-import { createQueryFn } from '@libs/react-query-utils';
-import { CW20Addr, HumanAddr } from '@anchor-protocol/types';
+import { useNetwork } from "@anchor-protocol/app-provider/contexts/network";
+import { CW20TokenDisplayInfo } from "@libs/app-fns";
+import { useCW20TokenDisplayInfosQuery } from "@libs/app-provider";
+import { createQueryFn } from "@libs/react-query-utils";
+import { CW20Addr, HumanAddr } from "@anchor-protocol/types";
 import {
   bridgeAssetsQuery,
   useAnchorQuery,
   WhitelistCollateral,
-} from 'queries';
-import { UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../@anchor-protocol/app-provider/contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../@anchor-protocol/app-provider/env';
-import { QueryClient, wasmFetch } from '@libs/query-client';
-import { WhitelistWasmQuery } from './types';
+} from "queries";
+import { UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../@anchor-protocol/app-provider/contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../@anchor-protocol/app-provider/env";
+import { QueryClient, wasmFetch } from "@libs/query-client";
+import { WhitelistWasmQuery } from "./types";
 import {
   DeploymentTarget,
   useDeploymentTarget,
-} from '@anchor-protocol/app-provider';
-import { NetworkInfo } from '@terra-money/wallet-provider';
+} from "@anchor-protocol/app-provider";
+import { NetworkInfo } from "@terra-money/wallet-provider";
 
 const fetchWhitelistCollateral = async (
   overseerContract: HumanAddr,
-  queryClient: QueryClient,
-): Promise<Omit<WhitelistCollateral, 'decimals'>[]> => {
+  queryClient: QueryClient
+): Promise<Omit<WhitelistCollateral, "decimals">[]> => {
   const { whitelist } = await wasmFetch<WhitelistWasmQuery>({
     ...queryClient,
     id: `whitelist--collateral`,
@@ -40,13 +40,12 @@ const fetchWhitelistCollateral = async (
 };
 
 const mapTokenInformation = (
-  whitelist: Omit<WhitelistCollateral, 'decimals'>[],
-  tokenInformation: Record<string, CW20TokenDisplayInfo>,
+  whitelist: Omit<WhitelistCollateral, "decimals">[],
+  tokenInformation: Record<string, CW20TokenDisplayInfo>
 ): WhitelistCollateral[] => {
   return whitelist.map((collateral) => {
     if (collateral && tokenInformation[collateral.collateral_token]) {
       const token = tokenInformation[collateral.collateral_token];
-
 
       return {
         ...token,
@@ -66,7 +65,7 @@ const mapTokenInformation = (
 const mapBridgedAssets = async (
   whitelist: WhitelistCollateral[],
   target: DeploymentTarget,
-  network: NetworkInfo,
+  network: NetworkInfo
 ): Promise<WhitelistCollateral[]> => {
   const map = await bridgeAssetsQuery(whitelist, target, network);
 
@@ -83,49 +82,48 @@ async function whitelistCollateralQuery(
   overseerContract: HumanAddr,
   target: DeploymentTarget,
   network: NetworkInfo,
-  tokenInformation: Record<string, CW20TokenDisplayInfo> | undefined,
+  tokenInformation: Record<string, CW20TokenDisplayInfo> | undefined
 ): Promise<WhitelistCollateral[]> {
   const whitelist = await fetchWhitelistCollateral(
     overseerContract,
-    queryClient,
+    queryClient
   );
 
   return await mapBridgedAssets(
-    mapTokenInformation(
-      whitelist,
-      tokenInformation ?? {},
-    ),
+    mapTokenInformation(whitelist, tokenInformation ?? {}),
     target,
-    network,
+    network
   );
 }
 
-function useLocalTokenInformation(){
+function useLocalTokenInformation() {
   const { contractAddress } = useAnchorWebapp();
 
   // We return the aLuna token information
 
   let aLunaInfo = {
     [contractAddress.cw20.aLuna]: {
-      protocol: 'Cavern',
-      symbol: 'aLuna',
+      protocol: "Cavern",
+      symbol: "aLuna",
       token: contractAddress.cw20.aLuna,
-      icon: 'assets/tokens/aluna.svg',
-      name: 'Cavern Bonded Luna',
+      icon: "assets/tokens/aluna.svg",
+      name: "Cavern Bonded Luna",
     },
   };
 
-  return Object.assign(aLunaInfo,
-      ...Object.entries(contractAddress.lsds).map(([key, contracts], ) => {
-        return ({
+  return Object.assign(
+    aLunaInfo,
+    ...Object.entries(contractAddress.lsds).map(([key, contracts]) => {
+      return {
         [contracts.token]: {
           protocol: contracts.info.protocol,
           token: contracts.token,
           icon: contracts.info.icon,
-          info: contracts
-        }
-      })})
-    )
+          info: contracts,
+        },
+      };
+    })
+  );
 }
 
 export function useWhitelistCollateralQuery(): UseQueryResult<
@@ -147,14 +145,14 @@ export function useWhitelistCollateralQuery(): UseQueryResult<
       contractAddress.moneyMarket.overseer,
       target,
       network,
-      {...(tokens && tokens[network.name]), ...localTokenInformation},
+      { ...(tokens && tokens[network.name]), ...localTokenInformation },
     ],
     createQueryFn(whitelistCollateralQuery, queryClient!),
     {
       refetchOnMount: false,
       keepPreviousData: true,
-      enabled: !!queryClient
-    },
+      enabled: !!queryClient,
+    }
   );
 
   return query;

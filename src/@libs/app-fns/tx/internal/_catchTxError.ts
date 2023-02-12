@@ -1,8 +1,8 @@
-import { Timeout, UserDenied } from '@terra-money/wallet-provider';
-import { OperatorFunction } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { TxResultRendering, TxStreamPhase } from '../../models/tx';
-import { TxHelper } from './TxHelper';
+import { Timeout, UserDenied } from "@terra-money/wallet-provider";
+import { OperatorFunction } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { TxResultRendering, TxStreamPhase } from "../../models/tx";
+import { TxHelper } from "./TxHelper";
 
 interface Params {
   helper: TxHelper;

@@ -1,14 +1,14 @@
-import { borrowRepayTx } from '@anchor-protocol/app-fns';
-import { UST } from '@anchor-protocol/types';
-import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
-import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
-import { useBorrowMarketQuery } from '../../queries/borrow/market';
+import { borrowRepayTx } from "@anchor-protocol/app-fns";
+import { UST } from "@anchor-protocol/types";
+import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
+import { useBorrowBorrowerQuery } from "../../queries/borrow/borrower";
+import { useBorrowMarketQuery } from "../../queries/borrow/market";
 
 export interface BorrowRepayTxParams {
   repayAmount: UST;
@@ -37,9 +37,10 @@ export function useBorrowRepayTx() {
         !connected ||
         !connectedWallet ||
         !terraWalletAddress ||
+        !queryClient ||
         !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return borrowRepayTx({
@@ -79,7 +80,7 @@ export function useBorrowRepayTx() {
       refetchQueries,
       terraWalletAddress,
       txErrorReporter,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

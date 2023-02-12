@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { Point, SpaceRect } from '../types';
+import { useEffect, useState } from "react";
+import { Point, SpaceRect } from "../types";
 
 export function useCursorPosition(
   targetElement: HTMLElement | SVGSVGElement | null | undefined,
-  coordinateSpace: SpaceRect,
+  coordinateSpace: SpaceRect
 ): Point | null {
   const [point, setPoint] = useState<Point | null>(null);
 
@@ -34,12 +34,12 @@ export function useCursorPosition(
       setPoint(null);
     }
 
-    el.addEventListener('mousemove', move);
-    el.addEventListener('mouseleave', leave);
+    el.addEventListener("mousemove", move);
+    el.addEventListener("mouseleave", leave);
 
     return () => {
-      el.removeEventListener('mousemove', move);
-      el.removeEventListener('mouseleave', leave);
+      el.removeEventListener("mousemove", move);
+      el.removeEventListener("mouseleave", leave);
     };
   }, [
     coordinateSpace.bottom,

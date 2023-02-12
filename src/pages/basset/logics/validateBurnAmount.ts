@@ -1,11 +1,11 @@
-import type { aLuna } from '@anchor-protocol/types';
-import { AnchorBank } from '@anchor-protocol/app-provider/hooks/useAnchorBank';
-import { microfy } from '@libs/formatter';
-import { ReactNode } from 'react';
+import type { aLuna } from "@anchor-protocol/types";
+import { AnchorBank } from "@anchor-protocol/app-provider/hooks/useAnchorBank";
+import { microfy } from "@libs/formatter";
+import { ReactNode } from "react";
 
 export function validateBurnAmount(
   burnAmount: aLuna,
-  bank: AnchorBank,
+  bank: AnchorBank
 ): ReactNode {
   if (burnAmount.length === 0) {
     return undefined;

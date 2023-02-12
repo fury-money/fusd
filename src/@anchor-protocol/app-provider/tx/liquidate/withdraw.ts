@@ -1,10 +1,10 @@
-import { withdrawLiquidationBidTx } from '@anchor-protocol/app-fns/tx/liquidate/withdraw';
-import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { withdrawLiquidationBidTx } from "@anchor-protocol/app-fns/tx/liquidate/withdraw";
+import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface WithdrawLiquidationBidTxParams {
   bid_idx: string;
@@ -27,7 +27,7 @@ export function useWithdrawLiquidationBidTx() {
       estimatedFee,
     }: WithdrawLiquidationBidTxParams) => {
       if (!connectedWallet || !connectedWallet.availablePost || !queryClient) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return withdrawLiquidationBidTx({
@@ -62,7 +62,7 @@ export function useWithdrawLiquidationBidTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

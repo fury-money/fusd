@@ -1,26 +1,26 @@
-import { Gas, HumanAddr, Rate, Token, u, UST } from '@anchor-protocol/types';
-import { TxResultRendering, TxStreamPhase } from '@libs/app-fns';
+import { Gas, HumanAddr, Rate, Token, u, UST } from "@anchor-protocol/types";
+import { TxResultRendering, TxStreamPhase } from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { formatTokenInput } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { formatTokenInput } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   Coin,
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
   MsgSend,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { CurrencyInfo } from 'pages/send/models/currency';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { CurrencyInfo } from "pages/send/models/currency";
+import { Observable } from "rxjs";
 
 export function terraSendTx($: {
   myWalletAddress: HumanAddr;
@@ -61,7 +61,7 @@ export function terraSendTx($: {
               new Coin(`u${$.currency.value}`, formatTokenInput($.amount)),
             ]),
           ],
-      fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
       memo: $.memo,
     }),
@@ -74,7 +74,7 @@ export function terraSendTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             {
-              name: 'Amount',
+              name: "Amount",
               value: `${$.amount} ${$.currency.label}`,
             },
             helper.txHashReceipt(),
@@ -84,6 +84,6 @@ export function terraSendTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

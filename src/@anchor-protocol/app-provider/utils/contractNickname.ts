@@ -1,6 +1,6 @@
-import { CW20Addr, HumanAddr } from '@anchor-protocol/types';
-import { useAnchorWebapp } from '../contexts/context';
-import { useBAssetInfoListQuery } from '../queries/basset/bAssetInfoList';
+import { CW20Addr, HumanAddr } from "@anchor-protocol/types";
+import { useAnchorWebapp } from "../contexts/context";
+import { useBAssetInfoListQuery } from "../queries/basset/bAssetInfoList";
 
 export function useContractNickname(): (addr: HumanAddr | CW20Addr) => string {
   const { contractAddress: address } = useAnchorWebapp();
@@ -60,7 +60,7 @@ export function useContractNickname(): (addr: HumanAddr | CW20Addr) => string {
       case address.liquidation.liquidationQueueContract:
         return `Liquidation / Liquidation Queue`;
       default:
-        return '-';
+        return "-";
     }
   };
 }

@@ -3,18 +3,18 @@ import {
   earnWithdrawForm,
   EarnWithdrawFormStates,
   useConvertToAUst,
-} from '@anchor-protocol/app-fns';
-import { useAnchorWebapp } from '@anchor-protocol/app-provider/contexts/context';
-import { u, UST } from '@anchor-protocol/types';
-import { createHookMsg } from '@libs/app-fns/tx/internal';
-import { useFeeEstimationFor } from '@libs/app-provider';
-import { formatTokenInput } from '@libs/formatter';
-import { useForm } from '@libs/use-form';
-import { MsgExecuteContract } from '@terra-money/terra.js';
-import { useAccount } from 'contexts/account';
-import { useBalances } from 'contexts/balances';
-import { useCallback, useMemo } from 'react';
-import { useEarnEpochStatesQuery } from '../../queries/earn/epochStates';
+} from "@anchor-protocol/app-fns";
+import { useAnchorWebapp } from "@anchor-protocol/app-provider/contexts/context";
+import { u, UST } from "@anchor-protocol/types";
+import { createHookMsg } from "@libs/app-fns/tx/internal";
+import { useFeeEstimationFor } from "@libs/app-provider";
+import { formatTokenInput } from "@libs/formatter";
+import { useForm } from "@libs/use-form";
+import { MsgExecuteContract } from "@terra-money/terra.js";
+import { useAccount } from "contexts/account";
+import { useBalances } from "contexts/balances";
+import { useCallback, useMemo } from "react";
+import { useEarnEpochStatesQuery } from "../../queries/earn/epochStates";
 
 export interface EarnWithdrawFormReturn extends EarnWithdrawFormStates {
   updateWithdrawAmount: (withdrawAmount: UST) => void;
@@ -49,7 +49,7 @@ export function useEarnWithdrawForm(): EarnWithdrawFormReturn {
       userUUSTBalance: uUST,
       totalDeposit: totalDeposit,
     },
-    () => ({ withdrawAmount: '' as UST }),
+    () => ({ withdrawAmount: "" as UST })
   );
 
   const updateWithdrawAmount = useCallback(
@@ -71,7 +71,7 @@ export function useEarnWithdrawForm(): EarnWithdrawFormReturn {
                   redeem_stable: {},
                 }),
               },
-            },
+            }
           ),
         ]);
       }
@@ -82,7 +82,7 @@ export function useEarnWithdrawForm(): EarnWithdrawFormReturn {
       terraWalletAddress,
       contractAddress.cw20.aUST,
       contractAddress.moneyMarket.market,
-    ],
+    ]
   );
 
   return {

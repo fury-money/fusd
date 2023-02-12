@@ -1,14 +1,14 @@
-import { StreamReturn } from '@rx-stream/react';
-import { ContractReceipt } from 'ethers';
-import { Subject } from 'rxjs';
-import { TxResultRendering } from '@libs/app-fns';
-import { TxEvent, useTx } from './useTx';
-import { CrossChainEventKind } from '@anchor-protocol/crossanchor-sdk';
-import { TransactionDisplay, useTransactions } from './storage/useTransactions';
-import { useCallback, useMemo, useState } from 'react';
-import { BACKGROUND_TRANSCATION_TAB_ID } from 'components/Header/transactions/BackgroundTransaction';
-import { useTransactionSnackbar } from 'components/Header/transactions/background/useTransactionSnackbar';
-import { useRefCallback } from 'hooks/useRefCallback';
+import { StreamReturn } from "@rx-stream/react";
+import { ContractReceipt } from "ethers";
+import { Subject } from "rxjs";
+import { TxResultRendering } from "@libs/app-fns";
+import { TxEvent, useTx } from "./useTx";
+import { CrossChainEventKind } from "@anchor-protocol/crossanchor-sdk";
+import { TransactionDisplay, useTransactions } from "./storage/useTransactions";
+import { useCallback, useMemo, useState } from "react";
+import { BACKGROUND_TRANSCATION_TAB_ID } from "components/Header/transactions/BackgroundTransaction";
+import { useTransactionSnackbar } from "components/Header/transactions/background/useTransactionSnackbar";
+import { useRefCallback } from "hooks/useRefCallback";
 
 type TxRender<TxResult> = TxResultRendering<TxResult>;
 
@@ -26,7 +26,7 @@ export const usePersistedTx = <TxParams, TxResult>(
   sendTx: (
     txParams: TxParams,
     renderTxResults: Subject<TxRender<TxResult>>,
-    txEvents: Subject<TxEvent<TxParams>>,
+    txEvents: Subject<TxEvent<TxParams>>
   ) => Promise<TxResult>,
   parseTx: (txResult: NonNullable<TxResult>) => ContractReceipt,
   emptyTxResult: TxResult,
@@ -34,7 +34,7 @@ export const usePersistedTx = <TxParams, TxResult>(
   onFinalize: (txHash: string) => void,
   onRegisterTxHash: (txHash: string) => void,
   minimized: boolean,
-  txHashInput?: string,
+  txHashInput?: string
 ): PersistedTxResult<TxParams, TxResult> => {
   const [txHash, setTxHash] = useState<string | undefined>(txHashInput);
 
@@ -49,7 +49,7 @@ export const usePersistedTx = <TxParams, TxResult>(
 
   const isTxMinimizable = useMemo(
     () => transactionExists(txHash),
-    [transactionExists, txHash],
+    [transactionExists, txHash]
   );
 
   const onTxEvent = useRefCallback(
@@ -82,7 +82,7 @@ export const usePersistedTx = <TxParams, TxResult>(
       setTxHash,
       displayTx,
       saveTransaction,
-    ],
+    ]
   );
 
   const dismissTx = useRefCallback(() => {
@@ -102,7 +102,7 @@ export const usePersistedTx = <TxParams, TxResult>(
     async (
       txParams: TxParams,
       renderTxResults: Subject<TxRender<TxResult>>,
-      txEvents: Subject<TxEvent<TxParams>>,
+      txEvents: Subject<TxEvent<TxParams>>
     ) => {
       const txEventsSubscription = txEvents.subscribe(onTxEvent);
 
@@ -122,7 +122,7 @@ export const usePersistedTx = <TxParams, TxResult>(
         txEventsSubscription.unsubscribe();
       }
     },
-    [sendTx, completeTx, dismissTx, onTxEvent],
+    [sendTx, completeTx, dismissTx, onTxEvent]
   );
 
   const persistedTxStream = useTx(sendTxCallback, parseTx, emptyTxResult);
@@ -132,6 +132,6 @@ export const usePersistedTx = <TxParams, TxResult>(
       stream: persistedTxStream,
       utils: { isTxMinimizable, dismissTx },
     }),
-    [persistedTxStream, isTxMinimizable, dismissTx],
+    [persistedTxStream, isTxMinimizable, dismissTx]
   );
 };

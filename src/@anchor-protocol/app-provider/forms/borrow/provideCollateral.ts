@@ -1,26 +1,26 @@
 import {
   BorrowBorrower,
   borrowProvideCollateralForm,
-} from '@anchor-protocol/app-fns';
+} from "@anchor-protocol/app-fns";
 import {
   BorrowMarketWithDisplay,
   useAnchorBank,
-} from '@anchor-protocol/app-provider';
-import { useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
-import { bAsset } from '@anchor-protocol/types';
-import { useFixedFee } from '@libs/app-provider';
-import { u } from '@libs/types';
-import { useForm } from '@libs/use-form';
-import { useAccount } from 'contexts/account';
-import { WhitelistCollateral } from 'queries';
-import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
-import { useBorrowMarketQuery } from '../../queries/borrow/market';
+} from "@anchor-protocol/app-provider";
+import { useWrappedTokenDetails } from "@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails";
+import { bAsset } from "@anchor-protocol/types";
+import { useFixedFee } from "@libs/app-provider";
+import { u } from "@libs/types";
+import { useForm } from "@libs/use-form";
+import { useAccount } from "contexts/account";
+import { WhitelistCollateral } from "queries";
+import { useBorrowBorrowerQuery } from "../../queries/borrow/borrower";
+import { useBorrowMarketQuery } from "../../queries/borrow/market";
 
 export function useBorrowProvideCollateralForm(
   collateral: WhitelistCollateral,
   balance: u<bAsset>,
   fallbackBorrowMarket: BorrowMarketWithDisplay,
-  fallbackBorrowBorrower: BorrowBorrower,
+  fallbackBorrowBorrower: BorrowBorrower
 ) {
   const { connected } = useAccount();
 
@@ -51,6 +51,6 @@ export function useBorrowProvideCollateralForm(
       fixedFee,
       bAssetLtvs,
     },
-    () => ({ depositAmount: '' as bAsset }),
+    () => ({ depositAmount: "" as bAsset })
   );
 }

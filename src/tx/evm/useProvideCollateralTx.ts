@@ -1,23 +1,23 @@
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { TxResultRendering } from '@libs/app-fns';
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { TxResultRendering } from "@libs/app-fns";
 import {
   EVM_ANCHOR_TX_REFETCH_MAP,
   refetchQueryByTxKind,
   TxKind,
   TX_GAS_LIMIT,
-} from './utils';
-import { Subject } from 'rxjs';
-import { useCallback } from 'react';
-import { OneWayTxResponse } from '@anchor-protocol/crossanchor-sdk';
-import { ContractReceipt } from '@ethersproject/contracts';
-import { BackgroundTxResult, useBackgroundTx } from './useBackgroundTx';
-import { formatOutput, microfy } from '@anchor-protocol/formatter';
-import { TxEvent } from './useTx';
-import { bAsset, NoMicro } from '@anchor-protocol/types';
-import { useRefetchQueries } from '@libs/app-provider';
-import { EvmTxProgressWriter } from './EvmTxProgressWriter';
-import { WhitelistCollateral } from 'queries';
+} from "./utils";
+import { Subject } from "rxjs";
+import { useCallback } from "react";
+import { OneWayTxResponse } from "@anchor-protocol/crossanchor-sdk";
+import { ContractReceipt } from "@ethersproject/contracts";
+import { BackgroundTxResult, useBackgroundTx } from "./useBackgroundTx";
+import { formatOutput, microfy } from "@anchor-protocol/formatter";
+import { TxEvent } from "./useTx";
+import { bAsset, NoMicro } from "@anchor-protocol/types";
+import { useRefetchQueries } from "@libs/app-provider";
+import { EvmTxProgressWriter } from "./EvmTxProgressWriter";
+import { WhitelistCollateral } from "queries";
 
 type ProvideCollateralTxResult = OneWayTxResponse<ContractReceipt> | null;
 type ProvideCollateralTxRender = TxResultRendering<ProvideCollateralTxResult>;
@@ -39,7 +39,7 @@ export function useProvideCollateralTx():
     async (
       txParams: ProvideCollateralTxParams,
       renderTxResults: Subject<ProvideCollateralTxRender>,
-      txEvents: Subject<TxEvent<ProvideCollateralTxParams>>,
+      txEvents: Subject<TxEvent<ProvideCollateralTxParams>>
     ) => {
       const {
         collateral: { bridgedAddress, symbol },
@@ -56,7 +56,7 @@ export function useProvideCollateralTx():
           { contract: bridgedAddress! },
           microfy(amount, erc20Decimals),
           address!,
-          TX_GAS_LIMIT,
+          TX_GAS_LIMIT
         );
 
         writer.provideCollateral(symbol);
@@ -70,7 +70,7 @@ export function useProvideCollateralTx():
           (event) => {
             writer.provideCollateral(symbol, event);
             txEvents.next({ event, txParams });
-          },
+          }
         );
 
         refetchQueries(refetchQueryByTxKind(TxKind.ProvideCollateral));
@@ -83,7 +83,7 @@ export function useProvideCollateralTx():
         writer.timer.stop();
       }
     },
-    [xAnchor, address, connectionType, refetchQueries],
+    [xAnchor, address, connectionType, refetchQueries]
   );
 
   const persistedTxResult = useBackgroundTx<

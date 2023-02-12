@@ -3,8 +3,8 @@ import {
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
-import { HumanAddr, terraswap } from '@libs/types';
+} from "@libs/query-client";
+import { HumanAddr, terraswap } from "@libs/types";
 
 export interface TerraswapPairWasmQuery {
   terraswapPair: WasmQuery<
@@ -18,18 +18,18 @@ export type TerraswapPair = WasmQueryData<TerraswapPairWasmQuery>;
 export async function terraswapPairQuery(
   queryClient: QueryClient,
   terraswapFactoryAddr: HumanAddr,
-  assetInfos: [terraswap.AssetInfo, terraswap.AssetInfo],
+  assetInfos: [terraswap.AssetInfo, terraswap.AssetInfo]
 ): Promise<TerraswapPair> {
   const urlQuery = assetInfos
     .reduce((urlQueries, asset, i) => {
-      if ('token' in asset) {
+      if ("token" in asset) {
         urlQueries.push(`token_${i + 1}=${asset.token.contract_addr}`);
-      } else if ('native_token' in asset) {
+      } else if ("native_token" in asset) {
         urlQueries.push(`native_token_${i + 1}=${asset.native_token.denom}`);
       }
       return urlQueries;
     }, [] as string[])
-    .join('&');
+    .join("&");
 
   return wasmFetch<TerraswapPairWasmQuery>({
     ...queryClient,

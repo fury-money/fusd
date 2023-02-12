@@ -9,32 +9,32 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers';
-import { FunctionFragment, Result } from '@ethersproject/abi';
-import { Listener, Provider } from '@ethersproject/providers';
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
+} from "ethers";
+import { FunctionFragment, Result } from "@ethersproject/abi";
+import { Listener, Provider } from "@ethersproject/providers";
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
 export interface IBeaconUpgradeableInterface extends utils.Interface {
-  contractName: 'IBeaconUpgradeable';
+  contractName: "IBeaconUpgradeable";
   functions: {
-    'implementation()': FunctionFragment;
+    "implementation()": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: 'implementation',
-    values?: undefined,
+    functionFragment: "implementation",
+    values?: undefined
   ): string;
 
   decodeFunctionResult(
-    functionFragment: 'implementation',
-    data: BytesLike,
+    functionFragment: "implementation",
+    data: BytesLike
   ): Result;
 
   events: {};
 }
 
 export interface IBeaconUpgradeable extends BaseContract {
-  contractName: 'IBeaconUpgradeable';
+  contractName: "IBeaconUpgradeable";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -44,15 +44,15 @@ export interface IBeaconUpgradeable extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>,
+    eventFilter?: TypedEventFilter<TEvent>
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>,
+    eventFilter: TypedEventFilter<TEvent>
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;

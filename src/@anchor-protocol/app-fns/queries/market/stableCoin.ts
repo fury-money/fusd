@@ -1,10 +1,10 @@
-import { HumanAddr, moneyMarket, u, UST } from '@anchor-protocol/types';
+import { HumanAddr, moneyMarket, u, UST } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface MarketStableCoinWasmQuery {
   borrowRate: WasmQuery<
@@ -25,7 +25,7 @@ export async function marketStableCoinQuery(
   overseerContract: HumanAddr,
   uUSTBalance: u<UST> | undefined,
   totalReserves: u<UST> | undefined,
-  totalLiabilities: u<UST> | undefined,
+  totalLiabilities: u<UST> | undefined
 ): Promise<MarketStableCoin | undefined> {
   if (!uUSTBalance || !totalReserves || !totalLiabilities) {
     return undefined;

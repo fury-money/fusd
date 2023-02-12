@@ -5,12 +5,12 @@ import {
   useRewardsAncGovernanceRewardsQuery,
   useRewardsAncUstLpRewardsQuery,
   useRewardsClaimableUstBorrowRewardsQuery,
-} from '@anchor-protocol/app-provider';
-import { ANC, u, UST, Token } from '@anchor-protocol/types';
-import big, { Big } from 'big.js';
-import { useAssetPriceInUstQuery } from 'queries';
-import { useMemo } from 'react';
-import { sum } from '@libs/big-math';
+} from "@anchor-protocol/app-provider";
+import { ANC, u, UST, Token } from "@anchor-protocol/types";
+import big, { Big } from "big.js";
+import { useAssetPriceInUstQuery } from "queries";
+import { useMemo } from "react";
+import { sum } from "@libs/big-math";
 
 export interface Reward {
   symbol: string;
@@ -18,7 +18,7 @@ export interface Reward {
   amountInUst: u<UST<Big>>;
 }
 
-const getRewardAmountInUst = (amount: Reward['amount'], price: UST<string>) =>
+const getRewardAmountInUst = (amount: Reward["amount"], price: UST<string>) =>
   big(amount).mul(price) as u<UST<Big>>;
 
 export function useRewards() {
@@ -26,7 +26,7 @@ export function useRewards() {
   // queries
   // ---------------------------------------------
   const { data: { ancPrice } = {} } = useAncPriceQuery();
-  const { data: astroPrice } = useAssetPriceInUstQuery('astro');
+  const { data: astroPrice } = useAssetPriceInUstQuery("astro");
 
   const { data: { lpStakingState } = {} } = useAncLpStakingStateQuery();
 
@@ -60,25 +60,25 @@ export function useRewards() {
     const totalUserLPHolding = big(userLPBalance.balance).plus(userLPDeposit);
 
     const LPValue = big(ancPrice.USTPoolSize)
-      .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare)
+      .div(ancPrice.LPShare === "0" ? 1 : ancPrice.LPShare)
       .mul(2) as u<UST<Big>>;
 
     const poolAssets = {
       anc: big(ancPrice.ANCPoolSize)
         .mul(userLPBalance.balance)
-        .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare) as u<ANC<Big>>,
+        .div(ancPrice.LPShare === "0" ? 1 : ancPrice.LPShare) as u<ANC<Big>>,
       ust: big(ancPrice.USTPoolSize)
         .mul(userLPBalance.balance)
-        .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare) as u<UST<Big>>,
+        .div(ancPrice.LPShare === "0" ? 1 : ancPrice.LPShare) as u<UST<Big>>,
     };
 
     const withdrawableAssets = {
       anc: big(ancPrice.ANCPoolSize)
         .mul(totalUserLPHolding)
-        .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare) as u<ANC<Big>>,
+        .div(ancPrice.LPShare === "0" ? 1 : ancPrice.LPShare) as u<ANC<Big>>,
       ust: big(ancPrice.USTPoolSize)
         .mul(totalUserLPHolding)
-        .div(ancPrice.LPShare === '0' ? 1 : ancPrice.LPShare) as u<UST<Big>>,
+        .div(ancPrice.LPShare === "0" ? 1 : ancPrice.LPShare) as u<UST<Big>>,
     };
 
     const staked = userLPDeposit;
@@ -92,7 +92,7 @@ export function useRewards() {
 
     const rewards: Reward[] = [
       {
-        symbol: 'ASTRO',
+        symbol: "ASTRO",
         amount: astroReward,
         amountInUst: getRewardAmountInUst(astroReward, astroPrice),
       },
@@ -100,14 +100,14 @@ export function useRewards() {
     // ANC rewards are no longer being issued
     if (!big(ancReward).eq(0)) {
       rewards.push({
-        symbol: 'ANC',
+        symbol: "ANC",
         amount: ancReward,
         amountInUst: getRewardAmountInUst(ancReward, ancPrice.ANCPrice),
       });
     }
 
     const rewardsAmountInUst = sum(
-      ...rewards.map((reward) => reward.amountInUst),
+      ...rewards.map((reward) => reward.amountInUst)
     ) as u<UST<Big>>;
 
     return {
@@ -161,7 +161,7 @@ export function useRewards() {
     }
 
     const ancRewardFromLP = ancUstLp.rewards.find(
-      ({ symbol }) => symbol === 'ANC',
+      ({ symbol }) => symbol === "ANC"
     );
 
     const ancRewardAmount = big(ancRewardFromLP?.amount || 0)
@@ -169,14 +169,14 @@ export function useRewards() {
       .toString() as u<Token>;
 
     const ancReward: Reward = {
-      symbol: 'ANC',
+      symbol: "ANC",
       amount: ancRewardAmount,
       amountInUst: getRewardAmountInUst(ancRewardAmount, ancPrice.ANCPrice),
     };
 
     return [
       ancReward,
-      ...ancUstLp.rewards.filter(({ symbol }) => symbol !== 'ANC'),
+      ...ancUstLp.rewards.filter(({ symbol }) => symbol !== "ANC"),
     ];
   }, [ancPrice, ancUstLp, ustBorrow]);
 
@@ -185,7 +185,7 @@ export function useRewards() {
       rewards
         ? (sum(...rewards.map((reward) => reward.amountInUst)) as u<UST<Big>>)
         : undefined,
-    [rewards],
+    [rewards]
   );
 
   return {

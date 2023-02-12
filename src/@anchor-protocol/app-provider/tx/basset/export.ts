@@ -1,13 +1,13 @@
-import { bAssetExportTx } from '@anchor-protocol/app-fns';
-import { bAsset } from '@anchor-protocol/types';
-import { useFixedFee, useRefetchQueries } from '@libs/app-provider';
-import { CW20Addr } from '@libs/types';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
-import { useBAssetInfoByTokenAddrQuery } from '../../queries/basset/bAssetInfoByTokenAddr';
+import { bAssetExportTx } from "@anchor-protocol/app-fns";
+import { bAsset } from "@anchor-protocol/types";
+import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
+import { CW20Addr } from "@libs/types";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
+import { useBAssetInfoByTokenAddrQuery } from "../../queries/basset/bAssetInfoByTokenAddr";
 
 export interface BAssetExportTxParams {
   amount: bAsset;
@@ -31,9 +31,10 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
         !connectedWallet ||
         !connectedWallet.availablePost ||
         !bAssetInfo ||
-        !bAssetInfo.converterConfig.anchor_token_address
+        !bAssetInfo.converterConfig.anchor_token_address ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return bAssetExportTx({
@@ -68,7 +69,7 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

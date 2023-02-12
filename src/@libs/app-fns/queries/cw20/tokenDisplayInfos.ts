@@ -1,10 +1,11 @@
-import { Chain } from '@anchor-protocol/app-provider';
-import { CW20Addr } from '@libs/types';
+import { Chain } from "@anchor-protocol/app-provider";
+import { Tokens } from "@anchor-protocol/token-icons";
+import { CW20Addr } from "@libs/types";
 
 export type CW20TokenDisplayInfo = {
   protocol: string;
   name: string;
-  symbol: string;
+  symbol: Tokens;
   token: CW20Addr;
   icon: string;
   decimals?: number;
@@ -19,11 +20,11 @@ export type CW20TokenDisplayInfos = {
 };
 
 export async function cw20TokenDisplayInfosQuery(
-  chain: Chain,
+  chain: Chain
 ): Promise<CW20TokenDisplayInfos> {
   // mainnet -> protocol === Wormhole (starts with wa)
   let data: CW20TokenDisplayInfos = await fetch(
-    'https://assets.terra.money/cw20/tokens.json',
+    "https://assets.terra.money/cw20/tokens.json"
   ).then((res) => res.json());
 
   if (chain !== Chain.Terra) {
@@ -41,7 +42,7 @@ const trimWormholeSymbols = (infos: CW20TokenDisplayInfos) => {
 
 const trimWormholeSymbolsPrefix = ([network, tokenDisplayInfos]: [
   string,
-  CW20NetworkTokenDisplayInfos,
+  CW20NetworkTokenDisplayInfos
 ]): [string, CW20NetworkTokenDisplayInfos] => {
   return [
     network,
@@ -49,19 +50,19 @@ const trimWormholeSymbolsPrefix = ([network, tokenDisplayInfos]: [
       .map(trimWormholeSymbolPrefix)
       .reduce(
         (acc, [k, v]) => ({ ...acc, [k]: v }),
-        {} as CW20NetworkTokenDisplayInfos,
+        {} as CW20NetworkTokenDisplayInfos
       ),
   ];
 };
 
 const trimWormholeSymbolPrefix = ([contract, info]: [
   string,
-  CW20TokenDisplayInfo,
+  CW20TokenDisplayInfo
 ]): [string, CW20TokenDisplayInfo] => {
-  if (info.protocol?.includes('Wormhole')) {
+  if (info.protocol?.includes("Wormhole")) {
     // remove first two characters, example:
     // - wasAVAX (Wormhole Avalanche) -> sAVAX
-    return [contract, { ...info, symbol: info.symbol.slice(2) }];
+    return [contract, { ...info, symbol: info.symbol.slice(2) as Tokens }];
   }
 
   return [contract, info];

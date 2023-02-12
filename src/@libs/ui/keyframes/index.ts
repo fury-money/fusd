@@ -1,1 +1,1 @@
-export * from './vibrate';
+export * from "./vibrate";

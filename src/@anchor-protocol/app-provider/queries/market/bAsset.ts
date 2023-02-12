@@ -1,9 +1,8 @@
-import { MarketBAsset, marketBAssetQuery } from '@anchor-protocol/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
-
+import { MarketBAsset, marketBAssetQuery } from "@anchor-protocol/app-fns";
+import { createQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
 export function useMarketBAssetQuery(): UseQueryResult<
   MarketBAsset | undefined
@@ -19,13 +18,13 @@ export function useMarketBAssetQuery(): UseQueryResult<
       contractAddress.aluna.custody,
       contractAddress.native.usd,
     ],
-    createQueryFn(marketBAssetQuery, queryClient),
+    createQueryFn(marketBAssetQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient,
-    },
+    }
   );
   return result;
 }

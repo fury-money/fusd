@@ -1,4 +1,4 @@
-import { ANC, JSDateTime, u, UST } from '@anchor-protocol/types';
+import { ANC, JSDateTime, u, UST } from "@anchor-protocol/types";
 
 export interface MarketBuybackData {
   offer_amount: u<UST>;
@@ -9,7 +9,7 @@ export interface MarketBuybackData {
 
 export interface MarketBuybackQueryParams {
   endpoint: string;
-  time: '72hrs' | 'total';
+  time: "72hrs" | "total";
 }
 
 export function marketBuybackQuery({

@@ -3,35 +3,32 @@ import {
   NativeBalances,
   pickNativeBalance,
   terraNativeBalancesQuery,
-} from '@libs/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
-import { HumanAddr, NativeDenom, Token, u, UST } from '@libs/types';
-import { useMemo } from 'react';
-import { useAccount } from 'contexts/account';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useApp } from '../../contexts/app';
-import { TERRA_QUERY_KEY } from '../../env';
+} from "@libs/app-fns";
+import { createQueryFn } from "@libs/react-query-utils";
+import { HumanAddr, NativeDenom, Token, u, UST } from "@libs/types";
+import { useMemo } from "react";
+import { useAccount } from "contexts/account";
+import { useQuery, UseQueryResult } from "react-query";
+import { useApp } from "../../contexts/app";
+import { TERRA_QUERY_KEY } from "../../env";
 
 export function useTerraNativeBalancesQuery(
-  walletAddr?: HumanAddr,
+  walletAddr?: HumanAddr
 ): UseQueryResult<NativeBalances | undefined> {
   const { queryClient, queryErrorReporter } = useApp();
 
   const { connected, terraWalletAddress } = useAccount();
 
   const result = useQuery(
-    [
-      TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES,
-      walletAddr ?? terraWalletAddress,
-    ],
-    createQueryFn(terraNativeBalancesQuery, queryClient),
+    [TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES, walletAddr ?? terraWalletAddress],
+    createQueryFn(terraNativeBalancesQuery, queryClient!),
     {
       refetchInterval: connected && 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient,
       placeholderData: () => EMPTY_NATIVE_BALANCES,
-    },
+    }
   );
 
   return result;
@@ -46,7 +43,7 @@ export function useTerraNativeBalances(walletAddr?: HumanAddr): NativeBalances {
 
 export function useTerraNativeBalanceQuery<T extends Token>(
   denom: NativeDenom,
-  walletAddr?: HumanAddr,
+  walletAddr?: HumanAddr
 ): u<T> {
   const { data: nativeBalances = EMPTY_NATIVE_BALANCES } =
     useTerraNativeBalancesQuery(walletAddr);
@@ -57,5 +54,5 @@ export function useTerraNativeBalanceQuery<T extends Token>(
 }
 
 export function useUstBalance(walletAddr?: HumanAddr | undefined): u<UST> {
-  return useTerraNativeBalanceQuery<UST>('uusd', walletAddr);
+  return useTerraNativeBalanceQuery<UST>("uusd", walletAddr);
 }

@@ -1,10 +1,10 @@
-import { HumanAddr, moneyMarket } from '@anchor-protocol/types';
+import { HumanAddr, moneyMarket } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface EarnEpochStatesWasmQuery {
   moneyMarketEpochState: WasmQuery<
@@ -27,10 +27,8 @@ export async function earnEpochStatesQuery(
   queryClient: QueryClient,
   moneyMarketContract: HumanAddr,
   overseerContract: HumanAddr,
-  blockHeight: number,
+  blockHeight: number
 ): Promise<EarnEpochStates> {
-
-
   return wasmFetch<EarnEpochStatesWasmQuery>({
     ...queryClient,
     id: `earn--epoch-states`,

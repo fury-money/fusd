@@ -1,12 +1,12 @@
-import { placeLiquidationBidTx } from '@anchor-protocol/app-fns/tx/liquidate/deposit';
-import { UST } from '@anchor-protocol/types';
-import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { WhitelistCollateral } from 'queries';
-import { useCallback } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { placeLiquidationBidTx } from "@anchor-protocol/app-fns/tx/liquidate/deposit";
+import { UST } from "@anchor-protocol/types";
+import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { WhitelistCollateral } from "queries";
+import { useCallback } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface PlaceLiquidationBidTxParams {
   depositAmount: UST;
@@ -32,8 +32,13 @@ export function usePlaceLiquidationBidTx(
       txFee,
       onTxSucceed,
     }: PlaceLiquidationBidTxParams) => {
-      if (!connectedWallet || !connectedWallet.availablePost || !collateral) {
-        throw new Error('Can not post!');
+      if (
+        !connectedWallet ||
+        !connectedWallet.availablePost ||
+        !collateral ||
+        !queryClient
+      ) {
+        throw new Error("Can not post!");
       }
 
       return placeLiquidationBidTx({
@@ -71,7 +76,7 @@ export function usePlaceLiquidationBidTx(
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

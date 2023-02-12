@@ -1,5 +1,5 @@
-import { anchorToken, HumanAddr } from '@anchor-protocol/types';
-import { QueryClient, WasmQuery, WasmQueryData } from '@libs/query-client';
+import { anchorToken, HumanAddr } from "@anchor-protocol/types";
+import { QueryClient, WasmQuery, WasmQueryData } from "@libs/query-client";
 
 interface AncVestingAccountWasmQuery {
   vestingAccount: WasmQuery<
@@ -13,7 +13,7 @@ export type AncVestingAccount = WasmQueryData<AncVestingAccountWasmQuery>;
 export async function ancVestingAccountQuery(
   queryClient: QueryClient,
   address: HumanAddr | undefined,
-  ancVestingAddr: HumanAddr,
+  ancVestingAddr: HumanAddr
 ): Promise<AncVestingAccount | undefined> {
   return undefined;
 

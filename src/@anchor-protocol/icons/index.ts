@@ -1,25 +1,25 @@
-import { ReactComponent as AnchorIcon } from './assets/Anchor.svg';
-import { ReactComponent as AnchorNoCircleIcon } from './assets/AnchorNoCircle.svg';
-import { ReactComponent as APYIcon } from './assets/APY.svg';
-import { ReactComponent as ArrowDownIcon } from './assets/ArrowDown.svg';
-import { ReactComponent as BorrowAPRIcon } from './assets/BorrowAPR.svg';
-import { ReactComponent as BorrowValueIcon } from './assets/BorrowValue.svg';
-import { ReactComponent as CircleArrowRightIcon } from './assets/CircleArrowRight.svg';
-import { ReactComponent as CollateralValueIcon } from './assets/CollateralValue.svg';
-import { ReactComponent as DiscordIcon } from './assets/Discord.svg';
-import { ReactComponent as DollarCoinIcon } from './assets/DollarCoin.svg';
-import { ReactComponent as LabtopIcon } from './assets/Labtop.svg';
-import { ReactComponent as MenuIcon } from './assets/Menu.svg';
-import { ReactComponent as MenuCloseIcon } from './assets/MenuClose.svg';
-import { ReactComponent as MenuWalletIcon } from './assets/MenuWallet.svg';
-import { ReactComponent as PlusIcon } from './assets/Plus.svg';
-import { ReactComponent as ShieldPlusIcon } from './assets/ShieldPlus.svg';
-import { ReactComponent as TerraIcon } from './assets/Terra.svg';
-import { ReactComponent as WalletIcon } from './assets/Wallet.svg';
-import { ReactComponent as WalletconnectIcon } from './assets/Walletconnect.svg';
-import { ReactComponent as ParticipateInLiquidationsIcon } from './assets/ParticipateInLiquidations.svg';
-import { ReactComponent as SettingsIcon } from './assets/Settings.svg';
-import { createMaterialIcon } from './createMaterialIcon';
+import { ReactComponent as AnchorIcon } from "./assets/Anchor.svg";
+import { ReactComponent as AnchorNoCircleIcon } from "./assets/AnchorNoCircle.svg";
+import { ReactComponent as APYIcon } from "./assets/APY.svg";
+import { ReactComponent as ArrowDownIcon } from "./assets/ArrowDown.svg";
+import { ReactComponent as BorrowAPRIcon } from "./assets/BorrowAPR.svg";
+import { ReactComponent as BorrowValueIcon } from "./assets/BorrowValue.svg";
+import { ReactComponent as CircleArrowRightIcon } from "./assets/CircleArrowRight.svg";
+import { ReactComponent as CollateralValueIcon } from "./assets/CollateralValue.svg";
+import { ReactComponent as DiscordIcon } from "./assets/Discord.svg";
+import { ReactComponent as DollarCoinIcon } from "./assets/DollarCoin.svg";
+import { ReactComponent as LabtopIcon } from "./assets/Labtop.svg";
+import { ReactComponent as MenuIcon } from "./assets/Menu.svg";
+import { ReactComponent as MenuCloseIcon } from "./assets/MenuClose.svg";
+import { ReactComponent as MenuWalletIcon } from "./assets/MenuWallet.svg";
+import { ReactComponent as PlusIcon } from "./assets/Plus.svg";
+import { ReactComponent as ShieldPlusIcon } from "./assets/ShieldPlus.svg";
+import { ReactComponent as TerraIcon } from "./assets/Terra.svg";
+import { ReactComponent as WalletIcon } from "./assets/Wallet.svg";
+import { ReactComponent as WalletconnectIcon } from "./assets/Walletconnect.svg";
+import { ReactComponent as ParticipateInLiquidationsIcon } from "./assets/ParticipateInLiquidations.svg";
+import { ReactComponent as SettingsIcon } from "./assets/Settings.svg";
+import { createMaterialIcon } from "./createMaterialIcon";
 
 export const Discord = createMaterialIcon(DiscordIcon);
 export const Wallet = createMaterialIcon(WalletIcon);
@@ -41,6 +41,6 @@ export const Terra = createMaterialIcon(TerraIcon);
 export const ShieldPlus = createMaterialIcon(ShieldPlusIcon);
 export const DollarCoin = createMaterialIcon(DollarCoinIcon);
 export const ParticipateInLiquidations = createMaterialIcon(
-  ParticipateInLiquidationsIcon,
+  ParticipateInLiquidationsIcon
 );
 export const Settings = createMaterialIcon(SettingsIcon);

@@ -6,16 +6,16 @@ import {
   Rate,
   u,
   NativeDenom,
-} from '@anchor-protocol/types';
-import { terraBalancesQuery } from '@libs/app-fns';
+} from "@anchor-protocol/types";
+import { terraBalancesQuery } from "@libs/app-fns";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
-import big from 'big.js';
-import { ANCHOR_SAFE_RATIO } from '../../env';
+} from "@libs/query-client";
+import big from "big.js";
+import { ANCHOR_SAFE_RATIO } from "../../env";
 
 export type BAssetLtv = {
   max: Rate;
@@ -54,8 +54,8 @@ export type BorrowMarket = WasmQueryData<BorrowMarketWasmQuery> & {
   bAssetLtvs: BAssetLtvs;
 };
 
-type MarketStateWasmQuery = Pick<BorrowMarketWasmQuery, 'marketState'>;
-type MarketWasmQuery = Omit<BorrowMarketWasmQuery, 'marketState'>;
+type MarketStateWasmQuery = Pick<BorrowMarketWasmQuery, "marketState">;
+type MarketWasmQuery = Omit<BorrowMarketWasmQuery, "marketState">;
 
 export async function borrowMarketQuery(
   queryClient: QueryClient,
@@ -63,7 +63,7 @@ export async function borrowMarketQuery(
   interestContract: HumanAddr,
   oracleContract: HumanAddr,
   overseerContract: HumanAddr,
-  stableDenom: NativeDenom,
+  stableDenom: NativeDenom
 ): Promise<BorrowMarket> {
   const _marketBalances = await terraBalancesQuery(
     queryClient,
@@ -71,7 +71,7 @@ export async function borrowMarketQuery(
     [
       {
         native_token: {
-          denom: 'uluna',
+          denom: "uluna",
         },
       },
       {
@@ -79,7 +79,7 @@ export async function borrowMarketQuery(
           denom: stableDenom,
         },
       },
-    ],
+    ]
   );
 
   const { marketState } = await wasmFetch<MarketStateWasmQuery>({
@@ -95,11 +95,11 @@ export async function borrowMarketQuery(
     },
   });
 
-  const marketBalances: Pick<BorrowMarket, 'marketBalances'>['marketBalances'] =
+  const marketBalances: Pick<BorrowMarket, "marketBalances">["marketBalances"] =
     {
       uUST: (_marketBalances.balances.find(
-        ({ asset }: any) => asset?.native_token?.denom === stableDenom,
-      )?.balance ?? '0') as u<UST>,
+        ({ asset }: any) => asset?.native_token?.denom === stableDenom
+      )?.balance ?? "0") as u<UST>,
     };
 
   const {
@@ -137,7 +137,7 @@ export async function borrowMarketQuery(
 
   const whitelistIndex: Map<
     string,
-    moneyMarket.overseer.WhitelistResponse['elems'][number]
+    moneyMarket.overseer.WhitelistResponse["elems"][number]
   > = new Map();
 
   for (const elem of overseerWhitelist.elems) {
@@ -148,12 +148,12 @@ export async function borrowMarketQuery(
 
   const oraclePrices: moneyMarket.oracle.PricesResponse =
     //@ts-ignore
-    'Ok' in _oraclePrices ? _oraclePrices.Ok : _oraclePrices;
+    "Ok" in _oraclePrices ? _oraclePrices.Ok : _oraclePrices;
 
   for (const price of oraclePrices.prices) {
     const max = whitelistIndex.has(price.asset)
-      ? whitelistIndex.get(price.asset)?.max_ltv ?? ('0.5' as Rate)
-      : ('0.5' as Rate);
+      ? whitelistIndex.get(price.asset)?.max_ltv ?? ("0.5" as Rate)
+      : ("0.5" as Rate);
 
     const safe = big(max).mul(ANCHOR_SAFE_RATIO).toFixed() as Rate;
 

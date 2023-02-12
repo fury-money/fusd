@@ -22,7 +22,9 @@ export interface TenderMintExtension {
   };
 }
 
-export function setupTendermintExtension(base: QueryClient): TenderMintExtension {
+export function setupTendermintExtension(
+  base: QueryClient
+): TenderMintExtension {
   const rpc = createProtobufRpcClient(base);
   // Use this service to get easy typed access to query methods
   // This cannot be used for proof verification
@@ -39,20 +41,20 @@ export function setupTendermintExtension(base: QueryClient): TenderMintExtension
 }
 
 export type BatchQuery = QueryClient &
-    WasmExtension &
-    BankExtension &
-    TxExtension &
-    AuthExtension &
-    TenderMintExtension;
+  WasmExtension &
+  BankExtension &
+  TxExtension &
+  AuthExtension &
+  TenderMintExtension;
 
-
-export function useBatchQuery(rpc: string | undefined): BatchQueryClient | undefined{
-
+export function useBatchQuery(
+  rpc: string | undefined
+): BatchQueryClient | undefined {
   const [batchQuery, setBatchQuery] = useState<BatchQuery>();
 
   useEffect(() => {
     const createBatchQuery = async () => {
-      if(rpc){
+      if (rpc) {
         const httpBatch = new HttpBatchClient(rpc, {
           dispatchInterval: 500,
           batchSizeLimit: 100,
@@ -60,31 +62,29 @@ export function useBatchQuery(rpc: string | undefined): BatchQueryClient | undef
         const tendermint = await Tendermint34Client.create(httpBatch);
         // We create the query client
         const client = QueryClient.withExtensions(
-            tendermint,
-            setupWasmExtension,
-            setupBankExtension,
-            setupTxExtension,
-            setupTendermintExtension,
-            setupAuthExtension,
-          );
-
-        setBatchQuery(
-          client
+          tendermint,
+          setupWasmExtension,
+          setupBankExtension,
+          setupTxExtension,
+          setupTendermintExtension,
+          setupAuthExtension
         );
-      }
-    }
-    createBatchQuery();
-  }, [rpc])
 
-  return batchQuery && rpc ? {
-    batchEndpoint: rpc,
-    batchFetcher: batchQuery,
-  } : undefined;
+        setBatchQuery(client);
+      }
+    };
+    createBatchQuery();
+  }, [rpc]);
+
+  return batchQuery && rpc
+    ? {
+        batchEndpoint: rpc,
+        batchFetcher: batchQuery,
+      }
+    : undefined;
 }
 
-
-
-import { LcdFetchError } from '../errors';
+import { LcdFetchError } from "../errors";
 import { BatchQueryClient } from "..";
 
 export type LcdResult<Data> =
@@ -97,17 +97,17 @@ export type LcdResult<Data> =
 
 export type LcdFetcher = <Data>(
   endpoint: string,
-  requestInit?: Omit<RequestInit, 'method' | 'body'>,
+  requestInit?: Omit<RequestInit, "method" | "body">
 ) => Promise<Data>;
 
 export async function defaultLcdFetcher<Data>(
   endpoint: string,
-  requestInit?: RequestInit,
+  requestInit?: RequestInit
 ): Promise<Data> {
-  return fetch(endpoint, { ...requestInit, cache: 'no-store' })
+  return fetch(endpoint, { ...requestInit, cache: "no-store" })
     .then((res) => res.json())
     .then((data) => {
-      if ('code' in data && data.code > 0) {
+      if ("code" in data && data.code > 0) {
         throw new LcdFetchError(data.code, data.txhash, data.raw_log);
       }
       return data;

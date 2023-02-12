@@ -1,7 +1,7 @@
-import { BACKGROUND_TRANSCATION_TAB_ID } from 'components/Header/transactions/BackgroundTransaction';
-import { useCallback } from 'react';
-import { Transaction } from '..';
-import { useTransactions } from './useTransactions';
+import { BACKGROUND_TRANSCATION_TAB_ID } from "components/Header/transactions/BackgroundTransaction";
+import { useCallback } from "react";
+import { Transaction } from "..";
+import { useTransactions } from "./useTransactions";
 
 export const useBackgroundTransactions = () => {
   const { transactions, updateTransaction } = useTransactions();
@@ -15,7 +15,7 @@ export const useBackgroundTransactions = () => {
         });
       }
     },
-    [updateTransaction],
+    [updateTransaction]
   );
 
   const unReserveBackgroundTx = useCallback(
@@ -27,7 +27,7 @@ export const useBackgroundTransactions = () => {
         });
       }
     },
-    [updateTransaction],
+    [updateTransaction]
   );
 
   return {

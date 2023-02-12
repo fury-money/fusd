@@ -1,13 +1,13 @@
-import { catchError, OperatorFunction } from 'rxjs';
-import { TxResultRendering, TxStreamPhase } from '@libs/app-fns';
-import { errorContains, formatError, TxError } from './utils';
+import { catchError, OperatorFunction } from "rxjs";
+import { TxResultRendering, TxStreamPhase } from "@libs/app-fns";
+import { errorContains, formatError, TxError } from "./utils";
 
 interface CatchTxErrorParams {
   txErrorReporter?: (error: unknown) => string;
 }
 
 const catchTxError = <TxResult>(
-  params: CatchTxErrorParams,
+  params: CatchTxErrorParams
 ): OperatorFunction<TxResultRendering<TxResult>, any> => {
   const { txErrorReporter } = params;
 

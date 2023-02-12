@@ -2,15 +2,15 @@ import {
   CW20SellTokenForm,
   cw20SellTokenForm,
   CW20SellTokenFormInput,
-} from '@libs/app-fns';
-import { CW20Addr, HumanAddr, Token } from '@libs/types';
-import { useForm } from '@libs/use-form';
-import { useAccount } from 'contexts/account';
-import { useApp } from '../../contexts/app';
-import { useFixedFee } from '../../hooks/useFixedFee';
-import { useCW20Balance } from '../../queries/cw20/balance';
-import { useUstBalance } from '../../queries/terra/nativeBalances';
-import { useUstTax } from '../../queries/terra/tax';
+} from "@libs/app-fns";
+import { CW20Addr, HumanAddr, Token } from "@libs/types";
+import { useForm } from "@libs/use-form";
+import { useAccount } from "contexts/account";
+import { useApp } from "../../contexts/app";
+import { useFixedFee } from "../../hooks/useFixedFee";
+import { useCW20Balance } from "../../queries/cw20/balance";
+import { useUstBalance } from "../../queries/terra/nativeBalances";
+import { useUstTax } from "../../queries/terra/tax";
 
 export interface CW20SellTokenFormParams {
   ustTokenPairAddr: HumanAddr;
@@ -50,8 +50,8 @@ export function useCW20SellTokenForm<T extends Token>({
     },
     () =>
       ({
-        tokenAmount: '' as T,
-        maxSpread: '0.01',
-      } as CW20SellTokenFormInput<T>),
+        tokenAmount: "" as T,
+        maxSpread: "0.01",
+      } as CW20SellTokenFormInput<T>)
   );
 }

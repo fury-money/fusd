@@ -1,30 +1,30 @@
-import { formatANCWithPostfixUnits } from '@anchor-protocol/notation';
-import { ANC, Gas, HumanAddr, Rate, u, UST } from '@anchor-protocol/types';
+import { formatANCWithPostfixUnits } from "@anchor-protocol/notation";
+import { ANC, Gas, HumanAddr, Rate, u, UST } from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { demicrofy } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { demicrofy } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { Observable } from "rxjs";
 
 export function rewardsUstBorrowClaimTx($: {
   walletAddr: HumanAddr;
@@ -48,7 +48,7 @@ export function rewardsUstBorrowClaimTx($: {
           claim_rewards: {},
         }),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -60,17 +60,17 @@ export function rewardsUstBorrowClaimTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
         const claimed = pickAttributeValueByKey<u<ANC>>(
           fromContract,
-          'amount',
-          (attrs) => attrs.reverse()[0],
+          "amount",
+          (attrs) => attrs.reverse()[0]
         );
 
         return {
@@ -79,8 +79,8 @@ export function rewardsUstBorrowClaimTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             claimed && {
-              name: 'Claimed',
-              value: formatANCWithPostfixUnits(demicrofy(claimed)) + ' ANC',
+              name: "Claimed",
+              value: formatANCWithPostfixUnits(demicrofy(claimed)) + " ANC",
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),
@@ -89,6 +89,6 @@ export function rewardsUstBorrowClaimTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

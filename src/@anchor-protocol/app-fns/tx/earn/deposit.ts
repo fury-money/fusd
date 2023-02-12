@@ -1,7 +1,7 @@
 import {
   formatAUSTWithPostfixUnits,
   formatUSTWithPostfixUnits,
-} from '@anchor-protocol/notation';
+} from "@anchor-protocol/notation";
 import {
   aUST,
   UST,
@@ -10,29 +10,29 @@ import {
   Rate,
   u,
   NativeDenom,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
 import {
   demicrofy,
   formatFluidDecimalPoints,
   formatTokenInput,
-} from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   Coin,
   Coins,
@@ -40,10 +40,10 @@ import {
   Fee,
   MsgExecuteContract,
   MsgSend,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import big, { BigSource } from 'big.js';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import big, { BigSource } from "big.js";
+import { Observable } from "rxjs";
 
 export function earnDepositTx($: {
   walletAddr: HumanAddr;
@@ -79,18 +79,30 @@ export function earnDepositTx($: {
           new Coins([
             new Coin(
               $.stableDenom,
-              formatTokenInput(big($.depositAmount).mul((1 - $.depositFeeAmount)).toString() as UST<string>),
+              formatTokenInput(
+                big($.depositAmount)
+                  .mul(1 - $.depositFeeAmount)
+                  .toString() as UST<string>
+              )
             ),
-          ]),
+          ])
         ),
-        new MsgSend($.walletAddr, $.depositFeeAddress, new Coins([
-              new Coin(
-                $.stableDenom,
-              formatTokenInput(big($.depositAmount).mul($.depositFeeAmount).toString() as UST<string>),
-              ),
-            ]),)     
+        new MsgSend(
+          $.walletAddr,
+          $.depositFeeAddress,
+          new Coins([
+            new Coin(
+              $.stableDenom,
+              formatTokenInput(
+                big($.depositAmount)
+                  .mul($.depositFeeAmount)
+                  .toString() as UST<string>
+              )
+            ),
+          ])
+        ),
       ],
-      fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -102,10 +114,10 @@ export function earnDepositTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
@@ -126,19 +138,19 @@ export function earnDepositTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             depositAmount && {
-              name: 'Deposit Amount',
+              name: "Deposit Amount",
               value:
                 formatUSTWithPostfixUnits(demicrofy(depositAmount)) +
-                ' axlUSDC',
+                " axlUSDC",
             },
             receivedAmount && {
-              name: 'Received Amount',
+              name: "Received Amount",
               value:
                 formatAUSTWithPostfixUnits(demicrofy(receivedAmount)) +
-                ' aUSDC',
+                " aUSDC",
             },
             exchangeRate && {
-              name: 'Exchange Rate',
+              name: "Exchange Rate",
               value: formatFluidDecimalPoints(exchangeRate, 6),
             },
             helper.txHashReceipt(),
@@ -148,6 +160,6 @@ export function earnDepositTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

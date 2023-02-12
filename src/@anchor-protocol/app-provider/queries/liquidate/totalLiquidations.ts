@@ -1,8 +1,11 @@
-import { LockedCollateral, totalCollateralsQuery } from '@anchor-protocol/app-fns/queries/liquidate/totalLiquidations';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+import {
+  LockedCollateral,
+  totalCollateralsQuery,
+} from "@anchor-protocol/app-fns/queries/liquidate/totalLiquidations";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
 const queryFn = createSimpleQueryFn((endpoint: string) => {
   return totalCollateralsQuery({ endpoint });
@@ -20,6 +23,6 @@ export function useTotalCollateralsQuery(): UseQueryResult<
       refetchInterval: 1000 * 60 * 60,
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 }

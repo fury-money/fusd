@@ -1,7 +1,7 @@
 import {
   computeBorrowedAmount,
   computeBorrowLimit,
-} from '@anchor-protocol/app-fns';
+} from "@anchor-protocol/app-fns";
 import {
   UST,
   bAsset,
@@ -9,21 +9,21 @@ import {
   moneyMarket,
   Rate,
   u,
-} from '@anchor-protocol/types';
-import { FormReturn } from '@libs/use-form';
-import big, { Big } from 'big.js';
-import { computeLtv } from '../../logics/borrow/computeLtv';
-import { computeDepositAmountToBorrowLimit } from '../../logics/borrow/computeDepositAmountToBorrowLimit';
-import { computeDepositAmountToLtv } from '../../logics/borrow/computeDepositAmountToLtv';
-import { computeLtvToDepositAmount } from '../../logics/borrow/computeLtvToDepositAmount';
-import { computeProvideCollateralBorrowLimit } from '../../logics/borrow/computeProvideCollateralBorrowLimit';
-import { computeProvideCollateralNextLtv } from '../../logics/borrow/computeProvideCollateralNextLtv';
-import { validateDepositAmount } from '../../logics/borrow/validateDepositAmount';
-import { validateTxFee } from '../../logics/common/validateTxFee';
-import { BAssetLtvs } from '../../queries/borrow/market';
-import { computebAssetLtvsAvg } from '@anchor-protocol/app-fns/logics/borrow/computebAssetLtvsAvg';
-import { microfy } from '@anchor-protocol/formatter';
-import { WhitelistCollateral } from 'queries';
+} from "@anchor-protocol/types";
+import { FormReturn } from "@libs/use-form";
+import big, { Big } from "big.js";
+import { computeLtv } from "../../logics/borrow/computeLtv";
+import { computeDepositAmountToBorrowLimit } from "../../logics/borrow/computeDepositAmountToBorrowLimit";
+import { computeDepositAmountToLtv } from "../../logics/borrow/computeDepositAmountToLtv";
+import { computeLtvToDepositAmount } from "../../logics/borrow/computeLtvToDepositAmount";
+import { computeProvideCollateralBorrowLimit } from "../../logics/borrow/computeProvideCollateralBorrowLimit";
+import { computeProvideCollateralNextLtv } from "../../logics/borrow/computeProvideCollateralNextLtv";
+import { validateDepositAmount } from "../../logics/borrow/validateDepositAmount";
+import { validateTxFee } from "../../logics/common/validateTxFee";
+import { BAssetLtvs } from "../../queries/borrow/market";
+import { computebAssetLtvsAvg } from "@anchor-protocol/app-fns/logics/borrow/computebAssetLtvsAvg";
+import { microfy } from "@anchor-protocol/formatter";
+import { WhitelistCollateral } from "queries";
 
 export interface BorrowProvideCollateralFormInput {
   depositAmount: bAsset;
@@ -78,7 +78,7 @@ export const borrowProvideCollateralForm = ({
     marketBorrowerInfo,
     overseerCollaterals,
     oraclePrices,
-    bAssetLtvs,
+    bAssetLtvs
   );
 
   const ltvToAmount = computeLtvToDepositAmount(
@@ -86,14 +86,14 @@ export const borrowProvideCollateralForm = ({
     marketBorrowerInfo,
     overseerCollaterals,
     oraclePrices,
-    bAssetLtvs,
+    bAssetLtvs
   );
 
   const amountToBorrowLimit = computeDepositAmountToBorrowLimit(
     collateral.collateral_token,
     overseerCollaterals,
     oraclePrices,
-    bAssetLtvs,
+    bAssetLtvs
   );
 
   const borrowedAmount = computeBorrowedAmount(marketBorrowerInfo);
@@ -101,7 +101,7 @@ export const borrowProvideCollateralForm = ({
   const borrowLimit = computeBorrowLimit(
     overseerCollaterals,
     oraclePrices,
-    bAssetLtvs,
+    bAssetLtvs
   );
 
   const currentLtv = computeLtv(borrowLimit, borrowedAmount);
@@ -131,22 +131,22 @@ export const borrowProvideCollateralForm = ({
     const amount =
       depositAmount.length > 0
         ? microfy(depositAmount, collateral.decimals)
-        : ('0' as u<bAsset>);
+        : ("0" as u<bAsset>);
 
     const nextLtv = computeProvideCollateralNextLtv(
       amount,
       currentLtv,
-      amountToLtv,
+      amountToLtv
     );
 
     const borrowLimit = computeProvideCollateralBorrowLimit(
       amount,
-      amountToBorrowLimit,
+      amountToBorrowLimit
     );
 
     const invalidDepositAmount = validateDepositAmount(
       amount,
-      userBAssetBalance,
+      userBAssetBalance
     );
 
     const availablePost =

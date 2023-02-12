@@ -13,10 +13,10 @@ import {
   CollateralAmount,
   UST,
   LSD,
-} from '@anchor-protocol/types';
-import Big from 'big.js';
-import { RegisteredLSDs } from 'env';
-import { WhitelistCollateral } from 'queries';
+} from "@anchor-protocol/types";
+import Big from "big.js";
+import { RegisteredLSDs } from "env";
+import { WhitelistCollateral } from "queries";
 
 /**
  * You can cast the token values as nominal types
@@ -38,20 +38,20 @@ export interface AnchorTokenBalances {
   uAncUstLP: u<AncUstLP>;
   uaLunaLunaLP: u<aLunaLunaLP>;
   uLSDs: {
-    [key in RegisteredLSDs]: string
-  }
+    [key in RegisteredLSDs]: string;
+  };
 }
 
 export const DefaultAnchorTokenBalances = {
-  uUST: '0' as u<UST>,
-  uaUST: '0' as u<aUST>,
-  uLuna: '0' as u<Luna>,
-  uaLuna: '0' as u<aLuna>,
-  uEth: '0' as u<Eth>,
-  ubEth: '0' as u<bEth>,
-  uANC: '0' as u<ANC>,
-  uAncUstLP: '0' as u<AncUstLP>,
-  uaLunaLunaLP: '0' as u<aLunaLunaLP>,
+  uUST: "0" as u<UST>,
+  uaUST: "0" as u<aUST>,
+  uLuna: "0" as u<Luna>,
+  uaLuna: "0" as u<aLuna>,
+  uEth: "0" as u<Eth>,
+  ubEth: "0" as u<bEth>,
+  uANC: "0" as u<ANC>,
+  uAncUstLP: "0" as u<AncUstLP>,
+  uaLunaLunaLP: "0" as u<aLunaLunaLP>,
 };
 
 export interface AnchorBalances {
@@ -60,13 +60,13 @@ export interface AnchorBalances {
   uUST: u<UST>;
 
   fetchWalletBalance: (
-    collateral?: WhitelistCollateral,
+    collateral?: WhitelistCollateral
   ) => Promise<u<CollateralAmount<Big>>>;
 }
 
 export const DefaultAnchorBalances: Partial<AnchorBalances> = {
-  uNative: '0' as u<Native>,
-  uaUST: '0' as u<aUST>,
+  uNative: "0" as u<Native>,
+  uaUST: "0" as u<aUST>,
 };
 
 /**

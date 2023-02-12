@@ -1,10 +1,10 @@
-import { EVMAddr, HumanAddr, crossAnchor } from '@anchor-protocol/types';
+import { EVMAddr, HumanAddr, crossAnchor } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface TerraAddressWasmQuery {
   terraAddress: WasmQuery<
@@ -19,7 +19,7 @@ export async function terraAddressQuery(
   nativeAddress: EVMAddr,
   nativeChain: number,
   crossAnchorContractAddr: HumanAddr,
-  queryClient: QueryClient,
+  queryClient: QueryClient
 ): Promise<TerraAddress | undefined> {
   if (!nativeAddress) {
     return undefined;

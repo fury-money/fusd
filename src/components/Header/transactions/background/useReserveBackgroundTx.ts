@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Transaction } from 'tx/evm';
-import { useBackgroundTransactions } from 'tx/evm/storage/useBackgroundTransactions';
-import { useEventListener } from 'usehooks-ts';
-import { BACKGROUND_TRANSCATION_TAB_ID } from '../BackgroundTransaction';
-import { useExecuteOnceWhen } from '../utils';
+import { useEffect, useMemo, useState } from "react";
+import { Transaction } from "tx/evm";
+import { useBackgroundTransactions } from "tx/evm/storage/useBackgroundTransactions";
+import { useEventListener } from "usehooks-ts";
+import { BACKGROUND_TRANSCATION_TAB_ID } from "../BackgroundTransaction";
+import { useExecuteOnceWhen } from "../utils";
 
 export const useReserveBackgroundTx = (tx: Transaction) => {
   // each tab attemps to "reserve" backgroundTx
@@ -17,7 +17,7 @@ export const useReserveBackgroundTx = (tx: Transaction) => {
   const { reserveBackgroundTx, unReserveBackgroundTx } =
     useBackgroundTransactions();
 
-  useEventListener('beforeunload', (e) => {
+  useEventListener("beforeunload", (e) => {
     unReserveBackgroundTx(tx);
   });
 
@@ -46,7 +46,7 @@ export const useReserveBackgroundTx = (tx: Transaction) => {
       Boolean(
         reservationTimeoutId &&
           tx.backgroundTransactionTabId &&
-          tx.backgroundTransactionTabId !== BACKGROUND_TRANSCATION_TAB_ID,
-      ),
+          tx.backgroundTransactionTabId !== BACKGROUND_TRANSCATION_TAB_ID
+      )
   );
 };

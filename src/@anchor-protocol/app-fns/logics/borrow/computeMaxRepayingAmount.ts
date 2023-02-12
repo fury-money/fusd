@@ -1,7 +1,7 @@
-import { moneyMarket, u, UST } from '@anchor-protocol/types';
-import { max } from '@libs/big-math';
-import big, { Big, BigSource } from 'big.js';
-import { computeRepayTotalBorrowed } from './computeRepayTotalBorrowed';
+import { moneyMarket, u, UST } from "@anchor-protocol/types";
+import { max } from "@libs/big-math";
+import big, { Big, BigSource } from "big.js";
+import { computeRepayTotalBorrowed } from "./computeRepayTotalBorrowed";
 
 export function computeMaxRepayingAmount(
   marketState: moneyMarket.market.StateResponse,
@@ -9,13 +9,13 @@ export function computeMaxRepayingAmount(
   marketBorrowerInfo: moneyMarket.market.BorrowerInfoResponse,
   currentBlock: number,
   ustBalance: u<UST<BigSource>>,
-  fixedGas: u<UST<BigSource>>,
+  fixedGas: u<UST<BigSource>>
 ) {
   const totalBorrowed = computeRepayTotalBorrowed(
     marketState,
     interestModelBorrowRate,
     marketBorrowerInfo,
-    currentBlock,
+    currentBlock
   );
   return big(ustBalance).gte(totalBorrowed)
     ? totalBorrowed

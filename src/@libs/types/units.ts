@@ -1,13 +1,13 @@
-import { NominalType } from './common';
+import { NominalType } from "./common";
 
-export type Rate<T = string> = T & NominalType<'ratio'>;
+export type Rate<T = string> = T & NominalType<"ratio">;
 
-export type Percent<T = string> = T & NominalType<'percent'>;
+export type Percent<T = string> = T & NominalType<"percent">;
 
-export type Num<T = string> = T & NominalType<'number'>;
+export type Num<T = string> = T & NominalType<"number">;
 
-export type JSDateTime = number & NominalType<'jsdatetime'>;
+export type JSDateTime = number & NominalType<"jsdatetime">;
 
-export type DateTime = number & NominalType<'datetime'>;
+export type DateTime = number & NominalType<"datetime">;
 
-export type ISODateFormat = string & NominalType<'isodateformat'>;
+export type ISODateFormat = string & NominalType<"isodateformat">;

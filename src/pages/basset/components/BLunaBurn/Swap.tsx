@@ -146,7 +146,7 @@ export function Component({
   // ---------------------------------------------
   const updateBurnAmount = useCallback(
     async (nextBurnAmount: string, maxSpread: number) => {
-      if (nextBurnAmount.trim().length === 0) {
+      if (nextBurnAmount.trim().length === 0 || !queryClient) {
         setGetAmount('' as Luna);
         setBurnAmount('' as aLuna);
 
@@ -200,7 +200,7 @@ export function Component({
 
   const updateGetAmount = useCallback(
     (nextGetAmount: string, maxSpread: number) => {
-      if (nextGetAmount.trim().length === 0) {
+      if (nextGetAmount.trim().length === 0 || !queryClient) {
         setBurnAmount('' as aLuna);
         setGetAmount('' as Luna);
 

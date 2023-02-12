@@ -1,12 +1,12 @@
-import { ancAncUstLpWithdrawTx } from '@anchor-protocol/app-fns';
-import { AncUstLP } from '@anchor-protocol/types';
-import { useFixedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { ancAncUstLpWithdrawTx } from "@anchor-protocol/app-fns";
+import { AncUstLP } from "@anchor-protocol/types";
+import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface AncAncUstLpWithdrawTxParams {
   lpAmount: AncUstLP;
@@ -31,9 +31,10 @@ export function useAncAncUstLpWithdrawTx() {
         !availablePost ||
         !connected ||
         !connectedWallet ||
-        !terraWalletAddress
+        !terraWalletAddress ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return ancAncUstLpWithdrawTx({
@@ -72,7 +73,7 @@ export function useAncAncUstLpWithdrawTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

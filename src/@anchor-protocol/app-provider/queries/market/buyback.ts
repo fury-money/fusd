@@ -1,18 +1,20 @@
 import {
   MarketBuybackData,
   marketBuybackQuery,
-} from '@anchor-protocol/app-fns';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+} from "@anchor-protocol/app-fns";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
-const queryFn = createSimpleQueryFn((endpoint: string, time: '72hrs' | 'total') => {
-  return marketBuybackQuery({ endpoint, time });
-});
+const queryFn = createSimpleQueryFn(
+  (endpoint: string, time: "72hrs" | "total") => {
+    return marketBuybackQuery({ endpoint, time });
+  }
+);
 
 export function useMarketBuybackQuery(
-  time: '72hrs' | 'total',
+  time: "72hrs" | "total"
 ): UseQueryResult<MarketBuybackData | undefined> {
   const { queryErrorReporter, indexerApiEndpoint } = useAnchorWebapp();
 
@@ -23,7 +25,7 @@ export function useMarketBuybackQuery(
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 
   return result;

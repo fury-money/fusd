@@ -1,6 +1,3 @@
-
-
-
 export const markdownString = String.raw`# Cavern Protocol WhitePaper[^3]
 
 Based on the money-market principles of Anchor Protocol and with slight added differences, 
@@ -177,4 +174,4 @@ Cavern Protocol is building a decentralized platform on top of existing software
 
 [^3]: This file was uploaded on Terra's blockchain ${"`"}phoenix-1${"`"} main-net at address ${"`"}Cavern Protocol Documents NFT${"`"}. All subsequent documents issued by Cavern Protocol will be located or linked from this address. 
 [^1]: See [DefiLlama for more details](https://defillama.com/protocol/anchor)
-[^2]: We have to keep in mind that, the higher the utilization ratio, the higher the actual deposit APR.`
+[^2]: We have to keep in mind that, the higher the utilization ratio, the higher the actual deposit APR.`;

@@ -1,11 +1,11 @@
 import {
   MarketCollateralsData,
   marketCollateralsQuery,
-} from '@anchor-protocol/app-fns';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+} from "@anchor-protocol/app-fns";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
 const queryFn = createSimpleQueryFn((endpoint: string) => {
   return marketCollateralsQuery({ endpoint });
@@ -23,7 +23,7 @@ export function useMarketCollateralsQuery(): UseQueryResult<
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 
   return result;

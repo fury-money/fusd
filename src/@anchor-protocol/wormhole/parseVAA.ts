@@ -1,4 +1,4 @@
-import Big from 'big.js';
+import Big from "big.js";
 
 const skipHeader = (buffer: Buffer): Buffer => {
   const VERSION_LEN = 1;
@@ -23,7 +23,7 @@ const parseVAA = (vaaBytes: Uint8Array): VAA => {
   const timestamp = buffer.readUInt32BE();
 
   const sequence = new Big(
-    (buffer.readUInt32BE(42) >> 32) | buffer.readUInt32BE(46),
+    (buffer.readUInt32BE(42) >> 32) | buffer.readUInt32BE(46)
   );
 
   return {

@@ -1,4 +1,4 @@
-import c from 'color';
+import c from "color";
 
 /**
  * @see https://neumorphism.io/#7380c9
@@ -35,14 +35,14 @@ interface NeumorphismValues {
 export function boxShadowColor({
   intensity,
   color,
-}: Pick<NeumorphismValues, 'intensity'> & { color: string }): string {
+}: Pick<NeumorphismValues, "intensity"> & { color: string }): string {
   return c(color).darken(intensity).string();
 }
 
 export function boxLightColor({
   intensity,
   color,
-}: Pick<NeumorphismValues, 'intensity'> & { color: string }): string {
+}: Pick<NeumorphismValues, "intensity"> & { color: string }): string {
   return c(color)
     .lighten(intensity + 0.15)
     .saturate(-0.2)
@@ -181,7 +181,7 @@ export function softPressed({
 export function rulerLightColor({
   intensity,
   color,
-}: Pick<NeumorphismValues, 'intensity'> & { color: string }): string {
+}: Pick<NeumorphismValues, "intensity"> & { color: string }): string {
   const ratio = c(color).isLight() ? intensity * 2 : intensity;
   return c(color).lighten(ratio).string();
 }
@@ -189,7 +189,7 @@ export function rulerLightColor({
 export function rulerShadowColor({
   intensity,
   color,
-}: Pick<NeumorphismValues, 'intensity'> & { color: string }) {
+}: Pick<NeumorphismValues, "intensity"> & { color: string }) {
   const ratio = c(color).isLight() ? intensity * 0.7 : intensity * 1.2;
   return c(color).darken(ratio).string();
 }
@@ -197,10 +197,10 @@ export function rulerShadowColor({
 export function horizontalRuler({
   intensity,
   ...colors
-}: Pick<NeumorphismValues, 'intensity'> &
+}: Pick<NeumorphismValues, "intensity"> &
   ({ color: string } | { topColor: string; bottomColor: string })) {
   const { topColor, bottomColor } =
-    'topColor' in colors
+    "topColor" in colors
       ? colors
       : {
           topColor: colors.color,
@@ -221,10 +221,10 @@ export function horizontalRuler({
 export function verticalRuler({
   intensity,
   ...colors
-}: Pick<NeumorphismValues, 'intensity'> &
+}: Pick<NeumorphismValues, "intensity"> &
   ({ color: string } | { leftColor: string; rightColor: string })) {
   const { leftColor, rightColor } =
-    'leftColor' in colors
+    "leftColor" in colors
       ? colors
       : {
           leftColor: colors.color,
@@ -247,14 +247,14 @@ export function horizontalDashedRuler({
   dash = 4,
   gap = 4,
   ...colors
-}: Pick<NeumorphismValues, 'intensity'> & { dash?: number; gap?: number } & (
+}: Pick<NeumorphismValues, "intensity"> & { dash?: number; gap?: number } & (
     | { color: string }
     | { topColor: string; bottomColor: string }
   )) {
   const dashPercentage = (dash / (dash + gap)) * 100;
 
   const { topColor, bottomColor } =
-    'topColor' in colors
+    "topColor" in colors
       ? colors
       : {
           topColor: colors.color,
@@ -274,7 +274,7 @@ export function horizontalDashedRuler({
     {
       intensity,
       color: bottomColor,
-    },
+    }
   )} ${dashPercentage}%, rgba(255, 255, 255, 0) 0%);
     background-position: top, bottom;
     background-size: ${dash + gap}px 1px;

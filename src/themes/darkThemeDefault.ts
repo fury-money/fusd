@@ -1,39 +1,39 @@
-import { muiThemeBase } from '@libs/neumorphism-ui/themes/muiThemeBase';
-import { createTheme } from '@mui/material/styles';
+import { muiThemeBase } from "@libs/neumorphism-ui/themes/muiThemeBase";
+import { createTheme } from "@mui/material/styles";
 
 // TERRA THEME TO FILL IN VARIABLE THEME
-const GREEN_100 = '#15cc93';
-const GREEN_200 = '#4BDB4B';
-const GREEN_300 = 'rgba(75, 219, 75, 0.1)';
+const GREEN_100 = "#15cc93";
+const GREEN_200 = "#4BDB4B";
+const GREEN_300 = "rgba(75, 219, 75, 0.1)";
 //const GREEN_400 = '#285e28';
-const GREEN_500 = '#36a337';
-const GREEN_600 = '#2d832d';
-const GREEN_700 = '#246d25';
-const GREEN_800 = '#174f1a';
-const GREEN_900 = '#0e3311';
-const RED_100 = '#e95979';
-const YELLOW_100 = '#ff9a63';
-const GRAY_200 = '#101010';
-const GRAY_0 = '#7B7B7B';
+const GREEN_500 = "#36a337";
+const GREEN_600 = "#2d832d";
+const GREEN_700 = "#246d25";
+const GREEN_800 = "#174f1a";
+const GREEN_900 = "#0e3311";
+const RED_100 = "#e95979";
+const YELLOW_100 = "#ff9a63";
+const GRAY_200 = "#101010";
+const GRAY_0 = "#7B7B7B";
 
 // DEFAULT DARK THEME VARIABLES FOR CONSTANTS
-export const DARK_BLUE_100 = '#1b1e31';
-export const DARK_BLUE_200 = '#1f2237';
-export const DARK_BLUE_300 = '#363c5f';
-export const DARK_BLUE_400 = 'rgba(37, 117, 164, 0.05)';
-export const DARK_BLUE_500 = '#404872';
-export const DARK_BLUE_600 = '#3867c4';
-export const DARK_BLUE_700 = '#3e9bba';
-export const DARK_BLUE_800 = '#363d5e';
+export const DARK_BLUE_100 = "#1b1e31";
+export const DARK_BLUE_200 = "#1f2237";
+export const DARK_BLUE_300 = "#363c5f";
+export const DARK_BLUE_400 = "rgba(37, 117, 164, 0.05)";
+export const DARK_BLUE_500 = "#404872";
+export const DARK_BLUE_600 = "#3867c4";
+export const DARK_BLUE_700 = "#3e9bba";
+export const DARK_BLUE_800 = "#363d5e";
 
-export const DARK_RED_200 = '#ac2b45';
-export const DARK_YELLOW_200 = '#d69f34';
-export const DARK_GRAY_100 = 'rgba(255, 255, 255, 0.5)';
-export const DARK_GRAY_300 = 'rgba(0, 0, 0, 0.3)';
-export const DARK_GRAY_400 = 'rgba(255, 255, 255, 0.2)';
+export const DARK_RED_200 = "#ac2b45";
+export const DARK_YELLOW_200 = "#d69f34";
+export const DARK_GRAY_100 = "rgba(255, 255, 255, 0.5)";
+export const DARK_GRAY_300 = "rgba(0, 0, 0, 0.3)";
+export const DARK_GRAY_400 = "rgba(255, 255, 255, 0.2)";
 
-export const BLACK = '#000000';
-export const WHITE = '#FFFFFF';
+export const BLACK = "#000000";
+export const WHITE = "#FFFFFF";
 
 export const defaultDarkTheme = {
   ...createTheme({
@@ -90,10 +90,10 @@ export const defaultDarkTheme = {
       opacity: 0.15,
     },
   },
-  palette_type: 'dark',
+  palette_type: "dark",
   MuiTableRow: {
     root: {
-      '&:last-child td': {
+      "&:last-child td": {
         borderBottom: 0,
       },
     },

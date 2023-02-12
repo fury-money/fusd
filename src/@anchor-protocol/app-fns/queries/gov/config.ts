@@ -1,10 +1,10 @@
-import { anchorToken, HumanAddr } from '@anchor-protocol/types';
+import { anchorToken, HumanAddr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface GovConfigWasmQuery {
   govConfig: WasmQuery<anchorToken.gov.Config, anchorToken.gov.ConfigResponse>;
@@ -14,7 +14,7 @@ export type GovConfig = WasmQueryData<GovConfigWasmQuery>;
 
 export async function govConfigQuery(
   queryClient: QueryClient,
-  govContract: HumanAddr,
+  govContract: HumanAddr
 ): Promise<GovConfig> {
   return wasmFetch<GovConfigWasmQuery>({
     ...queryClient,

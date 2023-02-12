@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from "react";
 
 export const shallowEqual =
   (keys: string[]) =>
@@ -25,7 +25,7 @@ export type Map<T, R> = {
 };
 
 export function createMap<T extends {}, R extends {}>(
-  map: Map<T, R>,
+  map: Map<T, R>
 ): Map<T, R> {
   return map;
 }
@@ -33,7 +33,7 @@ export function createMap<T extends {}, R extends {}>(
 export function useMap<T extends {}, R extends {}>(
   data: T | null | undefined,
   map: Map<T, R>,
-  { ignoreNullData = true }: { ignoreNullData?: boolean } = {},
+  { ignoreNullData = true }: { ignoreNullData?: boolean } = {}
 ): Mapped<T, R> {
   const savedMap = useRef(map);
 
@@ -78,7 +78,7 @@ export function useMap<T extends {}, R extends {}>(
 
 export function map<T extends {}, R extends {}>(
   data: T,
-  map: Map<T, R>,
+  map: Map<T, R>
 ): Mapped<T, R> {
   const keys = Object.keys(map) as (keyof R)[];
 

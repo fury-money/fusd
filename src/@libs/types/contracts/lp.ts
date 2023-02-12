@@ -1,4 +1,4 @@
-import { HumanAddr } from '@libs/types';
+import { HumanAddr } from "@libs/types";
 
 export namespace lp {
   export interface Minter {

@@ -1,9 +1,9 @@
-import type { bAsset, u } from '@anchor-protocol/types';
-import big, { BigSource } from 'big.js';
+import type { bAsset, u } from "@anchor-protocol/types";
+import big, { BigSource } from "big.js";
 
 export function validateRedeemAmount(
   redeemAmount: u<bAsset>,
-  withdrawableMaxAmount: u<bAsset<BigSource>> | undefined,
+  withdrawableMaxAmount: u<bAsset<BigSource>> | undefined
 ): string | undefined {
   if (redeemAmount.length === 0 || !withdrawableMaxAmount) {
     return undefined;

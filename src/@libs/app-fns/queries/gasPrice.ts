@@ -1,9 +1,9 @@
-import { GasPrice } from '../models/gasPrice';
+import { GasPrice } from "../models/gasPrice";
 
 let cache: GasPrice | null = null;
 
 export async function gasPriceQuery(
-  gasPriceEndpoint: string,
+  gasPriceEndpoint: string
 ): Promise<GasPrice> {
   if (cache) {
     return cache;

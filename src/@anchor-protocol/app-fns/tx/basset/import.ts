@@ -1,5 +1,5 @@
-import { exportCW20Decimals } from '@anchor-protocol/app-fns/functions/cw20Decimals';
-import { BAssetInfoWithDisplay } from '@anchor-protocol/app-provider';
+import { exportCW20Decimals } from "@anchor-protocol/app-fns/functions/cw20Decimals";
+import { BAssetInfoWithDisplay } from "@anchor-protocol/app-provider";
 import {
   basset,
   bAsset,
@@ -11,14 +11,14 @@ import {
   Token,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -26,18 +26,18 @@ import {
   _postTx,
   createHookMsg,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { formatTokenInput, formatNumeric } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { formatTokenInput, formatNumeric } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { Observable } from "rxjs";
 
 export function bAssetImportTx($: {
   walletAddr: HumanAddr;
@@ -65,7 +65,7 @@ export function bAssetImportTx($: {
             contract: $.converterAddr,
             amount: exportCW20Decimals<bAsset>(
               formatTokenInput($.wormholeTokenAmount) as u<bAsset>,
-              $.wormholeTokenInfo,
+              $.wormholeTokenInfo
             ),
             msg: createHookMsg({
               convert_wormhole_to_anchor: {},
@@ -73,7 +73,7 @@ export function bAssetImportTx($: {
           },
         } as cw20.Send<bAsset>),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -85,10 +85,10 @@ export function bAssetImportTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
@@ -100,21 +100,21 @@ export function bAssetImportTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             amount && {
-              name: 'Provided amount',
+              name: "Provided amount",
               value:
                 formatNumeric(
                   amount,
-                  $.bAssetInfo.tokenDisplay.wormhole.decimals,
+                  $.bAssetInfo.tokenDisplay.wormhole.decimals
                 ) + ` ${$.bAssetInfo.tokenDisplay.wormhole.symbol}`,
             },
             mintedAmount && {
-              name: 'Converted amount',
+              name: "Converted amount",
               value:
                 formatNumeric(mintedAmount) +
                 ` ${$.bAssetInfo.tokenDisplay.anchor.symbol}`,
             },
             {
-              name: 'Exchange rate',
+              name: "Exchange rate",
               value: `1 ${$.bAssetInfo.tokenDisplay.wormhole.symbol} per ${$.bAssetInfo.tokenDisplay.anchor.symbol}`,
             },
             helper.txHashReceipt(),
@@ -124,6 +124,6 @@ export function bAssetImportTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

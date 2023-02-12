@@ -1,20 +1,20 @@
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { TxResultRendering } from '@libs/app-fns';
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { TxResultRendering } from "@libs/app-fns";
 import {
   EVM_ANCHOR_TX_REFETCH_MAP,
   refetchQueryByTxKind,
   TxKind,
   TX_GAS_LIMIT,
-} from './utils';
-import { Subject } from 'rxjs';
-import { useCallback } from 'react';
-import { ContractReceipt } from 'ethers';
-import { BackgroundTxResult, useBackgroundTx } from './useBackgroundTx';
-import { TxEvent } from './useTx';
-import { OneWayTxResponse } from '@anchor-protocol/crossanchor-sdk';
-import { useRefetchQueries } from '@libs/app-provider';
-import { EvmTxProgressWriter } from './EvmTxProgressWriter';
+} from "./utils";
+import { Subject } from "rxjs";
+import { useCallback } from "react";
+import { ContractReceipt } from "ethers";
+import { BackgroundTxResult, useBackgroundTx } from "./useBackgroundTx";
+import { TxEvent } from "./useTx";
+import { OneWayTxResponse } from "@anchor-protocol/crossanchor-sdk";
+import { useRefetchQueries } from "@libs/app-provider";
+import { EvmTxProgressWriter } from "./EvmTxProgressWriter";
 
 type ClaimRewardsTxResult = OneWayTxResponse<ContractReceipt> | null;
 type ClaimRewardsTxRender = TxResultRendering<ClaimRewardsTxResult>;
@@ -32,7 +32,7 @@ export function useClaimRewardsTx():
     async (
       txParams: ClaimRewardsTxParams,
       renderTxResults: Subject<ClaimRewardsTxRender>,
-      txEvents: Subject<TxEvent<ClaimRewardsTxParams>>,
+      txEvents: Subject<TxEvent<ClaimRewardsTxParams>>
     ) => {
       const writer = new EvmTxProgressWriter(renderTxResults, connectionType);
       writer.claimRewards();
@@ -45,7 +45,7 @@ export function useClaimRewardsTx():
           (event) => {
             writer.claimRewards(event);
             txEvents.next({ event, txParams });
-          },
+          }
         );
 
         refetchQueries(refetchQueryByTxKind(TxKind.ClaimRewards));
@@ -54,7 +54,7 @@ export function useClaimRewardsTx():
         writer.timer.stop();
       }
     },
-    [address, connectionType, xAnchor, refetchQueries],
+    [address, connectionType, xAnchor, refetchQueries]
   );
 
   const persistedTxResult = useBackgroundTx<

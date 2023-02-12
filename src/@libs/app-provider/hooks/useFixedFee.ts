@@ -1,7 +1,7 @@
-import { computeGasToLuna } from '@anchor-protocol/app-fns';
-import { useDeploymentTarget } from '@anchor-protocol/app-provider';
-import { useApp } from '@libs/app-provider';
-import { Luna, u } from '@libs/types';
+import { computeGasToLuna } from "@anchor-protocol/app-fns";
+import { useDeploymentTarget } from "@anchor-protocol/app-provider";
+import { useApp } from "@libs/app-provider";
+import { Luna, u } from "@libs/types";
 
 export function useFixedFee(): u<Luna> {
   const {
@@ -13,5 +13,5 @@ export function useFixedFee(): u<Luna> {
     return computeGasToLuna(gasPrice, constants.fixedGas);
   }
 
-  return '0' as u<Luna>;
+  return "0" as u<Luna>;
 }

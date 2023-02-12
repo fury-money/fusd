@@ -1,18 +1,18 @@
-import { useQuery, UseQueryResult } from 'react-query';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { createQueryFn, createSimpleQueryFn } from '@libs/react-query-utils';
-import { ERC20Addr, EVMAddr, Token, u } from '@libs/types';
-import { useAccount } from 'contexts/account';
-import { useApp } from '../../contexts/app';
-import { EVM_QUERY_KEY, REFETCH_INTERVAL } from '../../env';
-import { erc2020BalanceQuery } from '../../../app-fns/queries/erc20/balanceOf';
-import { useEvmCrossAnchorSdk } from 'crossanchor';
+import { useQuery, UseQueryResult } from "react-query";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { createQueryFn, createSimpleQueryFn } from "@libs/react-query-utils";
+import { ERC20Addr, EVMAddr, Token, u } from "@libs/types";
+import { useAccount } from "contexts/account";
+import { useApp } from "../../contexts/app";
+import { EVM_QUERY_KEY, REFETCH_INTERVAL } from "../../env";
+import { erc2020BalanceQuery } from "../../../app-fns/queries/erc20/balanceOf";
+import { useEvmCrossAnchorSdk } from "crossanchor";
 
 const queryFn = createSimpleQueryFn(erc2020BalanceQuery);
 
 export function useERC20BalanceQuery<T extends Token>(
   tokenAddress: string | undefined,
-  walletAddress: EVMAddr | undefined,
+  walletAddress: EVMAddr | undefined
 ): UseQueryResult<T | undefined> {
   const { queryErrorReporter } = useApp();
 
@@ -27,7 +27,7 @@ export function useERC20BalanceQuery<T extends Token>(
       walletAddress ?? nativeWalletAddress,
       (
         tokenAddress: ERC20Addr,
-        walletAddress: EVMAddr,
+        walletAddress: EVMAddr
       ): Promise<string> | undefined => {
         if (!provider) {
           return;
@@ -41,18 +41,18 @@ export function useERC20BalanceQuery<T extends Token>(
       refetchInterval: REFETCH_INTERVAL,
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 }
 
 export function useERC20Balance<T extends Token>(
   tokenAddress: string | undefined,
-  walletAddress?: EVMAddr | undefined,
+  walletAddress?: EVMAddr | undefined
 ): u<T> {
   const { data: balance } = useERC20BalanceQuery<T>(
     tokenAddress,
-    walletAddress,
+    walletAddress
   );
 
-  return balance ? (balance as u<T>) : ('0' as u<T>);
+  return balance ? (balance as u<T>) : ("0" as u<T>);
 }

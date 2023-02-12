@@ -1,8 +1,8 @@
-import { NeumorphismTheme } from './Theme';
-import { createGlobalStyle, css } from 'styled-components';
+import { NeumorphismTheme } from "./Theme";
+import { createGlobalStyle, css } from "styled-components";
 
 function bodyStyleIfThemeExists(theme?: NeumorphismTheme): string {
-  if (!theme) return '';
+  if (!theme) return "";
 
   const styles = [];
 
@@ -14,7 +14,7 @@ function bodyStyleIfThemeExists(theme?: NeumorphismTheme): string {
     styles.push(`color: ${theme.textColor};`);
   }
 
-  return `body { ${styles.join('')} }`;
+  return `body { ${styles.join("")} }`;
 }
 
 export const globalStyle = css`
@@ -26,11 +26,11 @@ export const globalStyle = css`
   ${({ theme }) => bodyStyleIfThemeExists(theme)};
 
   html {
-    font-family: 'Gotham', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    font-family: "Gotham", BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
       sans-serif;
     font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
+    font-feature-settings: "tnum";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 16px;
@@ -40,48 +40,49 @@ export const globalStyle = css`
     box-sizing: border-box;
   }
 
-  html, body, #root, .App {
-    background-color: ${({ theme }) => theme.backgroundColor} !important; 
+  html,
+  body,
+  #root,
+  .App {
+    background-color: ${({ theme }) => theme.backgroundColor} !important;
   }
-
 
   *,
   *::before,
   *::after {
     box-sizing: border-box;
     margin: 0;
-    font-family: 'Gotham', BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    font-family: "Gotham", BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+      "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
       sans-serif;
     font-variant-numeric: tabular-nums;
-    font-feature-settings: 'tnum';
+    font-feature-settings: "tnum";
   }
 
   *::-webkit-scrollbar {
     width: 0.4em;
     height: 0.3em;
-    background-color: ${({theme})=> theme.backgroundColor};
+    background-color: ${({ theme }) => theme.backgroundColor};
   }
 
   *::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.00);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
     border-radius: 10px;
-    background-color: ${({theme})=> theme.backgroundColor};
+    background-color: ${({ theme }) => theme.backgroundColor};
   }
 
-
   *::-webkit-scrollbar-track:hover {
-    background-color: ${({theme})=> theme.skeleton.backgroundColor};
+    background-color: ${({ theme }) => theme.skeleton.backgroundColor};
   }
 
   *::-webkit-scrollbar-thumb {
     transition: background-color 0.5s ease;
-    background-color: ${({theme})=> theme.skeleton.backgroundColor};
+    background-color: ${({ theme }) => theme.skeleton.backgroundColor};
     border-radius: 10px;
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    background-color: ${({theme})=> theme.label.borderColor};
+    background-color: ${({ theme }) => theme.label.borderColor};
   }
 
   input::-webkit-outer-spin-button,
@@ -90,7 +91,7 @@ export const globalStyle = css`
     margin: 0;
   }
 
-  input[type='number'] {
+  input[type="number"] {
     -moz-appearance: textfield;
   }
 `;

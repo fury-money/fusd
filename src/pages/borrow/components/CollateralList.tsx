@@ -27,29 +27,6 @@ import { useCollaterals } from './useCollaterals';
 import { useProvideCollateralDialog } from './useProvideCollateralDialog';
 import { useRedeemCollateralDialog } from './useRedeemCollateralDialog';
 
-export const renderBuyLink = (collateral: WhitelistCollateral) => {
-  // TODO: think of a sustainable way to do this
-  const href =
-    collateral.symbol === 'bETH'
-      ? 'https://anchor.lido.fi/'
-      : collateral.symbol === 'bATOM'
-      ? 'https://app.pstake.finance/anchor'
-      : null;
-
-  return (
-    href && (
-      <BuyLink
-        href={href}
-        target="_blank"
-        rel="noreferrer"
-        style={{ transform: 'translateY(-5px)' }}
-      >
-        GET <Launch />
-      </BuyLink>
-    )
-  );
-};
-
 function useQuery() {
   const { search } = useLocation();
   return React.useMemo(() => new URLSearchParams(search), [search]);
@@ -168,7 +145,7 @@ export function CollateralList(props: UIElementProps) {
                   </i>
                   <div>
                     <div className="coin">
-                      {collateral.symbol} {renderBuyLink(collateral)}
+                      {collateral.symbol}
                     </div>
                     <p className="name">{collateral.name}</p>
                   </div>

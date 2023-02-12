@@ -1,10 +1,10 @@
-import { aluna, HumanAddr } from '@anchor-protocol/types';
+import { aluna, HumanAddr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface WithdrawableAmountWasmQuery {
   withdrawableUnbonded: WasmQuery<
@@ -27,7 +27,7 @@ type BLunaWithdrawableAmountWasmQuery = WithdrawableAmountWasmQuery &
 
 export type BLunaWithdrawableAmount = Omit<
   WasmQueryData<BLunaWithdrawableAmountWasmQuery>,
-  'parameters'
+  "parameters"
 > & {
   unbondedRequestsStartFrom: number;
   parameters?: aluna.hub.ParametersResponse;
@@ -36,7 +36,7 @@ export type BLunaWithdrawableAmount = Omit<
 export async function aLunaWithdrawableAmountQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  aLunaHubContract: HumanAddr,
+  aLunaHubContract: HumanAddr
 ): Promise<BLunaWithdrawableAmount | undefined> {
   if (!walletAddr) {
     return undefined;
@@ -71,7 +71,7 @@ export async function aLunaWithdrawableAmountQuery(
     unbondedRequests.requests.length > 0
       ? Math.max(
           0,
-          Math.min(...unbondedRequests.requests.map(([index]) => index)) - 1,
+          Math.min(...unbondedRequests.requests.map(([index]) => index)) - 1
         )
       : 0;
 

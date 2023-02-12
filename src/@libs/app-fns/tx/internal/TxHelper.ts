@@ -1,10 +1,10 @@
-import { formatUToken } from '@libs/formatter';
-import { Luna, u } from '@libs/types';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { CreateTxOptions } from '@terra-money/terra.js';
-import { BigSource } from 'big.js';
-import { TxReceipt, TxResultRendering, TxStreamPhase } from '../../models/tx';
-import { getTransactionDetailUrl } from 'utils/terrascope';
+import { formatUToken } from "@libs/formatter";
+import { Luna, u } from "@libs/types";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { CreateTxOptions } from "@terra-money/terra.js";
+import { BigSource } from "big.js";
+import { TxReceipt, TxResultRendering, TxStreamPhase } from "../../models/tx";
+import { getTransactionDetailUrl } from "utils/terrascope";
 
 export class TxHelper {
   private _savedTx: CreateTxOptions | null = null;
@@ -14,7 +14,7 @@ export class TxHelper {
 
   get savedTx(): CreateTxOptions {
     if (!this._savedTx) {
-      throw new Error('Saved Tx not found');
+      throw new Error("Saved Tx not found");
     }
     return this._savedTx;
   }
@@ -36,11 +36,11 @@ export class TxHelper {
     const txhash = this._savedTxResult.result.txhash;
     const html = `<a href="${getTransactionDetailUrl(
       chainID,
-      txhash,
+      txhash
     )}" target="_blank" rel="noreferrer">${truncate(txhash)}</a>`;
 
     return {
-      name: 'Tx Hash',
+      name: "Tx Hash",
       value: {
         html,
       },
@@ -49,8 +49,8 @@ export class TxHelper {
 
   txFeeReceipt = (txFee?: u<Luna<BigSource>>): TxReceipt => {
     return {
-      name: 'Tx Fee',
-      value: formatUToken(txFee ?? this.$.txFee) + ' Luna',
+      name: "Tx Fee",
+      value: formatUToken(txFee ?? this.$.txFee) + " Luna",
     };
   };
 
@@ -65,25 +65,25 @@ export class TxHelper {
   };
 
   failedToFindRawLog = (): TxResultRendering => {
-    return this.failedToCreateReceipt(new Error('Undefined RawLog'));
+    return this.failedToCreateReceipt(new Error("Undefined RawLog"));
   };
 
   failedToFindEvents = (...events: string[]): TxResultRendering => {
     return this.failedToCreateReceipt(
-      new Error(`Undefined events "${events.join(', ')}"`),
+      new Error(`Undefined events "${events.join(", ")}"`)
     );
   };
 
   failedToParseTxResult = (): TxResultRendering => {
-    return this.failedToCreateReceipt(new Error('Failed to parse TxResult'));
+    return this.failedToCreateReceipt(new Error("Failed to parse TxResult"));
   };
 }
 
 function truncate(
-  text: string = '',
-  [h, t]: [number, number] = [6, 6],
+  text: string = "",
+  [h, t]: [number, number] = [6, 6]
 ): string {
   const head = text.slice(0, h);
   const tail = text.slice(-1 * t, text.length);
-  return text.length > h + t ? [head, tail].join('...') : text;
+  return text.length > h + t ? [head, tail].join("...") : text;
 }

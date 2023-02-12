@@ -1,19 +1,19 @@
-import { CrossChainTxResponse } from '@anchor-protocol/crossanchor-sdk';
-import { TxResultRendering } from '@libs/app-fns';
-import { useRefetchQueries } from '@libs/app-provider';
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { ContractReceipt } from 'ethers';
-import { useCallback } from 'react';
-import { Subject } from 'rxjs';
-import { Transaction, useTransactions } from './storage/useTransactions';
-import { BackgroundTxResult, useBackgroundTx } from './useBackgroundTx';
-import { TxEvent } from './useTx';
+import { CrossChainTxResponse } from "@anchor-protocol/crossanchor-sdk";
+import { TxResultRendering } from "@libs/app-fns";
+import { useRefetchQueries } from "@libs/app-provider";
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { ContractReceipt } from "ethers";
+import { useCallback } from "react";
+import { Subject } from "rxjs";
+import { Transaction, useTransactions } from "./storage/useTransactions";
+import { BackgroundTxResult, useBackgroundTx } from "./useBackgroundTx";
+import { TxEvent } from "./useTx";
 import {
   errorContains,
   EVM_ANCHOR_TX_REFETCH_MAP,
   refetchQueryByTxKind,
   TxError,
-} from './utils';
+} from "./utils";
 
 export type ResumeTxResult = CrossChainTxResponse<ContractReceipt> | null;
 export type ResumeTxRender = TxResultRendering<ResumeTxResult>;
@@ -21,7 +21,7 @@ export type ResumeTxRender = TxResultRendering<ResumeTxResult>;
 export interface ResumeTxParams {}
 
 export const useResumeTx = (
-  tx: Transaction,
+  tx: Transaction
 ): BackgroundTxResult<ResumeTxParams, ResumeTxResult> | undefined => {
   const xAnchor = useEvmCrossAnchorSdk();
   const { removeTransaction } = useTransactions();
@@ -31,7 +31,7 @@ export const useResumeTx = (
     async (
       txParams: ResumeTxParams,
       _renderTxResults: Subject<ResumeTxRender>,
-      txEvents: Subject<TxEvent<ResumeTxParams>>,
+      txEvents: Subject<TxEvent<ResumeTxParams>>
     ) => {
       try {
         const result = await xAnchor.restoreTx(tx.txHash, (event) => {
@@ -49,7 +49,7 @@ export const useResumeTx = (
         throw error;
       }
     },
-    [xAnchor, tx.txHash, refetchQueries, tx.display.txKind, removeTransaction],
+    [xAnchor, tx.txHash, refetchQueries, tx.display.txKind, removeTransaction]
   );
 
   const displayTx = useCallback(() => tx.display, [tx.display]);
@@ -59,7 +59,7 @@ export const useResumeTx = (
     parseTx,
     null,
     displayTx,
-    tx,
+    tx
   );
 
   return persistedTxResult;

@@ -1,10 +1,10 @@
-import { aluna, HumanAddr } from '@anchor-protocol/types';
+import { aluna, HumanAddr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface BLunaClaimableRewardsWasmQuery {
   rewardState: WasmQuery<aluna.reward.State, aluna.reward.StateResponse>;
@@ -17,7 +17,7 @@ export type BLunaClaimableRewards =
 export async function aLunaClaimableRewardsQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  bAssetRewardContract: HumanAddr,
+  bAssetRewardContract: HumanAddr
 ): Promise<BLunaClaimableRewards | undefined> {
   if (!walletAddr) {
     return undefined;

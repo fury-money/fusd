@@ -1,7 +1,7 @@
 export enum ConnectType {
-  None = 'None',
-  MetaMask = 'MetaMask',
-  WalletConnect = 'WalletConnect',
+  None = "None",
+  MetaMask = "MetaMask",
+  WalletConnect = "WalletConnect",
 }
 
 export type Connection = {
@@ -11,9 +11,9 @@ export type Connection = {
 };
 
 export enum WalletStatus {
-  Initializing = 'initialization',
-  Connected = 'connected',
-  Disconnected = 'disconnected',
+  Initializing = "initialization",
+  Connected = "connected",
+  Disconnected = "disconnected",
 }
 
 export interface ERC20Token {

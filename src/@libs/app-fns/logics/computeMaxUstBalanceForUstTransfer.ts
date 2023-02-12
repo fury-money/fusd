@@ -1,15 +1,15 @@
-import { min } from '@libs/big-math';
-import { Luna, Rate, u, UST } from '@libs/types';
-import big, { Big, BigSource } from 'big.js';
+import { min } from "@libs/big-math";
+import { Luna, Rate, u, UST } from "@libs/types";
+import big, { Big, BigSource } from "big.js";
 
 export function computeMaxUstBalanceForUstTransfer(
   ustBalance: u<UST<BigSource>>,
   taxRate: Rate,
   maxTaxUUSD: u<Luna>,
-  fixedFee: u<Luna<BigSource>>,
+  fixedFee: u<Luna<BigSource>>
 ) {
   if (big(ustBalance).lte(0)) {
-    return big('0') as u<UST<Big>>;
+    return big("0") as u<UST<Big>>;
   }
 
   const withoutFixedGas = big(ustBalance).minus(fixedFee);

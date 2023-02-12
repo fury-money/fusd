@@ -1,5 +1,5 @@
-import { ComponentType } from 'react';
-import { ErrorBoundary } from './ErrorBoundary';
+import { ComponentType } from "react";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 let ErrorBoundaryComponent: ComponentType = ErrorBoundary;
 

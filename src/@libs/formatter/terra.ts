@@ -1,4 +1,4 @@
-import { Luna, u, UST } from '@libs/types';
+import { Luna, u, UST } from "@libs/types";
 
 export function stripUUSD(uusd: string): u<UST> {
   const amountMatch = uusd.match(/([0-9]+)ibc/);

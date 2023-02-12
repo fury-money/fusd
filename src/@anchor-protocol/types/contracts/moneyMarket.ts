@@ -1,3 +1,4 @@
+import { Tokens } from "@anchor-protocol/token-icons";
 import {
   UST,
   CW20Addr,
@@ -6,8 +7,8 @@ import {
   Num,
   Rate,
   u,
-} from '@libs/types';
-import { ANC, aToken, bAsset } from '../currencies';
+} from "@libs/types";
+import { ANC, aToken, bAsset } from "../currencies";
 
 export namespace moneyMarket {
   export namespace custody {
@@ -276,7 +277,7 @@ export namespace moneyMarket {
         distribution_model?: HumanAddr;
       };
     }
-    
+
     export interface BorrowerIncentives {
       borrower_incentives: Record<string, never>;
     }
@@ -533,7 +534,7 @@ export namespace moneyMarket {
     export interface WhitelistResponse {
       elems: Array<{
         name: string;
-        symbol: string;
+        symbol: Tokens;
         max_ltv: Rate;
         custody_contract: HumanAddr;
         collateral_token: CW20Addr;

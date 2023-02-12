@@ -1,7 +1,7 @@
-import { BAssetLtvs, computeBorrowLimit } from '@anchor-protocol/app-fns';
-import type { bAsset, CW20Addr, Rate, u } from '@anchor-protocol/types';
-import { moneyMarket } from '@anchor-protocol/types';
-import big, { Big, BigSource } from 'big.js';
+import { BAssetLtvs, computeBorrowLimit } from "@anchor-protocol/app-fns";
+import type { bAsset, CW20Addr, Rate, u } from "@anchor-protocol/types";
+import { moneyMarket } from "@anchor-protocol/types";
+import big, { Big, BigSource } from "big.js";
 
 export const computeDepositAmountToLtv =
   (
@@ -9,7 +9,7 @@ export const computeDepositAmountToLtv =
     marketBorrowerInfo: moneyMarket.market.BorrowerInfoResponse,
     overseerCollaterals: moneyMarket.overseer.CollateralsResponse,
     oraclePrices: moneyMarket.oracle.PricesResponse,
-    bAssetLtvs: BAssetLtvs,
+    bAssetLtvs: BAssetLtvs
   ) =>
   (depositAmount: u<bAsset<BigSource>>): Rate<Big> => {
     // calculate the new borrow limit taking into account the new deposit amount
@@ -17,7 +17,7 @@ export const computeDepositAmountToLtv =
       overseerCollaterals,
       oraclePrices,
       bAssetLtvs,
-      [[collateralToken, depositAmount]],
+      [[collateralToken, depositAmount]]
     );
 
     return (

@@ -1,10 +1,10 @@
-import { HumanAddr, moneyMarket } from '@anchor-protocol/types';
+import { HumanAddr, moneyMarket } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface GovDistributionModelUpdateConfigWasmQuery {
   distributionModelConfig: WasmQuery<
@@ -18,7 +18,7 @@ export type GovDistributionModelUpdateConfig =
 
 export async function govDistributionModelUpdateConfigQuery(
   queryClient: QueryClient,
-  distributionModelContract: HumanAddr,
+  distributionModelContract: HumanAddr
 ): Promise<GovDistributionModelUpdateConfig> {
   return wasmFetch<GovDistributionModelUpdateConfigWasmQuery>({
     ...queryClient,

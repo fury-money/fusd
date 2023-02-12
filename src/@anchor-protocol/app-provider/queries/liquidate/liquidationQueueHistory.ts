@@ -1,14 +1,19 @@
-import { LiquidationQueueData, liquidationQueueHistoryQuery } from '@anchor-protocol/app-fns/queries/liquidate/liquidationQueueHistory';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+import {
+  LiquidationQueueData,
+  liquidationQueueHistoryQuery,
+} from "@anchor-protocol/app-fns/queries/liquidate/liquidationQueueHistory";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
 const queryFn = createSimpleQueryFn((endpoint: string) => {
   return liquidationQueueHistoryQuery({ endpoint });
 });
 
-export function useLiquidationQueueHistory(): UseQueryResult<LiquidationQueueData[] | undefined> {
+export function useLiquidationQueueHistory(): UseQueryResult<
+  LiquidationQueueData[] | undefined
+> {
   const { indexerApiEndpoint, queryErrorReporter } = useAnchorWebapp();
 
   const result = useQuery(
@@ -18,7 +23,7 @@ export function useLiquidationQueueHistory(): UseQueryResult<LiquidationQueueDat
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 
   return result;

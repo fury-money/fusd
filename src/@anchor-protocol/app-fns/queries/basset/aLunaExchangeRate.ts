@@ -1,10 +1,10 @@
-import { aluna, HumanAddr } from '@anchor-protocol/types';
+import { aluna, HumanAddr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface BondBLunaExchangeRateWasmQuery {
   state: WasmQuery<aluna.hub.State, aluna.hub.StateResponse>;
@@ -16,7 +16,7 @@ export type BondBLunaExchangeRate =
 
 export async function bondBLunaExchangeRateQuery(
   queryClient: QueryClient,
-  aLunaHubContract: HumanAddr,
+  aLunaHubContract: HumanAddr
 ): Promise<BondBLunaExchangeRate> {
   return wasmFetch<BondBLunaExchangeRateWasmQuery>({
     ...queryClient,

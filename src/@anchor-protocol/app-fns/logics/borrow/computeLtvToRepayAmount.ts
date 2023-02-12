@@ -1,5 +1,5 @@
-import type { Rate, u, UST } from '@anchor-protocol/types';
-import big, { Big, BigSource } from 'big.js';
+import type { Rate, u, UST } from "@anchor-protocol/types";
+import big, { Big, BigSource } from "big.js";
 
 export const computeLtvToRepayAmount =
   (borrowLimit: u<UST<Big>>, borrowedAmount: u<UST<Big>>) =>

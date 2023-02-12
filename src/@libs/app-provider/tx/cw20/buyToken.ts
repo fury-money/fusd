@@ -1,16 +1,16 @@
-import { cw20BuyTokenTx } from '@libs/app-fns';
-import { useFixedFee } from '@libs/app-provider/hooks/useFixedFee';
-import { formatExecuteMsgNumber } from '@libs/formatter';
-import { HumanAddr, Rate, Token, u, UST } from '@libs/types';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import big from 'big.js';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useApp } from '../../contexts/app';
-import { TERRA_TX_KEYS } from '../../env';
-import { useRefetchQueries } from '../../hooks/useRefetchQueries';
-import { useUstTax } from '../../queries/terra/tax';
-import { useTerraswapPoolQuery } from '../../queries/terraswap/pool';
+import { cw20BuyTokenTx } from "@libs/app-fns";
+import { useFixedFee } from "@libs/app-provider/hooks/useFixedFee";
+import { formatExecuteMsgNumber } from "@libs/formatter";
+import { HumanAddr, Rate, Token, u, UST } from "@libs/types";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import big from "big.js";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useApp } from "../../contexts/app";
+import { TERRA_TX_KEYS } from "../../env";
+import { useRefetchQueries } from "../../hooks/useRefetchQueries";
+import { useUstTax } from "../../queries/terra/tax";
+import { useTerraswapPoolQuery } from "../../queries/terraswap/pool";
 
 export interface CW20BuyTokenTxParams {
   buyAmount: u<UST>;
@@ -22,7 +22,7 @@ export interface CW20BuyTokenTxParams {
 
 export function useCW20BuyTokenTx(
   tokenUstPairAddr: HumanAddr,
-  tokenSymbol: string,
+  tokenSymbol: string
 ) {
   const { availablePost, connected } = useAccount();
 
@@ -41,7 +41,13 @@ export function useCW20BuyTokenTx(
 
   const stream = useCallback(
     ({ buyAmount, txFee, maxSpread, onTxSucceed }: CW20BuyTokenTxParams) => {
-      if (!availablePost || !connected || !connectedWallet || !terraswapPool) {
+      if (
+        !availablePost ||
+        !connected ||
+        !connectedWallet ||
+        !terraswapPool ||
+        !queryClient
+      ) {
         throw new Error(`Can't post!`);
       }
 
@@ -52,7 +58,7 @@ export function useCW20BuyTokenTx(
         txFee,
         buyAmount,
         beliefPrice: formatExecuteMsgNumber(
-          big(ustPoolSize).div(tokenPoolSize),
+          big(ustPoolSize).div(tokenPoolSize)
         ) as UST,
         tokenUstPairAddr,
         tokenSymbol,
@@ -88,7 +94,7 @@ export function useCW20BuyTokenTx(
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   return connectedWallet ? stream : null;

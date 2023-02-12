@@ -1,4 +1,4 @@
-import { formatLuna } from '@anchor-protocol/notation';
+import { formatLuna } from "@anchor-protocol/notation";
 import {
   aLuna,
   CW20Addr,
@@ -8,14 +8,14 @@ import {
   Rate,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -23,23 +23,23 @@ import {
   _postTx,
   createHookMsg,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
 import {
   demicrofy,
   formatFluidDecimalPoints,
   formatTokenInput,
-} from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import big, { Big, BigSource } from 'big.js';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import big, { Big, BigSource } from "big.js";
+import { Observable } from "rxjs";
 
 export function bondSwapTx($: {
   walletAddr: HumanAddr;
@@ -76,7 +76,7 @@ export function bondSwapTx($: {
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -88,28 +88,28 @@ export function bondSwapTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
         const boughtAmount = pickAttributeValueByKey<u<Luna>>(
           fromContract,
-          'return_amount',
+          "return_amount"
         );
         const paidAmount = pickAttributeValueByKey<u<aLuna>>(
           fromContract,
-          'offer_amount',
+          "offer_amount"
         );
         const spreadAmount = pickAttributeValueByKey<u<Luna>>(
           fromContract,
-          'spread_amount',
+          "spread_amount"
         );
         const commissionAmount = pickAttributeValueByKey<u<Luna>>(
           fromContract,
-          'commission_amount',
+          "commission_amount"
         );
 
         const exchangeRate =
@@ -127,24 +127,24 @@ export function bondSwapTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             paidAmount && {
-              name: 'Paid Amount',
+              name: "Paid Amount",
               value: `${formatLuna(demicrofy(paidAmount))} bLUNA`,
             },
             boughtAmount && {
-              name: 'Bought Amount',
+              name: "Bought Amount",
               value: `${formatLuna(demicrofy(boughtAmount))} LUNA`,
             },
             exchangeRate && {
-              name: 'Exchange Rate',
+              name: "Exchange Rate",
               value: `${formatFluidDecimalPoints(
                 exchangeRate,
-                6,
+                6
               )} LUNA per bLUNA`,
             },
             helper.txHashReceipt(),
             tradingFee && {
-              name: 'Trading Fee',
-              value: formatLuna(demicrofy(tradingFee)) + ' LUNA',
+              name: "Trading Fee",
+              value: formatLuna(demicrofy(tradingFee)) + " LUNA",
             },
             helper.txFeeReceipt(),
           ],
@@ -152,6 +152,6 @@ export function bondSwapTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

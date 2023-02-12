@@ -1,10 +1,10 @@
-import { aluna, HumanAddr } from '@anchor-protocol/types';
+import { aluna, HumanAddr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface AirdropIsClaimedWasmQuery {
   isClaimed: WasmQuery<
@@ -19,7 +19,7 @@ export async function airdropIsClaimedQuery(
   airdropAddr: HumanAddr,
   walletAddr: HumanAddr,
   airdropStage: number,
-  queryClient: QueryClient,
+  queryClient: QueryClient
 ): Promise<AirdropIsClaimed> {
   return wasmFetch<AirdropIsClaimedWasmQuery>({
     ...queryClient,

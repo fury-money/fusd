@@ -1,9 +1,9 @@
-import { CrossChainEventKind } from '@anchor-protocol/crossanchor-sdk';
-import { useCallback, useMemo } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
-import { TxKind } from '../utils';
+import { CrossChainEventKind } from "@anchor-protocol/crossanchor-sdk";
+import { useCallback, useMemo } from "react";
+import { useLocalStorage } from "usehooks-ts";
+import { TxKind } from "../utils";
 
-const TRANSACTIONS_STORAGE_KEY = '__anchor_cross_chain_transaction_store';
+const TRANSACTIONS_STORAGE_KEY = "__anchor_cross_chain_transaction_store";
 
 export type TransactionDisplay = {
   txKind: TxKind;
@@ -28,12 +28,12 @@ export const useTransactions = () => {
 
   const getTransaction = useCallback(
     (txHash: string) => transactionStore[txHash],
-    [transactionStore],
+    [transactionStore]
   );
 
   const transactionExists = useCallback(
     (txHash: string | undefined) => Boolean(txHash && getTransaction(txHash)),
-    [getTransaction],
+    [getTransaction]
   );
 
   const saveTransaction = useCallback(
@@ -43,7 +43,7 @@ export const useTransactions = () => {
         [transaction.txHash]: transaction,
       }));
     },
-    [setTransactionStore],
+    [setTransactionStore]
   );
 
   const updateTransaction = useCallback(
@@ -63,7 +63,7 @@ export const useTransactions = () => {
         saveTransaction({ ...tx, ...updates });
       }
     },
-    [getTransaction, saveTransaction, transactionExists],
+    [getTransaction, saveTransaction, transactionExists]
   );
 
   const removeTransaction = useCallback(
@@ -74,10 +74,10 @@ export const useTransactions = () => {
             const { [transactionHash]: omit, ...rest } = transactionStore;
             return rest;
           }),
-        500,
+        500
       );
     },
-    [setTransactionStore],
+    [setTransactionStore]
   );
 
   const removeAll = useCallback(() => {
@@ -87,9 +87,9 @@ export const useTransactions = () => {
   const transactions = useMemo(
     () =>
       Object.values(transactionStore).sort(
-        (r1, r2) => r2.display.timestamp - r1.display.timestamp,
+        (r1, r2) => r2.display.timestamp - r1.display.timestamp
       ),
-    [transactionStore],
+    [transactionStore]
   );
 
   return {

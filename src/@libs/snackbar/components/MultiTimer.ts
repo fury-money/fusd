@@ -1,4 +1,4 @@
-import { EventTarget } from 'event-target-shim';
+import { EventTarget } from "event-target-shim";
 
 export class MultiTimer extends EventTarget {
   private remains: Map<() => void, number> = new Map();

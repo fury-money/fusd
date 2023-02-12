@@ -76,7 +76,7 @@ export function useCollaterals(){
                   collateral.decimals,
                 )).mul(exchangeRate).toString() as UST
               : undefined,
-          rawLockedAmount: collateralAmount?.[1],
+          rawLockedAmount: collateralAmount?.[1] ?? "0" as u<bAsset>,
           lockedAmount: big(collateralAmount?.[1] ?? ('0' as u<bAsset>)).div(exchangeRate).toString() as u<bAsset>,
           lockedAmountInUST: big(collateralAmount?.[1] ?? 0).mul(
             oracle?.price ?? 1,

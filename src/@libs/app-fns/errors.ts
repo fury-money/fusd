@@ -1,7 +1,7 @@
 export class PollingTimeout extends Error {
   constructor(message: string, readonly txhash: string) {
     super(message);
-    this.name = 'PollingTimeout';
+    this.name = "PollingTimeout";
   }
 
   toString = () => {

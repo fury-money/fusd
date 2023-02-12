@@ -1,7 +1,7 @@
-import { anchorToken } from '@anchor-protocol/types';
-import { govPollsQuery } from '@anchor-protocol/app-fns';
-import { useCallback, useEffect, useState } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
+import { anchorToken } from "@anchor-protocol/types";
+import { govPollsQuery } from "@anchor-protocol/app-fns";
+import { useCallback, useEffect, useState } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
 
 const limit = 6;
 
@@ -14,7 +14,7 @@ interface PollsReturn {
 
 // TODO use react-query infinite sroll
 export function useGovPollsQuery(
-  filter: anchorToken.gov.PollStatus | undefined,
+  filter: anchorToken.gov.PollStatus | undefined
 ): PollsReturn {
   const { queryClient, contractAddress, queryErrorReporter } =
     useAnchorWebapp();
@@ -27,14 +27,16 @@ export function useGovPollsQuery(
     // initialize data
     setIsLast(false);
     setPolls([]);
-
+    if (!queryClient) {
+      return;
+    }
     govPollsQuery(
       contractAddress.anchorToken.gov,
       {
         filter,
         limit,
       },
-      queryClient,
+      queryClient
     )
       .then(({ polls }) => {
         if (polls.polls.length > 0) {
@@ -54,7 +56,7 @@ export function useGovPollsQuery(
   ]);
 
   const loadMore = useCallback(() => {
-    if (polls.length > 0) {
+    if (polls.length > 0 && queryClient) {
       govPollsQuery(
         contractAddress.anchorToken.gov,
         {
@@ -62,7 +64,7 @@ export function useGovPollsQuery(
           limit,
           start_after: polls[polls.length - 1].id,
         },
-        queryClient,
+        queryClient
       )
         .then(({ polls }) => {
           if (polls.polls) {

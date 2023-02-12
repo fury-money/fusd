@@ -1,22 +1,22 @@
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { TxResultRendering } from '@libs/app-fns';
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { TxResultRendering } from "@libs/app-fns";
 import {
   EVM_ANCHOR_TX_REFETCH_MAP,
   refetchQueryByTxKind,
   TxKind,
   TX_GAS_LIMIT,
-} from './utils';
-import { Subject } from 'rxjs';
-import { useCallback } from 'react';
-import { ContractReceipt } from 'ethers';
-import { TwoWayTxResponse } from '@anchor-protocol/crossanchor-sdk';
-import { BackgroundTxResult, useBackgroundTx } from './useBackgroundTx';
-import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
-import { UST } from '@libs/types';
-import { TxEvent } from './useTx';
-import { useRefetchQueries } from '@libs/app-provider';
-import { EvmTxProgressWriter } from './EvmTxProgressWriter';
+} from "./utils";
+import { Subject } from "rxjs";
+import { useCallback } from "react";
+import { ContractReceipt } from "ethers";
+import { TwoWayTxResponse } from "@anchor-protocol/crossanchor-sdk";
+import { BackgroundTxResult, useBackgroundTx } from "./useBackgroundTx";
+import { useFormatters } from "@anchor-protocol/formatter/useFormatters";
+import { UST } from "@libs/types";
+import { TxEvent } from "./useTx";
+import { useRefetchQueries } from "@libs/app-provider";
+import { EvmTxProgressWriter } from "./EvmTxProgressWriter";
 
 type DepositUstTxResult = TwoWayTxResponse<ContractReceipt> | null;
 type DepositUstTxRender = TxResultRendering<DepositUstTxResult>;
@@ -39,10 +39,10 @@ export function useDepositUstTx():
     async (
       txParams: DepositUstTxParams,
       renderTxResults: Subject<DepositUstTxRender>,
-      txEvents: Subject<TxEvent<DepositUstTxParams>>,
+      txEvents: Subject<TxEvent<DepositUstTxParams>>
     ) => {
       const depositAmount = microfy(
-        formatInput(txParams.depositAmount),
+        formatInput(txParams.depositAmount)
       ).toString();
 
       const writer = new EvmTxProgressWriter(renderTxResults, connectionType);
@@ -51,10 +51,10 @@ export function useDepositUstTx():
 
       try {
         await xAnchor.approveLimit(
-          { token: 'UST' },
+          { token: "UST" },
           depositAmount,
           address!,
-          TX_GAS_LIMIT,
+          TX_GAS_LIMIT
         );
 
         writer.depositUST();
@@ -67,7 +67,7 @@ export function useDepositUstTx():
           (event) => {
             txEvents.next({ event, txParams });
             writer.depositUST(event);
-          },
+          }
         );
 
         refetchQueries(refetchQueryByTxKind(TxKind.DepositUst));
@@ -77,7 +77,7 @@ export function useDepositUstTx():
         writer.timer.stop();
       }
     },
-    [address, connectionType, xAnchor, microfy, formatInput, refetchQueries],
+    [address, connectionType, xAnchor, microfy, formatInput, refetchQueries]
   );
 
   const displayTx = useCallback(
@@ -86,7 +86,7 @@ export function useDepositUstTx():
       amount: `${formatOutput(txParams.depositAmount as UST)} UST`,
       timestamp: Date.now(),
     }),
-    [formatOutput],
+    [formatOutput]
   );
 
   const persistedTxResult = useBackgroundTx<

@@ -1,10 +1,10 @@
-import { HumanAddr, moneyMarket } from '@anchor-protocol/types';
+import { HumanAddr, moneyMarket } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface BorrowCollateralBorrowerWasmQuery {
   custodyBorrower: WasmQuery<
@@ -19,7 +19,7 @@ export type BorrowCollateralBorrower =
 export async function borrowCollateralBorrowerQuery(
   walletAddr: HumanAddr | undefined,
   custodyContract: HumanAddr,
-  queryClient: QueryClient,
+  queryClient: QueryClient
 ): Promise<BorrowCollateralBorrower | undefined> {
   if (!walletAddr) {
     return undefined;

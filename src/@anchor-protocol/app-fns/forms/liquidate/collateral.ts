@@ -1,7 +1,7 @@
-import { UST, u } from '@anchor-protocol/types';
-import { EstimatedFee } from '@libs/app-provider';
-import { FormReturn } from '@libs/use-form';
-import big from 'big.js';
+import { UST, u } from "@anchor-protocol/types";
+import { EstimatedFee } from "@libs/app-provider";
+import { FormReturn } from "@libs/use-form";
+import big from "big.js";
 
 export interface LiquidationWithdrawCollateralFormInput {}
 
@@ -36,12 +36,12 @@ export const liquidationWithdrawCollateralForm =
 
     // invalidTxFee
     const invalidTxFee = (() => {
-      if( isConnected && txFee && big(userULunaBalance).lt(txFee)){
-        return 'Not enough transaction fees'
-      }else if (isConnected){
-        return "Error when computing the tx Fee, invalid TX"
+      if (isConnected && txFee && big(userULunaBalance).lt(txFee)) {
+        return "Not enough transaction fees";
+      } else if (isConnected) {
+        return "Error when computing the tx Fee, invalid TX";
       }
-      return undefined
+      return undefined;
     })();
 
     // invalidDepositAmount

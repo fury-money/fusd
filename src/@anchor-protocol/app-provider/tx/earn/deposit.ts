@@ -1,11 +1,11 @@
-import { earnDepositTx } from '@anchor-protocol/app-fns';
-import { UST } from '@anchor-protocol/types';
-import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { earnDepositTx } from "@anchor-protocol/app-fns";
+import { UST } from "@anchor-protocol/types";
+import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface EarnDepositTxParams {
   depositAmount: UST;
@@ -23,8 +23,8 @@ export function useEarnDepositTx() {
 
   const stream = useCallback(
     ({ depositAmount, txFee, onTxSucceed }: EarnDepositTxParams) => {
-      if (!connectedWallet || !connectedWallet.availablePost) {
-        throw new Error('Can not post!');
+      if (!connectedWallet || !connectedWallet.availablePost || !queryClient) {
+        throw new Error("Can not post!");
       }
 
       return earnDepositTx({
@@ -60,7 +60,7 @@ export function useEarnDepositTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

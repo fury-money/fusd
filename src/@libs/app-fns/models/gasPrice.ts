@@ -21,7 +21,7 @@ import {
   THB,
   u,
   UST,
-} from '@libs/types';
+} from "@libs/types";
 
 export interface GasPrice {
   uluna: u<Luna>;

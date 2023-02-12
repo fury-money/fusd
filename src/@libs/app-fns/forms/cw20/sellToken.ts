@@ -1,10 +1,10 @@
-import { min } from '@libs/big-math';
-import { demicrofy, microfy } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { CW20Addr, HumanAddr, Rate, Token, u, UST } from '@libs/types';
-import { FormFunction, FormReturn } from '@libs/use-form';
-import big, { Big, BigSource } from 'big.js';
-import { terraswapSimulationQuery } from '../../queries/terraswap/simulation';
+import { min } from "@libs/big-math";
+import { demicrofy, microfy } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { CW20Addr, HumanAddr, Rate, Token, u, UST } from "@libs/types";
+import { FormFunction, FormReturn } from "@libs/use-form";
+import big, { Big, BigSource } from "big.js";
+import { terraswapSimulationQuery } from "../../queries/terraswap/simulation";
 
 export interface CW20SellTokenFormInput<T extends Token> {
   ustAmount?: UST;
@@ -13,7 +13,7 @@ export interface CW20SellTokenFormInput<T extends Token> {
 }
 
 export interface CW20SellTokenFormDependency<T extends Token> {
-  queryClient: QueryClient;
+  queryClient: QueryClient | undefined;
   //
   ustTokenPairAddr: HumanAddr;
   tokenAddr: CW20Addr;
@@ -81,9 +81,9 @@ export const cw20SellTokenForm = <T extends Token>({
       !!tokenAmount && tokenAmount.length > 0 && big(tokenAmount).gt(0);
 
     const invalidMaxSpread: string | null =
-      maxSpread.length === 0 ? 'Max Spread is required' : null;
+      maxSpread.length === 0 ? "Max Spread is required" : null;
 
-    if (!ustAmountExists && !ctAmountExists) {
+    if ((!ustAmountExists && !ctAmountExists) || !queryClient) {
       return [
         {
           ustAmount,
@@ -120,16 +120,16 @@ export const cw20SellTokenForm = <T extends Token>({
               },
             },
           },
-          queryClient,
+          queryClient
         ).then(
           ({
             simulation: { return_amount, spread_amount, commission_amount },
           }) => {
             const _tax = min(
               big(return_amount).minus(
-                big(return_amount).div(big(1).plus(taxRate)),
+                big(return_amount).div(big(1).plus(taxRate))
               ),
-              maxTaxUUSD,
+              maxTaxUUSD
             ) as u<UST<Big>>;
 
             const beliefPrice = microfy(tokenAmount!)
@@ -154,12 +154,12 @@ export const cw20SellTokenForm = <T extends Token>({
 
             const invalidTxFee =
               connected && big(fixedFee).gt(ustBalance)
-                ? 'Not enough transaction fees'
+                ? "Not enough transaction fees"
                 : null;
 
             const invalidTokenAmount =
               connected && microfy(tokenAmount!).gt(tokenBalance)
-                ? 'Not enough assets'
+                ? "Not enough assets"
                 : null;
 
             const availableTx =
@@ -179,7 +179,7 @@ export const cw20SellTokenForm = <T extends Token>({
               invalidTokenAmount,
               availableTx,
             };
-          },
+          }
         ),
       ];
     } else if (ustAmountExists) {
@@ -199,26 +199,26 @@ export const cw20SellTokenForm = <T extends Token>({
             amount: microfy(ustAmount!).toFixed() as u<UST>,
             info: {
               native_token: {
-                denom: 'uusd',
+                denom: "uusd",
               },
             },
           },
-          queryClient,
+          queryClient
         ).then(
           ({
             simulation: { return_amount, spread_amount, commission_amount },
           }) => {
             const _tax = min(
               microfy(ustAmount!).minus(
-                microfy(ustAmount!).div(big(1).plus(taxRate)),
+                microfy(ustAmount!).div(big(1).plus(taxRate))
               ),
-              maxTaxUUSD,
+              maxTaxUUSD
             ) as u<UST<Big>>;
 
             const beliefPrice = (
               big(return_amount).gt(0)
                 ? big(1).div(microfy(ustAmount!).div(return_amount).toFixed())
-                : '0'
+                : "0"
             ) as T;
 
             const expectedAmount = big(return_amount)
@@ -239,12 +239,12 @@ export const cw20SellTokenForm = <T extends Token>({
 
             const invalidTxFee =
               connected && big(fixedFee).gt(ustBalance)
-                ? 'Not enough transaction fees'
+                ? "Not enough transaction fees"
                 : null;
 
             const invalidTokenAmount =
               connected && big(return_amount).gt(tokenBalance)
-                ? 'Not enough assets'
+                ? "Not enough assets"
                 : null;
 
             const availableTx =
@@ -264,7 +264,7 @@ export const cw20SellTokenForm = <T extends Token>({
               invalidTxFee,
               availableTx,
             };
-          },
+          }
         ),
       ];
     }

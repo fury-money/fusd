@@ -1,12 +1,12 @@
 import {
   liquidationWithdrawForm,
   LiquidationWithdrawFormStates,
-} from '@anchor-protocol/app-fns/forms/liquidate/withdraw';
-import { useAnchorBank } from '@anchor-protocol/app-provider/hooks/useAnchorBank';
-import { defaultFee } from '@libs/app-provider';
-import { useForm } from '@libs/use-form';
-import { useAccount } from 'contexts/account';
-import { useCallback } from 'react';
+} from "@anchor-protocol/app-fns/forms/liquidate/withdraw";
+import { useAnchorBank } from "@anchor-protocol/app-provider/hooks/useAnchorBank";
+import { defaultFee } from "@libs/app-provider";
+import { useForm } from "@libs/use-form";
+import { useAccount } from "contexts/account";
+import { useCallback } from "react";
 
 export interface LiquidationWithdrawFormReturn
   extends LiquidationWithdrawFormStates {
@@ -26,7 +26,7 @@ export function useLiquidationWithdrawForm(): LiquidationWithdrawFormReturn {
       userUUSTBalance: uUST,
       userULunaBalance: uLuna,
     },
-    () => ({ bid_idx: '', estimatedFee: defaultFee() }),
+    () => ({ bid_idx: "", estimatedFee: defaultFee() })
   );
 
   const updateBidIdx = useCallback(
@@ -35,7 +35,7 @@ export function useLiquidationWithdrawForm(): LiquidationWithdrawFormReturn {
         bid_idx,
       });
     },
-    [input],
+    [input]
   );
 
   return {

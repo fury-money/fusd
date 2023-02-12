@@ -1,13 +1,13 @@
-import { computeGasPrice } from '@anchor-protocol/app-fns';
-import { GasPrice } from '@libs/app-fns';
-import { Gas } from '@libs/types';
-import { BigSource } from 'big.js';
-import { useMemo } from 'react';
-import { useApp } from '../contexts/app';
+import { computeGasPrice } from "@anchor-protocol/app-fns";
+import { GasPrice } from "@libs/app-fns";
+import { Gas } from "@libs/types";
+import { BigSource } from "big.js";
+import { useMemo } from "react";
+import { useApp } from "../contexts/app";
 
 export function useGasPrice<Denom extends keyof GasPrice>(
   gas: Gas<BigSource>,
-  denom: Denom,
+  denom: Denom
 ): GasPrice[Denom] {
   const { gasPrice } = useApp();
 

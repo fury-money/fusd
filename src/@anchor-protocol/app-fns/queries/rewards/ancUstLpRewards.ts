@@ -5,13 +5,13 @@ import {
   cw20,
   CW20Addr,
   HumanAddr,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface RewardsAncUstLpRewardsWasmQuery {
   userLPBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<AncUstLP>>;
@@ -32,7 +32,7 @@ export async function rewardsAncUstLpRewardsQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   ancUstLpContract: CW20Addr,
-  astroportGeneratorAddr: HumanAddr,
+  astroportGeneratorAddr: HumanAddr
 ): Promise<RewardsAncUstLpRewards | undefined> {
   if (!walletAddr) {
     return undefined;

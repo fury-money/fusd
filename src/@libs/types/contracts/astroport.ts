@@ -1,5 +1,5 @@
-import { CW20Addr, HumanAddr } from '../addrs';
-import { Astro, Token, u, LP, rs } from '@libs/types';
+import { CW20Addr, HumanAddr } from "../addrs";
+import { Astro, Token, u, LP, rs } from "@libs/types";
 
 export namespace astroport {
   export namespace QueryMsg {

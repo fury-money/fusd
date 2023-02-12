@@ -1,1 +1,1 @@
-export * from './tokenDisplay';
+export * from "./tokenDisplay";

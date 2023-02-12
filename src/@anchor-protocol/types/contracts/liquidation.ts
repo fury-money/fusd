@@ -6,8 +6,8 @@ import {
   Num,
   Rate,
   u,
-} from '@libs/types';
-import { aLuna } from '../currencies';
+} from "@libs/types";
+import { aLuna } from "../currencies";
 
 export namespace liquidation {
   export namespace liquidationContract {
@@ -69,7 +69,7 @@ export namespace liquidation {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/liquidations/liquidation-contract#config-1
      */
     export interface Config {
-      config:  Record<string, never>;
+      config: Record<string, never>;
     }
 
     /**
@@ -95,11 +95,11 @@ export namespace liquidation {
         borrow_limit: u<UST>;
         collaterals: [
           [CW20Addr, u<UST>], // (Cw20 contract address, Locked amount)
-          [CW20Addr, u<UST>],
+          [CW20Addr, u<UST>]
         ];
         collateral_prices: [
           u<UST>, // Price of collateral
-          u<UST>,
+          u<UST>
         ];
       };
     }

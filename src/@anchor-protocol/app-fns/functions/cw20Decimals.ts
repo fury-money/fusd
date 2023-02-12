@@ -1,9 +1,9 @@
-import { cw20, Token, u } from '@libs/types';
-import big from 'big.js';
+import { cw20, Token, u } from "@libs/types";
+import big from "big.js";
 
 export function importCW20Decimals<T extends Token>(
   number: u<T>,
-  tokenInfo: cw20.TokenInfoResponse<Token>,
+  tokenInfo: cw20.TokenInfoResponse<Token>
 ): u<T> {
   if (tokenInfo.decimals === 6) {
     return number;
@@ -14,7 +14,7 @@ export function importCW20Decimals<T extends Token>(
 
 export function exportCW20Decimals<T extends Token>(
   number: u<T>,
-  tokenInfo: cw20.TokenInfoResponse<Token>,
+  tokenInfo: cw20.TokenInfoResponse<Token>
 ): u<T> {
   if (tokenInfo.decimals === 6) {
     return number;

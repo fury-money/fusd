@@ -9,11 +9,11 @@ export class PersistCache<T> {
   constructor(
     private storageKey: string,
     private staleTime: number | undefined = undefined,
-    private storage: Storage | undefined = typeof localStorage !== 'undefined'
+    private storage: Storage | undefined = typeof localStorage !== "undefined"
       ? localStorage
-      : undefined,
+      : undefined
   ) {
-    this.cache = JSON.parse(storage?.getItem(storageKey) ?? '{}');
+    this.cache = JSON.parse(storage?.getItem(storageKey) ?? "{}");
   }
 
   set = (key: string, value: T) => {
@@ -25,8 +25,8 @@ export class PersistCache<T> {
     const block = this.cache[key];
     if (
       !block ||
-      !('timestamp' in block && 'value' in block) ||
-      (typeof this.staleTime === 'number' &&
+      !("timestamp" in block && "value" in block) ||
+      (typeof this.staleTime === "number" &&
         block.timestamp + this.staleTime > Date.now())
     ) {
       return undefined;

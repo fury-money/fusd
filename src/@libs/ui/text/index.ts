@@ -1,1 +1,1 @@
-export * from './AnimateNumber';
+export * from "./AnimateNumber";

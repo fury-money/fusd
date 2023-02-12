@@ -1,5 +1,5 @@
-import { useDeploymentTarget } from '@anchor-protocol/app-provider';
-import { useMemo } from 'react';
+import { useDeploymentTarget } from "@anchor-protocol/app-provider";
+import { useMemo } from "react";
 
 export interface RouteMenu {
   to: string;
@@ -7,38 +7,38 @@ export interface RouteMenu {
 }
 
 const dashboard: RouteMenu = {
-  to: '/',
-  title: 'DASHBOARD',
+  to: "/",
+  title: "DASHBOARD",
 };
 
 const myPage: RouteMenu = {
   to: `/mypage`,
-  title: 'MY PAGE',
+  title: "MY PAGE",
 };
 
 const earn: RouteMenu = {
-  to: '/earn',
-  title: 'EARN',
+  to: "/earn",
+  title: "EARN",
 };
 
 const borrow: RouteMenu = {
-  to: '/borrow',
-  title: 'BORROW',
+  to: "/borrow",
+  title: "BORROW",
 };
 
 const bAsset: RouteMenu = {
-  to: '/aasset',
-  title: 'MINT & BURN',
+  to: "/aasset",
+  title: "MINT & BURN",
 };
 
 const liquidation: RouteMenu = {
-  to: '/liquidation',
-  title: 'LIQUIDATE',
+  to: "/liquidation",
+  title: "LIQUIDATE",
 };
 
 const history: RouteMenu = {
-  to: '/history',
-  title: 'HISTORY',
+  to: "/history",
+  title: "HISTORY",
 };
 
 const useMenus = (): RouteMenu[] => {

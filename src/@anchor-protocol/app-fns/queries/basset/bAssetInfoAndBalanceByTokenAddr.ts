@@ -4,11 +4,11 @@ import {
   moneyMarket,
   u,
   UST,
-} from '@anchor-protocol/types';
-import { QueryClient, wasmFetch, WasmQuery } from '@libs/query-client';
-import big from 'big.js';
-import { bAssetInfoAndBalanceQuery } from './bAssetInfoAndBalance';
-import { BAssetInfoAndBalanceWithOracle } from './bAssetInfoAndBalanceTotal';
+} from "@anchor-protocol/types";
+import { QueryClient, wasmFetch, WasmQuery } from "@libs/query-client";
+import big from "big.js";
+import { bAssetInfoAndBalanceQuery } from "./bAssetInfoAndBalance";
+import { BAssetInfoAndBalanceWithOracle } from "./bAssetInfoAndBalanceTotal";
 
 interface WhitelistWasmQuery {
   whitelist: WasmQuery<
@@ -26,7 +26,7 @@ export async function bAssetInfoAndBalanceByTokenAddrQuery(
   tokenAddr: CW20Addr | undefined,
   overseerContract: HumanAddr,
   oracleContract: HumanAddr,
-  queryClient: QueryClient,
+  queryClient: QueryClient
 ): Promise<BAssetInfoAndBalanceWithOracle | undefined> {
   if (!walletAddr || !tokenAddr) {
     return undefined;
@@ -34,7 +34,7 @@ export async function bAssetInfoAndBalanceByTokenAddrQuery(
 
   const { whitelist, oraclePrices } = await wasmFetch<WhitelistWasmQuery>({
     ...queryClient,
-    id: 'basset--list',
+    id: "basset--list",
     wasmQuery: {
       whitelist: {
         contractAddress: overseerContract,
@@ -52,7 +52,7 @@ export async function bAssetInfoAndBalanceByTokenAddrQuery(
   });
 
   const bAsset = whitelist.elems.find(
-    ({ collateral_token }) => collateral_token === tokenAddr,
+    ({ collateral_token }) => collateral_token === tokenAddr
   );
 
   if (!bAsset) {
@@ -60,7 +60,7 @@ export async function bAssetInfoAndBalanceByTokenAddrQuery(
   }
 
   const oraclePrice = oraclePrices.prices.find(
-    ({ asset }) => asset === tokenAddr,
+    ({ asset }) => asset === tokenAddr
   );
 
   if (!oraclePrice) {
@@ -80,6 +80,6 @@ export async function bAssetInfoAndBalanceByTokenAddrQuery(
           .mul(oraclePrice.price)
           .toFixed() as u<UST>,
       } as BAssetInfoAndBalanceWithOracle;
-    },
+    }
   );
 }

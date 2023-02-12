@@ -1,8 +1,8 @@
-import { ANC, anchorToken, HumanAddr, u } from '@anchor-protocol/types';
-import { QueryClient, wasmFetch, WasmQuery } from '@libs/query-client';
+import { ANC, anchorToken, HumanAddr, u } from "@anchor-protocol/types";
+import { QueryClient, wasmFetch, WasmQuery } from "@libs/query-client";
 
 export type MyPoll = anchorToken.gov.PollResponse & {
-  my: { vote: 'yes' | 'no'; balance: u<ANC> } | undefined;
+  my: { vote: "yes" | "no"; balance: u<ANC> } | undefined;
 };
 
 interface PollsWasmQuery {
@@ -16,7 +16,7 @@ interface StakerWasmQuery {
 export async function govMyPollsQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  govContract: HumanAddr,
+  govContract: HumanAddr
 ): Promise<MyPoll[]> {
   if (!walletAddr) {
     return [];
@@ -30,8 +30,8 @@ export async function govMyPollsQuery(
         contractAddress: govContract,
         query: {
           polls: {
-            filter: 'in_progress',
-            order_by: 'desc',
+            filter: "in_progress",
+            order_by: "desc",
           },
         },
       },
@@ -59,7 +59,7 @@ export async function govMyPollsQuery(
 
   const myPolls: MyPoll[] = polls.polls.map((poll) => {
     const locked_balance = staker.locked_balance.find(
-      ([pollId]) => pollId === poll.id,
+      ([pollId]) => pollId === poll.id
     );
 
     return {

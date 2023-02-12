@@ -1,14 +1,14 @@
-import { CrossChainTxResponse } from '@anchor-protocol/crossanchor-sdk';
-import { TxResultRendering } from '@libs/app-fns';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { ContractReceipt } from 'ethers';
-import { useCallback } from 'react';
-import { Subject } from 'rxjs';
-import { EvmTxProgressWriter } from './EvmTxProgressWriter';
-import { useTransactions } from './storage';
-import { TxEvent, useTx } from './useTx';
-import { errorContains, formatError, TxError } from './utils';
+import { CrossChainTxResponse } from "@anchor-protocol/crossanchor-sdk";
+import { TxResultRendering } from "@libs/app-fns";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { ContractReceipt } from "ethers";
+import { useCallback } from "react";
+import { Subject } from "rxjs";
+import { EvmTxProgressWriter } from "./EvmTxProgressWriter";
+import { useTransactions } from "./storage";
+import { TxEvent, useTx } from "./useTx";
+import { errorContains, formatError, TxError } from "./utils";
 
 type TxResult = CrossChainTxResponse<ContractReceipt> | null;
 type TxRender = TxResultRendering<TxResult>;
@@ -26,7 +26,7 @@ export const useRestoreTx = () => {
     async (
       txParams: RestoreTxParams,
       renderTxResults: Subject<TxRender>,
-      txEvents: Subject<TxEvent<RestoreTxParams>>,
+      txEvents: Subject<TxEvent<RestoreTxParams>>
     ) => {
       const writer = new EvmTxProgressWriter(renderTxResults, connectionType);
       writer.restoreTx();
@@ -39,7 +39,7 @@ export const useRestoreTx = () => {
             writer.restoreTx(event);
             txEvents.next({ event, txParams });
           },
-          { manualRedemption: true },
+          { manualRedemption: true }
         );
 
         removeTransaction(txParams.txHash);
@@ -60,7 +60,7 @@ export const useRestoreTx = () => {
         writer.timer.stop();
       }
     },
-    [xAnchor, connectionType, removeTransaction],
+    [xAnchor, connectionType, removeTransaction]
   );
 
   const restoreTxStream = useTx(restoreTx, parseTx, null);

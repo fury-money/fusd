@@ -6,23 +6,23 @@ import {
   computeBorrowMax,
   computeBorrowSafeMax,
   computeLtv,
-} from '@anchor-protocol/app-fns';
-import { validateCollateralAmount } from '@anchor-protocol/app-fns/logics/borrow/validateCollateralAmount';
-import { DeploymentTarget } from '@anchor-protocol/app-provider';
-import { CollateralAmount, moneyMarket, Rate } from '@anchor-protocol/types';
-import { formatRate } from '@libs/formatter';
-import { UST, CW20Addr, Luna, u } from '@libs/types';
-import { FormReturn } from '@libs/use-form';
-import big, { Big, BigSource } from 'big.js';
-import { WhitelistCollateral } from 'queries';
-import { computeBorrowAPR } from '../../logics/borrow/computeBorrowAPR';
-import { computeBorrowNextLtv } from '../../logics/borrow/computeBorrowNextLtv';
-import { computeBorrowReceiveAmount } from '../../logics/borrow/computeBorrowReceiveAmount';
-import { computeBorrowTxFee } from '../../logics/borrow/computeBorrowTxFee';
-import { computeEstimateLiquidationPrice } from '../../logics/borrow/computeEstimateLiquidationPrice';
-import { validateBorrowAmount } from '../../logics/borrow/validateBorrowAmount';
-import { validateTxFee } from '../../logics/common/validateTxFee';
-import { BAssetLtvs } from '../../queries/borrow/market';
+} from "@anchor-protocol/app-fns";
+import { validateCollateralAmount } from "@anchor-protocol/app-fns/logics/borrow/validateCollateralAmount";
+import { DeploymentTarget } from "@anchor-protocol/app-provider";
+import { CollateralAmount, moneyMarket, Rate } from "@anchor-protocol/types";
+import { formatRate } from "@libs/formatter";
+import { UST, CW20Addr, Luna, u } from "@libs/types";
+import { FormReturn } from "@libs/use-form";
+import big, { Big, BigSource } from "big.js";
+import { WhitelistCollateral } from "queries";
+import { computeBorrowAPR } from "../../logics/borrow/computeBorrowAPR";
+import { computeBorrowNextLtv } from "../../logics/borrow/computeBorrowNextLtv";
+import { computeBorrowReceiveAmount } from "../../logics/borrow/computeBorrowReceiveAmount";
+import { computeBorrowTxFee } from "../../logics/borrow/computeBorrowTxFee";
+import { computeEstimateLiquidationPrice } from "../../logics/borrow/computeEstimateLiquidationPrice";
+import { validateBorrowAmount } from "../../logics/borrow/validateBorrowAmount";
+import { validateTxFee } from "../../logics/common/validateTxFee";
+import { BAssetLtvs } from "../../queries/borrow/market";
 
 export interface BorrowBorrowFormInput {
   borrowAmount: UST;
@@ -109,7 +109,7 @@ export const borrowBorrowForm = ({
       overseerCollaterals,
       oraclePrices,
       bAssetLtvs,
-      collateralAmounts,
+      collateralAmounts
     );
 
     const safeMax = computeBorrowSafeMax(borrowLimit, borrowedAmount);
@@ -127,10 +127,9 @@ export const borrowBorrowForm = ({
           nextLtv,
           whitelist,
           [...overseerCollaterals.collaterals, ...collateralAmounts],
-          oraclePrices,
+          oraclePrices
         )
       : null;
-
 
     const txFee = target.isNative
       ? computeBorrowTxFee(borrowAmount)
@@ -142,7 +141,7 @@ export const borrowBorrowForm = ({
 
     const invalidCollateralAmount = validateCollateralAmount(
       collateralAmount,
-      maxCollateralAmount,
+      maxCollateralAmount
     );
 
     const invalidOverMaxLtv = nextLtv?.gt(ANCHOR_DANGER_RATIO)
@@ -150,7 +149,7 @@ export const borrowBorrowForm = ({
       : undefined;
 
     const warningOverSafeLtv = nextLtv?.gt(ANCHOR_SAFE_RATIO)
-      ? 'WARNING: Are you sure you want to borrow above the recommended borrow usage? Crypto markets can be very volatile and you may be subject to liquidation in events of downward price swings of the aAsset.'
+      ? "WARNING: Are you sure you want to borrow above the recommended borrow usage? Crypto markets can be very volatile and you may be subject to liquidation in events of downward price swings of the aAsset."
       : undefined;
 
     const availablePost =

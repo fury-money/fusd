@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Rate } from '@anchor-protocol/types';
-import { useAnchorWebapp } from '@anchor-protocol/app-provider';
-import { formatRate } from '@libs/formatter';
-import { useAccount } from 'contexts/account';
-import big, { Big } from 'big.js';
-import { useNotification } from 'contexts/notification';
-import { userLtvQuery } from './userLtv';
+import { useCallback, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { Rate } from "@anchor-protocol/types";
+import { useAnchorWebapp } from "@anchor-protocol/app-provider";
+import { formatRate } from "@libs/formatter";
+import { useAccount } from "contexts/account";
+import big, { Big } from "big.js";
+import { useNotification } from "contexts/notification";
+import { userLtvQuery } from "./userLtv";
 
 export interface LiquidationAlert {
   enabled: boolean;
@@ -21,7 +21,7 @@ export function useLiquidationAlert({ enabled, ratio }: LiquidationAlert) {
   const navigate = useNavigate();
 
   const jobCallback = useCallback(async () => {
-    if (!terraWalletAddress || permission !== 'granted') {
+    if (!terraWalletAddress || permission !== "granted") {
       return;
     }
 
@@ -37,19 +37,19 @@ export function useLiquidationAlert({ enabled, ratio }: LiquidationAlert) {
           `Borrow Usage is ${formatRate(ltv as Rate<Big>)}%`,
           {
             body: `Lower borrow usage on Cavern webapp to prevent liquidation.`,
-            icon: '/logo.png',
-          },
+            icon: "/logo.png",
+          }
         );
 
         if (notification) {
           const click = () => {
-            navigate('/borrow');
+            navigate("/borrow");
           };
 
-          notification.addEventListener('click', click);
+          notification.addEventListener("click", click);
 
           setTimeout(() => {
-            notification.removeEventListener('click', click);
+            notification.removeEventListener("click", click);
           }, 1000 * 10);
         }
       }
@@ -71,7 +71,7 @@ export function useLiquidationAlert({ enabled, ratio }: LiquidationAlert) {
   }, [jobCallback]);
 
   useEffect(() => {
-    if (terraWalletAddress && permission === 'granted' && enabled) {
+    if (terraWalletAddress && permission === "granted" && enabled) {
       const intervalId = setInterval(() => {
         jobCallbackRef.current();
       }, 1000 * 60);

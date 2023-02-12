@@ -1,6 +1,6 @@
-import { JSDateTime, u, UST } from '@anchor-protocol/types';
-import { group } from 'd3-array';
-import { gmt9am } from 'utils/gmt9am';
+import { JSDateTime, u, UST } from "@anchor-protocol/types";
+import { group } from "d3-array";
+import { gmt9am } from "utils/gmt9am";
 
 interface MarketDepositRaw {
   total_ust_deposits: u<UST>;
@@ -13,7 +13,7 @@ interface MarketDepositRaw {
 interface MarketDepositHistoryRaw {
   total_ust_deposits: Array<{
     deposit: u<UST>;
-    liability: '74481041162848.589699372014181516';
+    liability: "74481041162848.589699372014181516";
     timestamp: JSDateTime;
   }>;
   total_depositors: Array<{
@@ -56,19 +56,19 @@ export async function marketDepositAndBorrowQuery({
   endpoint,
 }: MarketDepositAndBorrowQueryParams): Promise<MarketDepositAndBorrowData> {
   const deposit: MarketDepositRaw = await fetch(`${endpoint}/v1/deposit`).then(
-    (res) => res.json(),
+    (res) => res.json()
   );
 
   const depositHistory: MarketDepositHistoryRaw = await fetch(
-    `${endpoint}/v1/deposit/1d`,
+    `${endpoint}/v1/deposit/1d`
   ).then((res) => res.json());
 
   const borrow: MarketBorrowRaw = await fetch(`${endpoint}/v1/borrow`).then(
-    (res) => res.json(),
+    (res) => res.json()
   );
 
   const borrowHistory: MarketBorrowHistoryRaw = await fetch(
-    `${endpoint}/v1/borrow/1d`,
+    `${endpoint}/v1/borrow/1d`
   ).then((res) => res.json());
 
   const now = {
@@ -77,34 +77,32 @@ export async function marketDepositAndBorrowQuery({
     timestamp: Date.now() as JSDateTime,
   };
 
-  const deposits = group(
-      depositHistory.total_ust_deposits, (k) =>
-      gmt9am(k.timestamp),
-    );
+  const deposits = group(depositHistory.total_ust_deposits, (k) =>
+    gmt9am(k.timestamp)
+  );
 
-  deposits.set( Date.now(),[{
-        deposit: deposit.total_ust_deposits,
-        timestamp: Date.now() as JSDateTime,
-        liability: '74481041162848.589699372014181516',
-      }]);
+  deposits.set(Date.now(), [
+    {
+      deposit: deposit.total_ust_deposits,
+      timestamp: Date.now() as JSDateTime,
+      liability: "74481041162848.589699372014181516",
+    },
+  ]);
 
+  const borrowings = group(borrowHistory, (k) => gmt9am(k.timestamp));
+  borrowings.set(Date.now(), [
+    {
+      total_borrowed: borrow.total_borrowed,
+      timestamp: Date.now() as JSDateTime,
+    },
+  ]);
 
-
-  const borrowings = group(
-      borrowHistory,
-      (k) => gmt9am(k.timestamp)
-    );
-  borrowings.set(Date.now(), [{
-        total_borrowed: borrow.total_borrowed,
-        timestamp: Date.now() as JSDateTime,
-  }]);
-  
   const combined = Array.from(deposits).map(([timestamp, deposit]) => {
     const borrowing = borrowings.get(timestamp);
     return {
       timestamp: timestamp as JSDateTime,
       total_ust_deposits: deposit[0].deposit,
-      total_borrowed: borrowing ? borrowing[0].total_borrowed : ('0' as u<UST>),
+      total_borrowed: borrowing ? borrowing[0].total_borrowed : ("0" as u<UST>),
     };
   });
 

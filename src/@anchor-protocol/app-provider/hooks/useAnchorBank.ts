@@ -2,7 +2,7 @@ import {
   AnchorTax,
   AnchorTokenBalances,
   DefaultAnchorTokenBalances,
-} from '@anchor-protocol/app-fns';
+} from "@anchor-protocol/app-fns";
 import {
   ANC,
   AncUstLP,
@@ -13,16 +13,16 @@ import {
   LSD,
   NominalType,
   u,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   useCW20Balance,
   useTerraNativeBalances,
   useUstTax,
-} from '@libs/app-provider';
-import { useMemo } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../contexts/context';
-import { RegisteredLSDs } from 'env';
+} from "@libs/app-provider";
+import { useMemo } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../contexts/context";
+import { RegisteredLSDs } from "env";
 
 export interface AnchorBank {
   tax: AnchorTax;
@@ -40,38 +40,39 @@ export function useAnchorBank(): AnchorBank {
 
   const uANC = useCW20Balance<ANC>(
     contractAddress.cw20.ANC,
-    terraWalletAddress,
+    terraWalletAddress
   );
 
   const uAncUstLP = useCW20Balance<AncUstLP>(
     contractAddress.cw20.AncUstLP,
-    terraWalletAddress,
+    terraWalletAddress
   );
 
   const uaUST = useCW20Balance<aUST>(
     contractAddress.cw20.aUST,
-    terraWalletAddress,
+    terraWalletAddress
   );
 
   const uaLuna = useCW20Balance<aLuna>(
     contractAddress.cw20.aLuna,
-    terraWalletAddress,
+    terraWalletAddress
   );
 
   const uaLunaLunaLP = useCW20Balance<aLunaLunaLP>(
     contractAddress.cw20.aLunaLunaLP,
-    terraWalletAddress,
+    terraWalletAddress
   );
 
-
-  let lsdBalances: Record<RegisteredLSDs, u<LSD<RegisteredLSDs>>> = {} as Record<RegisteredLSDs, u<LSD<RegisteredLSDs>>>
+  let lsdBalances: Record<
+    RegisteredLSDs,
+    u<LSD<RegisteredLSDs>>
+  > = {} as Record<RegisteredLSDs, u<LSD<RegisteredLSDs>>>;
   Object.values(RegisteredLSDs).forEach((lsd: RegisteredLSDs) => {
-    
     lsdBalances[lsd] = useCW20Balance<LSD<typeof lsd>>(
       contractAddress.lsds[lsd]?.info.tokenAddress as CW20Addr,
-      terraWalletAddress,
-    )
-  })
+      terraWalletAddress
+    );
+  });
 
   return useMemo(() => {
     return {
@@ -88,8 +89,8 @@ export function useAnchorBank(): AnchorBank {
         uaLuna,
         uaLunaLunaLP,
         uLuna,
-        uLSDs: lsdBalances
-      }
+        uLSDs: lsdBalances,
+      },
     };
   }, [
     maxTax,
@@ -101,6 +102,6 @@ export function useAnchorBank(): AnchorBank {
     uaUST,
     uaLuna,
     uaLunaLunaLP,
-    lsdBalances
+    lsdBalances,
   ]);
 }

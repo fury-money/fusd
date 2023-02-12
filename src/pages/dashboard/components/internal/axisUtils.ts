@@ -1,12 +1,12 @@
-import { JSDateTime } from '@anchor-protocol/types';
-import { differenceInDays, format, toDate } from 'date-fns';
+import { JSDateTime } from "@anchor-protocol/types";
+import { differenceInDays, format, toDate } from "date-fns";
 
 export function shortDay(datetime: JSDateTime): string {
-  return format(datetime, 'MMM d');
+  return format(datetime, "MMM d");
 }
 
 export function mediumDay(datetime: JSDateTime): string {
-  return format(datetime, 'EEE, MMM d');
+  return format(datetime, "EEE, MMM d");
 }
 
 function checkTickPrint(i: number, length: number, timestamp: number): boolean {
@@ -29,10 +29,10 @@ function checkTickPrint(i: number, length: number, timestamp: number): boolean {
 export function xTimestampAxis(datetimes: JSDateTime[]): string[] {
   return datetimes.map((timestamp, i) => {
     return i === datetimes.length - 1
-      ? 'Now'
+      ? "Now"
       : checkTickPrint(i, datetimes.length, timestamp)
-      ? format(timestamp, 'MMM')
-      : '';
+      ? format(timestamp, "MMM")
+      : "";
   });
 }
 

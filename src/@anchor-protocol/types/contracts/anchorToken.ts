@@ -5,9 +5,9 @@ import {
   Num,
   Rate,
   u,
-} from '@libs/types';
-import { ANC, AncUstLP } from '../currencies';
-import { moneyMarket } from './moneyMarket';
+} from "@libs/types";
+import { ANC, AncUstLP } from "../currencies";
+import { moneyMarket } from "./moneyMarket";
 
 export namespace anchorToken {
   export namespace collector {
@@ -100,7 +100,7 @@ export namespace anchorToken {
       snapshot_period: number;
     }
 
-    export type PollStatus = 'in_progress' | 'passed' | 'rejected' | 'executed';
+    export type PollStatus = "in_progress" | "passed" | "rejected" | "executed";
 
     export interface ExecuteMsg {
       order: number;
@@ -160,7 +160,7 @@ export namespace anchorToken {
         filter?: PollStatus;
         start_after?: number;
         limit?: number;
-        order_by?: 'asc' | 'desc';
+        order_by?: "asc" | "desc";
       };
     }
 
@@ -190,9 +190,9 @@ export namespace anchorToken {
         [
           number, // poll_id
           {
-            vote: 'yes' | 'no';
+            vote: "yes" | "no";
             balance: u<ANC>;
-          },
+          }
         ]
       >;
     }
@@ -215,7 +215,7 @@ export namespace anchorToken {
 
     export interface Voter {
       voter: HumanAddr;
-      vote: 'yes' | 'no';
+      vote: "yes" | "no";
       balance: u<ANC>;
     }
 
@@ -227,7 +227,7 @@ export namespace anchorToken {
         poll_id?: number;
         start_after?: HumanAddr;
         limit?: number;
-        order_by?: 'asc' | 'desc';
+        order_by?: "asc" | "desc";
       };
     }
 

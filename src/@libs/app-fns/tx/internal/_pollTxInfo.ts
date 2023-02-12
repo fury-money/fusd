@@ -1,8 +1,8 @@
-import { QueryClient } from '@libs/query-client';
-import { TxResult } from '@terra-money/wallet-provider';
-import { TxResultRendering, TxStreamPhase } from '../../models/tx';
-import { pollTxInfo, TxInfoData } from '../../queries/txInfo';
-import { TxHelper } from './TxHelper';
+import { QueryClient } from "@libs/query-client";
+import { TxResult } from "@terra-money/wallet-provider";
+import { TxResultRendering, TxStreamPhase } from "../../models/tx";
+import { pollTxInfo, TxInfoData } from "../../queries/txInfo";
+import { TxHelper } from "./TxHelper";
 
 interface Params {
   helper: TxHelper;

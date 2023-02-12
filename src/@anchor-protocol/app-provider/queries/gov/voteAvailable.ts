@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { useRewardsAncGovernanceRewardsQuery } from '../rewards/ancGovernanceRewards';
+import { useMemo } from "react";
+import { useRewardsAncGovernanceRewardsQuery } from "../rewards/ancGovernanceRewards";
 
 export function useGovVoteAvailableQuery(pollId: number | undefined): boolean {
   const { data: { userGovStakingInfo } = {} } =

@@ -1,5 +1,5 @@
-import { FormReturn, useForm } from '@libs/use-form';
-import { useCallback } from 'react';
+import { FormReturn, useForm } from "@libs/use-form";
+import { useCallback } from "react";
 
 export interface RestoreTxFormInput {
   txHash: string;
@@ -25,8 +25,8 @@ export const useRestoreTxForm = () => {
           undefined,
         ];
       },
-    [],
+    []
   );
 
-  return useForm(restoreForm, {}, () => ({ txHash: '' }));
+  return useForm(restoreForm, {}, () => ({ txHash: "" }));
 };

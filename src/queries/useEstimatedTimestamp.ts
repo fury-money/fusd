@@ -1,11 +1,11 @@
-import { useAnchorWebapp } from '@anchor-protocol/app-provider';
-import { useLastSyncedBlock } from './useLastSyncedBlock';
-import { millisecondsInHour, getDaysInYear } from 'date-fns';
+import { useAnchorWebapp } from "@anchor-protocol/app-provider";
+import { useLastSyncedBlock } from "./useLastSyncedBlock";
+import { millisecondsInHour, getDaysInYear } from "date-fns";
 
 const hoursInDay = 24;
 
 export const useEstimatedTimestamp = (
-  blockHeight: number,
+  blockHeight: number
 ): number | undefined => {
   const {
     constants: { blocksPerYear },

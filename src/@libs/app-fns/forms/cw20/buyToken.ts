@@ -1,11 +1,11 @@
-import { min } from '@libs/big-math';
-import { demicrofy, microfy } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { CW20Addr, HumanAddr, Rate, Token, u, UST } from '@libs/types';
-import { FormFunction, FormReturn } from '@libs/use-form';
-import big, { Big, BigSource } from 'big.js';
-import { computeMaxUstBalanceForUstTransfer } from '../../logics/computeMaxUstBalanceForUstTransfer';
-import { terraswapSimulationQuery } from '../../queries/terraswap/simulation';
+import { min } from "@libs/big-math";
+import { demicrofy, microfy } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { CW20Addr, HumanAddr, Rate, Token, u, UST } from "@libs/types";
+import { FormFunction, FormReturn } from "@libs/use-form";
+import big, { Big, BigSource } from "big.js";
+import { computeMaxUstBalanceForUstTransfer } from "../../logics/computeMaxUstBalanceForUstTransfer";
+import { terraswapSimulationQuery } from "../../queries/terraswap/simulation";
 
 export interface CW20BuyTokenFormInput<T extends Token> {
   ustAmount?: UST;
@@ -14,7 +14,7 @@ export interface CW20BuyTokenFormInput<T extends Token> {
 }
 
 export interface CW20BuyTokenFormDependency {
-  queryClient: QueryClient;
+  queryClient: QueryClient | undefined;
   //
   ustTokenPairAddr: HumanAddr;
   tokenAddr: CW20Addr;
@@ -71,7 +71,7 @@ export const cw20BuyTokenForm = <T extends Token>({
     ustBalance,
     taxRate,
     maxTaxUUSD,
-    fixedFee,
+    fixedFee
   );
 
   return ({
@@ -88,9 +88,9 @@ export const cw20BuyTokenForm = <T extends Token>({
       !!tokenAmount && tokenAmount.length > 0 && big(tokenAmount).gt(0);
 
     const invalidMaxSpread: string | null =
-      maxSpread.length === 0 ? 'Max Spread is required' : null;
+      maxSpread.length === 0 ? "Max Spread is required" : null;
 
-    if (!ustAmountExists && !tokenAmountExists) {
+    if ((!ustAmountExists && !tokenAmountExists) || !queryClient) {
       return [
         {
           ustAmount,
@@ -125,11 +125,11 @@ export const cw20BuyTokenForm = <T extends Token>({
             amount: microfy(ustAmount!).toFixed() as u<UST>,
             info: {
               native_token: {
-                denom: 'uusd',
+                denom: "uusd",
               },
             },
           },
-          queryClient,
+          queryClient
         ).then(
           ({
             simulation: { return_amount, commission_amount, spread_amount },
@@ -141,7 +141,7 @@ export const cw20BuyTokenForm = <T extends Token>({
             const beliefPrice = (
               big(return_amount).gt(0)
                 ? microfy(ustAmount!).div(return_amount).toFixed()
-                : '0'
+                : "0"
             ) as UST;
 
             const rate = big(1).minus(maxSpread).toFixed() as Rate;
@@ -158,12 +158,12 @@ export const cw20BuyTokenForm = <T extends Token>({
 
             const invalidTxFee =
               connected && big(txFee).gt(ustBalance)
-                ? 'Not enough transaction fees'
+                ? "Not enough transaction fees"
                 : null;
 
             const invalidUstAmount =
               connected && microfy(ustAmount!).plus(txFee).gt(ustBalance)
-                ? 'Not enough axlUSDC'
+                ? "Not enough axlUSDC"
                 : null;
 
             const availableTx =
@@ -180,7 +180,7 @@ export const cw20BuyTokenForm = <T extends Token>({
                 .minus(microfy(ustAmount!))
                 .minus(txFee)
                 .lt(fixedFee)
-                ? 'You may run out of USD balance needed for future transactions'
+                ? "You may run out of USD balance needed for future transactions"
                 : null;
 
             return {
@@ -194,7 +194,7 @@ export const cw20BuyTokenForm = <T extends Token>({
               invalidUstAmount,
               availableTx,
             };
-          },
+          }
         ),
       ];
     } else if (tokenAmountExists) {
@@ -219,7 +219,7 @@ export const cw20BuyTokenForm = <T extends Token>({
               },
             },
           },
-          queryClient,
+          queryClient
         ).then(
           ({
             simulation: { return_amount, spread_amount, commission_amount },
@@ -246,12 +246,12 @@ export const cw20BuyTokenForm = <T extends Token>({
 
             const invalidUstAmount =
               connected && big(return_amount).plus(txFee).gt(ustBalance)
-                ? 'Not enough axlUSD'
+                ? "Not enough axlUSD"
                 : null;
 
             const invalidTxFee =
               connected && big(txFee).gt(ustBalance)
-                ? 'Not enough transaction fees'
+                ? "Not enough transaction fees"
                 : null;
 
             const availableTx =
@@ -265,7 +265,7 @@ export const cw20BuyTokenForm = <T extends Token>({
               connected &&
               availableTx &&
               big(ustBalance).minus(return_amount).minus(txFee).lt(fixedFee)
-                ? 'You may run out of USD balance needed for future transactions'
+                ? "You may run out of USD balance needed for future transactions"
                 : null;
 
             return {
@@ -279,7 +279,7 @@ export const cw20BuyTokenForm = <T extends Token>({
               warningNextTxFee,
               availableTx,
             };
-          },
+          }
         ),
       ];
     }

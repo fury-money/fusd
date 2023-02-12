@@ -1,5 +1,5 @@
-import big, { Big, BigSource } from 'big.js';
-import { easeLinear } from 'd3-ease';
+import big, { Big, BigSource } from "big.js";
+import { easeLinear } from "d3-ease";
 
 export interface Options {
   /** start value */

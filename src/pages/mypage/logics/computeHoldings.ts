@@ -1,19 +1,19 @@
 import {
   AnchorBalances,
   BAssetInfoAndBalancesTotal,
-} from '@anchor-protocol/app-fns';
-import { moneyMarket, u, UST } from '@anchor-protocol/types';
-import { sum, vectorMultiply } from '@libs/big-math';
-import { Big } from 'big.js';
+} from "@anchor-protocol/app-fns";
+import { moneyMarket, u, UST } from "@anchor-protocol/types";
+import { sum, vectorMultiply } from "@libs/big-math";
+import { Big } from "big.js";
 
 export function computeHoldings(
   tokenBalances: AnchorBalances,
   ancPrice: UST | undefined,
   oraclePrices: moneyMarket.oracle.PricesResponse | undefined,
-  bAssetBalanceTotal: BAssetInfoAndBalancesTotal | undefined,
+  bAssetBalanceTotal: BAssetInfoAndBalancesTotal | undefined
 ) {
   if (!ancPrice || !oraclePrices) {
-    return '0' as u<UST>;
+    return "0" as u<UST>;
   }
 
   const holdingsVector = [0];

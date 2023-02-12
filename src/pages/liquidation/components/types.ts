@@ -1,5 +1,5 @@
-import { TxResultRendering } from '@libs/app-fns';
-import { StreamDone, StreamInProgress } from '@rx-stream/react';
+import { TxResultRendering } from "@libs/app-fns";
+import { StreamDone, StreamInProgress } from "@rx-stream/react";
 
 export type FormParams = void;
 

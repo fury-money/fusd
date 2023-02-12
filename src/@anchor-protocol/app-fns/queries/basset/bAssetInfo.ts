@@ -1,11 +1,11 @@
-import { basset, cw20, moneyMarket, Token } from '@anchor-protocol/types';
-import { cw20TokenInfoQuery } from '@libs/app-fns';
+import { basset, cw20, moneyMarket, Token } from "@anchor-protocol/types";
+import { cw20TokenInfoQuery } from "@libs/app-fns";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface InfoWasmQuery {
   custodyConfig: WasmQuery<
@@ -25,13 +25,13 @@ interface WormholeTokenWasmQuery {
 export type BAssetInfo = WasmQueryData<
   InfoWasmQuery & WormholeTokenWasmQuery
 > & {
-  bAsset: moneyMarket.overseer.WhitelistResponse['elems'][number];
+  bAsset: moneyMarket.overseer.WhitelistResponse["elems"][number];
   wormholeTokenInfo?: cw20.TokenInfoResponse<Token>;
 };
 
 export async function bAssetInfoQuery(
-  bAsset: moneyMarket.overseer.WhitelistResponse['elems'][number] | undefined,
-  queryClient: QueryClient,
+  bAsset: moneyMarket.overseer.WhitelistResponse["elems"][number] | undefined,
+  queryClient: QueryClient
 ): Promise<BAssetInfo | undefined> {
   if (!bAsset) {
     return undefined;
@@ -81,7 +81,7 @@ export async function bAssetInfoQuery(
   if (converterConfig.wormhole_token_address) {
     const { tokenInfo: wormholeTokenInfo } = await cw20TokenInfoQuery(
       queryClient,
-      converterConfig.wormhole_token_address,
+      converterConfig.wormhole_token_address
     );
 
     return {

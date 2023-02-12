@@ -1,4 +1,4 @@
-import { Gas, HumanAddr, Rate } from '@libs/types';
+import { Gas, HumanAddr, Rate } from "@libs/types";
 
 export interface QueryRefetch {
   queryKey: string;

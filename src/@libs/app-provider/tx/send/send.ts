@@ -1,13 +1,13 @@
-import { sendTx } from '@libs/app-fns';
-import { useFixedFee } from '@libs/app-provider/hooks/useFixedFee';
-import { HumanAddr, terraswap, Token, u, UST } from '@libs/types';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useApp } from '../../contexts/app';
-import { TERRA_TX_KEYS } from '../../env';
-import { useRefetchQueries } from '../../hooks/useRefetchQueries';
-import { useUstTax } from '../../queries/terra/tax';
+import { sendTx } from "@libs/app-fns";
+import { useFixedFee } from "@libs/app-provider/hooks/useFixedFee";
+import { HumanAddr, terraswap, Token, u, UST } from "@libs/types";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useApp } from "../../contexts/app";
+import { TERRA_TX_KEYS } from "../../env";
+import { useRefetchQueries } from "../../hooks/useRefetchQueries";
+import { useUstTax } from "../../queries/terra/tax";
 
 export interface SendTxParams {
   amount: u<Token>;
@@ -34,7 +34,7 @@ export function useSendTx() {
 
   const stream = useCallback(
     ({ asset, memo, toAddr, amount, txFee, onTxSucceed }: SendTxParams) => {
-      if (!availablePost || !connected || !connectedWallet) {
+      if (!availablePost || !connected || !connectedWallet || !queryClient) {
         throw new Error(`Can't post!`);
       }
 
@@ -72,7 +72,7 @@ export function useSendTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   return connectedWallet ? stream : null;

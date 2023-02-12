@@ -1,12 +1,12 @@
-import { min } from '@libs/big-math';
-import { Rate, u, UST } from '@libs/types';
-import big, { Big, BigSource } from 'big.js';
+import { min } from "@libs/big-math";
+import { Rate, u, UST } from "@libs/types";
+import big, { Big, BigSource } from "big.js";
 
 export function estimatedAmountOfClaimBAsset(
   claimableRewards: u<UST<BigSource>>,
   taxRate: Rate,
   maxTaxUUSD: u<UST>,
-  fixedFee: u<UST>,
+  fixedFee: u<UST>
 ): { txFee: u<UST<Big>>; estimatedAmount: u<UST<Big>> } | undefined {
   if (big(claimableRewards).lte(0)) {
     return undefined;
@@ -18,7 +18,7 @@ export function estimatedAmountOfClaimBAsset(
   // ) + Fixed_gas
   const txFee = min(
     big(big(claimableRewards).div(big(1).plus(taxRate))).mul(taxRate),
-    maxTaxUUSD,
+    maxTaxUUSD
   ).plus(fixedFee) as u<UST<Big>>;
 
   const estimatedAmount = big(claimableRewards).minus(txFee) as u<UST<Big>>;

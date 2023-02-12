@@ -1,30 +1,30 @@
-import { formatLuna } from '@anchor-protocol/notation';
-import { Gas, HumanAddr, Rate, u, UST } from '@anchor-protocol/types';
+import { formatLuna } from "@anchor-protocol/notation";
+import { Gas, HumanAddr, Rate, u, UST } from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { demicrofy, stripULuna } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { demicrofy, stripULuna } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { Observable } from "rxjs";
 
 export function bondWithdrawTx($: {
   walletAddr: HumanAddr;
@@ -48,7 +48,7 @@ export function bondWithdrawTx($: {
           withdraw_unbonded: {},
         }),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -60,10 +60,10 @@ export function bondWithdrawTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const transfer = pickEvent(rawLog, 'transfer');
+      const transfer = pickEvent(rawLog, "transfer");
 
       if (!transfer) {
-        return helper.failedToFindEvents('transfer');
+        return helper.failedToFindEvents("transfer");
       }
 
       try {
@@ -75,9 +75,9 @@ export function bondWithdrawTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             !!unbondedAmount && {
-              name: 'Unbonded Amount',
+              name: "Unbonded Amount",
               value:
-                formatLuna(demicrofy(stripULuna(unbondedAmount))) + ' LUNA',
+                formatLuna(demicrofy(stripULuna(unbondedAmount))) + " LUNA",
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),
@@ -86,6 +86,6 @@ export function bondWithdrawTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

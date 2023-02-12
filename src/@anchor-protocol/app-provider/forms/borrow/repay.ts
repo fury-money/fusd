@@ -1,21 +1,21 @@
-import { BorrowBorrower, borrowRepayForm } from '@anchor-protocol/app-fns';
+import { BorrowBorrower, borrowRepayForm } from "@anchor-protocol/app-fns";
 import {
   BorrowMarketWithDisplay,
   useAnchorBank,
   useDeploymentTarget,
-} from '@anchor-protocol/app-provider';
-import { useFixedFee, useUstTax } from '@libs/app-provider';
-import { UST } from '@libs/types';
-import { useForm } from '@libs/use-form';
-import { useAccount } from 'contexts/account';
-import { useWhitelistCollateralQuery } from 'queries';
-import { useAnchorWebapp } from '../../contexts/context';
-import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
-import { useBorrowMarketQuery } from '../../queries/borrow/market';
+} from "@anchor-protocol/app-provider";
+import { useFixedFee, useUstTax } from "@libs/app-provider";
+import { UST } from "@libs/types";
+import { useForm } from "@libs/use-form";
+import { useAccount } from "contexts/account";
+import { useWhitelistCollateralQuery } from "queries";
+import { useAnchorWebapp } from "../../contexts/context";
+import { useBorrowBorrowerQuery } from "../../queries/borrow/borrower";
+import { useBorrowMarketQuery } from "../../queries/borrow/market";
 
 export function useBorrowRepayForm(
   fallbackBorrowMarket: BorrowMarketWithDisplay,
-  fallbackBorrowBorrower: BorrowBorrower,
+  fallbackBorrowBorrower: BorrowBorrower
 ) {
   const { target } = useDeploymentTarget();
 
@@ -72,6 +72,6 @@ export function useBorrowRepayForm(
       marketState,
       bAssetLtvs,
     },
-    () => ({ repayAmount: '' as UST }),
+    () => ({ repayAmount: "" as UST })
   );
 }

@@ -1,11 +1,15 @@
-import { bAssetClaimTx } from '@anchor-protocol/app-fns';
-import { EstimatedFee, useFixedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { RewardBreakdown } from 'pages/basset/hooks/useRewardsBreakdown';
-import { useCallback } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { bAssetClaimTx } from "@anchor-protocol/app-fns";
+import {
+  EstimatedFee,
+  useFixedFee,
+  useRefetchQueries,
+} from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { RewardBreakdown } from "pages/basset/hooks/useRewardsBreakdown";
+import { useCallback } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface BAssetClaimTxParams {
   rewardBreakdowns: RewardBreakdown[];
@@ -24,8 +28,8 @@ export function useBAssetClaimTx() {
 
   const stream = useCallback(
     ({ onTxSucceed, rewardBreakdowns, estimatedFee }: BAssetClaimTxParams) => {
-      if (!connectedWallet || !connectedWallet.availablePost) {
-        throw new Error('Can not post!');
+      if (!connectedWallet || !connectedWallet.availablePost || !queryClient) {
+        throw new Error("Can not post!");
       }
 
       return bAssetClaimTx({
@@ -55,7 +59,7 @@ export function useBAssetClaimTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

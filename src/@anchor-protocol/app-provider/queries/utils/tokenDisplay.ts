@@ -1,11 +1,11 @@
-import { useNetwork } from '@anchor-protocol/app-provider';
-import { CW20TokenDisplayInfo } from '@libs/app-fns';
+import { useNetwork } from "@anchor-protocol/app-provider";
+import { CW20TokenDisplayInfo } from "@libs/app-fns";
 import {
   EMPTY_QUERY_RESULT,
   useCW20TokenDisplayInfosQuery,
-} from '@libs/app-provider';
-import { useMemo } from 'react';
-import { UseQueryResult } from 'react-query';
+} from "@libs/app-provider";
+import { useMemo } from "react";
+import { UseQueryResult } from "react-query";
 
 export type TokenDisplayInfoByAddr = {
   [tokenAddr: string]: CW20TokenDisplayInfo;
@@ -17,8 +17,8 @@ export const useQueryWithTokenDisplay = <Data, DataWithTokenDisplay>(
   queryResult: UseQueryResult<Data | undefined>,
   withTokenDisplay: (
     data: Data,
-    tokenDisplayInfoByAddr: TokenDisplayInfoByAddr,
-  ) => UnitOrArrayWithTokenDisplay<Data, DataWithTokenDisplay>,
+    tokenDisplayInfoByAddr: TokenDisplayInfoByAddr
+  ) => UnitOrArrayWithTokenDisplay<Data, DataWithTokenDisplay>
 ): UseQueryResult<
   UnitOrArrayWithTokenDisplay<Data, DataWithTokenDisplay> | undefined
 > => {
@@ -33,7 +33,7 @@ export const useQueryWithTokenDisplay = <Data, DataWithTokenDisplay>(
       ...queryResult,
       data: withTokenDisplay(
         queryResult.data,
-        tokenDisplayInfos.data[network.name],
+        tokenDisplayInfos.data[network.name]
       ),
     } as UseQueryResult<
       UnitOrArrayWithTokenDisplay<Data, DataWithTokenDisplay> | undefined

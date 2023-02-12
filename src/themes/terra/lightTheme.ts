@@ -1,21 +1,21 @@
-import type { DefaultTheme } from 'styled-components';
+import type { DefaultTheme } from "styled-components";
 import {
   defaultLightTheme,
   LIGHT_GRAY_300,
   LIGHT_GRAY_600,
   BLACK,
-} from '../lightThemeDefault';
+} from "../lightThemeDefault";
 
-const SECONDARY_200 = '#285e28';
-const SECONDARY_300 = 'rgba(75, 219, 75, 0.1)';
-const SECONDARY_400 = '#4BDB4B';
-const SECONDARY_500 = '#36a337';
-const SECONDARY_600 = '#2d832d';
-const SECONDARY_700 = '#246d25';
-const SECONDARY_800 = '#174f1a';
-const SECONDARY_900 = '#0e3311';
+const SECONDARY_200 = "#285e28";
+const SECONDARY_300 = "rgba(75, 219, 75, 0.1)";
+const SECONDARY_400 = "#4BDB4B";
+const SECONDARY_500 = "#36a337";
+const SECONDARY_600 = "#2d832d";
+const SECONDARY_700 = "#246d25";
+const SECONDARY_800 = "#174f1a";
+const SECONDARY_900 = "#0e3311";
 
-const GRAY_400 = '#101010';
+const GRAY_400 = "#101010";
 
 export const lightTheme: DefaultTheme = {
   ...defaultLightTheme,

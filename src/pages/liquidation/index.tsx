@@ -20,7 +20,6 @@ import { u, UST } from '@libs/types';
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { demicrofy, formatOutput, useFormatters } from '@anchor-protocol/formatter';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
-import { renderBuyLink } from 'pages/borrow/components/CollateralList';
 import { useAllLiquidationStats } from './components/useLiquidationGraph';
 import { StatsDoughnutCard } from './components/StatsDoughnutCard';
 import { Link } from 'react-router-dom';
@@ -188,7 +187,7 @@ function Component({ className }: EarnProps) {
                         </i>
                         <div>
                           <div className="coin">
-                            {collateral.symbol} {renderBuyLink(collateral)}
+                            {collateral.symbol}
                           </div>
                           <p className="name">{collateral.name}</p>
                         </div>

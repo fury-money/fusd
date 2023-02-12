@@ -5,13 +5,13 @@ import {
   HumanAddr,
   moneyMarket,
   NativeDenom,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface MarketBAssetWasmQuery {
   aLunaBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<aLuna>>;
@@ -28,7 +28,7 @@ export async function marketBAssetQuery(
   aLunaContract: CW20Addr,
   oracleContract: HumanAddr,
   custodyContract: HumanAddr,
-  nativeDenom: NativeDenom,
+  nativeDenom: NativeDenom
 ): Promise<MarketBAsset> {
   return wasmFetch<MarketBAssetWasmQuery>({
     ...queryClient,

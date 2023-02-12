@@ -1,14 +1,14 @@
-import { ancAncUstLpProvideTx } from '@anchor-protocol/app-fns';
-import { ANC, Rate, u, UST } from '@anchor-protocol/types';
-import { useFixedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
-import { useAnchorBank } from '../../hooks/useAnchorBank';
-import { useAncPriceQuery } from '../../queries/anc/price';
+import { ancAncUstLpProvideTx } from "@anchor-protocol/app-fns";
+import { ANC, Rate, u, UST } from "@anchor-protocol/types";
+import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
+import { useAnchorBank } from "../../hooks/useAnchorBank";
+import { useAncPriceQuery } from "../../queries/anc/price";
 
 export interface AncAncUstLpProvideTxParams {
   ancAmount: ANC;
@@ -45,9 +45,10 @@ export function useAncAncUstLpProvideTx() {
         !connected ||
         !connectedWallet ||
         !terraWalletAddress ||
-        !ancPrice
+        !ancPrice ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return ancAncUstLpProvideTx({
@@ -57,7 +58,7 @@ export function useAncAncUstLpProvideTx() {
         walletAddr: terraWalletAddress,
         ancAmount,
         ustAmount,
-        slippageTolerance: '0.01' as Rate,
+        slippageTolerance: "0.01" as Rate,
         // receipts
         ancPrice,
         tax,
@@ -94,7 +95,7 @@ export function useAncAncUstLpProvideTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

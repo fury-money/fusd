@@ -1,11 +1,11 @@
-import { liquidationWithdrawCollateralTx } from '@anchor-protocol/app-fns/tx/liquidate/collateral';
-import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { WhitelistCollateral } from 'queries';
-import { useCallback } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { liquidationWithdrawCollateralTx } from "@anchor-protocol/app-fns/tx/liquidate/collateral";
+import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { WhitelistCollateral } from "queries";
+import { useCallback } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface LiquidationWithdrawCollateralTxParams {
   txFee: EstimatedFee;
@@ -24,17 +24,26 @@ export function useLiquidationWithdrawCollateralTx(
 
   const stream = useCallback(
     ({ txFee, onTxSucceed }: LiquidationWithdrawCollateralTxParams) => {
-      if (!connectedWallet || !connectedWallet.availablePost || !collateral) {
-        throw new Error('Can not post!');
+      if (
+        !connectedWallet ||
+        !connectedWallet.availablePost ||
+        !collateral ||
+        !queryClient
+      ) {
+        throw new Error("Can not post!");
       }
 
       return liquidationWithdrawCollateralTx({
         // fabricateMarketDepositStableCoin
         walletAddr: connectedWallet.walletAddress,
-        liquidationQueueAddr: contractAddress.liquidation.liquidationQueueContract,
+        liquidationQueueAddr:
+          contractAddress.liquidation.liquidationQueueContract,
         collateralAddr: collateral.collateral_token,
         // If the collateral is a lsd, we need to burn tokens
-        tokenWrapperAddr: (collateral && "info" in collateral) ? collateral.collateral_token : undefined, 
+        tokenWrapperAddr:
+          collateral && "info" in collateral
+            ? collateral.collateral_token
+            : undefined,
 
         // post
         network: connectedWallet.network,
@@ -61,7 +70,7 @@ export function useLiquidationWithdrawCollateralTx(
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

@@ -1,6 +1,6 @@
-import { Chain, DeploymentTarget } from '@anchor-protocol/app-provider';
-import { EvmChainId } from '@anchor-protocol/crossanchor-sdk';
-import { CW20Addr, ERC20Addr } from '@anchor-protocol/types';
+import { Chain, DeploymentTarget } from "@anchor-protocol/app-provider";
+import { EvmChainId } from "@anchor-protocol/crossanchor-sdk";
+import { CW20Addr, ERC20Addr } from "@anchor-protocol/types";
 import {
   ChainId,
   CHAIN_ID_AVAX,
@@ -12,19 +12,19 @@ import {
   getOriginalAssetTerra,
   hexToUint8Array,
   uint8ArrayToNative,
-} from '@certusone/wormhole-sdk';
-import { BaseProvider } from '@ethersproject/providers';
-import { LCDClient } from '@terra-money/terra.js';
-import { NetworkInfo } from '@terra-money/wallet-provider';
-import { ethers } from 'ethers';
-import { WhitelistCollateral } from 'queries';
+} from "@certusone/wormhole-sdk";
+import { BaseProvider } from "@ethersproject/providers";
+import { LCDClient } from "@terra-money/terra.js";
+import { NetworkInfo } from "@terra-money/wallet-provider";
+import { ethers } from "ethers";
+import { WhitelistCollateral } from "queries";
 
 export type BridgeAssets = Map<CW20Addr, CW20Addr | ERC20Addr>;
 
 export function bridgeAssetsQuery(
   whitelist: WhitelistCollateral[] | undefined,
   target: DeploymentTarget,
-  network: NetworkInfo,
+  network: NetworkInfo
 ): Promise<BridgeAssets | undefined> {
   if (whitelist === undefined) {
     return Promise.resolve(undefined);
@@ -44,10 +44,10 @@ export function bridgeAssetsQuery(
 }
 
 function bridgeTerraAssetsQuery(
-  whitelist: WhitelistCollateral[],
+  whitelist: WhitelistCollateral[]
 ): BridgeAssets {
   return new Map<CW20Addr, CW20Addr | ERC20Addr>(
-    whitelist.map((elem) => [elem.collateral_token, elem.collateral_token]),
+    whitelist.map((elem) => [elem.collateral_token, elem.collateral_token])
   );
 }
 
@@ -112,7 +112,7 @@ function bridgeTerraAssetsQuery(
 async function bridgeEvmAssetsQuery(
   whitelist: WhitelistCollateral[],
   target: DeploymentTarget,
-  network: NetworkInfo,
+  network: NetworkInfo
 ): Promise<BridgeAssets> {
   const lcd = new LCDClient({
     URL: network.lcd,
@@ -130,13 +130,13 @@ async function bridgeEvmAssetsQuery(
         wormholeChainId,
         provider,
         network,
-        collateral.collateral_token,
-      ),
-    ),
+        collateral.collateral_token
+      )
+    )
   );
 
   const map = promises.reduce((previous, current) => {
-    if (current.status === 'fulfilled' && current.value !== undefined) {
+    if (current.status === "fulfilled" && current.value !== undefined) {
       previous = [
         ...previous,
         [current.value[0] as CW20Addr, current.value[1] as ERC20Addr],
@@ -153,9 +153,9 @@ const fetchEvmAddr = async (
   wormholeChainId: ChainId,
   provider: BaseProvider,
   network: NetworkInfo,
-  tokenAddr: string,
+  tokenAddr: string
 ) => {
-  const ETH_ADDR_ZERO = '0x0000000000000000000000000000000000000000';
+  const ETH_ADDR_ZERO = "0x0000000000000000000000000000000000000000";
 
   const wormhole = await getOriginalAssetTerra(lcd as any, tokenAddr);
   if (wormhole.isWrapped) {
@@ -166,7 +166,7 @@ const fetchEvmAddr = async (
         tokenAddr,
         uint8ArrayToNative(
           wormhole.assetAddress,
-          wormhole.chainId,
+          wormhole.chainId
         ) as ERC20Addr,
       ];
     }
@@ -177,12 +177,12 @@ const fetchEvmAddr = async (
   // it is wrapped onto our selected chain
   const foreignAsset = await getForeignAssetEth(
     // TODO: need a better way to handle this
-    network.chainID === 'bombay-12'
-      ? '0x61E44E506Ca5659E6c0bba9b678586fA2d729756'
-      : '0x0e082F06FF657D94310cB8cE8B0D9a04541d8052',
+    network.chainID === "bombay-12"
+      ? "0x61E44E506Ca5659E6c0bba9b678586fA2d729756"
+      : "0x0e082F06FF657D94310cB8cE8B0D9a04541d8052",
     provider,
     CHAIN_ID_TERRA,
-    hexToUint8Array(await getEmitterAddressTerra(tokenAddr)),
+    hexToUint8Array(await getEmitterAddressTerra(tokenAddr))
   );
   if (foreignAsset && foreignAsset !== ETH_ADDR_ZERO) {
     return [tokenAddr, foreignAsset as ERC20Addr];
@@ -193,11 +193,11 @@ const fetchEvmAddr = async (
 
 const getWormholeChainId = (
   target: DeploymentTarget,
-  network: NetworkInfo,
+  network: NetworkInfo
 ): ChainId => {
   switch (target.chain) {
     case Chain.Ethereum:
-      return network.name === 'testnet'
+      return network.name === "testnet"
         ? CHAIN_ID_ETHEREUM_ROPSTEN
         : CHAIN_ID_ETH;
     case Chain.Avalanche:
@@ -208,18 +208,18 @@ const getWormholeChainId = (
 
 const getEvmChainId = (
   target: DeploymentTarget,
-  network: NetworkInfo,
+  network: NetworkInfo
 ): number | string => {
   switch (target.chain) {
     case Chain.Ethereum:
-      return network.name === 'testnet'
+      return network.name === "testnet"
         ? EvmChainId.ETHEREUM_ROPSTEN
         : EvmChainId.ETHEREUM;
     case Chain.Avalanche:
       // ethers doesnt recognize many chains
-      return network.name === 'testnet'
-        ? 'https://api.avax-test.network/ext/bc/C/rpc'
-        : 'https://api.avax.network/ext/bc/C/rpc';
+      return network.name === "testnet"
+        ? "https://api.avax-test.network/ext/bc/C/rpc"
+        : "https://api.avax.network/ext/bc/C/rpc";
   }
   return EvmChainId.ETHEREUM;
 };

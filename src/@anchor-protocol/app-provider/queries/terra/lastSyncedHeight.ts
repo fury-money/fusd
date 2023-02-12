@@ -1,14 +1,13 @@
-import { useNetwork } from '@anchor-protocol/app-provider';
-import { lastSyncedHeightQuery } from '@libs/app-fns';
-import { QueryClient } from '@libs/query-client';
-import { createQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+import { useNetwork } from "@anchor-protocol/app-provider";
+import { lastSyncedHeightQuery } from "@libs/app-fns";
+import { QueryClient } from "@libs/query-client";
+import { createQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
 const storageKey = (mantleEndpoint: string) =>
   `__anchor_last_synced_height__?mantle=${mantleEndpoint}`;
-
 
 export function useLastSyncedHeightQuery(): UseQueryResult<number> {
   const { network } = useNetwork();
@@ -16,8 +15,9 @@ export function useLastSyncedHeightQuery(): UseQueryResult<number> {
   const result = useQuery(
     [ANCHOR_QUERY_KEY.TERRA_LAST_SYNCED_HEIGHT, network.chainID],
     createQueryFn(
-      (queryClient: QueryClient, chainID: string) => lastSyncedHeightQuery(queryClient),
-       queryClient!
+      (queryClient: QueryClient, chainID: string) =>
+        lastSyncedHeightQuery(queryClient),
+      queryClient!
     ),
     {
       refetchInterval: 1000 * 60,
@@ -25,7 +25,7 @@ export function useLastSyncedHeightQuery(): UseQueryResult<number> {
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient,
-    },
+    }
   );
 
   return result;

@@ -1,10 +1,10 @@
-import { basset, HumanAddr } from '@anchor-protocol/types';
+import { basset, HumanAddr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface BAssetClaimableRewardsWasmQuery {
   claimableReward: WasmQuery<
@@ -19,7 +19,7 @@ export type BAssetClaimableRewards =
 export async function bAssetClaimableRewardsQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  bAssetRewardAddr: HumanAddr,
+  bAssetRewardAddr: HumanAddr
 ): Promise<BAssetClaimableRewards | undefined> {
   if (!walletAddr) {
     return undefined;

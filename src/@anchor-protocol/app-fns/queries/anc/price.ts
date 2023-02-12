@@ -6,9 +6,9 @@ import {
   Token,
   u,
   UST,
-} from '@anchor-protocol/types';
-import { QueryClient, wasmFetch, WasmQuery } from '@libs/query-client';
-import big from 'big.js';
+} from "@anchor-protocol/types";
+import { QueryClient, wasmFetch, WasmQuery } from "@libs/query-client";
+import big from "big.js";
 
 interface AncPriceWasmQuery {
   ancPrice: WasmQuery<
@@ -30,7 +30,7 @@ export interface AncPriceData {
 
 export async function ancPriceQuery(
   queryClient: QueryClient,
-  ancUstPairAddr: HumanAddr,
+  ancUstPairAddr: HumanAddr
 ): Promise<AncPriceData> {
   const {
     ancPrice: { assets, total_share },
@@ -51,7 +51,7 @@ export async function ancPriceQuery(
   const USTPoolSize = assets[1].amount as unknown as u<UST>;
   const LPShare = total_share as unknown as u<AncUstLP>;
   const ANCPrice = big(USTPoolSize)
-    .div(+ANCPoolSize === 0 ? '1' : ANCPoolSize)
+    .div(+ANCPoolSize === 0 ? "1" : ANCPoolSize)
     .toString() as UST;
 
   return {
@@ -59,7 +59,7 @@ export async function ancPriceQuery(
       ANCPoolSize,
       USTPoolSize,
       LPShare,
-      ANCPrice: ANCPrice.toLowerCase() === 'nan' ? ('0' as UST) : ANCPrice,
+      ANCPrice: ANCPrice.toLowerCase() === "nan" ? ("0" as UST) : ANCPrice,
     },
   };
 }

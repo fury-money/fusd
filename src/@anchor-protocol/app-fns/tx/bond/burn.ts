@@ -1,4 +1,4 @@
-import { formatLuna } from '@anchor-protocol/notation';
+import { formatLuna } from "@anchor-protocol/notation";
 import {
   aLuna,
   CW20Addr,
@@ -7,14 +7,14 @@ import {
   Luna,
   Rate,
   u,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -22,23 +22,23 @@ import {
   _postTx,
   createHookMsg,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
 import {
   demicrofy,
   formatFluidDecimalPoints,
   formatTokenInput,
-} from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Dec,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { Observable } from "rxjs";
 
 export function bondBurnTx($: {
   walletAddr: HumanAddr;
@@ -71,7 +71,7 @@ export function bondBurnTx($: {
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -83,17 +83,17 @@ export function bondBurnTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
         const burnedAmount = pickAttributeValueByKey<u<Luna>>(
           fromContract,
-          'amount',
-          (attrs) => attrs[0],
+          "amount",
+          (attrs) => attrs[0]
         );
 
         const expectedAmount = new Dec(burnedAmount)
@@ -105,18 +105,18 @@ export function bondBurnTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             burnedAmount && {
-              name: 'Burned Amount',
+              name: "Burned Amount",
               value: `${formatLuna(demicrofy(burnedAmount))} bLUNA`,
             },
             expectedAmount && {
-              name: 'Expected Amount',
+              name: "Expected Amount",
               value: `${formatLuna(demicrofy(expectedAmount))} LUNA`,
             },
             {
-              name: 'Exchange Rate',
+              name: "Exchange Rate",
               value: `${formatFluidDecimalPoints(
                 $.exchangeRate,
-                6,
+                6
               )} LUNA per bLUNA`,
             },
             helper.txHashReceipt(),
@@ -126,6 +126,6 @@ export function bondBurnTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

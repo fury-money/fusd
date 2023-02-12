@@ -1,12 +1,12 @@
-import { CW20Addr } from '@anchor-protocol/types';
-import { WhitelistCollateral } from 'queries';
+import { CW20Addr } from "@anchor-protocol/types";
+import { WhitelistCollateral } from "queries";
 
 export function pickCollateral(
   collateralToken: CW20Addr,
-  whitelist: WhitelistCollateral[],
+  whitelist: WhitelistCollateral[]
 ): WhitelistCollateral {
   const elem = whitelist.find(
-    ({ collateral_token }) => collateral_token === collateralToken,
+    ({ collateral_token }) => collateral_token === collateralToken
   );
 
   if (!elem) {

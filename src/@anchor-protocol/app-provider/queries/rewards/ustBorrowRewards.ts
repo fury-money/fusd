@@ -1,14 +1,13 @@
 import {
   RewardsUstBorrowRewards,
   rewardsUstBorrowRewardsQuery,
-} from '@anchor-protocol/app-fns';
-import { EMPTY_QUERY_RESULT } from '@libs/app-provider';
-import { createQueryFn } from '@libs/react-query-utils';
-import { useAccount } from 'contexts/account';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
-
+} from "@anchor-protocol/app-fns";
+import { EMPTY_QUERY_RESULT } from "@libs/app-provider";
+import { createQueryFn } from "@libs/react-query-utils";
+import { useAccount } from "contexts/account";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
 export function useRewardsUstBorrowRewardsQuery(): UseQueryResult<
   RewardsUstBorrowRewards | undefined
@@ -24,13 +23,13 @@ export function useRewardsUstBorrowRewardsQuery(): UseQueryResult<
       terraWalletAddress,
       contractAddress.moneyMarket.market,
     ],
-    createQueryFn(rewardsUstBorrowRewardsQuery, queryClient),
+    createQueryFn(rewardsUstBorrowRewardsQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 1,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: connected && !!queryClient,
-    },
+    }
   );
 
   return connected ? result : EMPTY_QUERY_RESULT;

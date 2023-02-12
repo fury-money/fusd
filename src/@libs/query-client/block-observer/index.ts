@@ -41,7 +41,7 @@ class BlockObserverImpl implements BlockObserver {
     const ws = new WebSocket(endpoint);
 
     ws.onopen = () => {
-      ws.send(JSON.stringify({ subscribe: 'new_block', chain_id: chainID }));
+      ws.send(JSON.stringify({ subscribe: "new_block", chain_id: chainID }));
     };
 
     ws.onmessage = (evt: MessageEvent<string>) => {
@@ -72,7 +72,7 @@ class BlockObserverImpl implements BlockObserver {
 
 export function createBlockObserver(
   endpoint: string,
-  chainID: string,
+  chainID: string
 ): BlockObserver {
   return new BlockObserverImpl(endpoint, chainID);
 }

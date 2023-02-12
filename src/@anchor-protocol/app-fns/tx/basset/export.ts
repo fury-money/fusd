@@ -1,4 +1,4 @@
-import { BAssetInfoWithDisplay } from '@anchor-protocol/app-provider';
+import { BAssetInfoWithDisplay } from "@anchor-protocol/app-provider";
 import {
   basset,
   bAsset,
@@ -8,14 +8,14 @@ import {
   Rate,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -23,18 +23,18 @@ import {
   _postTx,
   createHookMsg,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { formatTokenInput, formatNumeric } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { formatTokenInput, formatNumeric } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { Observable } from "rxjs";
 
 export function bAssetExportTx($: {
   walletAddr: HumanAddr;
@@ -67,7 +67,7 @@ export function bAssetExportTx($: {
           },
         } as cw20.Send<bAsset>),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -79,10 +79,10 @@ export function bAssetExportTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
@@ -94,21 +94,21 @@ export function bAssetExportTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             burnAmount && {
-              name: 'Provided amount',
+              name: "Provided amount",
               value:
                 formatNumeric(burnAmount as u<any>) +
                 ` ${$.bAssetInfo.tokenDisplay.anchor.symbol}`,
             },
             returnAmount && {
-              name: 'Converted amount',
+              name: "Converted amount",
               value:
                 formatNumeric(
                   returnAmount as u<any>,
-                  $.bAssetInfo.tokenDisplay.wormhole.decimals,
+                  $.bAssetInfo.tokenDisplay.wormhole.decimals
                 ) + ` ${$.bAssetInfo.tokenDisplay.wormhole.symbol}`,
             },
             {
-              name: 'Exchange rate',
+              name: "Exchange rate",
               value: `1 ${$.bAssetInfo.tokenDisplay.anchor.symbol} per ${$.bAssetInfo.tokenDisplay.wormhole.symbol}`,
             },
             helper.txHashReceipt(),
@@ -118,6 +118,6 @@ export function bAssetExportTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

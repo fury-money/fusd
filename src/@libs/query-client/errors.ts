@@ -7,7 +7,7 @@ export interface HiveFetchErrorItem {
 export class LcdFault extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'LcdFault';
+    this.name = "LcdFault";
   }
 
   toString = () => {
@@ -19,10 +19,10 @@ export class LcdFetchError extends Error {
   constructor(
     readonly code: number,
     readonly txhash: string,
-    readonly raw_log: string,
+    readonly raw_log: string
   ) {
     super(raw_log);
-    this.name = 'LcdFetchError';
+    this.name = "LcdFetchError";
   }
 
   toString = () => {
@@ -34,10 +34,10 @@ export class HiveFetchError extends Error {
   constructor(public readonly errors: HiveFetchErrorItem[]) {
     super(
       errors
-        .map(({ message, path }, i) => `${i} [${path.join(', ')}]: ${message}`)
-        .join('\n'),
+        .map(({ message, path }, i) => `${i} [${path.join(", ")}]: ${message}`)
+        .join("\n")
     );
-    this.name = 'HiveFetchError';
+    this.name = "HiveFetchError";
   }
 
   toString = () => {

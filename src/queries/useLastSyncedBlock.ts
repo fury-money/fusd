@@ -1,10 +1,10 @@
-import { ANCHOR_QUERY_KEY } from '@anchor-protocol/app-provider';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { UseQueryResult } from 'react-query';
-import { useAnchorQuery } from './useAnchorQuery';
-import { LcdQueryClient } from '@libs/query-client';
-import { useApp } from '@libs/app-provider';
-import { ISODateFormat, Num } from '@libs/types';
+import { ANCHOR_QUERY_KEY } from "@anchor-protocol/app-provider";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { UseQueryResult } from "react-query";
+import { useAnchorQuery } from "./useAnchorQuery";
+import { LcdQueryClient } from "@libs/query-client";
+import { useApp } from "@libs/app-provider";
+import { ISODateFormat, Num } from "@libs/types";
 
 interface Block {
   timestamp: number;
@@ -21,7 +21,7 @@ interface LcdBlocksLatest {
 }
 
 export const lastSyncedBlockQuery = async (
-  lcdQueryClient: LcdQueryClient,
+  lcdQueryClient: LcdQueryClient
 ): Promise<Block> => {
   const {
     block: {
@@ -29,7 +29,7 @@ export const lastSyncedBlockQuery = async (
     },
   } = await lcdQueryClient.lcdFetcher<LcdBlocksLatest>(
     `${lcdQueryClient.lcdEndpoint}/blocks/latest`,
-    lcdQueryClient.requestInit,
+    lcdQueryClient.requestInit
   );
 
   return {
@@ -50,6 +50,6 @@ export const useLastSyncedBlock = (): UseQueryResult<Block> => {
       refetchOnMount: false,
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
-    },
+    }
   );
 };

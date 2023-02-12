@@ -1,9 +1,9 @@
-import { AnchorContractAddress } from '@anchor-protocol/app-provider';
-import { LSDLiquidationBidsResponse } from '@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser';
+import { AnchorContractAddress } from "@anchor-protocol/app-provider";
+import { LSDLiquidationBidsResponse } from "@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser";
 import {
   formatAUSTWithPostfixUnits,
   formatUSTWithPostfixUnits,
-} from '@anchor-protocol/notation';
+} from "@anchor-protocol/notation";
 import {
   aUST,
   UST,
@@ -12,14 +12,14 @@ import {
   Rate,
   u,
   NativeDenom,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -27,149 +27,181 @@ import {
   _postTx,
   TxHelper,
   createHookMsg,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import {
-  demicrofy,
-  formatFluidDecimalPoints,
-} from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { demicrofy, formatFluidDecimalPoints } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   Coin,
   Coins,
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import big, { BigSource } from 'big.js';
-import { CollateralInfo } from 'pages/borrow/components/useCollaterals';
-import { Observable } from 'rxjs';
-import { getLiquidationWithdrawCollateralMsg } from '../liquidate/collateral';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import big, { BigSource } from "big.js";
+import { CollateralInfo } from "pages/borrow/components/useCollaterals";
+import { Observable } from "rxjs";
+import { getLiquidationWithdrawCollateralMsg } from "../liquidate/collateral";
 import _ from "lodash";
-import {Big} from "big.js";
+import { Big } from "big.js";
 
-export interface AbortMissionMessagesParams{
-  walletAddr: HumanAddr,
-  totalAUST: u<aUST>, 
-  contractAddress: AnchorContractAddress,  
-  allLiquidationBids: LSDLiquidationBidsResponse,
-  collaterals: CollateralInfo[],
-  borrowedValue: u<UST<Big>>,
-  uaUST: u<aUST<string>>,
+export interface AbortMissionMessagesParams {
+  walletAddr: HumanAddr;
+  totalAUST: u<aUST>;
+  contractAddress: AnchorContractAddress;
+  allLiquidationBids: LSDLiquidationBidsResponse;
+  collaterals: CollateralInfo[];
+  borrowedValue: u<UST<Big>>;
+  uaUST: u<aUST<string>>;
 }
 
-  export function getAbortMissionMessages({
-    walletAddr,
-    totalAUST,
-    contractAddress,
-    allLiquidationBids,
-    collaterals,
-    borrowedValue,
-    uaUST
-  }: AbortMissionMessagesParams) {
-    const redeemMsg = totalAUST && totalAUST != "0" ? 
-      [new MsgExecuteContract(walletAddr, contractAddress.cw20.aUST, {
-        send: {
-          contract: contractAddress.moneyMarket.market,
-          amount: uaUST,
-          msg: createHookMsg({
-            redeem_stable: {},
+export function getAbortMissionMessages({
+  walletAddr,
+  totalAUST,
+  contractAddress,
+  allLiquidationBids,
+  collaterals,
+  borrowedValue,
+  uaUST,
+}: AbortMissionMessagesParams) {
+  const redeemMsg =
+    totalAUST && totalAUST != "0"
+      ? [
+          new MsgExecuteContract(walletAddr, contractAddress.cw20.aUST, {
+            send: {
+              contract: contractAddress.moneyMarket.market,
+              amount: uaUST,
+              msg: createHookMsg({
+                redeem_stable: {},
+              }),
+            },
           }),
-        },
-      })] : 
-      [];
+        ]
+      : [];
 
-    const liquidationMsgs = allLiquidationBids.map((liq)=> {
-      return liq?.bids?.bidByUser.bids.map((bid)=> {
-        return new MsgExecuteContract(walletAddr, contractAddress.liquidation.liquidationQueueContract, {
-          retract_bid: {
-            bid_idx: bid.idx,
-          },
-        });
-      }) ?? []
-    }).flat();
-    
-    const collateralLiquidationMsgs = collaterals.map((collateral) => getLiquidationWithdrawCollateralMsg({
+  const liquidationMsgs = allLiquidationBids
+    .map((liq) => {
+      return (
+        liq?.bids?.bidByUser.bids.map((bid) => {
+          return new MsgExecuteContract(
+            walletAddr,
+            contractAddress.liquidation.liquidationQueueContract,
+            {
+              retract_bid: {
+                bid_idx: bid.idx,
+              },
+            }
+          );
+        }) ?? []
+      );
+    })
+    .flat();
+
+  const collateralLiquidationMsgs = collaterals
+    .map((collateral) =>
+      getLiquidationWithdrawCollateralMsg({
         walletAddr,
-        liquidationQueueAddr : contractAddress.liquidation.liquidationQueueContract ,
-        collateralToken : collateral.collateral.collateral_token,
-        tokenWrapperAddr: (collateral && "info" in collateral.collateral) ? collateral.collateral.collateral_token : undefined, 
-    })).flat();
-  
-    const repayMsg = borrowedValue && borrowedValue.gt("0") ? [
-        new MsgExecuteContract(
-          walletAddr,
-          contractAddress.moneyMarket.market,
-          {
-            repay_stable: {},
-          },
-          new Coins([new Coin(contractAddress.native.usd, borrowedValue.toString())]),
-        ),
-      ] : [];
+        liquidationQueueAddr:
+          contractAddress.liquidation.liquidationQueueContract,
+        collateralToken: collateral.collateral.collateral_token,
+        tokenWrapperAddr:
+          collateral && "info" in collateral.collateral
+            ? collateral.collateral.collateral_token
+            : undefined,
+      })
+    )
+    .flat();
 
-    const withdrawCollateralMsgs = collaterals.map((collateral) => {
-      if(!collateral.rawLockedAmount || collateral.rawLockedAmount == "0"){
+  const repayMsg =
+    borrowedValue && borrowedValue.gt("0")
+      ? [
+          new MsgExecuteContract(
+            walletAddr,
+            contractAddress.moneyMarket.market,
+            {
+              repay_stable: {},
+            },
+            new Coins([
+              new Coin(contractAddress.native.usd, borrowedValue.toString()),
+            ])
+          ),
+        ]
+      : [];
+
+  const withdrawCollateralMsgs = collaterals
+    .map((collateral) => {
+      if (!collateral.rawLockedAmount || collateral.rawLockedAmount == "0") {
         return [];
       }
-      console.log(collateral.rawLockedAmount)
+      console.log(collateral.rawLockedAmount);
       return _.compact([
         // unlock collateral
-        new MsgExecuteContract(walletAddr, contractAddress.moneyMarket.overseer, {
-          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L78
-          unlock_collateral: {
-            collaterals: [
-              [
-                collateral.collateral.collateral_token,
-                collateral.rawLockedAmount,
+        new MsgExecuteContract(
+          walletAddr,
+          contractAddress.moneyMarket.overseer,
+          {
+            // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L78
+            unlock_collateral: {
+              collaterals: [
+                [
+                  collateral.collateral.collateral_token,
+                  collateral.rawLockedAmount,
+                ],
               ],
-            ],
-          },
-        }),
+            },
+          }
+        ),
 
         // withdraw from custody
-        new MsgExecuteContract(walletAddr, collateral.collateral.custody_contract, {
-          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
-          withdraw_collateral: {
-            amount: collateral.rawLockedAmount
-          },
-        }),
-        "info" in collateral.collateral ? 
-        // Burn the tokens to get back the underlying token
-        new MsgExecuteContract(walletAddr, collateral.collateral.info.token, {
-          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
-          burn_all: {},
-        }) : undefined,
-      ])
-    }).flat();
+        new MsgExecuteContract(
+          walletAddr,
+          collateral.collateral.custody_contract,
+          {
+            // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
+            withdraw_collateral: {
+              amount: collateral.rawLockedAmount,
+            },
+          }
+        ),
+        "info" in collateral.collateral
+          ? // Burn the tokens to get back the underlying token
+            new MsgExecuteContract(
+              walletAddr,
+              collateral.collateral.info.token,
+              {
+                // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
+                burn_all: {},
+              }
+            )
+          : undefined,
+      ]);
+    })
+    .flat();
 
-
-    return _.compact(
-      // 1. We start by withdrawing all funds in earn
-      redeemMsg    
+  return _.compact(
+    // 1. We start by withdrawing all funds in earn
+    redeemMsg
       // 2. We then withdraw all deposits in the liquidation queue
-        .concat(liquidationMsgs)
+      .concat(liquidationMsgs)
       // 3. Withdraw all collaterals in the liquidation queue
-        .concat(collateralLiquidationMsgs)
+      .concat(collateralLiquidationMsgs)
       // 4. Repay all the debts you incurred in the borrow Tab (using the funds you have just withdrawn + your wallet content)
-        .concat(repayMsg)
-      // 5. Withdraw all collaterals you deposited on the borrow Tab (this will not unwrap aLuna collaterals)  
-        .concat(withdrawCollateralMsgs)
-    )
-  }
-
-
-
+      .concat(repayMsg)
+      // 5. Withdraw all collaterals you deposited on the borrow Tab (this will not unwrap aLuna collaterals)
+      .concat(withdrawCollateralMsgs)
+  );
+}
 
 export function abortMissionTx($: {
-  walletAddr: HumanAddr,
-  totalAUST: u<aUST>, 
-  contractAddress: AnchorContractAddress,  
-  allLiquidationBids: LSDLiquidationBidsResponse,
-  collaterals: CollateralInfo[],
-  borrowedValue: u<UST<Big>>,
-  uaUST: u<aUST<string>>,
+  walletAddr: HumanAddr;
+  totalAUST: u<aUST>;
+  contractAddress: AnchorContractAddress;
+  allLiquidationBids: LSDLiquidationBidsResponse;
+  collaterals: CollateralInfo[];
+  borrowedValue: u<UST<Big>>;
+  uaUST: u<aUST<string>>;
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -191,10 +223,9 @@ export function abortMissionTx($: {
         allLiquidationBids: $.allLiquidationBids,
         collaterals: $.collaterals,
         borrowedValue: $.borrowedValue,
-        uaUST: $.uaUST
-
+        uaUST: $.uaUST,
       }),
-      fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -206,10 +237,10 @@ export function abortMissionTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
@@ -230,19 +261,19 @@ export function abortMissionTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             depositAmount && {
-              name: 'Deposit Amount',
+              name: "Deposit Amount",
               value:
                 formatUSTWithPostfixUnits(demicrofy(depositAmount)) +
-                ' axlUSDC',
+                " axlUSDC",
             },
             receivedAmount && {
-              name: 'Received Amount',
+              name: "Received Amount",
               value:
                 formatAUSTWithPostfixUnits(demicrofy(receivedAmount)) +
-                ' aUSDC',
+                " aUSDC",
             },
             exchangeRate && {
-              name: 'Exchange Rate',
+              name: "Exchange Rate",
               value: formatFluidDecimalPoints(exchangeRate, 6),
             },
             helper.txHashReceipt(),
@@ -252,6 +283,6 @@ export function abortMissionTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

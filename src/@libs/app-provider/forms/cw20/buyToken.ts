@@ -2,14 +2,14 @@ import {
   CW20BuyTokenForm,
   cw20BuyTokenForm,
   CW20BuyTokenFormInput,
-} from '@libs/app-fns';
-import { CW20Addr, HumanAddr, Rate, Token, UST } from '@libs/types';
-import { useForm } from '@libs/use-form';
-import { useAccount } from 'contexts/account';
-import { useApp } from '../../contexts/app';
-import { useFixedFee } from '../../hooks/useFixedFee';
-import { useUstBalance } from '../../queries/terra/nativeBalances';
-import { useUstTax } from '../../queries/terra/tax';
+} from "@libs/app-fns";
+import { CW20Addr, HumanAddr, Rate, Token, UST } from "@libs/types";
+import { useForm } from "@libs/use-form";
+import { useAccount } from "contexts/account";
+import { useApp } from "../../contexts/app";
+import { useFixedFee } from "../../hooks/useFixedFee";
+import { useUstBalance } from "../../queries/terra/nativeBalances";
+import { useUstTax } from "../../queries/terra/tax";
 
 export interface CW20BuyTokenFormParams {
   ustTokenPairAddr: HumanAddr;
@@ -46,8 +46,8 @@ export function useCW20BuyTokenForm<T extends Token>({
     },
     () =>
       ({
-        ustAmount: '' as UST,
-        maxSpread: '0.01' as Rate,
-      } as CW20BuyTokenFormInput<T>),
+        ustAmount: "" as UST,
+        maxSpread: "0.01" as Rate,
+      } as CW20BuyTokenFormInput<T>)
   );
 }

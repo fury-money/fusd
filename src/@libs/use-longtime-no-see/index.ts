@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 interface Props {
   longtime: number;
@@ -32,10 +32,10 @@ export function useLongtimeNoSee({ longtime, onSee }: Props) {
       }
     }
 
-    document.addEventListener('visibilitychange', callback);
+    document.addEventListener("visibilitychange", callback);
 
     return () => {
-      document.removeEventListener('visibilitychange', callback);
+      document.removeEventListener("visibilitychange", callback);
     };
   }, []);
 }

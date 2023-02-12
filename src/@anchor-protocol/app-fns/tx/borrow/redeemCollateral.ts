@@ -2,13 +2,13 @@ import {
   computeBorrowedAmount,
   computeBorrowLimit,
   computeLtv,
-} from '@anchor-protocol/app-fns';
+} from "@anchor-protocol/app-fns";
 import {
   formatInput,
   formatOutput,
   microfy,
   demicrofy,
-} from '@anchor-protocol/formatter';
+} from "@anchor-protocol/formatter";
 import {
   bAsset,
   aLuna,
@@ -17,37 +17,37 @@ import {
   Rate,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { formatRate } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { formatRate } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { WhitelistCollateral } from 'queries';
-import { QueryObserverResult } from 'react-query';
-import { Observable } from 'rxjs';
-import { BorrowBorrower } from '../../queries/borrow/borrower';
-import { BorrowMarket } from '../../queries/borrow/market';
-import { _fetchBorrowData } from './_fetchBorrowData';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { WhitelistCollateral } from "queries";
+import { QueryObserverResult } from "react-query";
+import { Observable } from "rxjs";
+import { BorrowBorrower } from "../../queries/borrow/borrower";
+import { BorrowMarket } from "../../queries/borrow/market";
+import { _fetchBorrowData } from "./_fetchBorrowData";
 
 export function borrowRedeemCollateralTx($: {
   collateral: WhitelistCollateral;
@@ -83,7 +83,7 @@ export function borrowRedeemCollateralTx($: {
                 $.collateral.collateral_token,
                 formatInput(
                   microfy($.redeemAmount, $.collateral.decimals),
-                  $.collateral.decimals,
+                  $.collateral.decimals
                 ),
               ],
             ],
@@ -96,12 +96,12 @@ export function borrowRedeemCollateralTx($: {
           withdraw_collateral: {
             amount: formatInput(
               microfy($.redeemAmount, $.collateral.decimals),
-              $.collateral.decimals,
+              $.collateral.decimals
             ),
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -110,7 +110,7 @@ export function borrowRedeemCollateralTx($: {
     ({ value: { txInfo, borrowMarket, borrowBorrower } }) => {
       if (!borrowMarket || !borrowBorrower) {
         return helper.failedToCreateReceipt(
-          new Error('Failed to load borrow data'),
+          new Error("Failed to load borrow data")
         );
       }
 
@@ -120,10 +120,10 @@ export function borrowRedeemCollateralTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
@@ -133,9 +133,9 @@ export function borrowRedeemCollateralTx($: {
           computeBorrowLimit(
             borrowBorrower.overseerCollaterals,
             borrowMarket.oraclePrices,
-            borrowMarket.bAssetLtvs,
+            borrowMarket.bAssetLtvs
           ),
-          computeBorrowedAmount(borrowBorrower.marketBorrowerInfo),
+          computeBorrowedAmount(borrowBorrower.marketBorrowerInfo)
         );
 
         return {
@@ -144,15 +144,15 @@ export function borrowRedeemCollateralTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             redeemedAmount && {
-              name: 'Redeemed Amount',
+              name: "Redeemed Amount",
               value: `${formatOutput(
                 demicrofy(redeemedAmount, $.collateral.decimals),
-                { decimals: $.collateral.decimals },
+                { decimals: $.collateral.decimals }
               )} ${$.collateral.symbol}`,
             },
             ltv && {
-              name: 'New Borrow Usage',
-              value: formatRate(ltv) + ' %',
+              name: "New Borrow Usage",
+              value: formatRate(ltv) + " %",
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),
@@ -161,6 +161,6 @@ export function borrowRedeemCollateralTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

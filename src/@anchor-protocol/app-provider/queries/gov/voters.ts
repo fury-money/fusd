@@ -1,7 +1,7 @@
-import { anchorToken } from '@anchor-protocol/types';
-import { govVotersQuery } from '@anchor-protocol/app-fns';
-import { useCallback, useEffect, useState } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
+import { anchorToken } from "@anchor-protocol/types";
+import { govVotersQuery } from "@anchor-protocol/app-fns";
+import { useCallback, useEffect, useState } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
 
 const limit = 10;
 
@@ -26,7 +26,7 @@ export function useGovVotersQuery(pollId?: number): VotersReturn {
     setIsLast(false);
     setVoters([]);
 
-    if (typeof pollId !== 'number') {
+    if (typeof pollId !== "number" || !queryClient) {
       return;
     }
 
@@ -36,7 +36,7 @@ export function useGovVotersQuery(pollId?: number): VotersReturn {
         poll_id: pollId,
         limit,
       },
-      queryClient,
+      queryClient
     )
       .then(({ voters }) => {
         if (voters.voters) {
@@ -58,7 +58,7 @@ export function useGovVotersQuery(pollId?: number): VotersReturn {
   ]);
 
   const loadMore = useCallback(() => {
-    if (typeof pollId !== 'number') {
+    if (typeof pollId !== "number" || !queryClient) {
       return;
     }
 
@@ -70,7 +70,7 @@ export function useGovVotersQuery(pollId?: number): VotersReturn {
           limit,
           start_after: voters[voters.length - 1].voter,
         },
-        queryClient,
+        queryClient
       )
         .then(({ voters }) => {
           if (voters.voters) {

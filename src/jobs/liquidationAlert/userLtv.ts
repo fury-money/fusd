@@ -1,14 +1,14 @@
-import { HumanAddr } from '@anchor-protocol/types';
+import { HumanAddr } from "@anchor-protocol/types";
 import {
   borrowBorrowerQuery,
   borrowMarketQuery,
   computeBorrowedAmount,
   computeBorrowLimit,
   computeLtv,
-} from '@anchor-protocol/app-fns';
-import { AnchorContractAddress } from '@anchor-protocol/app-provider';
-import { lastSyncedHeightQuery } from '@libs/app-fns';
-import { HiveQueryClient } from '@libs/query-client';
+} from "@anchor-protocol/app-fns";
+import { AnchorContractAddress } from "@anchor-protocol/app-provider";
+import { lastSyncedHeightQuery } from "@libs/app-fns";
+import { HiveQueryClient } from "@libs/query-client";
 
 interface UserLtvQueryParams {
   walletAddress: HumanAddr;
@@ -28,14 +28,14 @@ export async function userLtvQuery({
       address.moneyMarket.interestModel,
       address.moneyMarket.oracle,
       address.moneyMarket.overseer,
-      address.native.usd,
+      address.native.usd
     ),
     borrowBorrowerQuery(
       hiveQueryClient,
       walletAddress,
-      () => lastSyncedHeightQuery(hiveQueryClient),
+      await lastSyncedHeightQuery(hiveQueryClient),
       address.moneyMarket.market,
-      address.moneyMarket.overseer,
+      address.moneyMarket.overseer
     ),
   ]);
 
@@ -48,7 +48,7 @@ export async function userLtvQuery({
   const borrowLimit = computeBorrowLimit(
     overseerCollaterals,
     oraclePrices,
-    bAssetLtvs,
+    bAssetLtvs
   );
 
   const borrowAmount = computeBorrowedAmount(marketBorrowerInfo);

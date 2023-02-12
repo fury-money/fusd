@@ -1,8 +1,8 @@
-import { moneyMarket } from '@anchor-protocol/types';
-import { QueryClient, wasmFetch, WasmQuery } from '@libs/query-client';
-import { HumanAddr } from '@libs/types';
-import { BAssetInfo, bAssetInfoQuery } from './bAssetInfo';
-import { isBAsset } from './isBAsset';
+import { moneyMarket } from "@anchor-protocol/types";
+import { QueryClient, wasmFetch, WasmQuery } from "@libs/query-client";
+import { HumanAddr } from "@libs/types";
+import { BAssetInfo, bAssetInfoQuery } from "./bAssetInfo";
+import { isBAsset } from "./isBAsset";
 
 interface WhitelistWasmQuery {
   whitelist: WasmQuery<
@@ -13,11 +13,11 @@ interface WhitelistWasmQuery {
 
 export async function bAssetInfoListQuery(
   queryClient: QueryClient,
-  overseerContract: HumanAddr,
+  overseerContract: HumanAddr
 ): Promise<BAssetInfo[]> {
   const { whitelist } = await wasmFetch<WhitelistWasmQuery>({
     ...queryClient,
-    id: 'basset--list',
+    id: "basset--list",
     wasmQuery: {
       whitelist: {
         contractAddress: overseerContract,
@@ -31,10 +31,10 @@ export async function bAssetInfoListQuery(
   const bAssetInfos = await Promise.all(
     whitelist.elems
       .filter(({ symbol }) => isBAsset(symbol))
-      .map((el) => bAssetInfoQuery(el, queryClient)),
+      .map((el) => bAssetInfoQuery(el, queryClient))
   ).then((list) => {
     return list.filter(
-      (item: BAssetInfo | undefined): item is BAssetInfo => !!item,
+      (item: BAssetInfo | undefined): item is BAssetInfo => !!item
     );
   });
 

@@ -1,4 +1,4 @@
-import { DateTime, Rate } from '@anchor-protocol/types';
+import { DateTime, Rate } from "@anchor-protocol/types";
 
 export interface EarnAPYHistoryData {
   apyHistory: {
@@ -9,7 +9,7 @@ export interface EarnAPYHistoryData {
 }
 
 export async function earnAPYHistoryQuery(
-  endpoint: string,
+  endpoint: string
 ): Promise<EarnAPYHistoryData> {
   return fetch(`${endpoint}/v2/deposit-rate`)
     .then((res) => res.json())
@@ -19,14 +19,14 @@ export async function earnAPYHistoryQuery(
           timestamp: DateTime;
           height: number;
           deposit_rate: Rate;
-        }>,
+        }>
       ) => {
         return data.map(({ deposit_rate, height, timestamp }) => ({
           Timestamp: timestamp,
           Height: height,
           DepositRate: deposit_rate,
         }));
-      },
+      }
     )
     .then((arr) => ({
       apyHistory: arr,

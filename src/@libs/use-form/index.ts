@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 function shallowEqual(a: any, b: any): boolean {
   if (a === b) {
@@ -22,38 +22,38 @@ function shallowEqual(a: any, b: any): boolean {
 }
 
 export type FormInput<Input> = (
-  input: Partial<Input> | ((prev: Input) => Input),
+  input: Partial<Input> | ((prev: Input) => Input)
 ) => void;
 
 export type FormStates<States, AsyncStates> = States & (AsyncStates | {});
 
 export type FormReturn<States, AsyncStates> = [
   States,
-  Promise<AsyncStates & Partial<States>> | undefined,
+  Promise<AsyncStates & Partial<States>> | undefined
 ];
 
 export type FormFunction<
   Input extends {},
   Dependency extends {},
   States extends {},
-  AsyncStates extends {},
+  AsyncStates extends {}
 > = (
   dependency: Dependency,
-  prevDependency: Dependency | undefined,
+  prevDependency: Dependency | undefined
 ) => (
   input: Input,
-  prevInput: Input | undefined,
+  prevInput: Input | undefined
 ) => FormReturn<States, AsyncStates>;
 
 export function useForm<
   Input extends {},
   Dependency extends {},
   States extends {},
-  AsyncStates extends {},
+  AsyncStates extends {}
 >(
   form: FormFunction<Input, Dependency, States, AsyncStates>,
   dependency: Dependency,
-  initialInput: () => Input,
+  initialInput: () => Input
 ): [FormInput<Input>, FormStates<States, AsyncStates>] {
   const initialForm = useRef(form);
 
@@ -107,12 +107,12 @@ export function useForm<
     } else {
       depResolved.current = initialForm.current(
         dependency,
-        lastDependency.current,
+        lastDependency.current
       );
 
       const [nextStates, nextAsyncStates] = depResolved.current(
         lastInput.current,
-        lastInput.current,
+        lastInput.current
       );
 
       setStates(nextStates);
@@ -131,14 +131,14 @@ export function useForm<
   const updateInput = useCallback(
     (input: Partial<Input> | ((prev: Input) => Input)) => {
       const nextInput =
-        typeof input === 'function'
+        typeof input === "function"
           ? input(lastInput.current)
           : { ...lastInput.current, ...input };
 
       if (!shallowEqual(nextInput, lastInput.current)) {
         const [nextStates, nextAsyncStates] = depResolved.current(
           nextInput,
-          lastInput.current,
+          lastInput.current
         );
 
         setStates(nextStates);
@@ -153,7 +153,7 @@ export function useForm<
         lastInput.current = nextInput;
       }
     },
-    [resolver],
+    [resolver]
   );
 
   useEffect(() => {

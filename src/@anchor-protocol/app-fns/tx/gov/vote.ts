@@ -1,29 +1,29 @@
-import { ANC, Gas, HumanAddr, Rate, u, UST } from '@anchor-protocol/types';
-import { TxResultRendering, TxStreamPhase } from '@libs/app-fns';
+import { ANC, Gas, HumanAddr, Rate, u, UST } from "@anchor-protocol/types";
+import { TxResultRendering, TxStreamPhase } from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { formatTokenInput } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { formatTokenInput } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { Observable } from "rxjs";
 
 export function govVoteTx($: {
   walletAddr: HumanAddr;
   govAddr: HumanAddr;
   amount: ANC;
-  voteFor: 'yes' | 'no';
+  voteFor: "yes" | "no";
   pollId: number;
 
   gasFee: Gas;
@@ -48,7 +48,7 @@ export function govVoteTx($: {
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -64,6 +64,6 @@ export function govVoteTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

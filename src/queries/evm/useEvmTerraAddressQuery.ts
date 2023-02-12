@@ -1,14 +1,14 @@
 import {
   ANCHOR_QUERY_KEY,
   useAnchorWebapp,
-} from '@anchor-protocol/app-provider';
-import { EvmCrossAnchorSdk } from '@anchor-protocol/crossanchor-sdk';
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { useQuery, UseQueryResult } from 'react-query';
+} from "@anchor-protocol/app-provider";
+import { EvmCrossAnchorSdk } from "@anchor-protocol/crossanchor-sdk";
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { useQuery, UseQueryResult } from "react-query";
 
 const evmTerraAddressQuery = async (
   sdk: EvmCrossAnchorSdk,
-  evmAddr: string | undefined,
+  evmAddr: string | undefined
 ): Promise<string | undefined> => {
   if (evmAddr === undefined) {
     return undefined;
@@ -21,7 +21,7 @@ const evmTerraAddressQuery = async (
 };
 
 export function useEvmTerraAddressQuery(
-  evmAddr: string | undefined,
+  evmAddr: string | undefined
 ): UseQueryResult<string | undefined> {
   const xAnchor = useEvmCrossAnchorSdk();
 
@@ -33,7 +33,7 @@ export function useEvmTerraAddressQuery(
     {
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 
   return terraAddress;

@@ -12,7 +12,7 @@ export async function liquidationQueueHistoryQuery({
   endpoint,
 }: LiquidationQueueQueryParams): Promise<LiquidationQueueData[]> {
   const liquidations: LiquidationQueueData[] = await fetch(
-    `${endpoint}/v4/liquidationQueue/1d`,
+    `${endpoint}/v4/liquidationQueue/1d`
   ).then((res) => res.json());
   return liquidations;
 }

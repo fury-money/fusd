@@ -1,26 +1,26 @@
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { TxResultRendering } from '@libs/app-fns';
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { TxResultRendering } from "@libs/app-fns";
 import {
   EVM_ANCHOR_TX_REFETCH_MAP,
   refetchQueryByTxKind,
   TxKind,
   TX_GAS_LIMIT,
-} from './utils';
-import { Subject } from 'rxjs';
-import { useCallback } from 'react';
-import { TwoWayTxResponse } from '@anchor-protocol/crossanchor-sdk';
-import { ContractReceipt } from 'ethers';
-import { BackgroundTxResult, useBackgroundTx } from './useBackgroundTx';
-import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
-import { ERC20Addr, u, UST } from '@libs/types';
-import { TxEvent } from './useTx';
-import { useRefetchQueries } from '@libs/app-provider';
-import { EvmTxProgressWriter } from './EvmTxProgressWriter';
-import { CollateralAmount } from '@anchor-protocol/types';
-import Big from 'big.js';
-import { WhitelistCollateral } from 'queries';
-import { microfy } from '@anchor-protocol/formatter';
+} from "./utils";
+import { Subject } from "rxjs";
+import { useCallback } from "react";
+import { TwoWayTxResponse } from "@anchor-protocol/crossanchor-sdk";
+import { ContractReceipt } from "ethers";
+import { BackgroundTxResult, useBackgroundTx } from "./useBackgroundTx";
+import { useFormatters } from "@anchor-protocol/formatter/useFormatters";
+import { ERC20Addr, u, UST } from "@libs/types";
+import { TxEvent } from "./useTx";
+import { useRefetchQueries } from "@libs/app-provider";
+import { EvmTxProgressWriter } from "./EvmTxProgressWriter";
+import { CollateralAmount } from "@anchor-protocol/types";
+import Big from "big.js";
+import { WhitelistCollateral } from "queries";
+import { microfy } from "@anchor-protocol/formatter";
 
 type BorrowUstTxResult = TwoWayTxResponse<ContractReceipt> | null;
 type BorrowUstTxRender = TxResultRendering<BorrowUstTxResult>;
@@ -47,7 +47,7 @@ export function useBorrowUstTx():
     async (
       txParams: BorrowUstTxParams,
       renderTxResults: Subject<BorrowUstTxRender>,
-      txEvents: Subject<TxEvent<BorrowUstTxParams>>,
+      txEvents: Subject<TxEvent<BorrowUstTxParams>>
     ) => {
       const { borrowAmount, collateral, collateralAmount } = txParams;
 
@@ -65,14 +65,14 @@ export function useBorrowUstTx():
           // need to normalize the amount according to the ERC20 definition
           const nativeCollateralAmount = microfy(
             Big(collateralAmount),
-            erc20Token.decimals - collateral.decimals,
+            erc20Token.decimals - collateral.decimals
           );
 
           await sdk.approveLimit(
             { contract: collateral.bridgedAddress as ERC20Addr },
             nativeCollateralAmount.toString(),
             address!,
-            TX_GAS_LIMIT,
+            TX_GAS_LIMIT
           );
 
           writer.borrowUST();
@@ -88,7 +88,7 @@ export function useBorrowUstTx():
             (event) => {
               writer.borrowUST(event, collateral.symbol);
               txEvents.next({ event, txParams });
-            },
+            }
           );
 
           refetchQueries(refetchQueryByTxKind(TxKind.BorrowUst));
@@ -105,7 +105,7 @@ export function useBorrowUstTx():
           (event) => {
             writer.borrowUST(event);
             txEvents.next({ event, txParams });
-          },
+          }
         );
         refetchQueries(refetchQueryByTxKind(TxKind.BorrowUst));
 
@@ -114,7 +114,7 @@ export function useBorrowUstTx():
         writer.timer.stop();
       }
     },
-    [address, connectionType, sdk, refetchQueries],
+    [address, connectionType, sdk, refetchQueries]
   );
 
   const displayTx = useCallback(
@@ -123,7 +123,7 @@ export function useBorrowUstTx():
       amount: `${formatOutput(demicrofy(txParams.borrowAmount))} USDC`,
       timestamp: Date.now(),
     }),
-    [formatOutput, demicrofy],
+    [formatOutput, demicrofy]
   );
 
   const persistedTxResult = useBackgroundTx<

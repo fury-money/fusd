@@ -27,11 +27,13 @@ function Component({ className }: EarnProps) {
 
   const collateral= useMemo(()=>{
 
-  
     let foundWhitelist: WhitelistCollateral | undefined = whitelist
       ?.find((collateral) => collateral.symbol === tokenSymbol || ("info" in collateral && collateral.info.info.symbol == tokenSymbol))
-    ?? whitelist
+
+    if(!foundWhitelist){
+      foundWhitelist = whitelist
       ?.find((collateral) => collateral.symbol == "aLuna");
+    }
 
     if(foundWhitelist){
        foundWhitelist.symbol = ("info" in foundWhitelist) ? foundWhitelist.info.info.symbol : foundWhitelist?.symbol

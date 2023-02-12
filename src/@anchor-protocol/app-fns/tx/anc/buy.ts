@@ -1,7 +1,7 @@
 import {
   formatANCWithPostfixUnits,
   formatUSTWithPostfixUnits,
-} from '@anchor-protocol/notation';
+} from "@anchor-protocol/notation";
 import {
   ANC,
   Gas,
@@ -10,36 +10,36 @@ import {
   terraswap,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor, min } from '@libs/big-math';
-import { demicrofy, formatTokenInput } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor, min } from "@libs/big-math";
+import { demicrofy, formatTokenInput } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   Coin,
   Coins,
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import big, { Big } from 'big.js';
-import { Observable } from 'rxjs';
-import { AnchorTax } from '../../types';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import big, { Big } from "big.js";
+import { Observable } from "rxjs";
+import { AnchorTax } from "../../types";
 
 export function ancBuyTx($: {
   fromAmount: UST;
@@ -72,7 +72,7 @@ export function ancBuyTx($: {
               offer_asset: {
                 info: {
                   native_token: {
-                    denom: 'uluna',
+                    denom: "uluna",
                   },
                 },
                 amount: formatTokenInput($.fromAmount) as u<UST>,
@@ -81,10 +81,10 @@ export function ancBuyTx($: {
               max_spread: $.maxSpread,
             },
           } as terraswap.pair.Swap<UST>,
-          new Coins([new Coin('uluna', formatTokenInput($.fromAmount))]),
+          new Coins([new Coin("uluna", formatTokenInput($.fromAmount))])
         ),
       ],
-      fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -96,28 +96,28 @@ export function ancBuyTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
         const return_amount = pickAttributeValueByKey<u<ANC>>(
           fromContract,
-          'return_amount',
+          "return_amount"
         );
         const offer_amount = pickAttributeValueByKey<u<UST>>(
           fromContract,
-          'offer_amount',
+          "offer_amount"
         );
         const spread_amount = pickAttributeValueByKey<u<ANC>>(
           fromContract,
-          'spread_amount',
+          "spread_amount"
         );
         const commission_amount = pickAttributeValueByKey<u<ANC>>(
           fromContract,
-          'commission_amount',
+          "commission_amount"
         );
 
         const pricePerANC =
@@ -130,7 +130,7 @@ export function ancBuyTx($: {
             : undefined;
         const txFee = offer_amount
           ? (big($.fixedGas).plus(
-              min(big(offer_amount).mul($.tax.taxRate), $.tax.maxTaxUUSD),
+              min(big(offer_amount).mul($.tax.taxRate), $.tax.maxTaxUUSD)
             ) as u<UST<Big>>)
           : undefined;
 
@@ -140,22 +140,22 @@ export function ancBuyTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             return_amount && {
-              name: 'Bought',
+              name: "Bought",
               value:
-                formatANCWithPostfixUnits(demicrofy(return_amount)) + ' ANC',
+                formatANCWithPostfixUnits(demicrofy(return_amount)) + " ANC",
             },
             offer_amount && {
-              name: 'Paid',
+              name: "Paid",
               value:
-                formatUSTWithPostfixUnits(demicrofy(offer_amount)) + ' UST',
+                formatUSTWithPostfixUnits(demicrofy(offer_amount)) + " UST",
             },
             pricePerANC && {
-              name: 'Paid/Bought',
-              value: formatUSTWithPostfixUnits(pricePerANC) + ' UST',
+              name: "Paid/Bought",
+              value: formatUSTWithPostfixUnits(pricePerANC) + " UST",
             },
             tradingFee && {
-              name: 'Trading Fee',
-              value: formatANCWithPostfixUnits(demicrofy(tradingFee)) + ' ANC',
+              name: "Trading Fee",
+              value: formatANCWithPostfixUnits(demicrofy(tradingFee)) + " ANC",
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(txFee),
@@ -164,6 +164,6 @@ export function ancBuyTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

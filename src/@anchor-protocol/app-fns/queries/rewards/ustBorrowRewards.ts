@@ -1,10 +1,10 @@
-import { HumanAddr, moneyMarket } from '@anchor-protocol/types';
+import { HumanAddr, moneyMarket } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface RewardsUstBorrowRewardsWasmQuery {
   borrowerInfo: WasmQuery<
@@ -23,7 +23,7 @@ export type RewardsUstBorrowRewards =
 export async function rewardsUstBorrowRewardsQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  marketContract: HumanAddr,
+  marketContract: HumanAddr
 ): Promise<RewardsUstBorrowRewards | undefined> {
   if (!walletAddr) {
     return undefined;

@@ -2,7 +2,7 @@ import {
   computeBorrowedAmount,
   computeBorrowLimit,
   computeLtv,
-} from '@anchor-protocol/app-fns';
+} from "@anchor-protocol/app-fns";
 import {
   UST,
   bAsset,
@@ -10,19 +10,19 @@ import {
   moneyMarket,
   Rate,
   u,
-} from '@anchor-protocol/types';
-import { FormReturn } from '@libs/use-form';
-import big, { Big, BigSource } from 'big.js';
-import { computeLtvToRedeemAmount } from '../../logics/borrow/computeLtvToRedeemAmount';
-import { computeRedeemAmountToLtv } from '../../logics/borrow/computeRedeemAmountToLtv';
-import { computeRedeemCollateralBorrowLimit } from '../../logics/borrow/computeRedeemCollateralBorrowLimit';
-import { computeRedeemCollateralNextLtv } from '../../logics/borrow/computeRedeemCollateralNextLtv';
-import { validateRedeemAmount } from '../../logics/borrow/validateRedeemAmount';
-import { validateTxFee } from '../../logics/common/validateTxFee';
-import { BAssetLtvs } from '../../queries/borrow/market';
-import { computebAssetLtvsAvg } from '@anchor-protocol/app-fns/logics/borrow/computebAssetLtvsAvg';
-import { microfy } from '@anchor-protocol/formatter';
-import { WhitelistCollateral } from 'queries';
+} from "@anchor-protocol/types";
+import { FormReturn } from "@libs/use-form";
+import big, { Big, BigSource } from "big.js";
+import { computeLtvToRedeemAmount } from "../../logics/borrow/computeLtvToRedeemAmount";
+import { computeRedeemAmountToLtv } from "../../logics/borrow/computeRedeemAmountToLtv";
+import { computeRedeemCollateralBorrowLimit } from "../../logics/borrow/computeRedeemCollateralBorrowLimit";
+import { computeRedeemCollateralNextLtv } from "../../logics/borrow/computeRedeemCollateralNextLtv";
+import { validateRedeemAmount } from "../../logics/borrow/validateRedeemAmount";
+import { validateTxFee } from "../../logics/common/validateTxFee";
+import { BAssetLtvs } from "../../queries/borrow/market";
+import { computebAssetLtvsAvg } from "@anchor-protocol/app-fns/logics/borrow/computebAssetLtvsAvg";
+import { microfy } from "@anchor-protocol/formatter";
+import { WhitelistCollateral } from "queries";
 
 export interface BorrowRedeemCollateralFormInput {
   redeemAmount: bAsset;
@@ -79,7 +79,7 @@ export const borrowRedeemCollateralForm = ({
     marketBorrowerInfo,
     overseerCollaterals,
     oraclePrices,
-    bAssetLtvs,
+    bAssetLtvs
   );
 
   const ltvToAmount = computeLtvToRedeemAmount(
@@ -87,7 +87,7 @@ export const borrowRedeemCollateralForm = ({
     marketBorrowerInfo,
     overseerCollaterals,
     oraclePrices,
-    bAssetLtvs,
+    bAssetLtvs
   );
 
   const bAssetLtvsAvg = computebAssetLtvsAvg(bAssetLtvs);
@@ -96,7 +96,7 @@ export const borrowRedeemCollateralForm = ({
 
   const currentLtv = computeLtv(
     computeBorrowLimit(overseerCollaterals, oraclePrices, bAssetLtvs),
-    computeBorrowedAmount(marketBorrowerInfo),
+    computeBorrowedAmount(marketBorrowerInfo)
   );
 
   const ltvStepFunction = (draftLtv: Rate<Big>): Rate<Big> => {
@@ -116,12 +116,12 @@ export const borrowRedeemCollateralForm = ({
     const amount =
       redeemAmount.length > 0
         ? microfy(redeemAmount, collateral.decimals)
-        : ('0' as u<bAsset>);
+        : ("0" as u<bAsset>);
 
     const nextLtv = computeRedeemCollateralNextLtv(
       amount,
       currentLtv,
-      amountToLtv,
+      amountToLtv
     );
 
     const withdrawableAmount = ltvToAmount(0.75 as Rate<BigSource>);
@@ -133,7 +133,7 @@ export const borrowRedeemCollateralForm = ({
       amount,
       overseerCollaterals,
       oraclePrices,
-      bAssetLtvs,
+      bAssetLtvs
     );
 
     const invalidTxFee = connected
@@ -142,7 +142,7 @@ export const borrowRedeemCollateralForm = ({
 
     const invalidRedeemAmount = validateRedeemAmount(
       amount,
-      withdrawableMaxAmount,
+      withdrawableMaxAmount
     );
 
     const availablePost =

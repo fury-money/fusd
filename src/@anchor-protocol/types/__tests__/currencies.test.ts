@@ -1,9 +1,9 @@
-import { Luna, NoMicro, u } from '@anchor-protocol/types';
-import { Big, BigSource } from 'big.js';
+import { Luna, NoMicro, u } from "@anchor-protocol/types";
+import { Big, BigSource } from "big.js";
 
-describe('types/currencies', () => {
-  test('type casting of nominal types', () => {
-    const currency: u<Luna> = '100' as u<Luna>;
+describe("types/currencies", () => {
+  test("type casting of nominal types", () => {
+    const currency: u<Luna> = "100" as u<Luna>;
 
     // Can type cast to its physical type
     const str: string = currency;
@@ -16,7 +16,7 @@ describe('types/currencies', () => {
     const lunaBigSource: Luna<BigSource> & NoMicro = currency;
 
     expect(new Set([currency, str, uLunaBigSource, lunaBigSource]).size).toBe(
-      1,
+      1
     );
 
     function fn1(amount: string) {}
@@ -37,7 +37,7 @@ describe('types/currencies', () => {
     // @ts-expect-error
     fn5(currency);
 
-    const source: u<Luna<BigSource>> = '100' as u<Luna<BigSource>>;
+    const source: u<Luna<BigSource>> = "100" as u<Luna<BigSource>>;
 
     // @ts-expect-error
     const str2: string = source;

@@ -1,7 +1,7 @@
 //import { COLLATERAL_DENOMS } from '@anchor-protocol/anchor.js';
 //import { CW20Addr, HumanAddr } from '@libs/types';
 
-export const __foo__ = 'bar';
+export const __foo__ = "bar";
 
 //export enum CollateralType {
 //  aLuna = 'aLuna',

@@ -1,8 +1,8 @@
-import { BAssetLtvs, vectorizeOraclePrices } from '@anchor-protocol/app-fns';
-import { min, max } from '@libs/big-math';
-import type { Rate } from '@anchor-protocol/types';
-import { bAsset, CW20Addr, moneyMarket, u } from '@anchor-protocol/types';
-import { Big, BigSource } from 'big.js';
+import { BAssetLtvs, vectorizeOraclePrices } from "@anchor-protocol/app-fns";
+import { min, max } from "@libs/big-math";
+import type { Rate } from "@anchor-protocol/types";
+import { bAsset, CW20Addr, moneyMarket, u } from "@anchor-protocol/types";
+import { Big, BigSource } from "big.js";
 
 export const computeLtvToRedeemAmount =
   (
@@ -10,7 +10,7 @@ export const computeLtvToRedeemAmount =
     marketBorrowerInfo: moneyMarket.market.BorrowerInfoResponse,
     overseerCollaterals: moneyMarket.overseer.CollateralsResponse,
     oraclePrices: moneyMarket.oracle.PricesResponse,
-    bAssetLtvs: BAssetLtvs,
+    bAssetLtvs: BAssetLtvs
   ) =>
   (ltv: Rate<BigSource>) => {
     const collaterals = overseerCollaterals.collaterals.map((c) => c[0]);
@@ -39,7 +39,7 @@ export const computeLtvToRedeemAmount =
             previous[1].add(asset.amount.mul(asset.price).mul(asset.maxLtv)),
           ];
         },
-        [{ amount: Big(0), price: Big(0), maxLtv: Big(0) }, Big(0)],
+        [{ amount: Big(0), price: Big(0), maxLtv: Big(0) }, Big(0)]
       );
 
     if (Big(maxLtv).lte(0)) {
@@ -53,8 +53,8 @@ export const computeLtvToRedeemAmount =
 
     const withdrawableAmount = Big(
       amount.minus(
-        loanAmount.minus(minAmount).div(Big(maxLtv).mul(price).mul(ltv)),
-      ),
+        loanAmount.minus(minAmount).div(Big(maxLtv).mul(price).mul(ltv))
+      )
     );
 
     return max(withdrawableAmount, 0) as u<bAsset<Big>>;

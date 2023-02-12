@@ -1,7 +1,7 @@
-import { BorrowBorrower } from '@anchor-protocol/app-fns';
-import { BorrowMarketWithDisplay } from '@anchor-protocol/app-provider';
-import { UIElementProps } from '@libs/ui';
-import { WhitelistCollateral, WhitelistWrappedCollateral } from 'queries';
+import { BorrowBorrower } from "@anchor-protocol/app-fns";
+import { BorrowMarketWithDisplay } from "@anchor-protocol/app-provider";
+import { UIElementProps } from "@libs/ui";
+import { WhitelistCollateral, WhitelistWrappedCollateral } from "queries";
 
 export interface ProvideCollateralFormParams extends UIElementProps {
   collateral: WhitelistCollateral;

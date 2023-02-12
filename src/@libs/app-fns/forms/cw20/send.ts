@@ -1,11 +1,11 @@
-import { min } from '@libs/big-math';
-import { microfy } from '@libs/formatter';
-import { Rate, Token, u, UST } from '@libs/types';
-import { FormFunction, FormReturn } from '@libs/use-form';
-import { AccAddress } from '@terra-money/terra.js';
-import big, { BigSource } from 'big.js';
-import { computeMaxUstBalanceForUstTransfer } from '../../logics/computeMaxUstBalanceForUstTransfer';
-import { SendTokenInfo } from './tokens';
+import { min } from "@libs/big-math";
+import { microfy } from "@libs/formatter";
+import { Rate, Token, u, UST } from "@libs/types";
+import { FormFunction, FormReturn } from "@libs/use-form";
+import { AccAddress } from "@terra-money/terra.js";
+import big, { BigSource } from "big.js";
+import { computeMaxUstBalanceForUstTransfer } from "../../logics/computeMaxUstBalanceForUstTransfer";
+import { SendTokenInfo } from "./tokens";
 
 export interface SendFormInput<T extends Token> {
   amount: T;
@@ -59,15 +59,15 @@ export const sendForm = <T extends Token>({
   connected,
 }: SendFormDependency<T>) => {
   const isUst =
-    'native_token' in tokenInfo.assetInfo &&
-    tokenInfo.assetInfo.native_token.denom === 'uusd';
+    "native_token" in tokenInfo.assetInfo &&
+    tokenInfo.assetInfo.native_token.denom === "uusd";
 
   const maxAmount: u<T> = isUst
     ? (computeMaxUstBalanceForUstTransfer(
         balance as u<UST>,
         taxRate,
         maxTaxUUSD,
-        fixedFee,
+        fixedFee
       ).toFixed() as u<T>)
     : balance;
 
@@ -80,12 +80,12 @@ export const sendForm = <T extends Token>({
 
     const invalidToAddr =
       toAddr.length > 0 && !AccAddress.validate(toAddr)
-        ? 'Invalid address'
+        ? "Invalid address"
         : null;
 
     const invalidMemo =
       memo.length > 0 && /[<>]/.test(memo)
-        ? 'Characters < and > are not allowed'
+        ? "Characters < and > are not allowed"
         : null;
 
     if (!amountExists) {
@@ -116,17 +116,17 @@ export const sendForm = <T extends Token>({
 
     const invalidTxFee =
       connected && big(txFee).gt(ustBalance)
-        ? 'Not enough transaction fees'
+        ? "Not enough transaction fees"
         : null;
 
     const invalidAmount = !connected
       ? null
       : isUst
       ? microfy(amount!).plus(txFee).gt(balance)
-        ? 'Not enough axlUSDC'
+        ? "Not enough axlUSDC"
         : null
       : microfy(amount!).gt(balance)
-      ? 'Not enough assets'
+      ? "Not enough assets"
       : null;
 
     const availableTx =
@@ -143,12 +143,12 @@ export const sendForm = <T extends Token>({
       availableTx &&
       isUst &&
       big(balance).minus(microfy(amount!)).minus(txFee).lt(fixedFee)
-        ? 'You may run out of USD balance needed for future transactions'
+        ? "You may run out of USD balance needed for future transactions"
         : null;
 
     const warningEmptyMemo =
       connected && availableTx && memo.trim().length === 0
-        ? 'Please double check if the transaction requires a memo'
+        ? "Please double check if the transaction requires a memo"
         : null;
 
     return [

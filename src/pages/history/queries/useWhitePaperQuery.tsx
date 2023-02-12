@@ -73,7 +73,7 @@ export function useWhitePaperQuery(): UseQueryResult<NftInfo | undefined> {
       contractAddress.documents.mainAddress,
       contractAddress.documents.tokens.whitepaper,
     ],
-    createQueryFn(whitePaperQuery, queryClient),
+    createQueryFn(whitePaperQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,

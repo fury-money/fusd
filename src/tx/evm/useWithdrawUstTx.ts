@@ -1,22 +1,22 @@
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { TxResultRendering } from '@libs/app-fns';
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { TxResultRendering } from "@libs/app-fns";
 import {
   EVM_ANCHOR_TX_REFETCH_MAP,
   refetchQueryByTxKind,
   TxKind,
   TX_GAS_LIMIT,
-} from './utils';
-import { Subject } from 'rxjs';
-import { useCallback } from 'react';
-import { ContractReceipt } from 'ethers';
-import { TwoWayTxResponse } from '@anchor-protocol/crossanchor-sdk';
-import { BackgroundTxResult, useBackgroundTx } from './useBackgroundTx';
-import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
-import { aUST } from '@anchor-protocol/types';
-import { TxEvent } from './useTx';
-import { useRefetchQueries } from '@libs/app-provider';
-import { EvmTxProgressWriter } from './EvmTxProgressWriter';
+} from "./utils";
+import { Subject } from "rxjs";
+import { useCallback } from "react";
+import { ContractReceipt } from "ethers";
+import { TwoWayTxResponse } from "@anchor-protocol/crossanchor-sdk";
+import { BackgroundTxResult, useBackgroundTx } from "./useBackgroundTx";
+import { useFormatters } from "@anchor-protocol/formatter/useFormatters";
+import { aUST } from "@anchor-protocol/types";
+import { TxEvent } from "./useTx";
+import { useRefetchQueries } from "@libs/app-provider";
+import { EvmTxProgressWriter } from "./EvmTxProgressWriter";
 
 type WithdrawUstTxResult = TwoWayTxResponse<ContractReceipt> | null;
 type WithdrawUstTxRender = TxResultRendering<WithdrawUstTxResult>;
@@ -41,10 +41,10 @@ export function useWithdrawUstTx():
     async (
       txParams: WithdrawUstTxParams,
       renderTxResults: Subject<WithdrawUstTxRender>,
-      txEvents: Subject<TxEvent<WithdrawUstTxParams>>,
+      txEvents: Subject<TxEvent<WithdrawUstTxParams>>
     ) => {
       const withdrawAmount = microfy(
-        formatInput(txParams.withdrawAmount),
+        formatInput(txParams.withdrawAmount)
       ).toString();
 
       const writer = new EvmTxProgressWriter(renderTxResults, connectionType);
@@ -53,10 +53,10 @@ export function useWithdrawUstTx():
 
       try {
         await xAnchor.approveLimit(
-          { token: 'aUST' },
+          { token: "aUST" },
           withdrawAmount,
           address!,
-          TX_GAS_LIMIT,
+          TX_GAS_LIMIT
         );
 
         writer.withdrawUST();
@@ -69,7 +69,7 @@ export function useWithdrawUstTx():
           (event) => {
             writer.withdrawUST(event);
             txEvents.next({ event, txParams });
-          },
+          }
         );
 
         refetchQueries(refetchQueryByTxKind(TxKind.WithdrawUst));
@@ -79,7 +79,7 @@ export function useWithdrawUstTx():
         writer.timer.stop();
       }
     },
-    [xAnchor, address, connectionType, formatInput, microfy, refetchQueries],
+    [xAnchor, address, connectionType, formatInput, microfy, refetchQueries]
   );
 
   const displayTx = useCallback(
@@ -88,7 +88,7 @@ export function useWithdrawUstTx():
       amount: `${formatOutput(txParams.withdrawAmount as aUST)} aUSDC`,
       timestamp: Date.now(),
     }),
-    [formatOutput],
+    [formatOutput]
   );
 
   const persistedTxResult = useBackgroundTx<

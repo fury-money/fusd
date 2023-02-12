@@ -12,10 +12,10 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers';
-import { FunctionFragment, Result } from '@ethersproject/abi';
-import { Listener, Provider } from '@ethersproject/providers';
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
+} from "ethers";
+import { FunctionFragment, Result } from "@ethersproject/abi";
+import { Listener, Provider } from "@ethersproject/providers";
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
 export declare namespace WormholeCoreBridge {
   export type SignatureStruct = {
@@ -57,7 +57,7 @@ export declare namespace WormholeCoreBridge {
     string,
     number,
     WormholeCoreBridge.SignatureStructOutput[],
-    string,
+    string
   ] & {
     version: number;
     timestamp: number;
@@ -74,35 +74,35 @@ export declare namespace WormholeCoreBridge {
 }
 
 export interface WormholeCoreBridgeInterface extends utils.Interface {
-  contractName: 'WormholeCoreBridge';
+  contractName: "WormholeCoreBridge";
   functions: {
-    'parseAndVerifyVM(bytes)': FunctionFragment;
-    'publishMessage(uint32,bytes,uint8)': FunctionFragment;
+    "parseAndVerifyVM(bytes)": FunctionFragment;
+    "publishMessage(uint32,bytes,uint8)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: 'parseAndVerifyVM',
-    values: [BytesLike],
+    functionFragment: "parseAndVerifyVM",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'publishMessage',
-    values: [BigNumberish, BytesLike, BigNumberish],
+    functionFragment: "publishMessage",
+    values: [BigNumberish, BytesLike, BigNumberish]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: 'parseAndVerifyVM',
-    data: BytesLike,
+    functionFragment: "parseAndVerifyVM",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'publishMessage',
-    data: BytesLike,
+    functionFragment: "publishMessage",
+    data: BytesLike
   ): Result;
 
   events: {};
 }
 
 export interface WormholeCoreBridge extends BaseContract {
-  contractName: 'WormholeCoreBridge';
+  contractName: "WormholeCoreBridge";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -112,15 +112,15 @@ export interface WormholeCoreBridge extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>,
+    eventFilter?: TypedEventFilter<TEvent>
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>,
+    eventFilter: TypedEventFilter<TEvent>
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -131,7 +131,7 @@ export interface WormholeCoreBridge extends BaseContract {
   functions: {
     parseAndVerifyVM(
       encodedVM: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<
       [WormholeCoreBridge.VMStructOutput, boolean, string] & {
         vm: WormholeCoreBridge.VMStructOutput;
@@ -144,13 +144,13 @@ export interface WormholeCoreBridge extends BaseContract {
       nonce: BigNumberish,
       payload: BytesLike,
       consistencyLevel: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
   parseAndVerifyVM(
     encodedVM: BytesLike,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<
     [WormholeCoreBridge.VMStructOutput, boolean, string] & {
       vm: WormholeCoreBridge.VMStructOutput;
@@ -163,13 +163,13 @@ export interface WormholeCoreBridge extends BaseContract {
     nonce: BigNumberish,
     payload: BytesLike,
     consistencyLevel: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> },
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     parseAndVerifyVM(
       encodedVM: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<
       [WormholeCoreBridge.VMStructOutput, boolean, string] & {
         vm: WormholeCoreBridge.VMStructOutput;
@@ -182,7 +182,7 @@ export interface WormholeCoreBridge extends BaseContract {
       nonce: BigNumberish,
       payload: BytesLike,
       consistencyLevel: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
@@ -191,28 +191,28 @@ export interface WormholeCoreBridge extends BaseContract {
   estimateGas: {
     parseAndVerifyVM(
       encodedVM: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     publishMessage(
       nonce: BigNumberish,
       payload: BytesLike,
       consistencyLevel: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
     parseAndVerifyVM(
       encodedVM: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     publishMessage(
       nonce: BigNumberish,
       payload: BytesLike,
       consistencyLevel: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

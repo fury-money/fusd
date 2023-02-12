@@ -4,7 +4,7 @@ import {
   KeyboardEvent,
   useCallback,
   useMemo,
-} from 'react';
+} from "react";
 
 export interface RestrictedInputReturn {
   onKeyPress: (event: KeyboardEvent<HTMLInputElement>) => void;
@@ -16,16 +16,16 @@ export interface RestrictedInputReturn {
  * @param availableCharacters 'abc', 'a-z', 'a-z0-9'
  */
 export function useRestrictedInput(
-  availableCharacters: ((character: string) => boolean) | string,
+  availableCharacters: ((character: string) => boolean) | string
 ): RestrictedInputReturn {
   const test: (character: string) => boolean = useMemo(() => {
-    if (typeof availableCharacters === 'string') {
+    if (typeof availableCharacters === "string") {
       const pattern: RegExp = new RegExp(`[${availableCharacters}]`);
       return (character: string) => pattern.test(character);
-    } else if (typeof availableCharacters === 'function') {
+    } else if (typeof availableCharacters === "function") {
       return availableCharacters;
     }
-    throw new Error('availableCharacters must be string or function');
+    throw new Error("availableCharacters must be string or function");
   }, [availableCharacters]);
 
   const onKeyPress: (event: KeyboardEvent<HTMLInputElement>) => void =
@@ -37,7 +37,7 @@ export function useRestrictedInput(
           event.stopPropagation();
         }
       },
-      [test],
+      [test]
     );
 
   return {
@@ -46,34 +46,34 @@ export function useRestrictedInput(
 }
 
 export interface RestrictedNumberInputParams {
-  type?: 'decimal' | 'integer';
+  type?: "decimal" | "integer";
   maxDecimalPoints?: number;
   maxIntegerPoinsts?: number;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function useRestrictedNumberInput({
-  type = 'decimal',
+  type = "decimal",
   maxDecimalPoints,
   maxIntegerPoinsts,
   onChange: _onChange,
 }: RestrictedNumberInputParams): RestrictedInputReturn {
   const { onKeyPress: restrictCharacters } = useRestrictedInput(
-    type === 'integer' ? '0-9' : '0-9.',
+    type === "integer" ? "0-9" : "0-9."
   );
 
   const isInvalid = useCallback(
     (nextValue: string): boolean => {
       return (
         Number.isNaN(+nextValue) ||
-        (typeof maxIntegerPoinsts === 'number' &&
+        (typeof maxIntegerPoinsts === "number" &&
           new RegExp(`^[0-9]{${maxIntegerPoinsts + 1},}`).test(nextValue)) ||
-        (type === 'decimal' &&
-          typeof maxDecimalPoints === 'number' &&
+        (type === "decimal" &&
+          typeof maxDecimalPoints === "number" &&
           new RegExp(`\\.[0-9]{${maxDecimalPoints + 1},}$`).test(nextValue))
       );
     },
-    [maxDecimalPoints, maxIntegerPoinsts, type],
+    [maxDecimalPoints, maxIntegerPoinsts, type]
   );
 
   const onKeyPress = useCallback(
@@ -88,8 +88,8 @@ export function useRestrictedNumberInput({
         event.target as HTMLInputElement;
 
       if (
-        typeof selectionStart !== 'number' ||
-        typeof selectionEnd !== 'number'
+        typeof selectionStart !== "number" ||
+        typeof selectionEnd !== "number"
       ) {
         event.preventDefault();
         event.stopPropagation();
@@ -108,12 +108,12 @@ export function useRestrictedNumberInput({
         event.stopPropagation();
       }
     },
-    [restrictCharacters, isInvalid],
+    [restrictCharacters, isInvalid]
   );
 
   const onPaste = useCallback(
     (event: ClipboardEvent<HTMLInputElement>) => {
-      const pastedText = event.clipboardData?.getData('text');
+      const pastedText = event.clipboardData?.getData("text");
 
       if (!/^[0-9.]+$/.test(pastedText)) {
         event.preventDefault();
@@ -124,8 +124,8 @@ export function useRestrictedNumberInput({
         event.target as HTMLInputElement;
 
       if (
-        typeof selectionStart !== 'number' ||
-        typeof selectionEnd !== 'number'
+        typeof selectionStart !== "number" ||
+        typeof selectionEnd !== "number"
       ) {
         event.preventDefault();
         event.stopPropagation();
@@ -142,7 +142,7 @@ export function useRestrictedNumberInput({
         event.stopPropagation();
       }
     },
-    [isInvalid],
+    [isInvalid]
   );
 
   const onChange = useCallback(
@@ -151,13 +151,13 @@ export function useRestrictedNumberInput({
         const hasNonNumeralCharacters = /[^0-9.]/g;
 
         if (hasNonNumeralCharacters.test(event.target.value)) {
-          event.target.value = event.target.value.replace(/[^0-9.]/g, '');
+          event.target.value = event.target.value.replace(/[^0-9.]/g, "");
         }
 
         _onChange(event);
       }
     },
-    [_onChange],
+    [_onChange]
   );
 
   return { onKeyPress, onPaste, onChange };

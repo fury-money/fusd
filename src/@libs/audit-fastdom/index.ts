@@ -1,4 +1,4 @@
-import fastdom from 'fastdom';
+import fastdom from "fastdom";
 
 export function auditMeasure(fn: () => void): () => void {
   let called = false;

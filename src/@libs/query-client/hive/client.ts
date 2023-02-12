@@ -1,12 +1,12 @@
-import { parse, print } from 'graphql';
+import { parse, print } from "graphql";
 import {
   WasmFetchBaseParams,
   WasmQueryData,
   WasmQueryRawData,
-} from '../interface';
-import { defaultHiveFetcher, HiveFetcher } from './fetch';
-import { createDocumentNode, findSelectionSet } from './gql';
-import { parseWasmQueryRawData, wasmQueryToFields } from './wasm';
+} from "../interface";
+import { defaultHiveFetcher, HiveFetcher } from "./fetch";
+import { createDocumentNode, findSelectionSet } from "./gql";
+import { parseWasmQueryRawData, wasmQueryToFields } from "./wasm";
 
 export interface HiveFetchParams<WasmQueries, QueryVariables extends {} = {}>
   extends WasmFetchBaseParams<WasmQueries> {
@@ -14,13 +14,13 @@ export interface HiveFetchParams<WasmQueries, QueryVariables extends {} = {}>
   variables: QueryVariables;
   hiveFetcher?: HiveFetcher;
   hiveEndpoint: string;
-  requestInit?: Omit<RequestInit, 'method' | 'body'>;
+  requestInit?: Omit<RequestInit, "method" | "body">;
 }
 
 export async function hiveFetch<
   WasmQueries,
   GraphqlQueryVariables extends {} = {},
-  GraphqlQueryResult extends {} = {},
+  GraphqlQueryResult extends {} = {}
 >({
   id,
   query,
@@ -54,7 +54,7 @@ export async function hiveFetch<
     graphqlQuery,
     variables,
     id ? `${hiveEndpoint}?${id}` : hiveEndpoint,
-    requestInit,
+    requestInit
   );
 
   const result = {

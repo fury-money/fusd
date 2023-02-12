@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useArrayPagination<T>(
   data: T[],
-  itemsInPage: number,
+  itemsInPage: number
 ): {
   page: T[];
   totalPages: number;
@@ -13,7 +13,7 @@ export function useArrayPagination<T>(
   const [page, setPage] = useState<T[]>(() => data.slice(0, itemsInPage));
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(() =>
-    Math.ceil(data.length / itemsInPage),
+    Math.ceil(data.length / itemsInPage)
   );
 
   useEffect(() => {
@@ -28,12 +28,12 @@ export function useArrayPagination<T>(
       setPage(
         dataRef.current.slice(
           index * itemsInPage,
-          index * itemsInPage + itemsInPage,
-        ),
+          index * itemsInPage + itemsInPage
+        )
       );
       setPageIndex(index);
     },
-    [itemsInPage],
+    [itemsInPage]
   );
 
   return {

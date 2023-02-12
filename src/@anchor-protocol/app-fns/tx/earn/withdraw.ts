@@ -1,7 +1,7 @@
 import {
   formatAUSTWithPostfixUnits,
   formatUSTWithPostfixUnits,
-} from '@anchor-protocol/notation';
+} from "@anchor-protocol/notation";
 import {
   aUST,
   CW20Addr,
@@ -10,14 +10,14 @@ import {
   Rate,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -25,24 +25,24 @@ import {
   _postTx,
   createHookMsg,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
 import {
   demicrofy,
   formatFluidDecimalPoints,
   formatTokenInput,
   stripUUSD,
-} from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import big, { BigSource } from 'big.js';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import big, { BigSource } from "big.js";
+import { Observable } from "rxjs";
 
 export function earnWithdrawTx($: {
   walletAddr: HumanAddr;
@@ -74,7 +74,7 @@ export function earnWithdrawTx($: {
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -86,18 +86,18 @@ export function earnWithdrawTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
-      const transfer = pickEvent(rawLog, 'transfer');
+      const fromContract = pickEvent(rawLog, "from_contract");
+      const transfer = pickEvent(rawLog, "transfer");
 
       if (!fromContract || !transfer) {
-        return helper.failedToFindEvents('from_contract', 'transfer');
+        return helper.failedToFindEvents("from_contract", "transfer");
       }
 
       try {
         const withdrawAmountUUSD = pickAttributeValueByKey<string>(
           transfer,
-          'amount',
-          (attrs) => attrs.reverse()[0],
+          "amount",
+          (attrs) => attrs.reverse()[0]
         );
 
         const withdrawAmount = withdrawAmountUUSD
@@ -106,7 +106,7 @@ export function earnWithdrawTx($: {
 
         const burnAmount = pickAttributeValueByKey<u<aUST>>(
           fromContract,
-          'burn_amount',
+          "burn_amount"
         );
 
         const exchangeRate =
@@ -120,17 +120,18 @@ export function earnWithdrawTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             withdrawAmount && {
-              name: 'Withdraw Amount',
+              name: "Withdraw Amount",
               value:
-                formatUSTWithPostfixUnits(demicrofy(withdrawAmount)) + ' axlUSDC',
+                formatUSTWithPostfixUnits(demicrofy(withdrawAmount)) +
+                " axlUSDC",
             },
             burnAmount && {
-              name: 'Returned Amount',
+              name: "Returned Amount",
               value:
-                formatAUSTWithPostfixUnits(demicrofy(burnAmount)) + ' aUSDC',
+                formatAUSTWithPostfixUnits(demicrofy(burnAmount)) + " aUSDC",
             },
             exchangeRate && {
-              name: 'Exchange Rate',
+              name: "Exchange Rate",
               value: formatFluidDecimalPoints(exchangeRate, 6),
             },
             helper.txHashReceipt(),
@@ -140,6 +141,6 @@ export function earnWithdrawTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

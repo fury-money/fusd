@@ -1,31 +1,31 @@
-import { formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
-import { Gas, HumanAddr, Rate, u, UST } from '@anchor-protocol/types';
+import { formatUSTWithPostfixUnits } from "@anchor-protocol/notation";
+import { Gas, HumanAddr, Rate, u, UST } from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { demicrofy, stripUUSD } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { demicrofy, stripUUSD } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import big, { Big } from 'big.js';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import big, { Big } from "big.js";
+import { Observable } from "rxjs";
 
 export function bondClaimTx($: {
   walletAddr: HumanAddr;
@@ -51,7 +51,7 @@ export function bondClaimTx($: {
           claim_rewards: {},
         }),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -63,10 +63,10 @@ export function bondClaimTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const transfer = pickEvent(rawLog, 'transfer');
+      const transfer = pickEvent(rawLog, "transfer");
 
       if (!transfer) {
-        return helper.failedToFindEvents('transfer');
+        return helper.failedToFindEvents("transfer");
       }
 
       try {
@@ -80,28 +80,28 @@ export function bondClaimTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             !!claimedReward && {
-              name: 'Claimed Reward',
+              name: "Claimed Reward",
               value:
                 formatUSTWithPostfixUnits(demicrofy(stripUUSD(claimedReward))) +
-                ' axlUSDC',
+                " axlUSDC",
             },
             helper.txHashReceipt(),
             {
-              name: 'Tx Fee',
+              name: "Tx Fee",
               value:
                 formatUSTWithPostfixUnits(
                   demicrofy(
-                    big(txFee ? stripUUSD(txFee) : '0').plus($.fixedGas) as u<
+                    big(txFee ? stripUUSD(txFee) : "0").plus($.fixedGas) as u<
                       UST<Big>
-                    >,
-                  ),
-                ) + ' Luna',
+                    >
+                  )
+                ) + " Luna",
             },
           ],
         } as TxResultRendering;
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

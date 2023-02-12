@@ -4,13 +4,13 @@ import {
   moneyMarket,
   u,
   UST,
-} from '@anchor-protocol/types';
-import { QueryClient, wasmFetch, WasmQuery } from '@libs/query-client';
-import big from 'big.js';
+} from "@anchor-protocol/types";
+import { QueryClient, wasmFetch, WasmQuery } from "@libs/query-client";
+import big from "big.js";
 import {
   BAssetInfoAndBalance,
   bAssetInfoAndBalanceQuery,
-} from './bAssetInfoAndBalance';
+} from "./bAssetInfoAndBalance";
 
 interface WhitelistWasmQuery {
   whitelist: WasmQuery<
@@ -24,7 +24,7 @@ interface WhitelistWasmQuery {
 }
 
 export interface BAssetInfoAndBalanceWithOracle extends BAssetInfoAndBalance {
-  oraclePrice: moneyMarket.oracle.PricesResponse['prices'][number];
+  oraclePrice: moneyMarket.oracle.PricesResponse["prices"][number];
   ustValue: u<UST>;
 }
 
@@ -37,7 +37,7 @@ export async function bAssetInfoAndBalanceTotalQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   overseerContract: HumanAddr,
-  oracleContract: HumanAddr,
+  oracleContract: HumanAddr
 ): Promise<BAssetInfoAndBalancesTotal | undefined> {
   if (!walletAddr) {
     return undefined;
@@ -45,7 +45,7 @@ export async function bAssetInfoAndBalanceTotalQuery(
 
   const { whitelist, oraclePrices } = await wasmFetch<WhitelistWasmQuery>({
     ...queryClient,
-    id: 'basset--list',
+    id: "basset--list",
     wasmQuery: {
       whitelist: {
         contractAddress: overseerContract,
@@ -64,7 +64,7 @@ export async function bAssetInfoAndBalanceTotalQuery(
 
   const oracleIndex = new Map<
     CW20Addr,
-    moneyMarket.oracle.PricesResponse['prices'][number]
+    moneyMarket.oracle.PricesResponse["prices"][number]
   >();
 
   for (const oraclePrice of oraclePrices.prices) {
@@ -74,15 +74,15 @@ export async function bAssetInfoAndBalanceTotalQuery(
   const infoAndBalances = await Promise.all(
     whitelist.elems
       //.filter(({ symbol }) => symbol.toLowerCase() !== 'aluna')
-      .map((el) => bAssetInfoAndBalanceQuery(walletAddr, el, queryClient)),
+      .map((el) => bAssetInfoAndBalanceQuery(walletAddr, el, queryClient))
   ).then((list) => {
     return list
       .filter(
         (
-          item: BAssetInfoAndBalance | undefined,
+          item: BAssetInfoAndBalance | undefined
         ): item is BAssetInfoAndBalance => {
           return !!item && oracleIndex.has(item.bAsset.collateral_token);
-        },
+        }
       )
       .map((item) => {
         const oraclePrice = oracleIndex.get(item.bAsset.collateral_token)!;

@@ -2,9 +2,9 @@ import {
   BAssetInfo,
   BAssetInfoAndBalancesTotal,
   BAssetInfoAndBalanceWithOracle,
-} from '@anchor-protocol/app-fns';
-import { CW20TokenDisplayInfo } from '@libs/app-fns';
-import { TokenDisplayInfoByAddr } from '../../utils/tokenDisplay';
+} from "@anchor-protocol/app-fns";
+import { CW20TokenDisplayInfo } from "@libs/app-fns";
+import { TokenDisplayInfoByAddr } from "../../utils/tokenDisplay";
 
 export type BAssetInfoWithDisplay = BAssetInfo & {
   tokenDisplay: {
@@ -15,7 +15,7 @@ export type BAssetInfoWithDisplay = BAssetInfo & {
 
 export const withBAssetInfoTokenDisplay = (
   bAssetInfo: BAssetInfo,
-  tokenDisplayInfoByAddr: TokenDisplayInfoByAddr,
+  tokenDisplayInfoByAddr: TokenDisplayInfoByAddr
 ): BAssetInfoWithDisplay => {
   const defaultAnchor = {
     name: bAssetInfo.bAsset.name,
@@ -44,12 +44,12 @@ export type BAssetInfoAndBalanceWithOracleWithDisplay =
 
 export type BAssetInfoAndBalancesTotalWithDisplay = Omit<
   BAssetInfoAndBalancesTotal,
-  'infoAndBalances'
+  "infoAndBalances"
 > & { infoAndBalances: BAssetInfoAndBalanceWithOracleWithDisplay[] };
 
 export const withBAssetInfoAndBalanceWithOracleTokenDisplay = (
   bAssetInfo: BAssetInfoAndBalanceWithOracle,
-  tokenDisplayByInfoAddr: TokenDisplayInfoByAddr,
+  tokenDisplayByInfoAddr: TokenDisplayInfoByAddr
 ): BAssetInfoAndBalanceWithOracleWithDisplay => ({
   ...bAssetInfo,
   tokenDisplay: tokenDisplayByInfoAddr[bAssetInfo.bAsset.collateral_token],
@@ -57,13 +57,10 @@ export const withBAssetInfoAndBalanceWithOracleTokenDisplay = (
 
 export const withBAssetInfoAndBalancesTotalTokenDisplay = (
   bAssetInfoAndBalancesTotal: BAssetInfoAndBalancesTotal,
-  tokenDisplayByInfoAddr: TokenDisplayInfoByAddr,
+  tokenDisplayByInfoAddr: TokenDisplayInfoByAddr
 ): BAssetInfoAndBalancesTotalWithDisplay => ({
   ...bAssetInfoAndBalancesTotal,
   infoAndBalances: bAssetInfoAndBalancesTotal.infoAndBalances.map((info) =>
-    withBAssetInfoAndBalanceWithOracleTokenDisplay(
-      info,
-      tokenDisplayByInfoAddr,
-    ),
+    withBAssetInfoAndBalanceWithOracleTokenDisplay(info, tokenDisplayByInfoAddr)
   ),
 });

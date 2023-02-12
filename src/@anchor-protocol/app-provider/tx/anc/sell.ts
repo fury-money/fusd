@@ -1,16 +1,16 @@
-import { ancSellTx } from '@anchor-protocol/app-fns';
-import { useAnchorBank } from '@anchor-protocol/app-provider';
-import { ANC, Rate, UST } from '@anchor-protocol/types';
-import { useFixedFee, useRefetchQueries } from '@libs/app-provider';
-import { formatExecuteMsgNumber } from '@libs/formatter';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import big from 'big.js';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
-import { useAncPriceQuery } from '../../queries/anc/price';
+import { ancSellTx } from "@anchor-protocol/app-fns";
+import { useAnchorBank } from "@anchor-protocol/app-provider";
+import { ANC, Rate, UST } from "@anchor-protocol/types";
+import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
+import { formatExecuteMsgNumber } from "@libs/formatter";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import big from "big.js";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
+import { useAncPriceQuery } from "../../queries/anc/price";
 
 export interface AncSellTxParams {
   burnAmount: ANC;
@@ -42,9 +42,10 @@ export function useAncSellTx() {
         !connected ||
         !connectedWallet ||
         !terraWalletAddress ||
-        !ancPrice
+        !ancPrice ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return ancSellTx({
@@ -52,7 +53,7 @@ export function useAncSellTx() {
         walletAddr: terraWalletAddress,
         burnAmount,
         beliefPrice: formatExecuteMsgNumber(
-          big(ancPrice.ANCPoolSize).div(ancPrice.USTPoolSize),
+          big(ancPrice.ANCPoolSize).div(ancPrice.USTPoolSize)
         ) as UST,
         maxSpread: maxSpread.toString() as Rate,
         ancTokenAddr: contractAddress.cw20.ANC,
@@ -90,7 +91,7 @@ export function useAncSellTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

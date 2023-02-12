@@ -1,22 +1,22 @@
-import { useEvmCrossAnchorSdk } from 'crossanchor';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { TxResultRendering } from '@libs/app-fns';
+import { useEvmCrossAnchorSdk } from "crossanchor";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { TxResultRendering } from "@libs/app-fns";
 import {
   EVM_ANCHOR_TX_REFETCH_MAP,
   refetchQueryByTxKind,
   TxKind,
   TX_GAS_LIMIT,
-} from './utils';
-import { Subject } from 'rxjs';
-import { useCallback } from 'react';
-import { OneWayTxResponse } from '@anchor-protocol/crossanchor-sdk';
-import { ContractReceipt } from 'ethers';
-import { BackgroundTxResult, useBackgroundTx } from './useBackgroundTx';
-import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
-import { UST } from '@libs/types';
-import { TxEvent } from './useTx';
-import { useRefetchQueries } from '@libs/app-provider';
-import { EvmTxProgressWriter } from './EvmTxProgressWriter';
+} from "./utils";
+import { Subject } from "rxjs";
+import { useCallback } from "react";
+import { OneWayTxResponse } from "@anchor-protocol/crossanchor-sdk";
+import { ContractReceipt } from "ethers";
+import { BackgroundTxResult, useBackgroundTx } from "./useBackgroundTx";
+import { useFormatters } from "@anchor-protocol/formatter/useFormatters";
+import { UST } from "@libs/types";
+import { TxEvent } from "./useTx";
+import { useRefetchQueries } from "@libs/app-provider";
+import { EvmTxProgressWriter } from "./EvmTxProgressWriter";
 
 type RepayUstTxResult = OneWayTxResponse<ContractReceipt> | null;
 type RepayUstTxRender = TxResultRendering<RepayUstTxResult>;
@@ -39,7 +39,7 @@ export function useRepayUstTx():
     async (
       txParams: RepayUstTxParams,
       renderTxResults: Subject<RepayUstTxRender>,
-      txEvents: Subject<TxEvent<RepayUstTxParams>>,
+      txEvents: Subject<TxEvent<RepayUstTxParams>>
     ) => {
       const amount = microfy(formatInput(txParams.amount)).toString();
 
@@ -49,10 +49,10 @@ export function useRepayUstTx():
 
       try {
         await xAnchor.approveLimit(
-          { token: 'UST' },
+          { token: "UST" },
           amount,
           address!,
-          TX_GAS_LIMIT,
+          TX_GAS_LIMIT
         );
 
         writer.repayUST();
@@ -65,7 +65,7 @@ export function useRepayUstTx():
           (event) => {
             writer.repayUST(event);
             txEvents.next({ event, txParams });
-          },
+          }
         );
 
         refetchQueries(refetchQueryByTxKind(TxKind.RepayUst));
@@ -75,7 +75,7 @@ export function useRepayUstTx():
         writer.timer.stop();
       }
     },
-    [xAnchor, address, connectionType, formatInput, microfy, refetchQueries],
+    [xAnchor, address, connectionType, formatInput, microfy, refetchQueries]
   );
 
   const displayTx = useCallback(
@@ -84,14 +84,14 @@ export function useRepayUstTx():
       amount: `${formatOutput(txParams.amount as UST)} UST`,
       timestamp: Date.now(),
     }),
-    [formatOutput],
+    [formatOutput]
   );
 
   const persistedTxResult = useBackgroundTx<RepayUstTxParams, RepayUstTxResult>(
     repayTx,
     parseTx,
     null,
-    displayTx,
+    displayTx
   );
 
   return address ? persistedTxResult : undefined;

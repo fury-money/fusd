@@ -1,15 +1,15 @@
-import { borrowProvideCollateralTx } from '@anchor-protocol/app-fns';
-import { bAsset } from '@anchor-protocol/types';
-import { EstimatedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
-import { useBorrowBorrowerQuery } from '../../queries/borrow/borrower';
-import { useBorrowMarketQuery } from '../../queries/borrow/market';
-import { WhitelistCollateral } from 'queries';
+import { borrowProvideCollateralTx } from "@anchor-protocol/app-fns";
+import { bAsset } from "@anchor-protocol/types";
+import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
+import { useBorrowBorrowerQuery } from "../../queries/borrow/borrower";
+import { useBorrowMarketQuery } from "../../queries/borrow/market";
+import { WhitelistCollateral } from "queries";
 
 export interface BorrowProvideCollateralTxParams {
   depositAmount: bAsset;
@@ -41,9 +41,10 @@ export function useBorrowProvideCollateralTx(collateral: WhitelistCollateral) {
         !connected ||
         !availablePost ||
         !collateral ||
-        !terraWalletAddress
+        !terraWalletAddress ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return borrowProvideCollateralTx({
@@ -82,7 +83,7 @@ export function useBorrowProvideCollateralTx(collateral: WhitelistCollateral) {
       refetchQueries,
       terraWalletAddress,
       txErrorReporter,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

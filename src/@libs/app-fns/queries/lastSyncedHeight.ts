@@ -1,5 +1,5 @@
-import { QueryClient } from '@libs/query-client';
-import { ISODateFormat, Num } from '@libs/types';
+import { QueryClient } from "@libs/query-client";
+import { ISODateFormat, Num } from "@libs/types";
 
 // language=graphql
 const LAST_SYNCED_HEIGHT_QUERY = `
@@ -93,32 +93,30 @@ class BlockHeightFetcher {
 
     let fetchLatestBlock;
 
-    if('lcdEndpoint' in this.client){
+    if ("lcdEndpoint" in this.client) {
       fetchLatestBlock = this.client
-            .lcdFetcher<LcdBlocksLatest>(
-              `${this.client.lcdEndpoint}/blocks/latest`,
-              this.client.requestInit,
-            )
-            .then(({ block }) => {
-              return +block.header.height;
-            })
-    }else if ("hiveEndpoint" in this.client){
+        .lcdFetcher<LcdBlocksLatest>(
+          `${this.client.lcdEndpoint}/blocks/latest`,
+          this.client.requestInit
+        )
+        .then(({ block }) => {
+          return +block.header.height;
+        });
+    } else if ("hiveEndpoint" in this.client) {
       fetchLatestBlock = this.client
-            .hiveFetcher<{}, LastSyncedHeight>(
-              LAST_SYNCED_HEIGHT_QUERY,
-              {},
-              this.client.hiveEndpoint + '?last-synced-height',
-            )
-            .then(({ LastSyncedHeight }) => LastSyncedHeight);
-    }else{
+        .hiveFetcher<{}, LastSyncedHeight>(
+          LAST_SYNCED_HEIGHT_QUERY,
+          {},
+          this.client.hiveEndpoint + "?last-synced-height"
+        )
+        .then(({ LastSyncedHeight }) => LastSyncedHeight);
+    } else {
       fetchLatestBlock = this.client
-          .batchFetcher!.tendermint.latestBlock()
-          .then((response) => {
-
-            return response.block.header.height.toNumber()
-          });
+        .batchFetcher!.tendermint.latestBlock()
+        .then((response) => {
+          return response.block.header.height.toNumber();
+        });
     }
-
 
     fetchLatestBlock
       .then((blockHeight) => {
@@ -156,17 +154,17 @@ const fetchers: Map<string, BlockHeightFetcher> = new Map<
 
 export function lastSyncedHeightQuery(client: QueryClient): Promise<number> {
   let endpoint;
-  if('lcdEndpoint' in client){
+  if ("lcdEndpoint" in client) {
     endpoint = client.lcdEndpoint;
-  }else if ("hiveEndpoint" in client){
+  } else if ("hiveEndpoint" in client) {
     endpoint = client.hiveEndpoint;
-  }else {
+  } else {
     endpoint = client.batchEndpoint ?? "batch querier endpoint";
   }
 
   if (!fetchers.has(endpoint)) {
     fetchers.set(endpoint, new BlockHeightFetcher(client));
-  }  
+  }
 
   return fetchers.get(endpoint)!.fetchBlockHeight();
 }

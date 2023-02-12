@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
 export function countUtf8Bytes(s: string): number {
   let b = 0,
@@ -9,8 +9,8 @@ export function countUtf8Bytes(s: string): number {
 }
 
 export enum BytesValid {
-  MUCH = 'much',
-  LESS = 'less',
+  MUCH = "much",
+  LESS = "less",
 }
 
 export function useStringBytesLength(str: string): number {
@@ -22,7 +22,7 @@ export function useStringBytesLength(str: string): number {
 export function useValidateStringBytes(
   str: string,
   minBytes: number,
-  maxBytes: number,
+  maxBytes: number
 ): BytesValid | undefined {
   return useMemo(() => {
     if (str.trim().length === 0) {

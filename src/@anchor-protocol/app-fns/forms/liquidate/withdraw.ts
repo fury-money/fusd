@@ -1,7 +1,7 @@
-import { UST, Luna, u } from '@anchor-protocol/types';
-import { max, min } from '@libs/big-math';
-import { FormReturn } from '@libs/use-form';
-import big, { Big } from 'big.js';
+import { UST, Luna, u } from "@anchor-protocol/types";
+import { max, min } from "@libs/big-math";
+import { FormReturn } from "@libs/use-form";
+import big, { Big } from "big.js";
 
 export interface LiquidationWithdrawFormInput {
   bid_idx: string;
@@ -42,15 +42,15 @@ export const liquidationWithdrawForm =
         return undefined;
       }
 
-      const ratioTxFee = big('0');
-      const maxTax = big('0');
+      const ratioTxFee = big("0");
+      const maxTax = big("0");
       return max(min(ratioTxFee, maxTax), 0) as u<Luna<Big>>;
     })();
 
     // invalidTxFee
     const invalidTxFee = (() => {
       return isConnected && txFee && big(userULunaBalance).lt(txFee)
-        ? 'Not enough transaction fees'
+        ? "Not enough transaction fees"
         : undefined;
     })();
 

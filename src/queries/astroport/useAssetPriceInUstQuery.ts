@@ -1,13 +1,13 @@
 import {
   ANCHOR_QUERY_KEY,
   useAnchorWebapp,
-} from '@anchor-protocol/app-provider';
-import { createQueryFn } from '@libs/react-query-utils';
-import { HumanAddr, UST } from '@libs/types';
-import { useQuery, UseQueryResult } from 'react-query';
-import { QueryClient, wasmFetch, WasmQuery } from '@libs/query-client';
-import { astroport } from '@anchor-protocol/types';
-import big from 'big.js';
+} from "@anchor-protocol/app-provider";
+import { createQueryFn } from "@libs/react-query-utils";
+import { HumanAddr, UST } from "@libs/types";
+import { useQuery, UseQueryResult } from "react-query";
+import { QueryClient, wasmFetch, WasmQuery } from "@libs/query-client";
+import { astroport } from "@anchor-protocol/types";
+import big from "big.js";
 
 interface AssetPriceWasmQuery {
   assetPrice: WasmQuery<
@@ -18,7 +18,7 @@ interface AssetPriceWasmQuery {
 
 const assetPriceQuery = async (
   queryClient: QueryClient,
-  assetUstPairAddress: HumanAddr,
+  assetUstPairAddress: HumanAddr
 ): Promise<UST> => {
   const {
     assetPrice: {
@@ -26,7 +26,7 @@ const assetPriceQuery = async (
     },
   } = await wasmFetch<AssetPriceWasmQuery>({
     ...queryClient,
-    id: 'asset--price',
+    id: "asset--price",
     wasmQuery: {
       assetPrice: {
         contractAddress: assetUstPairAddress,
@@ -47,11 +47,10 @@ const assetPriceQuery = async (
   return assetPrice.toString() as UST;
 };
 
-
-type AssetWithAstroportPool = 'anc' | 'astro';
+type AssetWithAstroportPool = "anc" | "astro";
 
 export function useAssetPriceInUstQuery(
-  asset: AssetWithAstroportPool,
+  asset: AssetWithAstroportPool
 ): UseQueryResult<UST> {
   const {
     queryClient,
@@ -68,12 +67,12 @@ export function useAssetPriceInUstQuery(
 
   return useQuery(
     [ANCHOR_QUERY_KEY.ASTRO_PRICE, astroportAddress[asset]],
-    createQueryFn(assetPriceQuery, queryClient),
+    createQueryFn(assetPriceQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient,
-    },
+    }
   );
 }

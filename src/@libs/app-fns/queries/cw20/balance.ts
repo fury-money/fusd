@@ -1,12 +1,12 @@
-import { importCW20Decimals } from '@anchor-protocol/app-fns';
+import { importCW20Decimals } from "@anchor-protocol/app-fns";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
-import { cw20, CW20Addr, HumanAddr, Token } from '@libs/types';
-import { cw20TokenInfoQuery } from './tokenInfo';
+} from "@libs/query-client";
+import { cw20, CW20Addr, HumanAddr, Token } from "@libs/types";
+import { cw20TokenInfoQuery } from "./tokenInfo";
 
 interface CW20BalanceWasmQuery<T extends Token> {
   tokenBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<T>>;
@@ -19,7 +19,7 @@ export type CW20Balance<T extends Token> = WasmQueryData<
 export async function cw20BalanceQuery<T extends Token>(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  tokenAddr: CW20Addr | undefined,
+  tokenAddr: CW20Addr | undefined
 ): Promise<CW20Balance<T> | undefined> {
   if (!walletAddr || !tokenAddr) {
     return undefined;

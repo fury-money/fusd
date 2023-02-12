@@ -1,16 +1,16 @@
-import { Rate } from '@anchor-protocol/types';
-import big, { Big, BigSource } from 'big.js';
-import { BorrowAPYData } from '../../queries/borrow/apy';
+import { Rate } from "@anchor-protocol/types";
+import big, { Big, BigSource } from "big.js";
+import { BorrowAPYData } from "../../queries/borrow/apy";
 
 export function computeNetAPR(
   borrowerDistributionAPYs:
-    | BorrowAPYData['borrowerDistributionAPYs']
+    | BorrowAPYData["borrowerDistributionAPYs"]
     | undefined,
-  borrowAPR: Rate<BigSource>,
+  borrowAPR: Rate<BigSource>
 ): Rate<BigSource> {
   return borrowerDistributionAPYs && borrowerDistributionAPYs.length > 0
     ? (big(borrowAPR).minus(
-        big(borrowerDistributionAPYs[0].DistributionAPY),
+        big(borrowerDistributionAPYs[0].DistributionAPY)
       ) as Rate<Big>)
     : (0 as Rate<number>);
 }

@@ -1,5 +1,5 @@
-import { hiveFetch, lcdFetch, QueryClient } from '@libs/query-client';
-import { batchFetch } from '@libs/query-client/lcd/batchclient';
+import { hiveFetch, lcdFetch, QueryClient } from "@libs/query-client";
+import { batchFetch } from "@libs/query-client/lcd/batchclient";
 import {
   cw20,
   HumanAddr,
@@ -8,7 +8,7 @@ import {
   terraswap,
   Token,
   u,
-} from '@libs/types';
+} from "@libs/types";
 
 // language=graphql
 const NATIVE_BALANCES_QUERY = `
@@ -45,7 +45,7 @@ export type TerraBalances = {
 export async function terraBalancesQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  assets: terraswap.AssetInfo[],
+  assets: terraswap.AssetInfo[]
 ): Promise<TerraBalances> {
   type CW20Query = Record<
     string,
@@ -55,7 +55,7 @@ export async function terraBalancesQuery(
   if (!walletAddr) {
     const balances = assets.map((asset) => ({
       asset,
-      balance: '0' as u<Token>,
+      balance: "0" as u<Token>,
     }));
 
     const balancesIndex = new Map<terraswap.AssetInfo, u<Token>>();
@@ -68,8 +68,8 @@ export async function terraBalancesQuery(
   }
 
   const wasmQuery: CW20Query = assets.reduce((wq, asset, i) => {
-    if ('token' in asset) {
-      wq['asset' + i] = {
+    if ("token" in asset) {
+      wq["asset" + i] = {
         contractAddress: asset.token.contract_addr,
         query: {
           balance: {
@@ -81,92 +81,94 @@ export async function terraBalancesQuery(
     return wq;
   }, {} as CW20Query);
 
-  let balancesPromise: Promise<TerraBalances['balances']>;
-  if(queryClient){
-    if('lcdEndpoint' in queryClient){
+  let balancesPromise: Promise<TerraBalances["balances"]>;
+  if (queryClient) {
+    if ("lcdEndpoint" in queryClient) {
       balancesPromise = Promise.all([
-          queryClient.lcdFetcher<LcdBankBalances>(
-            `${queryClient.lcdEndpoint}/bank/balances/${walletAddr}`,
-            queryClient.requestInit,
-          ),
-          lcdFetch<any>({
-            ...queryClient,
-            id: `terra-balances=${walletAddr}`,
-            wasmQuery,
-          }),
-        ]).then(([nativeTokenBalances, cw20TokenBalances]) => {
-          return assets.map((asset, i) => {
-            if ('token' in asset) {
-              const cw20Balance: cw20.BalanceResponse<Token> =
-                cw20TokenBalances['asset' + i] as any;
-              return { asset, balance: cw20Balance.balance };
-            }
+        queryClient.lcdFetcher<LcdBankBalances>(
+          `${queryClient.lcdEndpoint}/bank/balances/${walletAddr}`,
+          queryClient.requestInit
+        ),
+        lcdFetch<any>({
+          ...queryClient,
+          id: `terra-balances=${walletAddr}`,
+          wasmQuery,
+        }),
+      ]).then(([nativeTokenBalances, cw20TokenBalances]) => {
+        return assets.map((asset, i) => {
+          if ("token" in asset) {
+            const cw20Balance: cw20.BalanceResponse<Token> = cw20TokenBalances[
+              "asset" + i
+            ] as any;
+            return { asset, balance: cw20Balance.balance };
+          }
 
-            const nativeAsset = nativeTokenBalances.result.find(
-              ({ denom }) => asset.native_token.denom === denom,
-            );
+          const nativeAsset = nativeTokenBalances.result.find(
+            ({ denom }) => asset.native_token.denom === denom
+          );
 
-            return { asset, balance: nativeAsset?.amount ?? ('0' as u<Token>) };
-          });
-        })
-    }else if ("hiveEndpoint" in queryClient){
-      balancesPromise = hiveFetch<any, NativeBalancesQueryVariables, NativeBalancesQueryResult>(
-          {
-            ...queryClient,
-            id: `terra-balances=${walletAddr}`,
-            variables: {
-              walletAddress: walletAddr,
-            },
-            wasmQuery,
-            query: NATIVE_BALANCES_QUERY,
-          },
-        ).then((result) => {
-          return assets.map((asset, i) => {
-            if ('token' in asset) {
-              const cw20Balance: cw20.BalanceResponse<Token> = result[
-                'asset' + i
-              ] as any;
-              return { asset, balance: cw20Balance.balance };
-            }
-
-            const nativeAsset = result.nativeTokenBalances.Result.find(
-              ({ Denom }) => asset.native_token.denom === Denom,
-            );
-
-            return { asset, balance: nativeAsset?.Amount ?? ('0' as u<Token>) };
-          });
+          return { asset, balance: nativeAsset?.amount ?? ("0" as u<Token>) };
         });
+      });
+    } else if ("hiveEndpoint" in queryClient) {
+      balancesPromise = hiveFetch<
+        any,
+        NativeBalancesQueryVariables,
+        NativeBalancesQueryResult
+      >({
+        ...queryClient,
+        id: `terra-balances=${walletAddr}`,
+        variables: {
+          walletAddress: walletAddr,
+        },
+        wasmQuery,
+        query: NATIVE_BALANCES_QUERY,
+      }).then((result) => {
+        return assets.map((asset, i) => {
+          if ("token" in asset) {
+            const cw20Balance: cw20.BalanceResponse<Token> = result[
+              "asset" + i
+            ] as any;
+            return { asset, balance: cw20Balance.balance };
+          }
 
-    }else {
+          const nativeAsset = result.nativeTokenBalances.Result.find(
+            ({ Denom }) => asset.native_token.denom === Denom
+          );
+
+          return { asset, balance: nativeAsset?.Amount ?? ("0" as u<Token>) };
+        });
+      });
+    } else {
       balancesPromise = Promise.all([
-          queryClient.batchFetcher?.bank.allBalances(walletAddr),
-          batchFetch<any>({
-            ...queryClient,
-            id: `terra-balances=${walletAddr}`,
-            wasmQuery,
-          }),
-        ]).then(([nativeTokenBalances, cw20TokenBalances]) => {
-          return assets.map((asset, i) => {
-            if ('token' in asset) {
-              const cw20Balance: cw20.BalanceResponse<Token> =
-                cw20TokenBalances['asset' + i] as any;
-              return { asset, balance: cw20Balance.balance as u<Token<string>> };
-            }
+        queryClient.batchFetcher?.bank.allBalances(walletAddr),
+        batchFetch<any>({
+          ...queryClient,
+          id: `terra-balances=${walletAddr}`,
+          wasmQuery,
+        }),
+      ]).then(([nativeTokenBalances, cw20TokenBalances]) => {
+        return assets.map((asset, i) => {
+          if ("token" in asset) {
+            const cw20Balance: cw20.BalanceResponse<Token> = cw20TokenBalances[
+              "asset" + i
+            ] as any;
+            return { asset, balance: cw20Balance.balance as u<Token<string>> };
+          }
 
-            const nativeAsset = nativeTokenBalances?.find(
-              ({ denom }) => asset.native_token.denom === denom,
-            );
+          const nativeAsset = nativeTokenBalances?.find(
+            ({ denom }) => asset.native_token.denom === denom
+          );
 
-            return { asset, balance: (nativeAsset?.amount ?? '0' ) as u<Token> };
-          });
-        })
+          return { asset, balance: (nativeAsset?.amount ?? "0") as u<Token> };
+        });
+      });
     }
-  }else{
+  } else {
     balancesPromise = new Promise((resolve, reject) => {
-      resolve([])
+      resolve([]);
     });
   }
-
 
   const balances = await balancesPromise;
 

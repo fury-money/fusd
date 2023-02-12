@@ -1,7 +1,7 @@
-import { BAssetLtvs, computeBorrowLimit } from '@anchor-protocol/app-fns';
-import type { bAsset, Rate, u } from '@anchor-protocol/types';
-import { CW20Addr, moneyMarket } from '@anchor-protocol/types';
-import big, { Big, BigSource } from 'big.js';
+import { BAssetLtvs, computeBorrowLimit } from "@anchor-protocol/app-fns";
+import type { bAsset, Rate, u } from "@anchor-protocol/types";
+import { CW20Addr, moneyMarket } from "@anchor-protocol/types";
+import big, { Big, BigSource } from "big.js";
 
 export const computeRedeemAmountToLtv =
   (
@@ -9,14 +9,14 @@ export const computeRedeemAmountToLtv =
     marketBorrowerInfo: moneyMarket.market.BorrowerInfoResponse,
     overseerCollaterals: moneyMarket.overseer.CollateralsResponse,
     oraclePrices: moneyMarket.oracle.PricesResponse,
-    bAssetLtvs: BAssetLtvs,
+    bAssetLtvs: BAssetLtvs
   ) =>
   (redeemAmount: u<bAsset<BigSource>>): Rate<Big> => {
     const borrowLimit = computeBorrowLimit(
       overseerCollaterals,
       oraclePrices,
       bAssetLtvs,
-      [[collateralToken, big(redeemAmount).mul(-1) as u<bAsset<Big>>]],
+      [[collateralToken, big(redeemAmount).mul(-1) as u<bAsset<Big>>]]
     );
 
     return (

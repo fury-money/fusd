@@ -3,16 +3,16 @@ import Big from "big.js";
 
 export enum TxStreamPhase {
   /** in progress post (wait allow from chrome extension or walletconnect) */
-  POST = 'POST',
+  POST = "POST",
 
   /** in progress broadcast (poll txInfo) */
-  BROADCAST = 'BROADCAST',
+  BROADCAST = "BROADCAST",
 
   /** checked txInfo is succeed */
-  SUCCEED = 'SUCCEED',
+  SUCCEED = "SUCCEED",
 
   /** failed POST or BROADCAST */
-  FAILED = 'FAILED',
+  FAILED = "FAILED",
 }
 
 export interface TxErrorRendering {

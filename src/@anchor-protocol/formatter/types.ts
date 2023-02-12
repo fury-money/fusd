@@ -1,6 +1,6 @@
-import { UST, Luna, NoMicro, Token, u } from '@libs/types';
-import { ANC, aUST, aLuna, Native } from '@anchor-protocol/types';
-import { BigSource } from 'big.js';
+import { UST, Luna, NoMicro, Token, u } from "@libs/types";
+import { ANC, aUST, aLuna, Native } from "@anchor-protocol/types";
+import { BigSource } from "big.js";
 
 export interface FormatterOptions {
   decimals?: number;

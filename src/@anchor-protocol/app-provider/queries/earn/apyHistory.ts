@@ -1,11 +1,11 @@
 import {
   EarnAPYHistoryData,
   earnAPYHistoryQuery,
-} from '@anchor-protocol/app-fns';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+} from "@anchor-protocol/app-fns";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
 const queryFn = createSimpleQueryFn(earnAPYHistoryQuery);
 
@@ -21,6 +21,6 @@ export function useEarnAPYHistoryQuery(): UseQueryResult<
       refetchInterval: 1000 * 60 * 60,
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 }

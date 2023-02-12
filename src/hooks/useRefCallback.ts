@@ -1,8 +1,8 @@
-import { DependencyList, useEffect, useMemo, useRef } from 'react';
+import { DependencyList, useEffect, useMemo, useRef } from "react";
 
 export const useRefCallback = <T extends (...args: any[]) => any>(
   callback: T,
-  deps: DependencyList,
+  deps: DependencyList
 ): T => {
   const ref = useRef(callback);
 
@@ -17,6 +17,6 @@ export const useRefCallback = <T extends (...args: any[]) => any>(
         const fn = ref.current;
         return fn(...args);
       }) as T,
-    [ref],
+    [ref]
   );
 };

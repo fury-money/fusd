@@ -3,13 +3,13 @@ import {
   ResumeTxParams,
   ResumeTxResult,
   Transaction,
-} from 'tx/evm';
-import { BACKGROUND_TRANSCATION_TAB_ID } from '../BackgroundTransaction';
-import { useExecuteOnceWhen } from '../utils';
+} from "tx/evm";
+import { BACKGROUND_TRANSCATION_TAB_ID } from "../BackgroundTransaction";
+import { useExecuteOnceWhen } from "../utils";
 
 export const useExecuteReservedTx = (
   tx: Transaction,
-  backgroundTx: BackgroundTxResult<ResumeTxParams, ResumeTxResult> | undefined,
+  backgroundTx: BackgroundTxResult<ResumeTxParams, ResumeTxResult> | undefined
 ) => {
   const { alreadyRunning } = backgroundTx?.utils ?? {};
   const [execute] = backgroundTx?.stream ?? [null, null];
@@ -19,6 +19,6 @@ export const useExecuteReservedTx = (
     () =>
       Boolean(execute) &&
       !alreadyRunning &&
-      tx.backgroundTransactionTabId === BACKGROUND_TRANSCATION_TAB_ID,
+      tx.backgroundTransactionTabId === BACKGROUND_TRANSCATION_TAB_ID
   );
 };

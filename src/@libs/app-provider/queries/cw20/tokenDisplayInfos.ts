@@ -1,12 +1,12 @@
-import { useDeploymentTarget } from '@anchor-protocol/app-provider';
+import { useDeploymentTarget } from "@anchor-protocol/app-provider";
 import {
   CW20TokenDisplayInfos,
   cw20TokenDisplayInfosQuery,
-} from '@libs/app-fns';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { useAnchorQuery } from 'queries';
-import { UseQueryResult } from 'react-query';
-import { TERRA_QUERY_KEY } from '../../env';
+} from "@libs/app-fns";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { useAnchorQuery } from "queries";
+import { UseQueryResult } from "react-query";
+import { TERRA_QUERY_KEY } from "../../env";
 
 const queryFn = createSimpleQueryFn(cw20TokenDisplayInfosQuery);
 
@@ -21,7 +21,7 @@ export function useCW20TokenDisplayInfosQuery(): UseQueryResult<CW20TokenDisplay
     {
       keepPreviousData: false,
       refetchOnMount: false,
-    },
+    }
   );
 
   return result;

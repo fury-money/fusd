@@ -1,14 +1,14 @@
-import { borrowMarketQuery } from '@anchor-protocol/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+import { borrowMarketQuery } from "@anchor-protocol/app-fns";
+import { createQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 import {
   BorrowMarketWithDisplay,
   withBorrowMarketTokenDisplay,
-} from './utils/tokenDisplay';
+} from "./utils/tokenDisplay";
 
-import { useQueryWithTokenDisplay } from '../utils/tokenDisplay';
+import { useQueryWithTokenDisplay } from "../utils/tokenDisplay";
 
 export function useBorrowMarketQuery(): UseQueryResult<
   BorrowMarketWithDisplay | undefined
@@ -30,8 +30,8 @@ export function useBorrowMarketQuery(): UseQueryResult<
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: false,
       onError: queryErrorReporter,
-      enabled: !!queryClient
-    },
+      enabled: !!queryClient,
+    }
   );
 
   return useQueryWithTokenDisplay(borrowMarket, withBorrowMarketTokenDisplay);

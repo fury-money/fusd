@@ -1,7 +1,7 @@
 import {
   BAssetClaimableRewards,
   BLunaClaimableRewards,
-} from '@anchor-protocol/app-fns';
+} from "@anchor-protocol/app-fns";
 import {
   AnchorContractAddress,
   BAssetInfoWithDisplay,
@@ -10,16 +10,16 @@ import {
   useBAssetInfoListQuery,
   useBLunaClaimableRewards,
   useBorrowMarketQuery,
-} from '@anchor-protocol/app-provider';
-import { bAsset, moneyMarket } from '@anchor-protocol/types';
-import { HumanAddr, u, UST } from '@libs/types';
-import big from 'big.js';
-import { useMemo } from 'react';
-import { claimableRewards as _claimableRewards } from '../logics/claimableRewards';
+} from "@anchor-protocol/app-provider";
+import { bAsset, moneyMarket } from "@anchor-protocol/types";
+import { HumanAddr, u, UST } from "@libs/types";
+import big from "big.js";
+import { useMemo } from "react";
+import { claimableRewards as _claimableRewards } from "../logics/claimableRewards";
 
 type BAssetClaimableRewardsPayload = [
   contract: HumanAddr,
-  rewards: BAssetClaimableRewards,
+  rewards: BAssetClaimableRewards
 ];
 
 export type RewardBreakdown = {
@@ -36,22 +36,21 @@ export type RewardsBreakdown = {
 };
 
 const aLunaRewardBreakdown = (
-  oraclePrices: moneyMarket.oracle.PricesResponse['prices'],
+  oraclePrices: moneyMarket.oracle.PricesResponse["prices"],
   contractAddress: AnchorContractAddress,
-  claimableRewards?: BLunaClaimableRewards,
+  claimableRewards?: BLunaClaimableRewards
 ): RewardBreakdown => {
   const tokenPriceUST = big(
-    oraclePrices.find((p) => p.asset === contractAddress.cw20.aLuna)?.price ??
-      0,
+    oraclePrices.find((p) => p.asset === contractAddress.cw20.aLuna)?.price ?? 0
   ) as u<UST<big>>;
 
   const tokenRewardUST = _claimableRewards(
     claimableRewards?.claimableReward,
-    claimableRewards?.rewardState,
+    claimableRewards?.rewardState
   );
 
   return {
-    symbol: 'aLuna',
+    symbol: "aLuna",
     tokenRewardUST,
     tokenPriceUST,
     tokenReward: (tokenPriceUST.gt(big(0))
@@ -62,22 +61,22 @@ const aLunaRewardBreakdown = (
 };
 
 const bAssetRewardsBreakdown = (
-  oraclePrices: moneyMarket.oracle.PricesResponse['prices'],
+  oraclePrices: moneyMarket.oracle.PricesResponse["prices"],
   bAssetInfoList: BAssetInfoWithDisplay[],
-  bAssetRewards: BAssetClaimableRewardsPayload[],
+  bAssetRewards: BAssetClaimableRewardsPayload[]
 ): RewardBreakdown[] => {
   return bAssetInfoList.map((b) => {
     const rewardPayload = bAssetRewards.find(
-      (r) => r[0] === b.custodyConfig.reward_contract,
+      (r) => r[0] === b.custodyConfig.reward_contract
     );
 
     const tokenRewardUST = big(
-      rewardPayload ? rewardPayload[1].claimableReward.rewards : 0,
+      rewardPayload ? rewardPayload[1].claimableReward.rewards : 0
     ) as u<UST<big>>;
 
     const tokenPriceUST = big(
       oraclePrices.find((p) => p.asset === b.bAsset.collateral_token)?.price ??
-        0,
+        0
     ) as u<UST<big>>;
 
     return {
@@ -93,7 +92,7 @@ const bAssetRewardsBreakdown = (
 };
 
 const useRewardsBreakdown = (
-  oraclePrices: moneyMarket.oracle.PricesResponse['prices'],
+  oraclePrices: moneyMarket.oracle.PricesResponse["prices"]
 ): RewardsBreakdown => {
   const { data: bAssetInfoList = [] } = useBAssetInfoListQuery();
   const { data: { rewards: bAssetRewards = [] } = {} } =
@@ -107,14 +106,14 @@ const useRewardsBreakdown = (
       aLunaRewardBreakdown(
         oraclePrices,
         contractAddress,
-        aLunaClaimableRewards,
+        aLunaClaimableRewards
       ),
-    [oraclePrices, contractAddress, aLunaClaimableRewards],
+    [oraclePrices, contractAddress, aLunaClaimableRewards]
   );
 
   const bAssetBreakdown = useMemo(
     () => bAssetRewardsBreakdown(oraclePrices, bAssetInfoList, bAssetRewards),
-    [oraclePrices, bAssetInfoList, bAssetRewards],
+    [oraclePrices, bAssetInfoList, bAssetRewards]
   );
 
   return useMemo(() => {
@@ -125,7 +124,7 @@ const useRewardsBreakdown = (
         .map((r) => r.tokenRewardUST)
         .reduce((acc, curr) => acc.plus(curr), big(0)) as u<UST<big>>,
       rewardBreakdowns: rewardBreakdowns.filter((r) =>
-        r.tokenRewardUST.gt(big(0)),
+        r.tokenRewardUST.gt(big(0))
       ),
     };
   }, [bAssetBreakdown, aLunaBreakdown]);

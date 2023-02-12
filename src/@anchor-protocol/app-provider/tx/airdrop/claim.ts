@@ -1,12 +1,12 @@
-import { Airdrop, airdropClaimTx } from '@anchor-protocol/app-fns';
-import { useGasPrice, useRefetchQueries } from '@libs/app-provider';
-import { u, UST } from '@libs/types';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAccount } from 'contexts/account';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
+import { Airdrop, airdropClaimTx } from "@anchor-protocol/app-fns";
+import { useGasPrice, useRefetchQueries } from "@libs/app-provider";
+import { u, UST } from "@libs/types";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAccount } from "contexts/account";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
 
 export interface AirdropClaimTxParams {
   airdrop: Airdrop;
@@ -22,7 +22,7 @@ export function useAirdropClaimTx() {
   const { queryClient, txErrorReporter, constants, contractAddress } =
     useAnchorWebapp();
 
-  const airdropFee = useGasPrice(constants.airdropGas, 'uluna');
+  const airdropFee = useGasPrice(constants.airdropGas, "uluna");
 
   const refetchQueries = useRefetchQueries();
 
@@ -32,9 +32,10 @@ export function useAirdropClaimTx() {
         !availablePost ||
         !connected ||
         !connectedWallet ||
-        !terraWalletAddress
+        !terraWalletAddress ||
+        !queryClient
       ) {
-        throw new Error('Can not post!');
+        throw new Error("Can not post!");
       }
 
       return airdropClaimTx({
@@ -70,7 +71,7 @@ export function useAirdropClaimTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

@@ -1,4 +1,4 @@
-import { JSDateTime } from '@anchor-protocol/types';
+import { JSDateTime } from "@anchor-protocol/types";
 
 export interface MypageTxHistory {
   tx_type: string;
@@ -25,9 +25,9 @@ export async function mypageTxHistoryQuery({
   walletAddress,
   offset,
 }: MypageTxHistoryQueryParams): Promise<MypageTxHistoryData> {
-  const offsetQuery = offset ? '?offset=' + offset : '';
+  const offsetQuery = offset ? "?offset=" + offset : "";
   const data: MypageTxHistoryData = await fetch(
-    `${endpoint}/v1/history/${walletAddress}${offsetQuery}`,
+    `${endpoint}/v1/history/${walletAddress}${offsetQuery}`
   ).then((res) => res.json());
 
   return data;

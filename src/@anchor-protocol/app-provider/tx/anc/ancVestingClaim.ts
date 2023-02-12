@@ -1,11 +1,11 @@
-import { vestingClaimTx } from '@anchor-protocol/app-fns/tx/anc/vestingClaim';
-import { useFixedFee, useRefetchQueries } from '@libs/app-provider';
-import { useStream } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { useCallback } from 'react';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_TX_KEY } from '../../env';
-import { useAnchorBank } from '../../hooks/useAnchorBank';
+import { vestingClaimTx } from "@anchor-protocol/app-fns/tx/anc/vestingClaim";
+import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
+import { useStream } from "@rx-stream/react";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useCallback } from "react";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_TX_KEY } from "../../env";
+import { useAnchorBank } from "../../hooks/useAnchorBank";
 
 export interface AncVestingClaimTxParams {
   onTxSucceed?: () => void;
@@ -25,8 +25,8 @@ export function useAncVestingClaimTx() {
 
   const stream = useCallback(
     ({ onTxSucceed }: AncVestingClaimTxParams) => {
-      if (!connectedWallet || !connectedWallet.availablePost) {
-        throw new Error('Can not post!');
+      if (!connectedWallet || !connectedWallet.availablePost || !queryClient) {
+        throw new Error("Can not post!");
       }
       return vestingClaimTx({
         // fabricatebBuy
@@ -60,7 +60,7 @@ export function useAncVestingClaimTx() {
       queryClient,
       txErrorReporter,
       refetchQueries,
-    ],
+    ]
   );
 
   const streamReturn = useStream(stream);

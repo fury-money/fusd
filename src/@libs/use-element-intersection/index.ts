@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from "react";
 
 export interface ElementIntersectionParams extends IntersectionObserverInit {
   elementRef: RefObject<HTMLElement>;
@@ -33,7 +33,7 @@ export function useElementIntersection({
         threshold,
         root,
         rootMargin,
-      },
+      }
     );
 
     observer.observe(elementRef.current);

@@ -3,9 +3,9 @@ import {
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
-import { CW20Addr, HumanAddr, Token } from '@libs/types';
-import { astroport } from '@libs/types/contracts/astroport';
+} from "@libs/query-client";
+import { CW20Addr, HumanAddr, Token } from "@libs/types";
+import { astroport } from "@libs/types/contracts/astroport";
 
 interface AstroportDepositQuery<T extends Token> {
   deposit: WasmQuery<
@@ -22,7 +22,7 @@ export async function astroportDepositQuery<T extends Token>(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   lpTokenAddr: CW20Addr,
-  generatorAddr: HumanAddr,
+  generatorAddr: HumanAddr
 ): Promise<AstroportDeposit<T> | undefined> {
   if (!walletAddr) {
     return undefined;

@@ -1,8 +1,8 @@
-import { Tokens } from '@anchor-protocol/token-icons';
-import { Gas } from '@anchor-protocol/types';
-import { AppConstants, AppContractAddress } from '@libs/app-provider';
-import { CW20Addr, HumanAddr, NativeDenom } from '@libs/types';
-import { RegisteredLSDs } from 'env';
+import { Tokens } from "@anchor-protocol/token-icons";
+import { Gas } from "@anchor-protocol/types";
+import { AppConstants, AppContractAddress } from "@libs/app-provider";
+import { CW20Addr, HumanAddr, NativeDenom } from "@libs/types";
+import { RegisteredLSDs } from "env";
 
 export interface AnchorContractAddress extends AppContractAddress {
   aluna: {
@@ -52,20 +52,20 @@ export interface AnchorContractAddress extends AppContractAddress {
     aLunaLunaLP: CW20Addr;
   };
   native: {
-    usd: NativeDenom
+    usd: NativeDenom;
   };
-  documents:{
+  documents: {
     mainAddress: string;
     tokens: {
       whitepaper: string;
-    }
+    };
   };
   admin: {
     feeAddress: HumanAddr;
-  },
-  lsds:{
+  };
+  lsds: {
     [key in RegisteredLSDs]: LSDContracts;
-  }
+  };
 }
 
 export interface AnchorConstants extends AppConstants {
@@ -76,17 +76,16 @@ export interface AnchorConstants extends AppConstants {
   depositFeeAmount: number;
 }
 
-
 export interface LSDContracts {
   info: {
     tokenAddress: string;
     hubAddress: string;
     protocol: string;
     icon: string;
-    symbol: Tokens,
-    name: string,
-    link: string,
-    underlyingToken: Tokens,
+    symbol: Tokens;
+    name: string;
+    link: string;
+    underlyingToken: Tokens;
   };
   hub: string;
   reward: string;

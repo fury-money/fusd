@@ -1,15 +1,15 @@
-import { ANCHOR_TX_KEY } from '@anchor-protocol/app-provider';
+import { ANCHOR_TX_KEY } from "@anchor-protocol/app-provider";
 import {
   CrossChainEvent,
   CrossChainEventKind,
   EvmChainId,
-} from '@anchor-protocol/crossanchor-sdk';
-import { TxResultRendering, TxStreamPhase } from '@libs/app-fns';
-import { EVM_QUERY_KEY, TxRefetchMap } from '@libs/app-provider';
-import { ConnectType } from '@libs/evm-wallet';
-import { StreamReturn } from '@rx-stream/react';
-import { ANCHOR_TX_REFETCH_MAP } from 'env';
-import { ContractReceipt } from 'ethers';
+} from "@anchor-protocol/crossanchor-sdk";
+import { TxResultRendering, TxStreamPhase } from "@libs/app-fns";
+import { EVM_QUERY_KEY, TxRefetchMap } from "@libs/app-provider";
+import { ConnectType } from "@libs/evm-wallet";
+import { StreamReturn } from "@rx-stream/react";
+import { ANCHOR_TX_REFETCH_MAP } from "env";
+import { ContractReceipt } from "ethers";
 
 export const TX_GAS_LIMIT = 255000;
 
@@ -21,7 +21,7 @@ export const txResult = (
   event: CrossChainEvent<ContractReceipt>,
   connnectType: ConnectType,
   chainId: EvmChainId,
-  txKind: TxKind,
+  txKind: TxKind
 ) => {
   return {
     value: null,
@@ -37,18 +37,18 @@ export const txResultMessage = (
   eventKind: CrossChainEventKind,
   connnectType: ConnectType,
   chainId: EvmChainId,
-  txKind: TxKind,
+  txKind: TxKind
 ) => {
   switch (eventKind) {
     case CrossChainEventKind.CrossChainTxCompleted:
       return `Cross chain transaction completed.`;
     case CrossChainEventKind.IncomingTxRequested:
       return `${capitalize(formatTxKind(txKind))} requested. ${capitalize(
-        connnectType,
+        connnectType
       )} notification should appear soon...`;
     case CrossChainEventKind.IncomingTxExecuted:
       return `${capitalize(
-        chain(chainId),
+        chain(chainId)
       )} transaction successful, waiting for Wormhole bridge...`;
     case CrossChainEventKind.IncomingVAAsRetrieved:
       return `Entering Wormhole bridge on ${capitalize(chain(chainId))}...`;
@@ -58,15 +58,15 @@ export const txResultMessage = (
       return `Terra action executed, exiting Wormhole bridge on Terra...`;
     case CrossChainEventKind.IncomingTxSubmitted:
       return `Waiting for ${formatTxKind(txKind)} transaction on ${capitalize(
-        chain(chainId),
+        chain(chainId)
       )}...`;
     case CrossChainEventKind.OutgoingTxRequested:
       return `Deposit requested. ${capitalize(
-        connnectType,
+        connnectType
       )} notification should appear soon...`;
     case CrossChainEventKind.OutgoingTxSubmitted:
       return `Waiting for finalize transaction on ${capitalize(
-        chain(chainId),
+        chain(chainId)
       )}...`;
   }
 };
@@ -80,9 +80,9 @@ export const chain = (chainId: EvmChainId) => {
   switch (chainId) {
     case EvmChainId.AVALANCHE:
     case EvmChainId.AVALANCHE_FUJI_TESTNET:
-      return 'Avalanche';
+      return "Avalanche";
     default:
-      return 'Ethereum';
+      return "Ethereum";
   }
 };
 
@@ -95,7 +95,7 @@ export const pluralize = <T>(word: string, arr: T[]) => {
     return word;
   }
 
-  return word + 's';
+  return word + "s";
 };
 
 export enum TxKind {
@@ -113,23 +113,23 @@ export enum TxKind {
 export const formatTxKind = (txKind: TxKind) => {
   switch (txKind) {
     case TxKind.WithdrawUst:
-      return 'Withdraw';
+      return "Withdraw";
     case TxKind.RepayUst:
-      return 'Repay';
+      return "Repay";
     case TxKind.RedeemCollateral:
-      return 'Redeem Collateral';
+      return "Redeem Collateral";
     case TxKind.ProvideCollateral:
-      return 'Provide Collateral';
+      return "Provide Collateral";
     case TxKind.DepositUst:
-      return 'Deposit';
+      return "Deposit";
     case TxKind.ClaimRewards:
-      return 'Claim Rewards';
+      return "Claim Rewards";
     case TxKind.BorrowUst:
-      return 'Borrow';
+      return "Borrow";
     case TxKind.WithdrawAssets:
-      return 'Withdraw';
+      return "Withdraw";
     case TxKind.ProvideAndBorrow:
-      return 'Borrow';
+      return "Borrow";
   }
 };
 
@@ -202,14 +202,14 @@ export const EVM_ANCHOR_TX_REFETCH_MAP: TxRefetchMap = {
 
 export const errorContains = (error: any, message: string) =>
   String(error?.data?.message ?? error?.message ?? error?.reason).includes(
-    message,
+    message
   );
 
 export enum TxError {
-  TxHashInvalid = 'invalid hash',
-  TxAlreadyProcessed = 'execution reverted: transfer info already processed',
-  TxInvalid = 'Transaction invalid. Action sequence missing.',
-  TxFailed = 'transaction failed',
+  TxHashInvalid = "invalid hash",
+  TxAlreadyProcessed = "execution reverted: transfer info already processed",
+  TxInvalid = "Transaction invalid. Action sequence missing.",
+  TxFailed = "transaction failed",
 }
 
 export const formatError = (error: any, txError: TxError) => {
@@ -221,12 +221,12 @@ export const formatError = (error: any, txError: TxError) => {
 const formatTxError = (txError: TxError) => {
   switch (txError) {
     case TxError.TxHashInvalid:
-      return 'Transaction hash is invalid. Please confirm inputs are correct.';
+      return "Transaction hash is invalid. Please confirm inputs are correct.";
     case TxError.TxAlreadyProcessed:
-      return 'Transaction already processed.';
+      return "Transaction already processed.";
     case TxError.TxInvalid:
-      return 'Not a valid xAnchor transaction (action sequence missing).';
+      return "Not a valid xAnchor transaction (action sequence missing).";
     case TxError.TxFailed:
-      return 'Transaction failed.';
+      return "Transaction failed.";
   }
 };

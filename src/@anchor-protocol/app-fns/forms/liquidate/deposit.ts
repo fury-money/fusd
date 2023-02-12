@@ -1,11 +1,11 @@
-import { UST, Luna, u } from '@anchor-protocol/types';
-import { EstimatedFee } from '@libs/app-provider';
-import { max, min } from '@libs/big-math';
-import { microfy } from '@libs/formatter';
-import { FormReturn } from '@libs/use-form';
-import big, { Big } from 'big.js';
-import _ from'lodash';
-import { WhitelistCollateral } from 'queries';
+import { UST, Luna, u } from "@anchor-protocol/types";
+import { EstimatedFee } from "@libs/app-provider";
+import { max, min } from "@libs/big-math";
+import { microfy } from "@libs/formatter";
+import { FormReturn } from "@libs/use-form";
+import big, { Big } from "big.js";
+import _ from "lodash";
+import { WhitelistCollateral } from "queries";
 
 export interface LiquidationDepositFormInput {
   depositAmount: UST;
@@ -54,10 +54,10 @@ export const liquidationDepositForm =
         return undefined;
       }
 
-      const ratioTxFee = big('0');
-      const maxTax = big('0');
+      const ratioTxFee = big("0");
+      const maxTax = big("0");
       return max(min(ratioTxFee, maxTax), 0).plus(
-        estimatedFee?.txFee ?? '0',
+        estimatedFee?.txFee ?? "0"
       ) as u<Luna<Big>>;
     })();
 
@@ -72,7 +72,7 @@ export const liquidationDepositForm =
     // invalidTxFee
     const invalidTxFee = (() => {
       return isConnected && txFee && big(userULunaBalance).lt(txFee)
-        ? 'Not enough transaction fees'
+        ? "Not enough transaction fees"
         : undefined;
     })();
 
@@ -107,7 +107,7 @@ export const liquidationDepositForm =
         return undefined;
       }
 
-      return big(userULunaBalance).lt(big(estimatedFee?.txFee ?? '0').mul(2))
+      return big(userULunaBalance).lt(big(estimatedFee?.txFee ?? "0").mul(2))
         ? `Leaving less Luna in your account may lead to insufficient transaction fees for future transactions.`
         : undefined;
     })();

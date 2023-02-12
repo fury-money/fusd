@@ -42,6 +42,7 @@ import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
 import { MsgExecuteContract } from '@terra-money/terra.js';
 import { createHookMsg } from '@libs/app-fns/tx/internal';
 import { CircleSpinner } from 'react-spinners-kit';
+import { WhitelistWrappedCollateral } from 'queries';
 
 export interface ProvideCollateralDialogParams
   extends UIElementProps,
@@ -49,6 +50,7 @@ export interface ProvideCollateralDialogParams
   txResult: StreamResult<TxResultRendering> | null;
   uTokenBalance: u<bAsset>;
   proceedable: boolean;
+  collateral: WhitelistWrappedCollateral,
   onProceed: (amount: bAsset & NoMicro, txFee: EstimatedFee, lunaAmount: u<bAsset>, exchangeRate: Rate) => void;
 }
 

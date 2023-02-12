@@ -1,18 +1,17 @@
-import { bAssetInfoByTokenAddrQuery } from '@anchor-protocol/app-fns';
-import { CW20Addr } from '@anchor-protocol/types';
-import { createQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
-import { useQueryWithTokenDisplay } from '../utils/tokenDisplay';
+import { bAssetInfoByTokenAddrQuery } from "@anchor-protocol/app-fns";
+import { CW20Addr } from "@anchor-protocol/types";
+import { createQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
+import { useQueryWithTokenDisplay } from "../utils/tokenDisplay";
 import {
   BAssetInfoWithDisplay,
   withBAssetInfoTokenDisplay,
-} from './utils/tokenDisplay';
-
+} from "./utils/tokenDisplay";
 
 export function useBAssetInfoByTokenAddrQuery(
-  tokenAddr: CW20Addr | undefined,
+  tokenAddr: CW20Addr | undefined
 ): UseQueryResult<BAssetInfoWithDisplay | undefined> {
   const { queryClient, queryErrorReporter, contractAddress } =
     useAnchorWebapp();
@@ -23,13 +22,13 @@ export function useBAssetInfoByTokenAddrQuery(
       contractAddress.moneyMarket.overseer,
       tokenAddr,
     ],
-    createQueryFn(bAssetInfoByTokenAddrQuery, queryClient),
+    createQueryFn(bAssetInfoByTokenAddrQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient,
-    },
+    }
   );
 
   return useQueryWithTokenDisplay(bAssetInfo, withBAssetInfoTokenDisplay);

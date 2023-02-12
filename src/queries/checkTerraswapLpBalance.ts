@@ -1,31 +1,31 @@
-import { useAnchorWebapp } from '@anchor-protocol/app-provider';
-import { ANC, anchorToken, AncUstLP, cw20 } from '@anchor-protocol/types';
+import { useAnchorWebapp } from "@anchor-protocol/app-provider";
+import { ANC, anchorToken, AncUstLP, cw20 } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
-import { CW20Addr, HumanAddr, u } from '@libs/types';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import big from 'big.js';
-import { useEffect, useState } from 'react';
-import { useAccount } from 'contexts/account';
+} from "@libs/query-client";
+import { CW20Addr, HumanAddr, u } from "@libs/types";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
+import big from "big.js";
+import { useEffect, useState } from "react";
+import { useAccount } from "contexts/account";
 
 const address = {
-  'columbus-5': {
+  "columbus-5": {
     terraswapAncUstPair:
-      'terra1gm5p3ner9x9xpwugn9sp6gvhd0lwrtkyrecdn3' as HumanAddr,
+      "terra1gm5p3ner9x9xpwugn9sp6gvhd0lwrtkyrecdn3" as HumanAddr,
     terraswapAncUstLPToken:
-      'terra1gecs98vcuktyfkrve9czrpgtg0m3aq586x6gzm' as CW20Addr,
-    staking: 'terra1897an2xux840p9lrh6py3ryankc6mspw49xse3' as HumanAddr,
+      "terra1gecs98vcuktyfkrve9czrpgtg0m3aq586x6gzm" as CW20Addr,
+    staking: "terra1897an2xux840p9lrh6py3ryankc6mspw49xse3" as HumanAddr,
   },
-  'bombay-12': {
+  "bombay-12": {
     terraswapAncUstPair:
-      'terra1wfvczps2865j0awnurk9m04u7wdmd6qv3fdnvz' as HumanAddr,
+      "terra1wfvczps2865j0awnurk9m04u7wdmd6qv3fdnvz" as HumanAddr,
     terraswapAncUstLPToken:
-      'terra1vg0qyq92ky9z9dp0j9fv5rmr2s80sg605dah6f' as CW20Addr,
-    staking: 'terra19nxz35c8f7t3ghdxrxherym20tux8eccar0c3k' as HumanAddr,
+      "terra1vg0qyq92ky9z9dp0j9fv5rmr2s80sg605dah6f" as CW20Addr,
+    staking: "terra19nxz35c8f7t3ghdxrxherym20tux8eccar0c3k" as HumanAddr,
   },
 } as const;
 
@@ -43,22 +43,22 @@ export function useCheckTerraswapLpBalance() {
   } | null>(null);
 
   useEffect(() => {
-    if (!connected || !connectedWallet) {
+    if (!connected || !connectedWallet || !queryClient) {
       return;
     }
 
     const { terraswapAncUstLPToken, staking } =
       address[
-        connectedWallet.network.chainID === 'columbus-5'
-          ? 'columbus-5'
-          : 'bombay-12'
+        connectedWallet.network.chainID === "columbus-5"
+          ? "columbus-5"
+          : "bombay-12"
       ];
 
     rewardsAncUstLpRewardsQuery(
       terraWalletAddress,
       staking,
       terraswapAncUstLPToken,
-      queryClient,
+      queryClient
     ).then((result) => {
       if (!result) {
         setBalances(null);
@@ -93,22 +93,22 @@ export function useCheckTerraswapLpRewards() {
   } | null>(null);
 
   useEffect(() => {
-    if (!connected || !connectedWallet) {
+    if (!connected || !connectedWallet || !queryClient) {
       return;
     }
 
     const { terraswapAncUstLPToken, staking } =
       address[
-        connectedWallet.network.chainID === 'columbus-5'
-          ? 'columbus-5'
-          : 'bombay-12'
+        connectedWallet.network.chainID === "columbus-5"
+          ? "columbus-5"
+          : "bombay-12"
       ];
 
     rewardsAncUstLpRewardsQuery(
       terraWalletAddress,
       staking,
       terraswapAncUstLPToken,
-      queryClient,
+      queryClient
     ).then((result) => {
       if (!result) {
         setBalances(null);
@@ -140,7 +140,7 @@ export async function rewardsAncUstLpRewardsQuery(
   walletAddr: HumanAddr | undefined,
   stakingContract: HumanAddr,
   ancUstLpContract: CW20Addr,
-  queryClient: QueryClient,
+  queryClient: QueryClient
 ): Promise<RewardsAncUstLpRewards | undefined> {
   if (!walletAddr) {
     return undefined;

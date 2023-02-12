@@ -1,15 +1,15 @@
-import { useAnchorWebapp } from '@anchor-protocol/app-provider/contexts/context';
-import { HumanAddr, Rate } from '@libs/types';
-import { UseQueryResult } from 'react-query';
-import big, { Big } from 'big.js';
-import { min, max, abs } from '@libs/big-math';
-import { createQueryFn } from '@libs/react-query-utils';
-import { ANCHOR_QUERY_KEY } from '@anchor-protocol/app-provider/env';
-import { wasmFetch, QueryClient, WasmQuery } from '@libs/query-client';
-import { moneyMarket } from '@anchor-protocol/types';
-import { terraNativeBalancesQuery } from '@libs/app-fns';
-import { useAnchorQuery } from 'queries/useAnchorQuery';
-import { computeApy } from '@anchor-protocol/app-fns';
+import { useAnchorWebapp } from "@anchor-protocol/app-provider/contexts/context";
+import { HumanAddr, Rate } from "@libs/types";
+import { UseQueryResult } from "react-query";
+import big, { Big } from "big.js";
+import { min, max, abs } from "@libs/big-math";
+import { createQueryFn } from "@libs/react-query-utils";
+import { ANCHOR_QUERY_KEY } from "@anchor-protocol/app-provider/env";
+import { wasmFetch, QueryClient, WasmQuery } from "@libs/query-client";
+import { moneyMarket } from "@anchor-protocol/types";
+import { terraNativeBalancesQuery } from "@libs/app-fns";
+import { useAnchorQuery } from "queries/useAnchorQuery";
+import { computeApy } from "@anchor-protocol/app-fns";
 
 interface ProjectedEarnApyWasmQuery {
   overseerDynRateState: WasmQuery<
@@ -26,7 +26,7 @@ interface ProjectedEarnApyWasmQuery {
 const computeYieldReserveChange = (
   state: moneyMarket.overseer.DynRateStateResponse,
   config: moneyMarket.overseer.ConfigResponse,
-  currentBalance: Big,
+  currentBalance: Big
 ) => {
   const { dyn_rate_yr_increase_expectation, dyn_rate_maxchange } = config;
 
@@ -42,11 +42,11 @@ const computeYieldReserveChange = (
 
   if (!isCurrentYieldReserveHigher) {
     yieldReserveChange = yieldReserveChange.add(
-      dyn_rate_yr_increase_expectation,
+      dyn_rate_yr_increase_expectation
     );
   } else if (yieldReserveChange.gt(dyn_rate_yr_increase_expectation)) {
     yieldReserveChange = yieldReserveChange.minus(
-      dyn_rate_yr_increase_expectation,
+      dyn_rate_yr_increase_expectation
     );
   } else {
     isCurrentYieldReserveHigher = !isCurrentYieldReserveHigher;
@@ -61,21 +61,21 @@ const computeYieldReserveChange = (
 const computeNewRate = (
   config: moneyMarket.overseer.ConfigResponse,
   yr: ReturnType<typeof computeYieldReserveChange>,
-  blocksPerYear: number,
+  blocksPerYear: number
 ) => {
   const { threshold_deposit_rate, dyn_rate_min, dyn_rate_max } = config;
 
   const bound = (rate: Big) => {
     return max(
       min(rate, computeApy(dyn_rate_max, blocksPerYear, config.epoch_period)),
-      computeApy(dyn_rate_min, blocksPerYear, config.epoch_period),
+      computeApy(dyn_rate_min, blocksPerYear, config.epoch_period)
     );
   };
 
   const currentRate = computeApy(
     threshold_deposit_rate,
     blocksPerYear,
-    config.epoch_period,
+    config.epoch_period
   );
 
   if (yr.isHigher) {
@@ -92,17 +92,17 @@ const computeNewRate = (
 const earnApyProjectionQuery = async (
   queryClient: QueryClient,
   blocksPerYear: number,
-  overseerContract: HumanAddr,
+  overseerContract: HumanAddr
 ) => {
   const { uUST } = await terraNativeBalancesQuery(
     queryClient,
-    overseerContract,
+    overseerContract
   );
 
   const { overseerDynRateState, overseerConfig } =
     await wasmFetch<ProjectedEarnApyWasmQuery>({
       ...queryClient,
-      id: 'projected-earn-apy',
+      id: "projected-earn-apy",
       wasmQuery: {
         overseerDynRateState: {
           contractAddress: overseerContract,
@@ -118,7 +118,7 @@ const earnApyProjectionQuery = async (
   const change = computeYieldReserveChange(
     overseerDynRateState,
     overseerConfig,
-    big(uUST),
+    big(uUST)
   );
 
   const rate = computeNewRate(overseerConfig, change, blocksPerYear);
@@ -149,12 +149,12 @@ export const useEarnApyProjectionQuery =
         blocksPerYear,
         contractAddress.moneyMarket.overseer,
       ],
-      createQueryFn(earnApyProjectionQuery, queryClient),
+      createQueryFn(earnApyProjectionQuery, queryClient!),
       {
         refetchOnMount: false,
         refetchInterval: 1000 * 60 * 5,
         keepPreviousData: true,
-        enabled: !!queryClient
-      },
+        enabled: !!queryClient,
+      }
     );
   };

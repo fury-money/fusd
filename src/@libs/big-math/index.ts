@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import big, { Big, BigSource } from 'big.js';
+import big, { Big, BigSource } from "big.js";
 
 export function min(...numbers: BigSource[]): Big {
   let minimum: Big = big(numbers[0]);
@@ -41,13 +41,13 @@ export function avg(...numbers: BigSource[]): Big {
 
 export function floor(number: BigSource): Big {
   const fixed = big(number).toFixed();
-  const integer = fixed.split('.')[0];
-  return integer.length > 0 ? big(integer) : big('0');
+  const integer = fixed.split(".")[0];
+  return integer.length > 0 ? big(integer) : big("0");
 }
 
 export function vectorizeAB(
   a: BigSource[] | BigSource,
-  b: BigSource[] | BigSource,
+  b: BigSource[] | BigSource
 ): [BigSource[], BigSource[]] {
   if (Array.isArray(a) && Array.isArray(b)) {
     if (a.length !== b.length) {
@@ -75,7 +75,7 @@ export function exp(a: BigSource): Big {
 
 export function vectorPlus(
   _a: BigSource[] | BigSource,
-  _b: BigSource[] | BigSource,
+  _b: BigSource[] | BigSource
 ): Big[] {
   const [a, b] = vectorizeAB(_a, _b);
   return a.map((value, i) => big(value).plus(b[i]));
@@ -83,7 +83,7 @@ export function vectorPlus(
 
 export function vectorMinus(
   _a: BigSource[] | BigSource,
-  _b: BigSource[] | BigSource,
+  _b: BigSource[] | BigSource
 ): Big[] {
   const [a, b] = vectorizeAB(_a, _b);
   return a.map((value, i) => big(value).minus(b[i]));
@@ -91,7 +91,7 @@ export function vectorMinus(
 
 export function vectorMultiply(
   _a: BigSource[] | BigSource,
-  _b: BigSource[] | BigSource,
+  _b: BigSource[] | BigSource
 ): Big[] {
   const [a, b] = vectorizeAB(_a, _b);
   return a.map((value, i) => big(value).mul(b[i]));
@@ -99,7 +99,7 @@ export function vectorMultiply(
 
 export function vectorDivision(
   _a: BigSource[] | BigSource,
-  _b: BigSource[] | BigSource,
+  _b: BigSource[] | BigSource
 ): Big[] {
   const [a, b] = vectorizeAB(_a, _b);
   return a.map((value, i) => big(value).div(b[i]));
@@ -107,7 +107,7 @@ export function vectorDivision(
 
 export function vectorDot(
   _a: BigSource[] | BigSource,
-  _b: BigSource[] | BigSource,
+  _b: BigSource[] | BigSource
 ): Big {
   const [a, b] = vectorizeAB(_a, _b);
   return sum(...vectorMultiply(a, b));

@@ -3,10 +3,10 @@ import {
   computeBorrowedAmount,
   computeBorrowLimit,
   vectorizeOraclePrices,
-} from '@anchor-protocol/app-fns';
-import type { bAsset, Rate, u } from '@anchor-protocol/types';
-import { CW20Addr, moneyMarket } from '@anchor-protocol/types';
-import { Big, BigSource } from 'big.js';
+} from "@anchor-protocol/app-fns";
+import type { bAsset, Rate, u } from "@anchor-protocol/types";
+import { CW20Addr, moneyMarket } from "@anchor-protocol/types";
+import { Big, BigSource } from "big.js";
 
 export const computeLtvToDepositAmount =
   (
@@ -14,18 +14,18 @@ export const computeLtvToDepositAmount =
     marketBorrowerInfo: moneyMarket.market.BorrowerInfoResponse,
     overseerCollaterals: moneyMarket.overseer.CollateralsResponse,
     oraclePrices: moneyMarket.oracle.PricesResponse,
-    bAssetLtvs: BAssetLtvs,
+    bAssetLtvs: BAssetLtvs
   ) =>
   (ltv: Rate<BigSource>): u<bAsset<Big>> => {
     const borrowLimit = computeBorrowLimit(
       overseerCollaterals,
       oraclePrices,
-      bAssetLtvs,
+      bAssetLtvs
     );
 
     const prices = vectorizeOraclePrices(
       [collateralToken],
-      oraclePrices.prices,
+      oraclePrices.prices
     );
 
     const borrowedAmount = computeBorrowedAmount(marketBorrowerInfo);

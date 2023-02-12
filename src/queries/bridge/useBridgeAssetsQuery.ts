@@ -3,16 +3,16 @@ import {
   useAnchorWebapp,
   useDeploymentTarget,
   useNetwork,
-} from '@anchor-protocol/app-provider';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { WhitelistCollateral } from 'queries/collateral/types';
-import { useQuery, UseQueryResult } from 'react-query';
-import { BridgeAssets, bridgeAssetsQuery } from './bridgeAssetsQuery';
+} from "@anchor-protocol/app-provider";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { WhitelistCollateral } from "queries/collateral/types";
+import { useQuery, UseQueryResult } from "react-query";
+import { BridgeAssets, bridgeAssetsQuery } from "./bridgeAssetsQuery";
 
 const queryFn = createSimpleQueryFn(bridgeAssetsQuery);
 
 export function useBridgeAssetsQuery(
-  whitelist: WhitelistCollateral[] | undefined,
+  whitelist: WhitelistCollateral[] | undefined
 ): UseQueryResult<BridgeAssets | undefined> {
   const { target } = useDeploymentTarget();
 
@@ -27,7 +27,7 @@ export function useBridgeAssetsQuery(
       refetchOnMount: false,
       keepPreviousData: false,
       onError: queryErrorReporter,
-    },
+    }
   );
 
   return bridgeAssets;

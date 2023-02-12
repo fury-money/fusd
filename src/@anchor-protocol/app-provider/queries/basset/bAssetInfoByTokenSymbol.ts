@@ -1,16 +1,16 @@
-import { bAssetInfoByTokenSymbolQuery } from '@anchor-protocol/app-fns';
-import { createQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
-import { useQueryWithTokenDisplay } from '../utils/tokenDisplay';
+import { bAssetInfoByTokenSymbolQuery } from "@anchor-protocol/app-fns";
+import { createQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
+import { useQueryWithTokenDisplay } from "../utils/tokenDisplay";
 import {
   BAssetInfoWithDisplay,
   withBAssetInfoTokenDisplay,
-} from './utils/tokenDisplay';
+} from "./utils/tokenDisplay";
 
 export function useBAssetInfoByTokenSymbolQuery(
-  tokenSymbol: string | undefined,
+  tokenSymbol: string | undefined
 ): UseQueryResult<BAssetInfoWithDisplay | undefined> {
   const { queryClient, queryErrorReporter, contractAddress } =
     useAnchorWebapp();
@@ -21,13 +21,13 @@ export function useBAssetInfoByTokenSymbolQuery(
       contractAddress.moneyMarket.overseer,
       tokenSymbol,
     ],
-    createQueryFn(bAssetInfoByTokenSymbolQuery, queryClient),
+    createQueryFn(bAssetInfoByTokenSymbolQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient,
-    },
+    }
   );
 
   return useQueryWithTokenDisplay(bAssetInfo, withBAssetInfoTokenDisplay);

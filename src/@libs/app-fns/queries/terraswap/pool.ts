@@ -3,9 +3,9 @@ import {
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
-import { HumanAddr, LP, terraswap, Token, u, UST } from '@libs/types';
-import big from 'big.js';
+} from "@libs/query-client";
+import { HumanAddr, LP, terraswap, Token, u, UST } from "@libs/types";
+import big from "big.js";
 
 interface TerraswapPoolWasmQuery<T extends Token> {
   terraswapPool: WasmQuery<
@@ -29,7 +29,7 @@ export type TerraswapPool<T extends Token> = WasmQueryData<
 
 export async function terraswapPoolQuery<T extends Token>(
   queryClient: QueryClient,
-  ustPairAddr: HumanAddr,
+  ustPairAddr: HumanAddr
 ): Promise<TerraswapPool<T>> {
   const { terraswapPool } = await wasmFetch<TerraswapPoolWasmQuery<T>>({
     ...queryClient,
@@ -47,7 +47,7 @@ export async function terraswapPoolQuery<T extends Token>(
 
   const ustIndex = terraswapPool.assets.findIndex(
     (asset) =>
-      'native_token' in asset.info && asset.info.native_token.denom === 'uusd',
+      "native_token" in asset.info && asset.info.native_token.denom === "uusd"
   )!;
   const tokenIndex = ustIndex === 0 ? 1 : 0;
 

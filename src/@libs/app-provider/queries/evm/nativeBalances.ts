@@ -1,18 +1,18 @@
-import { useQuery, UseQueryResult } from 'react-query';
-import { evmNativeBalancesQuery, ZERO_ETH_BALANCE } from '@libs/app-fns';
-import { useEvmWallet } from '@libs/evm-wallet';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { useAccount } from 'contexts/account';
-import { useApp } from '../../contexts/app';
-import { EVM_QUERY_KEY, REFETCH_INTERVAL } from '../../env';
-import { EVMAddr, u } from '../../../types';
-import { Eth } from '../../../../@anchor-protocol/types';
-import { BigNumber } from '@ethersproject/bignumber';
+import { useQuery, UseQueryResult } from "react-query";
+import { evmNativeBalancesQuery, ZERO_ETH_BALANCE } from "@libs/app-fns";
+import { useEvmWallet } from "@libs/evm-wallet";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { useAccount } from "contexts/account";
+import { useApp } from "../../contexts/app";
+import { EVM_QUERY_KEY, REFETCH_INTERVAL } from "../../env";
+import { EVMAddr, u } from "../../../types";
+import { Eth } from "../../../../@anchor-protocol/types";
+import { BigNumber } from "@ethersproject/bignumber";
 
 const queryFn = createSimpleQueryFn(evmNativeBalancesQuery);
 
 export function useEvmNativeBalanceQuery(
-  walletAddress?: EVMAddr,
+  walletAddress?: EVMAddr
 ): UseQueryResult<u<Eth> | undefined> {
   const { queryErrorReporter } = useApp();
   const { nativeWalletAddress } = useAccount();
@@ -35,7 +35,7 @@ export function useEvmNativeBalanceQuery(
       refetchInterval: REFETCH_INTERVAL,
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 }
 

@@ -1,45 +1,45 @@
-import { muiThemeBase } from '@libs/neumorphism-ui/themes/muiThemeBase';
-import { createTheme } from '@mui/material/styles';
+import { muiThemeBase } from "@libs/neumorphism-ui/themes/muiThemeBase";
+import { createTheme } from "@mui/material/styles";
 
 // AVAX THEME TO FILL IN VARIABLE THEME
-const PRIMARY_500 = '#F4A81A';
-const PRIMARY_400 = '#F8B22F';
-const SECONDARY_900 = '#661515';
-const SECONDARY_800 = '#8B1010';
-const SECONDARY_700 = '#A50C0C';
-const SECONDARY_600 = '#D11516';
-const SECONDARY_500 = '#E84142';
-const SECONDARY_100 = '#FAD7D8';
-const GRAY_700 = '#151515';
-const GRAY_500 = '#A4A4A4';
-const GRAY_400 = '#B7B7B7';
+const PRIMARY_500 = "#F4A81A";
+const PRIMARY_400 = "#F8B22F";
+const SECONDARY_900 = "#661515";
+const SECONDARY_800 = "#8B1010";
+const SECONDARY_700 = "#A50C0C";
+const SECONDARY_600 = "#D11516";
+const SECONDARY_500 = "#E84142";
+const SECONDARY_100 = "#FAD7D8";
+const GRAY_700 = "#151515";
+const GRAY_500 = "#A4A4A4";
+const GRAY_400 = "#B7B7B7";
 
 // DEFAULT LIGHT THEME
-export const BLACK = '#000000';
-export const WHITE = '#FFFFFF';
+export const BLACK = "#000000";
+export const WHITE = "#FFFFFF";
 
-export const LIGHT_GRAY_100 = '#EFEFEF';
-export const LIGHT_GRAY_200 = '#F4F4F5';
-export const LIGHT_GRAY_300 = '#1F1F1F';
-export const LIGHT_GRAY_400 = '#E8E8E8';
-export const LIGHT_GRAY_500 = '#2c2c2e';
-export const LIGHT_GRAY_600 = '#999999';
-export const LIGHT_GRAY_700 = '#2c2c2c';
-export const LIGHT_GRAY_800 = 'rgba(0, 0, 0, 0.1)';
-export const LIGHT_GRAY_900 = 'rgba(0, 0, 0, 0.15)';
-export const LIGHT_GRAY_1000 = 'rgba(255, 255, 255, 0.8)';
-export const LIGHT_GRAY_1100 = '#1c1c1c';
+export const LIGHT_GRAY_100 = "#EFEFEF";
+export const LIGHT_GRAY_200 = "#F4F4F5";
+export const LIGHT_GRAY_300 = "#1F1F1F";
+export const LIGHT_GRAY_400 = "#E8E8E8";
+export const LIGHT_GRAY_500 = "#2c2c2e";
+export const LIGHT_GRAY_600 = "#999999";
+export const LIGHT_GRAY_700 = "#2c2c2c";
+export const LIGHT_GRAY_800 = "rgba(0, 0, 0, 0.1)";
+export const LIGHT_GRAY_900 = "rgba(0, 0, 0, 0.15)";
+export const LIGHT_GRAY_1000 = "rgba(255, 255, 255, 0.8)";
+export const LIGHT_GRAY_1100 = "#1c1c1c";
 
-export const LIGHT_BLUE_100 = 'rgba(37, 117, 164, 0.05)';
-export const LIGHT_BLUE_300 = '#3867c4';
-export const LIGHT_BLUE_400 = '#3e9bba';
+export const LIGHT_BLUE_100 = "rgba(37, 117, 164, 0.05)";
+export const LIGHT_BLUE_300 = "#3867c4";
+export const LIGHT_BLUE_400 = "#3e9bba";
 
-export const LIGHT_RED_100 = '#ef3158';
-export const LIGHT_RED_200 = '#e95979';
+export const LIGHT_RED_100 = "#ef3158";
+export const LIGHT_RED_200 = "#e95979";
 
-export const LIGHT_GREEN_100 = '#94f3b8';
-export const LIGHT_ORANGE_100 = '#dd8f5c';
-export const LIGHT_YELLOW_100 = '#FF9A63';
+export const LIGHT_GREEN_100 = "#94f3b8";
+export const LIGHT_ORANGE_100 = "#dd8f5c";
+export const LIGHT_YELLOW_100 = "#FF9A63";
 
 export const defaultLightTheme = {
   ...createTheme({
@@ -47,12 +47,12 @@ export const defaultLightTheme = {
   }),
   MuiTableRow: {
     root: {
-      '&:last-child td': {
+      "&:last-child td": {
         borderBottom: 0,
       },
     },
   },
-  palette_type: 'light',
+  palette_type: "light",
   // VARIABLES (SHOULD BE CHANGED)
   textColor: GRAY_700,
   dimTextColor: GRAY_500,

@@ -1,4 +1,4 @@
-import { CW20Addr } from '@anchor-protocol/types';
+import { CW20Addr } from "@anchor-protocol/types";
 
 export const createCollateralVector =
   <T, R>(picker: (item: T) => [CW20Addr, R], fill?: R) =>

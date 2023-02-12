@@ -5,14 +5,14 @@ import {
   Num,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
-import { TERRA_ADDRESS_UNKNOWN } from '../utils';
+} from "@libs/query-client";
+import { TERRA_ADDRESS_UNKNOWN } from "../utils";
 
 interface BorrowBorrowerWasmQuery {
   marketBorrowerInfo: WasmQuery<
@@ -38,17 +38,16 @@ export async function borrowBorrowerQuery(
   walletAddr: HumanAddr | undefined,
   blockHeight: number,
   marketContract: HumanAddr,
-  overseerContract: HumanAddr,
+  overseerContract: HumanAddr
 ): Promise<BorrowBorrower | undefined> {
-
   if (!walletAddr) {
     return {
       marketBorrowerInfo: {
         borrower: TERRA_ADDRESS_UNKNOWN,
-        interest_index: '0' as Num<string>,
-        reward_index: '0' as Num<string>,
-        loan_amount: '0' as u<UST>,
-        pending_rewards: '0' as u<ANC>,
+        interest_index: "0" as Num<string>,
+        reward_index: "0" as Num<string>,
+        loan_amount: "0" as u<UST>,
+        pending_rewards: "0" as u<ANC>,
       },
       overseerCollaterals: {
         borrower: TERRA_ADDRESS_UNKNOWN,
@@ -56,7 +55,7 @@ export async function borrowBorrowerQuery(
       },
       overseerBorrowLimit: {
         borrower: TERRA_ADDRESS_UNKNOWN,
-        borrow_limit: '0' as Num<string>,
+        borrow_limit: "0" as Num<string>,
       },
       blockHeight: blockHeight + 1,
     };
@@ -95,7 +94,6 @@ export async function borrowBorrowerQuery(
         },
       },
     });
-
 
   return {
     marketBorrowerInfo,

@@ -1,14 +1,14 @@
 import {
   liquidationDepositForm,
   LiquidationDepositFormStates,
-} from '@anchor-protocol/app-fns/forms/liquidate/deposit';
-import { useAnchorBank } from '@anchor-protocol/app-provider/hooks/useAnchorBank';
-import { UST } from '@anchor-protocol/types';
-import { defaultFee, EstimatedFee } from '@libs/app-provider';
-import { useForm } from '@libs/use-form';
-import { useAccount } from 'contexts/account';
-import { WhitelistCollateral } from 'queries';
-import { useCallback } from 'react';
+} from "@anchor-protocol/app-fns/forms/liquidate/deposit";
+import { useAnchorBank } from "@anchor-protocol/app-provider/hooks/useAnchorBank";
+import { UST } from "@anchor-protocol/types";
+import { defaultFee, EstimatedFee } from "@libs/app-provider";
+import { useForm } from "@libs/use-form";
+import { useAccount } from "contexts/account";
+import { WhitelistCollateral } from "queries";
+import { useCallback } from "react";
 
 export interface LiquidationDepositFormReturn
   extends LiquidationDepositFormStates {
@@ -32,10 +32,10 @@ export function useLiquidationDepositForm(): LiquidationDepositFormReturn {
       userULunaBalance: uLuna,
     },
     () => ({
-      depositAmount: '' as UST,
+      depositAmount: "" as UST,
       premium: 0,
       estimatedFee: defaultFee(),
-    }),
+    })
   );
 
   const updateDepositAmount = useCallback(
@@ -44,7 +44,7 @@ export function useLiquidationDepositForm(): LiquidationDepositFormReturn {
         depositAmount,
       });
     },
-    [input],
+    [input]
   );
 
   const updatePremiumValue = useCallback(
@@ -53,7 +53,7 @@ export function useLiquidationDepositForm(): LiquidationDepositFormReturn {
         premium,
       });
     },
-    [input],
+    [input]
   );
 
   const updateEstimatedFee = useCallback(
@@ -62,7 +62,7 @@ export function useLiquidationDepositForm(): LiquidationDepositFormReturn {
         estimatedFee,
       });
     },
-    [input],
+    [input]
   );
 
   return {

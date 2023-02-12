@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export const useExecuteOnceWhen = (
   execute: () => void,
-  when: () => boolean,
+  when: () => boolean
 ) => {
   const [executed, setExecuted] = useState<boolean>();
 

@@ -2,150 +2,150 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from 'ethers';
-import { Provider } from '@ethersproject/providers';
+import { Contract, Signer, utils } from "ethers";
+import { Provider } from "@ethersproject/providers";
 import type {
   WormholeCoreBridge,
   WormholeCoreBridgeInterface,
-} from '../WormholeCoreBridge';
+} from "../WormholeCoreBridge";
 
 const _abi = [
   {
     inputs: [
       {
-        internalType: 'bytes',
-        name: 'encodedVM',
-        type: 'bytes',
+        internalType: "bytes",
+        name: "encodedVM",
+        type: "bytes",
       },
     ],
-    name: 'parseAndVerifyVM',
+    name: "parseAndVerifyVM",
     outputs: [
       {
         components: [
           {
-            internalType: 'uint8',
-            name: 'version',
-            type: 'uint8',
+            internalType: "uint8",
+            name: "version",
+            type: "uint8",
           },
           {
-            internalType: 'uint32',
-            name: 'timestamp',
-            type: 'uint32',
+            internalType: "uint32",
+            name: "timestamp",
+            type: "uint32",
           },
           {
-            internalType: 'uint32',
-            name: 'nonce',
-            type: 'uint32',
+            internalType: "uint32",
+            name: "nonce",
+            type: "uint32",
           },
           {
-            internalType: 'uint16',
-            name: 'emitterChainId',
-            type: 'uint16',
+            internalType: "uint16",
+            name: "emitterChainId",
+            type: "uint16",
           },
           {
-            internalType: 'bytes32',
-            name: 'emitterAddress',
-            type: 'bytes32',
+            internalType: "bytes32",
+            name: "emitterAddress",
+            type: "bytes32",
           },
           {
-            internalType: 'uint64',
-            name: 'sequence',
-            type: 'uint64',
+            internalType: "uint64",
+            name: "sequence",
+            type: "uint64",
           },
           {
-            internalType: 'uint8',
-            name: 'consistencyLevel',
-            type: 'uint8',
+            internalType: "uint8",
+            name: "consistencyLevel",
+            type: "uint8",
           },
           {
-            internalType: 'bytes',
-            name: 'payload',
-            type: 'bytes',
+            internalType: "bytes",
+            name: "payload",
+            type: "bytes",
           },
           {
-            internalType: 'uint32',
-            name: 'guardianSetIndex',
-            type: 'uint32',
+            internalType: "uint32",
+            name: "guardianSetIndex",
+            type: "uint32",
           },
           {
             components: [
               {
-                internalType: 'bytes32',
-                name: 'r',
-                type: 'bytes32',
+                internalType: "bytes32",
+                name: "r",
+                type: "bytes32",
               },
               {
-                internalType: 'bytes32',
-                name: 's',
-                type: 'bytes32',
+                internalType: "bytes32",
+                name: "s",
+                type: "bytes32",
               },
               {
-                internalType: 'uint8',
-                name: 'v',
-                type: 'uint8',
+                internalType: "uint8",
+                name: "v",
+                type: "uint8",
               },
               {
-                internalType: 'uint8',
-                name: 'guardianIndex',
-                type: 'uint8',
+                internalType: "uint8",
+                name: "guardianIndex",
+                type: "uint8",
               },
             ],
-            internalType: 'struct WormholeCoreBridge.Signature[]',
-            name: 'signatures',
-            type: 'tuple[]',
+            internalType: "struct WormholeCoreBridge.Signature[]",
+            name: "signatures",
+            type: "tuple[]",
           },
           {
-            internalType: 'bytes32',
-            name: 'hash',
-            type: 'bytes32',
+            internalType: "bytes32",
+            name: "hash",
+            type: "bytes32",
           },
         ],
-        internalType: 'struct WormholeCoreBridge.VM',
-        name: 'vm',
-        type: 'tuple',
+        internalType: "struct WormholeCoreBridge.VM",
+        name: "vm",
+        type: "tuple",
       },
       {
-        internalType: 'bool',
-        name: 'valid',
-        type: 'bool',
+        internalType: "bool",
+        name: "valid",
+        type: "bool",
       },
       {
-        internalType: 'string',
-        name: 'reason',
-        type: 'string',
+        internalType: "string",
+        name: "reason",
+        type: "string",
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: 'uint32',
-        name: 'nonce',
-        type: 'uint32',
+        internalType: "uint32",
+        name: "nonce",
+        type: "uint32",
       },
       {
-        internalType: 'bytes',
-        name: 'payload',
-        type: 'bytes',
+        internalType: "bytes",
+        name: "payload",
+        type: "bytes",
       },
       {
-        internalType: 'uint8',
-        name: 'consistencyLevel',
-        type: 'uint8',
+        internalType: "uint8",
+        name: "consistencyLevel",
+        type: "uint8",
       },
     ],
-    name: 'publishMessage',
+    name: "publishMessage",
     outputs: [
       {
-        internalType: 'uint64',
-        name: 'sequence',
-        type: 'uint64',
+        internalType: "uint64",
+        name: "sequence",
+        type: "uint64",
       },
     ],
-    stateMutability: 'payable',
-    type: 'function',
+    stateMutability: "payable",
+    type: "function",
   },
 ];
 
@@ -156,7 +156,7 @@ export class WormholeCoreBridge__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider,
+    signerOrProvider: Signer | Provider
   ): WormholeCoreBridge {
     return new Contract(address, _abi, signerOrProvider) as WormholeCoreBridge;
   }

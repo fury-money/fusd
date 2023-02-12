@@ -3,13 +3,13 @@ import type {
   DocumentNode,
   OperationDefinitionNode,
   SelectionSetNode,
-} from 'graphql';
+} from "graphql";
 
 export function findSelectionSet(document: DocumentNode): SelectionSetNode {
   const query: DefinitionNode | undefined = document.definitions.find(
     (definition) =>
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'query',
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "query"
   );
 
   if (!query) {
@@ -21,13 +21,13 @@ export function findSelectionSet(document: DocumentNode): SelectionSetNode {
 
 export function createDocumentNode(): DocumentNode {
   return {
-    kind: 'Document',
+    kind: "Document",
     definitions: [
       {
-        kind: 'OperationDefinition',
-        operation: 'query',
+        kind: "OperationDefinition",
+        operation: "query",
         selectionSet: {
-          kind: 'SelectionSet',
+          kind: "SelectionSet",
           selections: [],
         },
       },

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 export class Resolver<T> {
   latestId: number = -1;
@@ -31,7 +31,7 @@ export class Resolver<T> {
 }
 
 export function useResolveLast<T>(
-  init: () => T,
+  init: () => T
 ): [resolve: (value: Promise<T> | T) => void, result: T] {
   const [state, setState] = useState<T>(init);
 
@@ -41,7 +41,7 @@ export function useResolveLast<T>(
     (value: Promise<T> | T) => {
       resolver.next(value);
     },
-    [resolver],
+    [resolver]
   );
 
   useEffect(() => {

@@ -165,7 +165,10 @@ export function AppProvider<
   ]);
 
   const lastSyncedHeight = useMemo(() => {
-    return () => lastSyncedHeightQuery(networkBoundStates.queryClient);
+    if(!networkBoundStates.queryClient){
+      return async () => 0;
+    }
+    return () => lastSyncedHeightQuery(networkBoundStates.queryClient!);
   }, [networkBoundStates.queryClient]);
 
   const {

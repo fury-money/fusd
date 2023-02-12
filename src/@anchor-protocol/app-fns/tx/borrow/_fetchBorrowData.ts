@@ -1,8 +1,8 @@
-import { TxInfoData, TxResultRendering, TxStreamPhase } from '@libs/app-fns';
-import { TxHelper } from '@libs/app-fns/tx/internal';
-import { QueryObserverResult } from 'react-query';
-import { BorrowBorrower } from '../../queries/borrow/borrower';
-import { BorrowMarket } from '../../queries/borrow/market';
+import { TxInfoData, TxResultRendering, TxStreamPhase } from "@libs/app-fns";
+import { TxHelper } from "@libs/app-fns/tx/internal";
+import { QueryObserverResult } from "react-query";
+import { BorrowBorrower } from "../../queries/borrow/borrower";
+import { BorrowMarket } from "../../queries/borrow/market";
 
 interface Params {
   helper: TxHelper;
@@ -32,7 +32,7 @@ export function _fetchBorrowData({
           borrowMarket: BorrowMarket;
           borrowBorrower: BorrowBorrower;
         }>;
-      },
+      }
     );
   };
 }

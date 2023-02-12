@@ -1,10 +1,10 @@
-import { HumanAddr, moneyMarket } from '@anchor-protocol/types';
+import { HumanAddr, moneyMarket } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface MarketStateWasmQuery {
   marketState: WasmQuery<
@@ -35,9 +35,8 @@ export const MARKET_STATE_QUERY = `
 
 export async function marketStateQuery(
   queryClient: QueryClient,
-  marketContract: HumanAddr,
+  marketContract: HumanAddr
 ): Promise<MarketState> {
-
   const marketState = await wasmFetch<MarketStateWasmQuery>({
     ...queryClient,
     id: `market--state`,

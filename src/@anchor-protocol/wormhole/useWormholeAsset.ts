@@ -1,7 +1,7 @@
-import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
-import { ChainId, hexToNativeString } from '@certusone/wormhole-sdk';
-import { Token, u } from '@libs/types';
-import { BigSource } from 'big.js';
+import { useFormatters } from "@anchor-protocol/formatter/useFormatters";
+import { ChainId, hexToNativeString } from "@certusone/wormhole-sdk";
+import { Token, u } from "@libs/types";
+import { BigSource } from "big.js";
 
 const defaultFormatter = (amount: string): string => {
   return amount.toString();
@@ -21,9 +21,9 @@ const useWormholeAsset = (address: string, chainId: ChainId) => {
     ust: { demicrofy, formatOutput },
   } = useFormatters();
   switch (asset) {
-    case 'uusd':
+    case "uusd":
       return {
-        name: 'UST',
+        name: "UST",
         formatter: (amount: string) =>
           formatOutput(demicrofy(amount as u<Token<BigSource>>)),
       };

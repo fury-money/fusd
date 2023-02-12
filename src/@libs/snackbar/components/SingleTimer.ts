@@ -1,7 +1,7 @@
-import { EventTarget, Event } from 'event-target-shim';
+import { EventTarget, Event } from "event-target-shim";
 
 export class TimerEvent extends Event {
-  static TIMER_END: string = 'TIMER_END';
+  static TIMER_END: string = "TIMER_END";
 }
 
 export class SingleTimer extends EventTarget {

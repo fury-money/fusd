@@ -2,13 +2,13 @@ import {
   computeBorrowedAmount,
   computeBorrowLimit,
   computeLtv,
-} from '@anchor-protocol/app-fns';
+} from "@anchor-protocol/app-fns";
 import {
   formatInput,
   formatOutput,
   microfy,
   demicrofy,
-} from '@anchor-protocol/formatter';
+} from "@anchor-protocol/formatter";
 import {
   bAsset,
   aLuna,
@@ -17,14 +17,14 @@ import {
   Rate,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -32,23 +32,23 @@ import {
   _postTx,
   createHookMsg,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { formatRate } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { formatRate } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { WhitelistCollateral } from 'queries';
-import { QueryObserverResult } from 'react-query';
-import { Observable } from 'rxjs';
-import { BorrowBorrower } from '../../queries/borrow/borrower';
-import { BorrowMarket } from '../../queries/borrow/market';
-import { _fetchBorrowData } from './_fetchBorrowData';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { WhitelistCollateral } from "queries";
+import { QueryObserverResult } from "react-query";
+import { Observable } from "rxjs";
+import { BorrowBorrower } from "../../queries/borrow/borrower";
+import { BorrowMarket } from "../../queries/borrow/market";
+import { _fetchBorrowData } from "./_fetchBorrowData";
 
 export function borrowProvideCollateralTx($: {
   collateral: WhitelistCollateral;
@@ -74,15 +74,14 @@ export function borrowProvideCollateralTx($: {
 
   return pipe(
     _createTxOptions({
-      msgs: [  
-
+      msgs: [
         // provide_collateral call
         new MsgExecuteContract($.walletAddr, $.collateral.collateral_token, {
           send: {
             contract: $.collateral.custody_contract,
             amount: formatInput(
               microfy($.depositAmount, $.collateral.decimals),
-              $.collateral.decimals,
+              $.collateral.decimals
             ),
             msg: createHookMsg({
               deposit_collateral: {},
@@ -98,14 +97,14 @@ export function borrowProvideCollateralTx($: {
                 $.collateral.collateral_token,
                 formatInput(
                   microfy($.depositAmount, $.collateral.decimals),
-                  $.collateral.decimals,
+                  $.collateral.decimals
                 ),
               ],
             ],
           },
         }),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -114,7 +113,7 @@ export function borrowProvideCollateralTx($: {
     ({ value: { txInfo, borrowMarket, borrowBorrower } }) => {
       if (!borrowMarket || !borrowBorrower) {
         return helper.failedToCreateReceipt(
-          new Error('Failed to load borrow data'),
+          new Error("Failed to load borrow data")
         );
       }
 
@@ -124,25 +123,25 @@ export function borrowProvideCollateralTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
         const collateralizedAmount = pickAttributeValue<u<aLuna>>(
           fromContract,
-          7,
+          7
         );
 
         const ltv = computeLtv(
           computeBorrowLimit(
             borrowBorrower.overseerCollaterals,
             borrowMarket.oraclePrices,
-            borrowMarket.bAssetLtvs,
+            borrowMarket.bAssetLtvs
           ),
-          computeBorrowedAmount(borrowBorrower.marketBorrowerInfo),
+          computeBorrowedAmount(borrowBorrower.marketBorrowerInfo)
         );
 
         return {
@@ -151,15 +150,15 @@ export function borrowProvideCollateralTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             collateralizedAmount && {
-              name: 'Collateralized Amount',
+              name: "Collateralized Amount",
               value: `${formatOutput(
                 demicrofy(collateralizedAmount, $.collateral.decimals),
-                { decimals: $.collateral.decimals },
+                { decimals: $.collateral.decimals }
               )} ${$.collateral.symbol}`,
             },
             ltv && {
-              name: 'New Borrow Usage',
-              value: formatRate(ltv) + ' %',
+              name: "New Borrow Usage",
+              value: formatRate(ltv) + " %",
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),
@@ -168,6 +167,6 @@ export function borrowProvideCollateralTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

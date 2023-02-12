@@ -1,6 +1,6 @@
-import type { aLuna, Luna, u } from '@anchor-protocol/types';
-import { aluna } from '@anchor-protocol/types';
-import big, { Big } from 'big.js';
+import type { aLuna, Luna, u } from "@anchor-protocol/types";
+import { aluna } from "@anchor-protocol/types";
+import big, { Big } from "big.js";
 
 export interface WithdrawHistory {
   alunaAmount: u<aLuna<Big>>;
@@ -13,7 +13,7 @@ export function withdrawAllHistory(
   unbondRequests: aluna.hub.UnbondRequestsResponse | undefined,
   unbondedRequestsStartFrom: number,
   allHistory: aluna.hub.AllHistoryResponse | undefined,
-  parameters: aluna.hub.ParametersResponse | undefined,
+  parameters: aluna.hub.ParametersResponse | undefined
 ): WithdrawHistory[] | undefined {
   if (
     !unbondRequests ||

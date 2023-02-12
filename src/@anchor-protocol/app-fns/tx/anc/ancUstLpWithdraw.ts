@@ -2,7 +2,7 @@ import {
   formatANCWithPostfixUnits,
   formatLP,
   formatUSTWithPostfixUnits,
-} from '@anchor-protocol/notation';
+} from "@anchor-protocol/notation";
 import {
   ANC,
   AncUstLP,
@@ -13,14 +13,14 @@ import {
   Rate,
   u,
   UST,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -28,18 +28,18 @@ import {
   _postTx,
   createHookMsg,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { demicrofy, formatTokenInput, stripUUSD } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { demicrofy, formatTokenInput, stripUUSD } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { Observable } from "rxjs";
 
 export function ancAncUstLpWithdrawTx($: {
   walletAddr: HumanAddr;
@@ -71,7 +71,7 @@ export function ancAncUstLpWithdrawTx($: {
           },
         } as cw20.Send<AncUstLP>),
       ],
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -83,28 +83,28 @@ export function ancAncUstLpWithdrawTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
-      const transfer = pickEvent(rawLog, 'transfer');
+      const fromContract = pickEvent(rawLog, "from_contract");
+      const transfer = pickEvent(rawLog, "transfer");
 
       if (!fromContract || !transfer) {
-        return helper.failedToFindEvents('from_contract', 'transfer');
+        return helper.failedToFindEvents("from_contract", "transfer");
       }
 
       try {
         const burned = pickAttributeValueByKey<u<AncUstLP>>(
           fromContract,
-          'withdrawn_share',
+          "withdrawn_share"
         );
 
         const receivedAnc = pickAttributeValueByKey<u<ANC>>(
           fromContract,
-          'amount',
-          (attrs) => attrs.reverse()[1],
+          "amount",
+          (attrs) => attrs.reverse()[1]
         );
         const receivedUusd = pickAttributeValueByKey<string>(
           transfer,
-          'amount',
-          (attrs) => attrs.reverse()[0],
+          "amount",
+          (attrs) => attrs.reverse()[0]
         );
         const receivedUst = !!receivedUusd && stripUUSD(receivedUusd);
 
@@ -123,17 +123,17 @@ export function ancAncUstLpWithdrawTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             burned && {
-              name: 'Burned',
-              value: formatLP(demicrofy(burned)) + ' ANC-UST LP',
+              name: "Burned",
+              value: formatLP(demicrofy(burned)) + " ANC-UST LP",
             },
             receivedAnc &&
               receivedUst && {
-                name: 'Received',
+                name: "Received",
                 value:
                   formatANCWithPostfixUnits(demicrofy(receivedAnc)) +
-                  ' ANC + ' +
+                  " ANC + " +
                   formatUSTWithPostfixUnits(demicrofy(receivedUst)) +
-                  ' UST',
+                  " UST",
               },
             helper.txHashReceipt(),
             helper.txFeeReceipt(txFee ? txFee : undefined),
@@ -142,6 +142,6 @@ export function ancAncUstLpWithdrawTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

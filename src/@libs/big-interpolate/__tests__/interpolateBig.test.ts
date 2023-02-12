@@ -1,7 +1,7 @@
-import { interpolateBig } from '@libs/big-interpolate/index';
+import { interpolateBig } from "@libs/big-interpolate/index";
 
-describe('interpolateBig', () => {
-  test('should get right value', () => {
+describe("interpolateBig", () => {
+  test("should get right value", () => {
     const interpolate = interpolateBig({
       from: 0,
       to: 100,

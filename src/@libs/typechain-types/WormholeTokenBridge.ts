@@ -13,10 +13,10 @@ import {
   PopulatedTransaction,
   Signer,
   utils,
-} from 'ethers';
-import { FunctionFragment, Result } from '@ethersproject/abi';
-import { Listener, Provider } from '@ethersproject/providers';
-import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from './common';
+} from "ethers";
+import { FunctionFragment, Result } from "@ethersproject/abi";
+import { Listener, Provider } from "@ethersproject/providers";
+import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
 export declare namespace WormholeTokenBridge {
   export type TransferStruct = {
@@ -36,7 +36,7 @@ export declare namespace WormholeTokenBridge {
     number,
     string,
     number,
-    BigNumber,
+    BigNumber
   ] & {
     payloadID: number;
     amount: BigNumber;
@@ -49,63 +49,63 @@ export declare namespace WormholeTokenBridge {
 }
 
 export interface WormholeTokenBridgeInterface extends utils.Interface {
-  contractName: 'WormholeTokenBridge';
+  contractName: "WormholeTokenBridge";
   functions: {
-    'completeTransfer(bytes)': FunctionFragment;
-    'isTransferCompleted(bytes32)': FunctionFragment;
-    'parseTransfer(bytes)': FunctionFragment;
-    'transferTokens(address,uint256,uint16,bytes32,uint256,uint32)': FunctionFragment;
-    'wormhole()': FunctionFragment;
+    "completeTransfer(bytes)": FunctionFragment;
+    "isTransferCompleted(bytes32)": FunctionFragment;
+    "parseTransfer(bytes)": FunctionFragment;
+    "transferTokens(address,uint256,uint16,bytes32,uint256,uint32)": FunctionFragment;
+    "wormhole()": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: 'completeTransfer',
-    values: [BytesLike],
+    functionFragment: "completeTransfer",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'isTransferCompleted',
-    values: [BytesLike],
+    functionFragment: "isTransferCompleted",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'parseTransfer',
-    values: [BytesLike],
+    functionFragment: "parseTransfer",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: 'transferTokens',
+    functionFragment: "transferTokens",
     values: [
       string,
       BigNumberish,
       BigNumberish,
       BytesLike,
       BigNumberish,
-      BigNumberish,
-    ],
+      BigNumberish
+    ]
   ): string;
-  encodeFunctionData(functionFragment: 'wormhole', values?: undefined): string;
+  encodeFunctionData(functionFragment: "wormhole", values?: undefined): string;
 
   decodeFunctionResult(
-    functionFragment: 'completeTransfer',
-    data: BytesLike,
+    functionFragment: "completeTransfer",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'isTransferCompleted',
-    data: BytesLike,
+    functionFragment: "isTransferCompleted",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'parseTransfer',
-    data: BytesLike,
+    functionFragment: "parseTransfer",
+    data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: 'transferTokens',
-    data: BytesLike,
+    functionFragment: "transferTokens",
+    data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: 'wormhole', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "wormhole", data: BytesLike): Result;
 
   events: {};
 }
 
 export interface WormholeTokenBridge extends BaseContract {
-  contractName: 'WormholeTokenBridge';
+  contractName: "WormholeTokenBridge";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -115,15 +115,15 @@ export interface WormholeTokenBridge extends BaseContract {
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
     fromBlockOrBlockhash?: string | number | undefined,
-    toBlock?: string | number | undefined,
+    toBlock?: string | number | undefined
   ): Promise<Array<TEvent>>;
 
   listeners<TEvent extends TypedEvent>(
-    eventFilter?: TypedEventFilter<TEvent>,
+    eventFilter?: TypedEventFilter<TEvent>
   ): Array<TypedListener<TEvent>>;
   listeners(eventName?: string): Array<Listener>;
   removeAllListeners<TEvent extends TypedEvent>(
-    eventFilter: TypedEventFilter<TEvent>,
+    eventFilter: TypedEventFilter<TEvent>
   ): this;
   removeAllListeners(eventName?: string): this;
   off: OnEvent<this>;
@@ -134,17 +134,17 @@ export interface WormholeTokenBridge extends BaseContract {
   functions: {
     completeTransfer(
       encodedVm: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     isTransferCompleted(
       hash: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     parseTransfer(
       encoded: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<
       [WormholeTokenBridge.TransferStructOutput] & {
         transfer: WormholeTokenBridge.TransferStructOutput;
@@ -158,7 +158,7 @@ export interface WormholeTokenBridge extends BaseContract {
       recipient: BytesLike,
       arbiterFee: BigNumberish,
       nonce: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     wormhole(overrides?: CallOverrides): Promise<[string]>;
@@ -166,17 +166,17 @@ export interface WormholeTokenBridge extends BaseContract {
 
   completeTransfer(
     encodedVm: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> },
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   isTransferCompleted(
     hash: BytesLike,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<boolean>;
 
   parseTransfer(
     encoded: BytesLike,
-    overrides?: CallOverrides,
+    overrides?: CallOverrides
   ): Promise<WormholeTokenBridge.TransferStructOutput>;
 
   transferTokens(
@@ -186,7 +186,7 @@ export interface WormholeTokenBridge extends BaseContract {
     recipient: BytesLike,
     arbiterFee: BigNumberish,
     nonce: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> },
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   wormhole(overrides?: CallOverrides): Promise<string>;
@@ -194,17 +194,17 @@ export interface WormholeTokenBridge extends BaseContract {
   callStatic: {
     completeTransfer(
       encodedVm: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<void>;
 
     isTransferCompleted(
       hash: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<boolean>;
 
     parseTransfer(
       encoded: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<WormholeTokenBridge.TransferStructOutput>;
 
     transferTokens(
@@ -214,7 +214,7 @@ export interface WormholeTokenBridge extends BaseContract {
       recipient: BytesLike,
       arbiterFee: BigNumberish,
       nonce: BigNumberish,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     wormhole(overrides?: CallOverrides): Promise<string>;
@@ -225,17 +225,17 @@ export interface WormholeTokenBridge extends BaseContract {
   estimateGas: {
     completeTransfer(
       encodedVm: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     isTransferCompleted(
       hash: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     parseTransfer(
       encoded: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     transferTokens(
@@ -245,7 +245,7 @@ export interface WormholeTokenBridge extends BaseContract {
       recipient: BytesLike,
       arbiterFee: BigNumberish,
       nonce: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     wormhole(overrides?: CallOverrides): Promise<BigNumber>;
@@ -254,17 +254,17 @@ export interface WormholeTokenBridge extends BaseContract {
   populateTransaction: {
     completeTransfer(
       encodedVm: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> },
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     isTransferCompleted(
       hash: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     parseTransfer(
       encoded: BytesLike,
-      overrides?: CallOverrides,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     transferTokens(
@@ -274,7 +274,7 @@ export interface WormholeTokenBridge extends BaseContract {
       recipient: BytesLike,
       arbiterFee: BigNumberish,
       nonce: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> },
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     wormhole(overrides?: CallOverrides): Promise<PopulatedTransaction>;

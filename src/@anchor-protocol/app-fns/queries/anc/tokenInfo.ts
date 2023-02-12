@@ -1,10 +1,10 @@
-import { ANC, cw20, CW20Addr } from '@anchor-protocol/types';
+import { ANC, cw20, CW20Addr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface AncTokenInfoWasmQuery {
   ancTokenInfo: WasmQuery<cw20.TokenInfo, cw20.TokenInfoResponse<ANC>>;
@@ -15,7 +15,7 @@ export type AncTokenInfo = WasmQueryData<AncTokenInfoWasmQuery>;
 /** @deprecated */
 export async function ancTokenInfoQuery(
   queryClient: QueryClient,
-  ancTokenAddr: CW20Addr,
+  ancTokenAddr: CW20Addr
 ): Promise<AncTokenInfo> {
   return wasmFetch<AncTokenInfoWasmQuery>({
     ...queryClient,

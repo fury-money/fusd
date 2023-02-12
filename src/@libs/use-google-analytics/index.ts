@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import {log} from "console";
+import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { log } from "console";
 
 declare global {
   interface Window {
@@ -18,7 +18,7 @@ const gtag = (trackingId: string) => `
 
 export function useGoogleAnalytics(
   trackingId: string,
-  debug: boolean = process.env.NODE_ENV !== 'production',
+  debug: boolean = process.env.NODE_ENV !== "production"
 ) {
   const location = useLocation();
   const trackingIdRef = useRef<string>(trackingId);
@@ -26,36 +26,36 @@ export function useGoogleAnalytics(
 
   useEffect(() => {
     if (!debugRef.current) {
-      const script1 = document.createElement('script');
+      const script1 = document.createElement("script");
       script1.src = `https://www.googletagmanager.com/gtag/js?id=${trackingIdRef.current}`;
       script1.async = true;
 
       document.body.appendChild(script1);
 
-      const script2 = document.createElement('script');
+      const script2 = document.createElement("script");
       script2.text = gtag(trackingIdRef.current);
 
       document.body.appendChild(script2);
     } else {
-      log('GTAG INIT:', trackingIdRef.current);
+      log("GTAG INIT:", trackingIdRef.current);
     }
   }, []);
 
   useEffect(() => {
     if (!debugRef.current && window.gtag) {
-      window.gtag('config', trackingIdRef.current, {
+      window.gtag("config", trackingIdRef.current, {
         page_location: location.pathname + location.search,
         page_path: location.pathname,
       });
     } else if (debugRef.current) {
-      log('GTAG PUSH: ', location.pathname + location.search);
+      log("GTAG PUSH: ", location.pathname + location.search);
     }
   }, [location]);
 }
 
 export function GoogleAnalytics({
   trackingId,
-  debug = process.env.NODE_ENV !== 'production',
+  debug = process.env.NODE_ENV !== "production",
 }: {
   trackingId: string;
   debug?: boolean;

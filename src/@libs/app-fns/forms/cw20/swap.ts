@@ -1,9 +1,9 @@
-import { demicrofy, microfy } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { CW20Addr, HumanAddr, Rate, Token, u, UST } from '@libs/types';
-import { FormFunction, FormReturn } from '@libs/use-form';
-import big from 'big.js';
-import { terraswapSimulationQuery } from '../../queries/terraswap/simulation';
+import { demicrofy, microfy } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { CW20Addr, HumanAddr, Rate, Token, u, UST } from "@libs/types";
+import { FormFunction, FormReturn } from "@libs/use-form";
+import big from "big.js";
+import { terraswapSimulationQuery } from "../../queries/terraswap/simulation";
 
 export interface CW20SwapTokenFormInput<From extends Token, To extends Token> {
   fromAmount?: From;
@@ -13,7 +13,7 @@ export interface CW20SwapTokenFormInput<From extends Token, To extends Token> {
 
 export interface CW20SwapTokenFormDependency<
   From extends Token,
-  To extends Token,
+  To extends Token
 > {
   queryClient: QueryClient;
   //
@@ -47,7 +47,7 @@ export type CW20SwapTokenFormAsyncStates<To extends Token> = {
 
 export type CW20SwapTokenForm<
   From extends Token,
-  To extends Token,
+  To extends Token
 > = FormFunction<
   CW20SwapTokenFormInput<From, To>,
   CW20SwapTokenFormDependency<From, To>,
@@ -80,7 +80,7 @@ export const cw20SwapTokenForm = <From extends Token, To extends Token>({
       !!toAmount && toAmount.length > 0 && big(toAmount).gt(0);
 
     const invalidMaxSpread: string | null =
-      maxSpread.length === 0 ? 'Max Spread is required' : null;
+      maxSpread.length === 0 ? "Max Spread is required" : null;
 
     if (!fromAmountExists && !toAmountExists) {
       return [
@@ -119,7 +119,7 @@ export const cw20SwapTokenForm = <From extends Token, To extends Token>({
               },
             },
           },
-          queryClient,
+          queryClient
         ).then(
           ({
             simulation: { return_amount, commission_amount, spread_amount },
@@ -137,12 +137,12 @@ export const cw20SwapTokenForm = <From extends Token, To extends Token>({
 
             const invalidTxFee =
               connected && big(fixedFee).gt(ustBalance)
-                ? 'Not enough transaction fees'
+                ? "Not enough transaction fees"
                 : null;
 
             const invalidFromAmount =
               connected && microfy(fromAmount!).gt(fromTokenBalance)
-                ? 'Not enough asset'
+                ? "Not enough asset"
                 : null;
 
             const availableTx =
@@ -161,7 +161,7 @@ export const cw20SwapTokenForm = <From extends Token, To extends Token>({
               invalidFromAmount,
               availableTx,
             };
-          },
+          }
         ),
       ];
     } else if (toAmountExists) {
@@ -185,7 +185,7 @@ export const cw20SwapTokenForm = <From extends Token, To extends Token>({
               },
             },
           },
-          queryClient,
+          queryClient
         ).then(
           ({
             simulation: { return_amount, spread_amount, commission_amount },
@@ -203,12 +203,12 @@ export const cw20SwapTokenForm = <From extends Token, To extends Token>({
 
             const invalidTxFee =
               connected && big(fixedFee).gt(ustBalance)
-                ? 'Not enough transaction fees'
+                ? "Not enough transaction fees"
                 : null;
 
             const invalidToAmount =
               connected && microfy(toAmount!).gt(toTokenBalance)
-                ? 'Not enough asset'
+                ? "Not enough asset"
                 : null;
 
             const availableTx =
@@ -227,7 +227,7 @@ export const cw20SwapTokenForm = <From extends Token, To extends Token>({
               invalidToAmount,
               availableTx,
             };
-          },
+          }
         ),
       ];
     }

@@ -1,16 +1,16 @@
-import { StreamReturn, useStream } from '@rx-stream/react';
-import { ContractReceipt } from 'ethers';
-import { merge, from, map, BehaviorSubject, Subject } from 'rxjs';
-import { useCallback, useMemo } from 'react';
-import { TxReceipt, TxResultRendering, TxStreamPhase } from '@libs/app-fns';
-import { truncateEvm } from '@libs/formatter';
-import { catchTxError } from './catchTxError';
-import { useAnchorWebapp } from '@anchor-protocol/app-provider';
-import { CrossChainEvent } from '@anchor-protocol/crossanchor-sdk';
+import { StreamReturn, useStream } from "@rx-stream/react";
+import { ContractReceipt } from "ethers";
+import { merge, from, map, BehaviorSubject, Subject } from "rxjs";
+import { useCallback, useMemo } from "react";
+import { TxReceipt, TxResultRendering, TxStreamPhase } from "@libs/app-fns";
+import { truncateEvm } from "@libs/formatter";
+import { catchTxError } from "./catchTxError";
+import { useAnchorWebapp } from "@anchor-protocol/app-provider";
+import { CrossChainEvent } from "@anchor-protocol/crossanchor-sdk";
 
 export type TxEventHandler<TxParams> = (
   event: CrossChainEvent<ContractReceipt>,
-  txParams: TxParams,
+  txParams: TxParams
 ) => void;
 
 export type TxEvent<TxParams> = {
@@ -22,10 +22,10 @@ export const useTx = <TxParams, TxResult>(
   sendTx: (
     txParams: TxParams,
     renderTxResults: Subject<TxResultRendering<TxResult>>,
-    txEvents: Subject<TxEvent<TxParams>>,
+    txEvents: Subject<TxEvent<TxParams>>
   ) => Promise<TxResult | null>,
   parseTx: (txResult: NonNullable<TxResult>) => ContractReceipt,
-  emptyTxResult: TxResult,
+  emptyTxResult: TxResult
 ): StreamReturn<TxParams, TxResultRendering<TxResult>> => {
   const { txErrorReporter } = useAnchorWebapp();
 
@@ -35,11 +35,11 @@ export const useTx = <TxParams, TxResult>(
     () =>
       new BehaviorSubject<TxResultRendering<TxResult>>({
         value: emptyTxResult,
-        message: 'Processing transaction...',
+        message: "Processing transaction...",
         phase: TxStreamPhase.BROADCAST,
         receipts: [],
       }),
-    [emptyTxResult],
+    [emptyTxResult]
   );
 
   const txCallback = useCallback(
@@ -58,20 +58,20 @@ export const useTx = <TxParams, TxResult>(
                   ? [txReceipt(parseTx(txResult!))]
                   : [],
               };
-            }),
+            })
           )
           .pipe(catchTxError<TxResult | null>({ txErrorReporter })),
-        renderingEvents,
+        renderingEvents
       );
     },
-    [sendTx, parseTx, txErrorReporter, renderingEvents, txEvents],
+    [sendTx, parseTx, txErrorReporter, renderingEvents, txEvents]
   );
 
   const [fetch, result] = useStream(txCallback);
   const txStreamResult = useMemo(
     () =>
       [fetch, result] as StreamReturn<TxParams, TxResultRendering<TxResult>>,
-    [fetch, result],
+    [fetch, result]
   );
 
   return txStreamResult;
@@ -79,7 +79,7 @@ export const useTx = <TxParams, TxResult>(
 
 const txReceipt = (tx: ContractReceipt): TxReceipt => {
   return {
-    name: 'Tx hash',
+    name: "Tx hash",
     value: truncateEvm(tx.transactionHash),
   };
 };

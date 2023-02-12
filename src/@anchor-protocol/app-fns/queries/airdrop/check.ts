@@ -1,7 +1,7 @@
-import { ANC, HumanAddr, Rate, u } from '@anchor-protocol/types';
-import { QueryClient } from '@libs/query-client';
-import { airdropStageCache } from '../../caches/airdropStage';
-import { airdropIsClaimedQuery } from './isClaimed';
+import { ANC, HumanAddr, Rate, u } from "@anchor-protocol/types";
+import { QueryClient } from "@libs/query-client";
+import { airdropStageCache } from "../../caches/airdropStage";
+import { airdropIsClaimedQuery } from "./isClaimed";
 
 export interface Airdrop {
   createdAt: string; // date string
@@ -21,9 +21,9 @@ export async function airdropCheckQuery(
   queryClient: QueryClient,
   walletAddress: HumanAddr | undefined,
   airdropContract: HumanAddr,
-  chainId: string,
+  chainId: string
 ): Promise<Airdrop | undefined> {
-  if (!walletAddress || !chainId.startsWith('columbus')) {
+  if (!walletAddress || !chainId.startsWith("columbus")) {
     return undefined;
   }
 
@@ -32,7 +32,7 @@ export async function airdropCheckQuery(
 
   try {
     const airdrops: Airdrop[] = await fetch(
-      `https://airdrop.cavernprotocol.com/api/get?address=${walletAddress}&chainId=columbus-4`,
+      `https://airdrop.cavernprotocol.com/api/get?address=${walletAddress}&chainId=columbus-4`
     ).then((res) => res.json());
 
     if (airdrops.length === 0) {
@@ -48,7 +48,7 @@ export async function airdropCheckQuery(
         airdropContract,
         walletAddress,
         stage,
-        queryClient,
+        queryClient
       );
 
       // FIXME double check if the stage is not claimed

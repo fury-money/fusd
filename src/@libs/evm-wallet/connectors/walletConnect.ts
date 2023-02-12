@@ -1,6 +1,6 @@
-import { initializeConnector } from '@web3-react/core';
-import { WalletConnect } from '@web3-react/walletconnect';
-import { SupportedChainRpcs } from '../constants';
+import { initializeConnector } from "@web3-react/core";
+import { WalletConnect } from "@web3-react/walletconnect";
+import { SupportedChainRpcs } from "../constants";
 
 export const [walletConnect, walletConnectHooks, walletConnectStore] =
   initializeConnector<WalletConnect>(
@@ -10,7 +10,7 @@ export const [walletConnect, walletConnectHooks, walletConnectStore] =
         {
           rpc: SupportedChainRpcs,
         },
-        true,
+        true
       ),
-    Object.keys(SupportedChainRpcs).map((chainId) => Number(chainId)),
+    Object.keys(SupportedChainRpcs).map((chainId) => Number(chainId))
   );

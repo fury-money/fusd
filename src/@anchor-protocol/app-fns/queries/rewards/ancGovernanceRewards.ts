@@ -5,13 +5,13 @@ import {
   CW20Addr,
   HumanAddr,
   u,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface RewardsAncGovernanceRewardsWasmQuery {
   userGovStakingInfo: WasmQuery<
@@ -28,7 +28,7 @@ export async function rewardsAncGovernanceRewardsQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   govContract: HumanAddr,
-  ancContract: CW20Addr,
+  ancContract: CW20Addr
 ): Promise<RewardsAncGovernanceRewards | undefined> {
   if (!walletAddr) {
     return undefined;

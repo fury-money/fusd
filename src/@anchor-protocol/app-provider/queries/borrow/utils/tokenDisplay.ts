@@ -1,9 +1,9 @@
-import { BorrowMarket } from '@anchor-protocol/app-fns';
-import { moneyMarket } from '@anchor-protocol/types';
-import { CW20TokenDisplayInfo } from '@libs/app-fns';
-import { TokenDisplayInfoByAddr } from '../../utils/tokenDisplay';
+import { BorrowMarket } from "@anchor-protocol/app-fns";
+import { moneyMarket } from "@anchor-protocol/types";
+import { CW20TokenDisplayInfo } from "@libs/app-fns";
+import { TokenDisplayInfoByAddr } from "../../utils/tokenDisplay";
 
-type OverseerWhilelistElem = moneyMarket.overseer.WhitelistResponse['elems'][0];
+type OverseerWhilelistElem = moneyMarket.overseer.WhitelistResponse["elems"][0];
 
 export type OverseerWhitelistWithDisplay = {
   elems: Array<OverseerWhilelistElem & { tokenDisplay: CW20TokenDisplayInfo }>;
@@ -11,7 +11,7 @@ export type OverseerWhitelistWithDisplay = {
 
 export type BorrowMarketWithDisplay = Omit<
   BorrowMarket,
-  'overseerWhitelist'
+  "overseerWhitelist"
 > & {
   overseerWhitelist: OverseerWhitelistWithDisplay;
 };
@@ -22,7 +22,7 @@ export type OverseerWhitelistTokenDisplay = {
 
 export const withBorrowMarketTokenDisplay = (
   borrowMarket: BorrowMarket,
-  tokenDisplayInfoByAddr: TokenDisplayInfoByAddr,
+  tokenDisplayInfoByAddr: TokenDisplayInfoByAddr
 ): BorrowMarketWithDisplay => ({
   ...borrowMarket,
   overseerWhitelist: {

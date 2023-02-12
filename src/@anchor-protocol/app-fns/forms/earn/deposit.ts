@@ -1,9 +1,9 @@
-import { UST, Luna, Rate, u } from '@anchor-protocol/types';
-import { computeMaxUstBalanceForUstTransfer } from '@libs/app-fns';
-import { EstimatedFee } from '@libs/app-provider';
-import { microfy } from '@libs/formatter';
-import { FormReturn } from '@libs/use-form';
-import big, { Big } from 'big.js';
+import { UST, Luna, Rate, u } from "@anchor-protocol/types";
+import { computeMaxUstBalanceForUstTransfer } from "@libs/app-fns";
+import { EstimatedFee } from "@libs/app-provider";
+import { microfy } from "@libs/formatter";
+import { FormReturn } from "@libs/use-form";
+import big, { Big } from "big.js";
 
 export interface EarnDepositFormInput {
   depositAmount: UST;
@@ -12,7 +12,7 @@ export interface EarnDepositFormInput {
 export interface EarnDepositFormDependency {
   userUUSTBalance: u<UST>;
   txFee?: EstimatedFee;
-  estimatedFeeError?: string;
+  estimatedFeeError?: string | JSX.Element;
   taxRate: Rate;
   maxTaxUUSD: u<Luna>;
   isConnected: boolean;
@@ -25,7 +25,7 @@ export interface EarnDepositFormStates extends EarnDepositFormInput {
   receiveAmount?: u<UST>;
   cavernFee?: u<UST>;
   estimatedFee?: EstimatedFee;
-  estimatedFeeError?: string;
+  estimatedFeeError?: string | JSX.Element;
   invalidTxFee?: string;
   invalidDepositAmount?: string;
   invalidNextTxFee?: string;
@@ -53,11 +53,17 @@ export const earnDepositForm =
 
     // actual receive Amount (we take a small fee for system operations)
     const receiveAmount = txFee
-      ? (microfy(big(depositAmount).mul(1 - depositFeeAmount).toString() as UST<string>) as u<UST<Big>>)
+      ? (microfy(
+          big(depositAmount)
+            .mul(1 - depositFeeAmount)
+            .toString() as UST<string>
+        ) as u<UST<Big>>)
       : undefined;
 
     const cavernFee = txFee
-      ? (microfy(big(depositAmount).mul(depositFeeAmount).toString() as UST<string>) as u<UST<Big>>)
+      ? (microfy(
+          big(depositAmount).mul(depositFeeAmount).toString() as UST<string>
+        ) as u<UST<Big>>)
       : undefined;
 
     // maxAmount
@@ -65,13 +71,13 @@ export const earnDepositForm =
       userUUSTBalance,
       taxRate,
       maxTaxUUSD,
-      '0' as u<UST>,
+      "0" as u<UST>
     );
 
     // invalidTxFee
     const invalidTxFee = (() => {
       return isConnected && txFee && big(userUUSTBalance).lt(0)
-        ? 'Not enough transaction fees'
+        ? "Not enough transaction fees"
         : undefined;
     })();
 

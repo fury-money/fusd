@@ -1,9 +1,9 @@
-import { ConnectType } from './types';
-import { Connector } from '@web3-react/types';
-import { MetaMask } from '@web3-react/metamask';
-import { WalletConnect } from '@web3-react/walletconnect';
-import { EvmChainId } from '@anchor-protocol/crossanchor-sdk';
-import { Chain } from '@anchor-protocol/app-provider';
+import { ConnectType } from "./types";
+import { Connector } from "@web3-react/types";
+import { MetaMask } from "@web3-react/metamask";
+import { WalletConnect } from "@web3-react/walletconnect";
+import { EvmChainId } from "@anchor-protocol/crossanchor-sdk";
+import { Chain } from "@anchor-protocol/app-provider";
 
 export const getConnectionType = (connector: Connector): ConnectType => {
   if (connector instanceof MetaMask) {

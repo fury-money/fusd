@@ -1,8 +1,0 @@
-query {
-    poll: WasmContractsContractAddressStore(
-      ContractAddress: "terra12r5ghc6ppewcdcs3hkewrz24ey6xl7mmpk478s"
-      QueryMsg: "{\"poll\": {\"poll_id\": 83}}"
-    ) {
-      Result
-    }
-}

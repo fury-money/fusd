@@ -1,32 +1,32 @@
-import { formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
-import { Gas, HumanAddr, Rate, u, UST } from '@anchor-protocol/types';
+import { formatUSTWithPostfixUnits } from "@anchor-protocol/notation";
+import { Gas, HumanAddr, Rate, u, UST } from "@anchor-protocol/types";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLogs,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { floor } from '@libs/big-math';
-import { demicrofy } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
+} from "@libs/app-fns/tx/internal";
+import { floor } from "@libs/big-math";
+import { demicrofy } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
 import {
   CreateTxOptions,
   Dec,
   Fee,
   MsgExecuteContract,
-} from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { RewardBreakdown } from 'pages/basset/hooks/useRewardsBreakdown';
-import { Observable } from 'rxjs';
+} from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { RewardBreakdown } from "pages/basset/hooks/useRewardsBreakdown";
+import { Observable } from "rxjs";
 
 type RewardLogWithDisplay = {
   rewards: string;
@@ -58,10 +58,10 @@ export function bAssetClaimTx($: {
             claim_rewards: {
               recipient: undefined,
             },
-          },
+          }
         );
       }),
-      fee: new Fee($.gasFee, floor($.fixedGas) + 'uluna'),
+      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -71,16 +71,16 @@ export function bAssetClaimTx($: {
 
       const rewardBreakdownByRewardContract = $.rewardBreakdowns.reduce(
         (acc, curr) => ({ ...acc, [curr.rewardAddr]: curr }),
-        {} as { [k: string]: RewardBreakdown },
+        {} as { [k: string]: RewardBreakdown }
       );
 
       const rewardLogsWithDisplay = rawLogs.reduce((acc, curr) => {
-        const wasm = pickEvent(curr, 'wasm');
+        const wasm = pickEvent(curr, "wasm");
         if (wasm) {
-          const rewards = pickAttributeValueByKey<string>(wasm, 'rewards');
+          const rewards = pickAttributeValueByKey<string>(wasm, "rewards");
           const contract = pickAttributeValueByKey<string>(
             wasm,
-            'contract_address',
+            "contract_address"
           );
 
           if (rewards && contract) {
@@ -100,7 +100,7 @@ export function bAssetClaimTx($: {
 
       const total = rewardLogsWithDisplay.reduce(
         (acc, curr) => acc.add(curr.rewards),
-        new Dec(0),
+        new Dec(0)
       );
 
       try {
@@ -109,18 +109,18 @@ export function bAssetClaimTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             ...rewardLogsWithDisplay.map((rewardLog) => ({
-              name: `${rewardLog.symbol ?? '???'} Reward`,
+              name: `${rewardLog.symbol ?? "???"} Reward`,
               value:
                 formatUSTWithPostfixUnits(
-                  demicrofy(rewardLog.rewards as u<UST>),
-                ) + ' axlUSDC',
+                  demicrofy(rewardLog.rewards as u<UST>)
+                ) + " axlUSDC",
             })),
             total && {
-              name: 'Total Rewards',
+              name: "Total Rewards",
               value:
                 formatUSTWithPostfixUnits(
-                  demicrofy(total.toString() as u<UST>),
-                ) + ' alxUSDC',
+                  demicrofy(total.toString() as u<UST>)
+                ) + " alxUSDC",
             },
             helper.txHashReceipt(),
             helper.txFeeReceipt(),
@@ -129,6 +129,6 @@ export function bAssetClaimTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

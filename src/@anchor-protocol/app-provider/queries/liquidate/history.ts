@@ -1,11 +1,11 @@
 import {
   LiquidationData,
   liquidationHistoryQuery,
-} from '@anchor-protocol/app-fns/queries/liquidate/history';
-import { createSimpleQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+} from "@anchor-protocol/app-fns/queries/liquidate/history";
+import { createSimpleQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 
 const queryFn = createSimpleQueryFn((endpoint: string) => {
   return liquidationHistoryQuery({ endpoint });
@@ -23,6 +23,6 @@ export function useLiquidationHistoryQuery(): UseQueryResult<
       refetchInterval: 1000 * 60 * 60,
       keepPreviousData: true,
       onError: queryErrorReporter,
-    },
+    }
   );
 }

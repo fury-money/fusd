@@ -1,10 +1,10 @@
-import { ANC, cw20, CW20Addr, HumanAddr } from '@anchor-protocol/types';
+import { ANC, cw20, CW20Addr, HumanAddr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface AncBalanceWasmQuery {
   ancBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<ANC>>;
@@ -15,7 +15,7 @@ export type AncBalance = WasmQueryData<AncBalanceWasmQuery>;
 export async function ancBalanceQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  ancTokenAddr: CW20Addr,
+  ancTokenAddr: CW20Addr
 ): Promise<AncBalance | undefined> {
   if (!walletAddr) {
     return undefined;

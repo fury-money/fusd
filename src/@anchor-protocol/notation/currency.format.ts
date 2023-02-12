@@ -9,19 +9,19 @@ import {
   Luna,
   Token,
   UST,
-} from '@anchor-protocol/types';
-import { formatDemimal, formatInteger, MICRO } from '@libs/formatter';
-import { u } from '@libs/types';
-import big, { BigSource } from 'big.js';
+} from "@anchor-protocol/types";
+import { formatDemimal, formatInteger, MICRO } from "@libs/formatter";
+import { u } from "@libs/types";
+import big, { BigSource } from "big.js";
 
 // ---------------------------------------------
 // render
 // ---------------------------------------------
 export function mapDecimalPointBaseSeparatedNumbers<T>(
   n: string,
-  mapper: (i: string, d: string | undefined) => T,
+  mapper: (i: string, d: string | undefined) => T
 ): T {
-  const [i, d] = n.toString().split('.');
+  const [i, d] = n.toString().split(".");
   return mapper(i, d);
 }
 
@@ -70,7 +70,7 @@ export function formatAUSTInput(n: aUST<BigSource>): aUST {
 }
 
 export function formatLunaInput<C extends Luna<BigSource> | aLuna<BigSource>>(
-  n: C,
+  n: C
 ): C extends Luna<BigSource>
   ? Luna
   : C extends aLuna<BigSource>
@@ -84,13 +84,13 @@ export function formatBAssetInput<C extends bAsset<BigSource>>(n: C): bAsset {
 }
 
 export function formatANCInput<C extends ANC<BigSource>>(
-  n: C,
+  n: C
 ): C extends ANC<BigSource> ? ANC : never {
   return d6InputFormatter(n) as any;
 }
 
 export function formatLPInput<C extends LPToken<BigSource>>(
-  n: C,
+  n: C
 ): C extends AncUstLP<BigSource>
   ? AncUstLP
   : C extends aLunaLunaLP<BigSource>
@@ -111,19 +111,19 @@ export function formatLP(n: LPToken<BigSource>): string {
 
 export function formatANCWithPostfixUnits(n: ANC<BigSource>): string {
   const bn = big(n);
-  return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + 'M' : formatANC(n);
+  return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + "M" : formatANC(n);
 }
 
 export function formatUST(n: UST<BigSource>): string {
   if (big(n).gt(0) && big(n).lt(0.001)) {
-    return '<0.001';
+    return "<0.001";
   }
   return d3Formatter(n);
 }
 
 export function formatUSTWithPostfixUnits(n: UST<BigSource>): string {
   const bn = big(n);
-  return bn.gte(MILLION) ? d2Formatter(bn.div(MILLION)) + 'M' : formatUST(n);
+  return bn.gte(MILLION) ? d2Formatter(bn.div(MILLION)) + "M" : formatUST(n);
 }
 
 export function formatAUST(n: aUST<BigSource>): string {
@@ -132,7 +132,7 @@ export function formatAUST(n: aUST<BigSource>): string {
 
 export function formatAUSTWithPostfixUnits(n: aUST<BigSource>): string {
   const bn = big(n);
-  return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + 'M' : d6Formatter(bn);
+  return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + "M" : d6Formatter(bn);
 }
 
 export function formatLuna(n: Luna<BigSource> | aLuna<BigSource>): string {
@@ -140,10 +140,10 @@ export function formatLuna(n: Luna<BigSource> | aLuna<BigSource>): string {
 }
 
 export function formatLunaWithPostfixUnits(
-  n: Luna<BigSource> | aLuna<BigSource>,
+  n: Luna<BigSource> | aLuna<BigSource>
 ): string {
   const bn = big(n);
-  return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + 'M' : d3Formatter(bn);
+  return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + "M" : d3Formatter(bn);
 }
 
 export function formatBAsset(n: bAsset<BigSource>): string {
@@ -152,7 +152,7 @@ export function formatBAsset(n: bAsset<BigSource>): string {
 
 export function formatBAssetWithPostfixUnits(n: bAsset<BigSource>): string {
   const bn = big(n);
-  return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + 'M' : d3Formatter(bn);
+  return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + "M" : d3Formatter(bn);
 }
 
 // ---------------------------------------------
@@ -160,27 +160,27 @@ export function formatBAssetWithPostfixUnits(n: bAsset<BigSource>): string {
 // ---------------------------------------------
 export function formatUTokenDecimal2(n: u<Token<BigSource>>): string {
   const bn = big(n).div(MICRO);
-  return bn.gte(MILLION) ? d2Formatter(bn.div(MILLION)) + 'M' : d2Formatter(bn);
+  return bn.gte(MILLION) ? d2Formatter(bn.div(MILLION)) + "M" : d2Formatter(bn);
 }
 
 export function formatTokenInteger(n: Token<BigSource>): string {
-  return big(n).gte(MILLION) ? iFormatter(n) + 'M' : iFormatter(n);
+  return big(n).gte(MILLION) ? iFormatter(n) + "M" : iFormatter(n);
 }
 
 export function formatUTokenInteger(n: u<Token<BigSource>>): string {
   const bn = big(n).div(MICRO);
-  return bn.gte(MILLION) ? iFormatter(bn.div(MILLION)) + 'M' : iFormatter(bn);
+  return bn.gte(MILLION) ? iFormatter(bn.div(MILLION)) + "M" : iFormatter(bn);
 }
 
 export function formatUTokenIntegerWithoutPostfixUnits(
-  n: u<Token<BigSource>>,
+  n: u<Token<BigSource>>
 ): string {
   const bn = big(n).div(MICRO);
   return iFormatter(bn);
 }
 
 export function formatTokenIntegerWithoutPostfixUnits(
-  n: u<Token<BigSource>>,
+  n: u<Token<BigSource>>
 ): string {
   return iFormatter(n);
 }

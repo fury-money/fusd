@@ -1,15 +1,15 @@
-import { ERC20Addr, EVMAddr, Token, u } from '@libs/types';
-import { BigNumber } from '@ethersproject/bignumber';
+import { ERC20Addr, EVMAddr, Token, u } from "@libs/types";
+import { BigNumber } from "@ethersproject/bignumber";
 
 export type BalanceOfFetcher = (
   tokenAddress: ERC20Addr,
-  walletAddress: EVMAddr,
+  walletAddress: EVMAddr
 ) => Promise<BigNumber>;
 
 export async function erc2020BalanceQuery<T extends Token>(
   tokenAddress: ERC20Addr | undefined,
   walletAddress: EVMAddr | undefined,
-  fetcher: BalanceOfFetcher,
+  fetcher: BalanceOfFetcher
 ): Promise<T | undefined> {
   if (!walletAddress || !tokenAddress || !fetcher) {
     return;
@@ -17,7 +17,7 @@ export async function erc2020BalanceQuery<T extends Token>(
 
   const balance: BigNumber | undefined = await fetcher(
     tokenAddress,
-    walletAddress,
+    walletAddress
   );
 
   if (!balance) {

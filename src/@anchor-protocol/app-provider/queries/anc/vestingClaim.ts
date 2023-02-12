@@ -1,13 +1,13 @@
-import { createQueryFn } from '@libs/react-query-utils';
-import { useQuery, UseQueryResult } from 'react-query';
-import { EMPTY_QUERY_RESULT } from '@libs/app-provider';
-import { useAnchorWebapp } from '../../contexts/context';
-import { ANCHOR_QUERY_KEY } from '../../env';
+import { createQueryFn } from "@libs/react-query-utils";
+import { useQuery, UseQueryResult } from "react-query";
+import { EMPTY_QUERY_RESULT } from "@libs/app-provider";
+import { useAnchorWebapp } from "../../contexts/context";
+import { ANCHOR_QUERY_KEY } from "../../env";
 import {
   AncVestingAccount,
   ancVestingAccountQuery,
-} from '@anchor-protocol/app-fns/queries/anc/vesting';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
+} from "@anchor-protocol/app-fns/queries/anc/vesting";
+import { useConnectedWallet } from "@terra-money/wallet-provider";
 
 export function useAncVestingAccountQuery(): UseQueryResult<
   AncVestingAccount | undefined
@@ -23,13 +23,13 @@ export function useAncVestingAccountQuery(): UseQueryResult<
       connectedWallet?.walletAddress ?? undefined,
       contractAddress.anchorToken.vesting,
     ],
-    createQueryFn(ancVestingAccountQuery, queryClient),
+    createQueryFn(ancVestingAccountQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 2,
       keepPreviousData: true,
       onError: queryErrorReporter,
       enabled: !!queryClient,
-    },
+    }
   );
 
   return connectedWallet?.walletAddress ? result : EMPTY_QUERY_RESULT;

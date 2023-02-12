@@ -1,4 +1,4 @@
-import { focusManager } from 'react-query';
+import { focusManager } from "react-query";
 
 /**
  * change the behavior of refetch data after user's inactive
@@ -10,7 +10,7 @@ import { focusManager } from 'react-query';
  * @see https://caniuse.com/mdn-api_document_visibilitychange_event
  */
 export function patchReactQueryFocusRefetching(
-  refetchInactiveTime: number = 1000 * 60,
+  refetchInactiveTime: number = 1000 * 60
 ) {
   focusManager.setEventListener((handleFocus) => {
     let lastInvisibleTime = -1;
@@ -27,12 +27,12 @@ export function patchReactQueryFocusRefetching(
       }
     }
 
-    if (typeof window !== 'undefined' && window.addEventListener) {
-      document.addEventListener('visibilitychange', onVisibilityChange, false);
+    if (typeof window !== "undefined" && window.addEventListener) {
+      document.addEventListener("visibilitychange", onVisibilityChange, false);
     }
 
     return () => {
-      document.removeEventListener('visibilitychange', onVisibilityChange);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   });
 }

@@ -1,10 +1,10 @@
-import { QueryClient } from '@libs/query-client';
-import { HumanAddr, u, UST } from '@libs/types';
-import big from 'big.js';
+import { QueryClient } from "@libs/query-client";
+import { HumanAddr, u, UST } from "@libs/types";
+import big from "big.js";
 import {
   BAssetClaimableRewards,
   bAssetClaimableRewardsQuery,
-} from './bAssetClaimableRewards';
+} from "./bAssetClaimableRewards";
 
 export interface BAssetClaimableRewardsTotal {
   rewards: Array<[contract: HumanAddr, reward: BAssetClaimableRewards]>;
@@ -14,23 +14,23 @@ export interface BAssetClaimableRewardsTotal {
 export async function bAssetClaimableRewardsTotalQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  rewardContracts: HumanAddr[],
+  rewardContracts: HumanAddr[]
 ): Promise<BAssetClaimableRewardsTotal> {
   if (!walletAddr || rewardContracts.length === 0) {
     return {
       rewards: [],
-      total: '0' as u<UST>,
+      total: "0" as u<UST>,
     };
   }
 
   const rewards = await Promise.all(
     rewardContracts.map((rewardContract) =>
-      bAssetClaimableRewardsQuery(queryClient, walletAddr, rewardContract),
-    ),
+      bAssetClaimableRewardsQuery(queryClient, walletAddr, rewardContract)
+    )
   ).then((arr) => {
     return arr.map(
       (item, i) =>
-        [rewardContracts[i], item!] as [HumanAddr, BAssetClaimableRewards],
+        [rewardContracts[i], item!] as [HumanAddr, BAssetClaimableRewards]
     );
   });
 

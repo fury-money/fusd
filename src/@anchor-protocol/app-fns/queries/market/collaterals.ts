@@ -1,5 +1,5 @@
-import { bAsset, JSDateTime, u, UST } from '@anchor-protocol/types';
-import { dedupeTimestamp } from './utils/dedupeTimestamp';
+import { bAsset, JSDateTime, u, UST } from "@anchor-protocol/types";
+import { dedupeTimestamp } from "./utils/dedupeTimestamp";
 
 export interface MarketCollateralsHistory {
   timestamp: JSDateTime;
@@ -25,7 +25,7 @@ export async function marketCollateralsQuery({
   endpoint,
 }: MarketCollateralsQueryParams): Promise<MarketCollateralsData> {
   const now: MarketCollateralsHistory = await fetch(
-    `${endpoint}/v2/collaterals`,
+    `${endpoint}/v2/collaterals`
   )
     .then((res) => res.json())
     .then((data: MarketCollateralsHistory) => ({
@@ -34,7 +34,7 @@ export async function marketCollateralsQuery({
     }));
 
   const history: MarketCollateralsHistory[] = await fetch(
-    `${endpoint}/v2/collaterals/1d`,
+    `${endpoint}/v2/collaterals/1d`
   )
     .then((res) => res.json())
     .then((data: MarketCollateralsHistory[]) => {
@@ -43,6 +43,6 @@ export async function marketCollateralsQuery({
 
   return {
     now,
-    history: dedupeTimestamp(history, 'timestamp'),
+    history: dedupeTimestamp(history, "timestamp"),
   };
 }

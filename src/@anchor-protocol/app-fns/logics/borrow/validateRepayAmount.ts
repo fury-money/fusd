@@ -1,10 +1,10 @@
-import type { u, UST } from '@anchor-protocol/types';
-import { microfy } from '@libs/formatter';
-import { BigSource } from 'big.js';
+import type { u, UST } from "@anchor-protocol/types";
+import { microfy } from "@libs/formatter";
+import { BigSource } from "big.js";
 
 export function validateRepayAmount(
   repayAmount: UST,
-  ustBalance: u<UST<BigSource>>,
+  ustBalance: u<UST<BigSource>>
 ): string | undefined {
   if (repayAmount.length === 0) {
     return undefined;

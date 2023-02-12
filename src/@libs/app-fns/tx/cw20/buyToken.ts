@@ -1,27 +1,27 @@
-import { floor, min } from '@libs/big-math';
+import { floor, min } from "@libs/big-math";
 import {
   formatTokenWithPostfixUnits,
   formatUTokenIntegerWithPostfixUnits,
-} from '@libs/formatter';
-import { HumanAddr, Rate, terraswap, Token, u, UST } from '@libs/types';
-import { pipe } from '@rx-stream/pipe';
-import { MsgExecuteContract, Fee } from '@terra-money/terra.js';
-import big, { Big } from 'big.js';
-import { Observable } from 'rxjs';
-import { TxResultRendering, TxStreamPhase } from '../../models/tx';
+} from "@libs/formatter";
+import { HumanAddr, Rate, terraswap, Token, u, UST } from "@libs/types";
+import { pipe } from "@rx-stream/pipe";
+import { MsgExecuteContract, Fee } from "@terra-money/terra.js";
+import big, { Big } from "big.js";
+import { Observable } from "rxjs";
+import { TxResultRendering, TxStreamPhase } from "../../models/tx";
 import {
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
-} from '../../queries/txInfo';
+} from "../../queries/txInfo";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '../internal';
-import { TxCommonParams } from '../TxCommonParams';
+} from "../internal";
+import { TxCommonParams } from "../TxCommonParams";
 
 export function cw20BuyTokenTx(
   $: {
@@ -35,7 +35,7 @@ export function cw20BuyTokenTx(
     taxRate: Rate;
     maxTaxUUSD: u<UST>;
     onTxSucceed?: () => void;
-  } & TxCommonParams,
+  } & TxCommonParams
 ): Observable<TxResultRendering> {
   const helper = new TxHelper($);
 
@@ -51,7 +51,7 @@ export function cw20BuyTokenTx(
                 amount: $.buyAmount,
                 info: {
                   native_token: {
-                    denom: 'uusd',
+                    denom: "uusd",
                   },
                 },
               },
@@ -59,10 +59,10 @@ export function cw20BuyTokenTx(
               max_spread: $.maxSpread,
             },
           } as terraswap.pair.Swap<UST>,
-          $.buyAmount + 'uluna',
+          $.buyAmount + "uluna"
         ),
       ],
-      fee: new Fee($.gasWanted, floor($.txFee) + 'uluna'),
+      fee: new Fee($.gasWanted, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),
@@ -74,28 +74,28 @@ export function cw20BuyTokenTx(
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
         const return_amount = pickAttributeValueByKey<u<Token>>(
           fromContract,
-          'return_amount',
+          "return_amount"
         );
         const offer_amount = pickAttributeValueByKey<u<UST>>(
           fromContract,
-          'offer_amount',
+          "offer_amount"
         );
         const spread_amount = pickAttributeValueByKey<u<Token>>(
           fromContract,
-          'spread_amount',
+          "spread_amount"
         );
         const commission_amount = pickAttributeValueByKey<u<Token>>(
           fromContract,
-          'commission_amount',
+          "commission_amount"
         );
 
         const pricePerToken =
@@ -108,7 +108,7 @@ export function cw20BuyTokenTx(
             : undefined;
         const txFee = offer_amount
           ? (big($.fixedFee).plus(
-              min(big(offer_amount).mul($.taxRate), $.maxTaxUUSD),
+              min(big(offer_amount).mul($.taxRate), $.maxTaxUUSD)
             ) as u<UST<Big>>)
           : undefined;
 
@@ -118,21 +118,23 @@ export function cw20BuyTokenTx(
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             return_amount && {
-              name: 'Bought',
+              name: "Bought",
               value: `${formatUTokenIntegerWithPostfixUnits(return_amount)} ${
                 $.tokenSymbol
               }`,
             },
             offer_amount && {
-              name: 'Paid',
-              value: `${formatUTokenIntegerWithPostfixUnits(offer_amount)} axlUSDC`,
+              name: "Paid",
+              value: `${formatUTokenIntegerWithPostfixUnits(
+                offer_amount
+              )} axlUSDC`,
             },
             pricePerToken && {
-              name: 'Paid/Bought',
+              name: "Paid/Bought",
               value: `${formatTokenWithPostfixUnits(pricePerToken)} axlUSDC`,
             },
             tradingFee && {
-              name: 'Trading Fee',
+              name: "Trading Fee",
               value: `${formatUTokenIntegerWithPostfixUnits(tradingFee)} ${
                 $.tokenSymbol
               }`,
@@ -144,6 +146,6 @@ export function cw20BuyTokenTx(
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }

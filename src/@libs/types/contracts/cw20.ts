@@ -1,4 +1,4 @@
-import { HumanAddr, Token, u } from '@libs/types';
+import { HumanAddr, Token, u } from "@libs/types";
 
 export namespace cw20 {
   // ---------------------------------------------

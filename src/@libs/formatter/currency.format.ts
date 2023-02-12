@@ -1,17 +1,17 @@
-import { floor } from '@libs/big-math';
-import { NoMicro, Token, u } from '@libs/types';
-import big, { BigSource } from 'big.js';
-import { demicrofy, MICRO } from './currency';
-import { formatDemimal, formatInteger } from './unit.format';
+import { floor } from "@libs/big-math";
+import { NoMicro, Token, u } from "@libs/types";
+import big, { BigSource } from "big.js";
+import { demicrofy, MICRO } from "./currency";
+import { formatDemimal, formatInteger } from "./unit.format";
 
 // ---------------------------------------------
 // render
 // ---------------------------------------------
 export function mapDecimalPointBaseSeparatedNumbers<T>(
   n: string,
-  mapper: (i: string, d: string | undefined) => T,
+  mapper: (i: string, d: string | undefined) => T
 ): T {
-  const [i, d] = n.toString().split('.');
+  const [i, d] = n.toString().split(".");
   return mapper(i, d);
 }
 
@@ -57,17 +57,17 @@ export function formatUToken(n: u<Token<BigSource>>): string {
 
 export function formatTokenWithPostfixUnits(n: Token<BigSource>): string {
   const bn = big(n);
-  return bn.gte(M) ? d3Formatter(bn.div(M)) + 'M' : formatToken(n);
+  return bn.gte(M) ? d3Formatter(bn.div(M)) + "M" : formatToken(n);
 }
 
 export function formatUTokenWithPostfixUnits(n: u<Token<BigSource>>): string {
   const bn = demicrofy(n);
-  return bn.gte(M) ? d3Formatter(bn.div(M)) + 'M' : formatToken(bn);
+  return bn.gte(M) ? d3Formatter(bn.div(M)) + "M" : formatToken(bn);
 }
 
 export function formatNumeric(
   n: u<Token<BigSource>>,
-  decimals: number = 6,
+  decimals: number = 6
 ): string {
   const formatter = formatDemimal({
     decimalPoints: decimals,
@@ -82,21 +82,21 @@ export function formatNumeric(
 // print decimal points
 export function formatUTokenDecimal2(n: u<Token<BigSource>>): string {
   const bn = big(n).div(MICRO);
-  return bn.gte(M) ? d2Formatter(bn.div(M)) + 'M' : d2Formatter(bn);
+  return bn.gte(M) ? d2Formatter(bn.div(M)) + "M" : d2Formatter(bn);
 }
 
 // print only integers
 export function formatTokenIntegerWithPostfixUnits(
-  n: Token<BigSource>,
+  n: Token<BigSource>
 ): string {
-  return big(n).gte(M) ? iFormatter(n) + 'M' : iFormatter(n);
+  return big(n).gte(M) ? iFormatter(n) + "M" : iFormatter(n);
 }
 
 export function formatUTokenIntegerWithPostfixUnits(
-  n: u<Token<BigSource>>,
+  n: u<Token<BigSource>>
 ): string {
   const bn = big(n).div(MICRO);
-  return bn.gte(M) ? iFormatter(bn.div(M)) + 'M' : iFormatter(bn);
+  return bn.gte(M) ? iFormatter(bn.div(M)) + "M" : iFormatter(bn);
 }
 
 export function formatUTokenInteger(n: u<Token<BigSource>>): string {

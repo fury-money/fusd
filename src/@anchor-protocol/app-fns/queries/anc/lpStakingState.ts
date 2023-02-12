@@ -1,10 +1,10 @@
-import { anchorToken, HumanAddr } from '@anchor-protocol/types';
+import { anchorToken, HumanAddr } from "@anchor-protocol/types";
 import {
   QueryClient,
   wasmFetch,
   WasmQuery,
   WasmQueryData,
-} from '@libs/query-client';
+} from "@libs/query-client";
 
 interface AncLpStakingStateWasmQuery {
   lpStakingState: WasmQuery<
@@ -17,7 +17,7 @@ export type AncLpStakingState = WasmQueryData<AncLpStakingStateWasmQuery>;
 
 export async function ancLpStakingStateQuery(
   queryClient: QueryClient,
-  ancStakingAddr: HumanAddr,
+  ancStakingAddr: HumanAddr
 ): Promise<AncLpStakingState> {
   return wasmFetch<AncLpStakingStateWasmQuery>({
     ...queryClient,

@@ -1,5 +1,5 @@
-import { DateTime, HumanAddr, Luna, Num, Rate, Token, u } from '@libs/types';
-import { aLuna } from '../currencies';
+import { DateTime, HumanAddr, Luna, Num, Rate, Token, u } from "@libs/types";
+import { aLuna } from "../currencies";
 
 export namespace aluna {
   export namespace airdropRegistry {

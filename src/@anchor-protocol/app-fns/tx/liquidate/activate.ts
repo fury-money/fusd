@@ -1,4 +1,4 @@
-import { formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
+import { formatUSTWithPostfixUnits } from "@anchor-protocol/notation";
 import {
   aUST,
   UST,
@@ -8,27 +8,27 @@ import {
   u,
   CW20Addr,
   Luna,
-} from '@anchor-protocol/types';
+} from "@anchor-protocol/types";
 import {
   pickAttributeValue,
   pickEvent,
   pickRawLog,
   TxResultRendering,
   TxStreamPhase,
-} from '@libs/app-fns';
+} from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
   _pollTxInfo,
   _postTx,
   TxHelper,
-} from '@libs/app-fns/tx/internal';
-import { demicrofy } from '@libs/formatter';
-import { QueryClient } from '@libs/query-client';
-import { pipe } from '@rx-stream/pipe';
-import { CreateTxOptions, MsgExecuteContract } from '@terra-money/terra.js';
-import { NetworkInfo, TxResult } from '@terra-money/wallet-provider';
-import { Observable } from 'rxjs';
+} from "@libs/app-fns/tx/internal";
+import { demicrofy } from "@libs/formatter";
+import { QueryClient } from "@libs/query-client";
+import { pipe } from "@rx-stream/pipe";
+import { CreateTxOptions, MsgExecuteContract } from "@terra-money/terra.js";
+import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { Observable } from "rxjs";
 
 export function activateLiquidationBidTx($: {
   walletAddr: HumanAddr;
@@ -67,10 +67,10 @@ export function activateLiquidationBidTx($: {
         return helper.failedToFindRawLog();
       }
 
-      const fromContract = pickEvent(rawLog, 'from_contract');
+      const fromContract = pickEvent(rawLog, "from_contract");
 
       if (!fromContract) {
-        return helper.failedToFindEvents('from_contract');
+        return helper.failedToFindEvents("from_contract");
       }
 
       try {
@@ -84,13 +84,13 @@ export function activateLiquidationBidTx($: {
           phase: TxStreamPhase.SUCCEED,
           receipts: [
             withdrawAmount && {
-              name: 'Withdraw Amount',
+              name: "Withdraw Amount",
               value:
                 formatUSTWithPostfixUnits(demicrofy(withdrawAmount)) +
-                ' axlUSDC',
+                " axlUSDC",
             },
             bidIdx && {
-              name: 'Bid Id',
+              name: "Bid Id",
               value: bidIdx,
             },
             helper.txHashReceipt(),
@@ -100,6 +100,6 @@ export function activateLiquidationBidTx($: {
       } catch (error) {
         return helper.failedToParseTxResult();
       }
-    },
+    }
   )().pipe(_catchTxError({ helper, ...$ }));
 }
