@@ -97,7 +97,7 @@ export function useFeeEstimationFor(
           })
           .catch((error) => {
             setEstimatedFeeError(() => (<div style={{display:"flex", alignItems: "center"}}>
-                Error estimating the fee
+                Error simulating the transaction
                 <InfoTooltip style={{display: "inline", marginLeft: 10}}>
                   {error.toString()}
                 </InfoTooltip>
