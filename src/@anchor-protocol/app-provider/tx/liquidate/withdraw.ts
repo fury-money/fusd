@@ -35,7 +35,7 @@ export function useWithdrawLiquidationBidTx() {
         walletAddr: connectedWallet.walletAddress,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
-        bLunaAddr: contractAddress.cw20.bLuna,
+        aLunaAddr: contractAddress.cw20.aLuna,
         bid_idx,
         // post
         network: connectedWallet.network,
@@ -57,7 +57,7 @@ export function useWithdrawLiquidationBidTx() {
     [
       connectedWallet,
       contractAddress.liquidation.liquidationQueueContract,
-      contractAddress.cw20.bLuna,
+      contractAddress.cw20.aLuna,
       constants.gasAdjustment,
       queryClient,
       txErrorReporter,

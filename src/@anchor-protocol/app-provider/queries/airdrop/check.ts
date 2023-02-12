@@ -21,7 +21,7 @@ export function useAirdropCheckQuery(): UseQueryResult<Airdrop | undefined> {
     [
       ANCHOR_QUERY_KEY.AIRDROP_CHECK,
       terraWalletAddress,
-      contractAddress.bluna.airdropRegistry,
+      contractAddress.aluna.airdropRegistry,
       network.chainID,
     ],
     createQueryFn(airdropCheckQuery, queryClient!),

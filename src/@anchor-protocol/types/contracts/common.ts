@@ -4,7 +4,7 @@
 export const __foo__ = 'bar';
 
 //export enum CollateralType {
-//  bLuna = 'bLuna',
+//  aLuna = 'aLuna',
 //  bEth = 'bEth',
 //}
 //
@@ -16,10 +16,10 @@ export const __foo__ = 'bar';
 //}
 
 //export interface ContractAddress {
-//  bluna: {
-//    /** addressProvider.bLunaReward() */
+//  aluna: {
+//    /** addressProvider.aLunaReward() */
 //    reward: HumanAddr;
-//    /** addressProvider.bLunaHub() */
+//    /** addressProvider.aLunaHub() */
 //    hub: HumanAddr;
 //    /** addressProvider.airdrop() */
 //    airdropRegistry: HumanAddr;
@@ -35,7 +35,7 @@ export const __foo__ = 'bar';
 //    collaterals: Record<CollateralType, CollateralInfo>;
 //    collateralsArray: CollateralInfo[];
 //    ///** addressProvider.custody() */
-//    //bLunaCustody: HumanAddr;
+//    //aLunaCustody: HumanAddr;
 //    ///** addressProvider.custody() */
 //    //bEthCustody: HumanAddr;
 //    /** addressProvider.overseer() */
@@ -69,14 +69,14 @@ export const __foo__ = 'bar';
 //  };
 //  terraswap: {
 //    factory: HumanAddr;
-//    /** addressProvider.terraswapblunaLunaPair() */
-//    blunaLunaPair: HumanAddr;
+//    /** addressProvider.terraswapalunaLunaPair() */
+//    alunaLunaPair: HumanAddr;
 //    /** addressProvider.terraswapbAncUstPair() */
 //    ancUstPair: HumanAddr;
 //  };
 //  cw20: {
-//    /** addressProvider.bLunaToken() */
-//    bLuna: CW20Addr;
+//    /** addressProvider.aLunaToken() */
+//    aLuna: CW20Addr;
 //    /** addressProvider.bEthToken() */
 //    bEth: CW20Addr;
 //    /** addressProvider.aTerra() */
@@ -85,7 +85,7 @@ export const __foo__ = 'bar';
 //    ANC: CW20Addr;
 //    /** addressProvider.terraswapbAncUstLPToken() */
 //    AncUstLP: CW20Addr;
-//    /** addressProvider.terraswapblunaLunaLPToken() */
-//    bLunaLunaLP: CW20Addr;
+//    /** addressProvider.terraswapalunaLunaLPToken() */
+//    aLunaLunaLP: CW20Addr;
 //  };
 //}

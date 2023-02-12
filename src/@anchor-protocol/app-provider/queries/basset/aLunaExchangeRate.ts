@@ -17,7 +17,7 @@ export function useBLunaExchangeRateQuery(): UseQueryResult<
   return useQuery(
     [
       ANCHOR_QUERY_KEY.BOND_BLUNA_EXCHANGE_RATE,
-      contractAddress.bluna.hub,
+      contractAddress.aluna.hub,
     ],
     createQueryFn(bondBLunaExchangeRateQuery, queryClient),
     {

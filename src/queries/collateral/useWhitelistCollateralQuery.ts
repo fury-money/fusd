@@ -103,19 +103,19 @@ async function whitelistCollateralQuery(
 function useLocalTokenInformation(){
   const { contractAddress } = useAnchorWebapp();
 
-  // We return the bLuna token information
+  // We return the aLuna token information
 
-  let bLunaInfo = {
-    [contractAddress.cw20.bLuna]: {
+  let aLunaInfo = {
+    [contractAddress.cw20.aLuna]: {
       protocol: 'Cavern',
       symbol: 'aLuna',
-      token: contractAddress.cw20.bLuna,
-      icon: 'assets/tokens/bluna.svg',
+      token: contractAddress.cw20.aLuna,
+      icon: 'assets/tokens/aluna.svg',
       name: 'Cavern Bonded Luna',
     },
   };
 
-  return Object.assign(bLunaInfo,
+  return Object.assign(aLunaInfo,
       ...Object.entries(contractAddress.lsds).map(([key, contracts], ) => {
         return ({
         [contracts.token]: {

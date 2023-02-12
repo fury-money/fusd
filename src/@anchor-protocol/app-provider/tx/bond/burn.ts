@@ -1,5 +1,5 @@
 import { bondBurnTx } from '@anchor-protocol/app-fns';
-import { bLuna, Gas, Rate, u, UST } from '@anchor-protocol/types';
+import { aLuna, Gas, Rate, u, UST } from '@anchor-protocol/types';
 import { useRefetchQueries } from '@libs/app-provider';
 import { useStream } from '@rx-stream/react';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
@@ -9,7 +9,7 @@ import { useAnchorWebapp } from '../../contexts/context';
 import { ANCHOR_TX_KEY } from '../../env';
 
 export interface BondBurnTxParams {
-  burnAmount: bLuna;
+  burnAmount: aLuna;
   gasWanted: Gas;
   txFee: u<UST>;
   exchangeRate: Rate<string>;
@@ -47,8 +47,8 @@ export function useBondBurnTx() {
         // fabricatebAssetUnbond
         burnAmount,
         walletAddr: terraWalletAddress,
-        bAssetTokenAddr: contractAddress.cw20.bLuna,
-        bAssetHubAddr: contractAddress.bluna.hub,
+        bAssetTokenAddr: contractAddress.cw20.aLuna,
+        bAssetHubAddr: contractAddress.aluna.hub,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
@@ -71,8 +71,8 @@ export function useBondBurnTx() {
       availablePost,
       connected,
       connectedWallet,
-      contractAddress.cw20.bLuna,
-      contractAddress.bluna.hub,
+      contractAddress.cw20.aLuna,
+      contractAddress.aluna.hub,
       terraWalletAddress,
       constants.gasAdjustment,
       queryClient,

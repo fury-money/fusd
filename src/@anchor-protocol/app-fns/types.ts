@@ -2,8 +2,8 @@ import {
   ANC,
   AncUstLP,
   aUST,
-  bLuna,
-  bLunaLunaLP,
+  aLuna,
+  aLunaLunaLP,
   Luna,
   Eth,
   bEth,
@@ -31,12 +31,12 @@ export interface AnchorTokenBalances {
   uUST: u<UST>;
   uaUST: u<aUST>;
   uLuna: u<Luna>;
-  ubLuna: u<bLuna>;
+  uaLuna: u<aLuna>;
   uEth: u<Eth>;
   ubEth: u<bEth>;
   uANC: u<ANC>;
   uAncUstLP: u<AncUstLP>;
-  ubLunaLunaLP: u<bLunaLunaLP>;
+  uaLunaLunaLP: u<aLunaLunaLP>;
   uLSDs: {
     [key in RegisteredLSDs]: string
   }
@@ -46,12 +46,12 @@ export const DefaultAnchorTokenBalances = {
   uUST: '0' as u<UST>,
   uaUST: '0' as u<aUST>,
   uLuna: '0' as u<Luna>,
-  ubLuna: '0' as u<bLuna>,
+  uaLuna: '0' as u<aLuna>,
   uEth: '0' as u<Eth>,
   ubEth: '0' as u<bEth>,
   uANC: '0' as u<ANC>,
   uAncUstLP: '0' as u<AncUstLP>,
-  ubLunaLunaLP: '0' as u<bLunaLunaLP>,
+  uaLunaLunaLP: '0' as u<aLunaLunaLP>,
 };
 
 export interface AnchorBalances {

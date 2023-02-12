@@ -7,7 +7,7 @@ import {
   Rate,
   u,
 } from '@libs/types';
-import { bLuna } from '../currencies';
+import { aLuna } from '../currencies';
 
 export namespace liquidation {
   export namespace liquidationContract {
@@ -144,7 +144,7 @@ export namespace liquidation {
       premium_slot: number;
       product_snapshot: string;
       sum_snapshot: string;
-      pending_liquidated_collateral: u<bLuna>;
+      pending_liquidated_collateral: u<aLuna>;
       wait_end?: number;
       epoch_snapshot: string;
       scale_snapshot: string;

@@ -11,7 +11,7 @@ import {
 } from '@anchor-protocol/formatter';
 import {
   bAsset,
-  bLuna,
+  aLuna,
   Gas,
   HumanAddr,
   Rate,
@@ -127,7 +127,7 @@ export function borrowRedeemCollateralTx($: {
       }
 
       try {
-        const redeemedAmount = pickAttributeValue<u<bLuna>>(fromContract, 16);
+        const redeemedAmount = pickAttributeValue<u<aLuna>>(fromContract, 16);
 
         const ltv = computeLtv(
           computeBorrowLimit(

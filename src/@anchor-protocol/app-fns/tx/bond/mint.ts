@@ -1,5 +1,5 @@
 import { formatLuna } from '@anchor-protocol/notation';
-import { bLuna, Gas, HumanAddr, Luna, Rate, u } from '@anchor-protocol/types';
+import { aLuna, Gas, HumanAddr, Luna, Rate, u } from '@anchor-protocol/types';
 import {
   pickAttributeValue,
   pickEvent,
@@ -85,7 +85,7 @@ export function bondMintTx($: {
       try {
         const bondedAmount = pickAttributeValue<u<Luna>>(fromContract, 3);
 
-        const mintedAmount = pickAttributeValue<u<bLuna>>(fromContract, 4);
+        const mintedAmount = pickAttributeValue<u<aLuna>>(fromContract, 4);
 
         return {
           value: null,

@@ -3,8 +3,8 @@ import {
   AncUstLP,
   aUST,
   bAsset,
-  bLuna,
-  bLunaLunaLP,
+  aLuna,
+  aLunaLunaLP,
   LPToken,
   Luna,
   Token,
@@ -69,12 +69,12 @@ export function formatAUSTInput(n: aUST<BigSource>): aUST {
   return d6InputFormatter(n) as any;
 }
 
-export function formatLunaInput<C extends Luna<BigSource> | bLuna<BigSource>>(
+export function formatLunaInput<C extends Luna<BigSource> | aLuna<BigSource>>(
   n: C,
 ): C extends Luna<BigSource>
   ? Luna
-  : C extends bLuna<BigSource>
-  ? bLuna
+  : C extends aLuna<BigSource>
+  ? aLuna
   : never {
   return d6InputFormatter(n) as any;
 }
@@ -93,8 +93,8 @@ export function formatLPInput<C extends LPToken<BigSource>>(
   n: C,
 ): C extends AncUstLP<BigSource>
   ? AncUstLP
-  : C extends bLunaLunaLP<BigSource>
-  ? bLunaLunaLP
+  : C extends aLunaLunaLP<BigSource>
+  ? aLunaLunaLP
   : C extends LPToken<BigSource>
   ? LPToken
   : never {
@@ -135,12 +135,12 @@ export function formatAUSTWithPostfixUnits(n: aUST<BigSource>): string {
   return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + 'M' : d6Formatter(bn);
 }
 
-export function formatLuna(n: Luna<BigSource> | bLuna<BigSource>): string {
+export function formatLuna(n: Luna<BigSource> | aLuna<BigSource>): string {
   return d6Formatter(n);
 }
 
 export function formatLunaWithPostfixUnits(
-  n: Luna<BigSource> | bLuna<BigSource>,
+  n: Luna<BigSource> | aLuna<BigSource>,
 ): string {
   const bn = big(n);
   return bn.gte(MILLION) ? d3Formatter(bn.div(MILLION)) + 'M' : d3Formatter(bn);

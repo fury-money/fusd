@@ -12,7 +12,7 @@ import {
   LUNA_INPUT_MAXIMUM_INTEGER_POINTS,
 } from '@anchor-protocol/notation';
 import { TokenIcon } from '@anchor-protocol/token-icons';
-import { bLuna } from '@anchor-protocol/types';
+import { aLuna } from '@anchor-protocol/types';
 import { createHookMsg } from '@libs/app-fns/tx/internal';
 import { useFeeEstimationFor } from '@libs/app-provider';
 import { floor } from '@libs/big-math';
@@ -108,9 +108,9 @@ export function Component({
     (nextBurnAmount: string) => {
       if (nextBurnAmount.trim().length === 0) {
         setGetAmount('' as Luna);
-        setBurnAmount('' as bLuna);
+        setBurnAmount('' as aLuna);
       } else {
-        const burnAmount: bLuna = nextBurnAmount as bLuna;
+        const burnAmount: aLuna = nextBurnAmount as aLuna;
         const getAmount: Luna = formatLunaInput(
           big(burnAmount).mul(exchangeRate?.exchange_rate ?? 1) as Luna<Big>,
         );
@@ -125,12 +125,12 @@ export function Component({
   const updateGetAmount = useCallback(
     (nextGetAmount: string) => {
       if (nextGetAmount.trim().length === 0) {
-        setBurnAmount('' as bLuna);
+        setBurnAmount('' as aLuna);
         setGetAmount('' as Luna);
       } else {
         const getAmount: Luna = nextGetAmount as Luna;
-        const burnAmount: bLuna = formatLunaInput(
-          big(getAmount).div(exchangeRate?.exchange_rate ?? 1) as bLuna<Big>,
+        const burnAmount: aLuna = formatLunaInput(
+          big(getAmount).div(exchangeRate?.exchange_rate ?? 1) as aLuna<Big>,
         );
 
         setBurnAmount(burnAmount);
@@ -142,11 +142,11 @@ export function Component({
 
   const init = useCallback(() => {
     setGetAmount('' as Luna);
-    setBurnAmount('' as bLuna);
+    setBurnAmount('' as aLuna);
   }, [setBurnAmount, setGetAmount]);
 
   const proceed = useCallback(
-    async (burnAmount: bLuna) => {
+    async (burnAmount: aLuna) => {
       if (!connected || !terraWalletAddress || !burn) {
         return;
       }
@@ -196,7 +196,7 @@ export function Component({
 
     const amount = floor(big(burnAmount).mul(MICRO));
 
-    if (amount.lt(0) || amount.gt(bank.tokenBalances.ubLuna ?? 0)) {
+    if (amount.lt(0) || amount.gt(bank.tokenBalances.uaLuna ?? 0)) {
       estimateFee(null);
       return;
     }
@@ -204,10 +204,10 @@ export function Component({
     estimateFee([
       new MsgExecuteContract(
         connectedWallet.terraAddress,
-        contractAddress.cw20.bLuna,
+        contractAddress.cw20.aLuna,
         {
           send: {
-            contract: contractAddress.bluna.hub,
+            contract: contractAddress.aluna.hub,
             amount: amount.toFixed(),
             msg: createHookMsg({
               unbond: {},
@@ -217,12 +217,12 @@ export function Component({
       ),
     ]);
   }, [
-    bank.tokenBalances.ubLuna,
+    bank.tokenBalances.uaLuna,
     burnAmount,
     connectedWallet,
     constants.bondGasWanted,
-    contractAddress.bluna.hub,
-    contractAddress.cw20.bLuna,
+    contractAddress.aluna.hub,
+    contractAddress.cw20.aLuna,
     estimateFee,
     gasPrice.uluna,
   ]);
@@ -281,7 +281,7 @@ export function Component({
           className="symbols"
           view="burn"
           fromIcon={<TokenIcon token="luna" />}
-          toIcon={<TokenIcon token="bluna" />}
+          toIcon={<TokenIcon token="aluna" />}
         />
       </ConvertSymbolsContainer>
 
@@ -304,18 +304,18 @@ export function Component({
                 style={{ textDecoration: 'underline', cursor: 'pointer' }}
                 onClick={() =>
                   updateBurnAmount(
-                    formatLunaInput(demicrofy(bank.tokenBalances.ubLuna)),
+                    formatLunaInput(demicrofy(bank.tokenBalances.uaLuna)),
                   )
                 }
               >
-                {formatLuna(demicrofy(bank.tokenBalances.ubLuna))} aLuna
+                {formatLuna(demicrofy(bank.tokenBalances.uaLuna))} aLuna
               </span>
             </span>
           )
         }
       >
         <SelectAndTextInputContainerLabel>
-          <TokenIcon token="bluna" /> aLuna
+          <TokenIcon token="aluna" /> aLuna
         </SelectAndTextInputContainerLabel>
         <NumberMuiInput
           placeholder="0.00"

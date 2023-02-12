@@ -33,7 +33,7 @@ import { Observable } from 'rxjs';
 export function activateLiquidationBidTx($: {
   walletAddr: HumanAddr;
   liquidationQueueAddr: HumanAddr;
-  bLunaAddr: CW20Addr;
+  aLunaAddr: CW20Addr;
 
   txFee: u<Luna>;
   gasFee: Gas;
@@ -52,7 +52,7 @@ export function activateLiquidationBidTx($: {
         new MsgExecuteContract($.walletAddr, $.liquidationQueueAddr, {
           // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L65
           activate_bids: {
-            collateral_token: $.bLunaAddr,
+            collateral_token: $.aLunaAddr,
           },
         }),
       ],

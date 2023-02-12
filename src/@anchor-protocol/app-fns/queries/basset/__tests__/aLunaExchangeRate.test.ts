@@ -1,11 +1,11 @@
 import { TEST_LCD_CLIENT } from '@libs/app-fns/test-env';
 import { TEST_ADDRESSES } from '../../../test-env';
-import { bondBLunaExchangeRateQuery } from '../bLunaExchangeRate';
+import { bondBLunaExchangeRateQuery } from '../aLunaExchangeRate';
 
-describe('queries/bLunaExchangeRate', () => {
+describe('queries/aLunaExchangeRate', () => {
   test('should get result from query', async () => {
     const { state, parameters } = await bondBLunaExchangeRateQuery(
-      TEST_ADDRESSES.bluna.hub,
+      TEST_ADDRESSES.aluna.hub,
       TEST_LCD_CLIENT,
     );
 

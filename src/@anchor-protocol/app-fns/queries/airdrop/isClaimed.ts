@@ -1,4 +1,4 @@
-import { bluna, HumanAddr } from '@anchor-protocol/types';
+import { aluna, HumanAddr } from '@anchor-protocol/types';
 import {
   QueryClient,
   wasmFetch,
@@ -8,8 +8,8 @@ import {
 
 interface AirdropIsClaimedWasmQuery {
   isClaimed: WasmQuery<
-    bluna.airdropRegistry.IsClaimed,
-    bluna.airdropRegistry.IsClaimedResponse
+    aluna.airdropRegistry.IsClaimed,
+    aluna.airdropRegistry.IsClaimedResponse
   >;
 }
 

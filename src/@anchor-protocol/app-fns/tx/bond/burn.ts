@@ -1,6 +1,6 @@
 import { formatLuna } from '@anchor-protocol/notation';
 import {
-  bLuna,
+  aLuna,
   CW20Addr,
   Gas,
   HumanAddr,
@@ -44,7 +44,7 @@ export function bondBurnTx($: {
   walletAddr: HumanAddr;
   bAssetTokenAddr: CW20Addr;
   bAssetHubAddr: HumanAddr;
-  burnAmount: bLuna;
+  burnAmount: aLuna;
   gasFee: Gas;
   gasAdjustment: Rate<number>;
   fixedGas: u<Luna>;

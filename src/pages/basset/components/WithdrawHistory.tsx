@@ -56,7 +56,7 @@ function WithdrawHistoryBase({
           .slice(0, limit)
           .map(
             (
-              { blunaAmount, lunaAmount, requestTime, claimableTime },
+              { alunaAmount, lunaAmount, requestTime, claimableTime },
               index,
             ) => {
               const status: 'PENDING' | 'UNBONDING' | 'WITHDRAWABLE' =
@@ -70,7 +70,7 @@ function WithdrawHistoryBase({
                 <li key={`withdraw-history-${index}`} data-status={status}>
                   <h5>{status}</h5>
                   <div>
-                    <p>{formatLuna(demicrofy(blunaAmount))} bLUNA</p>
+                    <p>{formatLuna(demicrofy(alunaAmount))} bLUNA</p>
 
                     {!!requestTime && status !== 'PENDING' ? (
                       <p>

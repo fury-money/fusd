@@ -5,14 +5,14 @@ import { lcdFetch } from '../lcd/client';
 
 describe('wasm query test', () => {
   test('should get wasm json result from lcd endpoint', async () => {
-    const bLunaTokenAddr = 'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x';
+    const aLunaTokenAddr = 'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x';
 
     const balanceQuery = {
       balance: { address: 'terra12hnhh5vtyg5juqnzm43970nh4fw42pt27nw9g9' },
     };
 
     const res = await fetch(
-      `https://pisco-lcd.terra.dev/wasm/contracts/${bLunaTokenAddr}/store?query_msg=${JSON.stringify(
+      `https://pisco-lcd.terra.dev/wasm/contracts/${aLunaTokenAddr}/store?query_msg=${JSON.stringify(
         balanceQuery,
       )}`,
     );
@@ -22,12 +22,12 @@ describe('wasm query test', () => {
   });
 
   interface TestQuery {
-    bluna: WasmQuery<cw20.Balance, cw20.BalanceResponse<Token>>;
+    aluna: WasmQuery<cw20.Balance, cw20.BalanceResponse<Token>>;
     beth: WasmQuery<cw20.Balance, cw20.BalanceResponse<Token>>;
   }
 
   const testQuery: WasmQueryInput<TestQuery> = {
-    bluna: {
+    aluna: {
       contractAddress:
         'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x' as HumanAddr,
       query: {
@@ -53,7 +53,7 @@ describe('wasm query test', () => {
       lcdEndpoint: 'https://pisco-lcd.terra.dev',
     });
 
-    expect(typeof +result.bluna.balance).toBe('number');
+    expect(typeof +result.aluna.balance).toBe('number');
     expect(typeof +result.beth.balance).toBe('number');
   });
 
@@ -64,7 +64,7 @@ describe('wasm query test', () => {
       variables: {},
     });
 
-    expect(typeof +result.bluna.balance).toBe('number');
+    expect(typeof +result.aluna.balance).toBe('number');
     expect(typeof +result.beth.balance).toBe('number');
   });
 });

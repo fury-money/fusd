@@ -1,5 +1,5 @@
 import { useDeploymentTarget, Chain } from '@anchor-protocol/app-provider';
-import { ANC, aUST, bLuna, Native, Token } from '@anchor-protocol/types';
+import { ANC, aUST, aLuna, Native, Token } from '@anchor-protocol/types';
 import { UST, Luna, NoMicro, u } from '@libs/types';
 import { BigSource } from 'big.js';
 import { useMemo } from 'react';
@@ -37,7 +37,7 @@ const useFormatters = (): Formatters => {
       aUST: createFormatter<aUST>('aUSDC', 6),
       anc: createFormatter<ANC>('ANC', 6),
       luna: createFormatter<Luna>('Luna', 6),
-      bLuna: createFormatter<bLuna>('aLuna', 6),
+      aLuna: createFormatter<aLuna>('aLuna', 6),
     };
     switch (chain) {
       case Chain.Terra:

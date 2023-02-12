@@ -37,7 +37,7 @@ export function useBondClaimTx() {
       return bondClaimTx({
         // fabricatebAssetClaimRewards
         walletAddr: terraWalletAddress,
-        bAssetRewardAddr: contractAddress.bluna.reward,
+        bAssetRewardAddr: contractAddress.aluna.reward,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
@@ -59,7 +59,7 @@ export function useBondClaimTx() {
       availablePost,
       connected,
       connectedWallet,
-      contractAddress.bluna.reward,
+      contractAddress.aluna.reward,
       terraWalletAddress,
       fixedFee,
       constants.gasWanted,

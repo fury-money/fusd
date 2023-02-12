@@ -149,9 +149,9 @@ function AbortMissionBase({ className }: AbortMissionProps) {
               {allWithdrawableDefaultedCollaterals.map(({ collateral, withdrawable_number }, i) => (
                 <Grid item xs={6}
                   key={collateral?.info?.symbol}
-                  style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left"}}
+                  style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}
                 >
-                   <TokenIcon token={collateral?.info?.symbol} /> {formatBAssetWithPostfixUnits(demicrofy(withdrawable_number))} 
+                   <TokenIcon token={collateral?.info?.symbol} variant="@4x"/> {formatBAssetWithPostfixUnits(demicrofy(withdrawable_number))} 
                 </Grid>
               ))}
               </Grid>            
@@ -166,9 +166,9 @@ function AbortMissionBase({ className }: AbortMissionProps) {
               {collaterals.map(({ collateral, lockedAmount }, i) => (
                 <Grid item xs={6}
                   key={collateral.symbol}
-                  style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left"}}
+                  style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}
                 >
-                   <TokenIcon token={collateral.symbol} /> {formatBAssetWithPostfixUnits(demicrofy(lockedAmount))} 
+                   <TokenIcon token={collateral.symbol} variant="@4x"/> {formatBAssetWithPostfixUnits(demicrofy(lockedAmount))} 
                 </Grid>
               ))}
               </Grid>

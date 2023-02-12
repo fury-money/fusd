@@ -1,5 +1,5 @@
 import {
-  bLuna,
+  aLuna,
   cw20,
   CW20Addr,
   HumanAddr,
@@ -14,7 +14,7 @@ import {
 } from '@libs/query-client';
 
 interface MarketBAssetWasmQuery {
-  bLunaBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<bLuna>>;
+  aLunaBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<aLuna>>;
   oraclePrices: WasmQuery<
     moneyMarket.oracle.Prices,
     moneyMarket.oracle.PricesResponse
@@ -25,7 +25,7 @@ export type MarketBAsset = WasmQueryData<MarketBAssetWasmQuery>;
 
 export async function marketBAssetQuery(
   queryClient: QueryClient,
-  bLunaContract: CW20Addr,
+  aLunaContract: CW20Addr,
   oracleContract: HumanAddr,
   custodyContract: HumanAddr,
   nativeDenom: NativeDenom,
@@ -34,8 +34,8 @@ export async function marketBAssetQuery(
     ...queryClient,
     id: `market--basset`,
     wasmQuery: {
-      bLunaBalance: {
-        contractAddress: bLunaContract,
+      aLunaBalance: {
+        contractAddress: aLunaContract,
         query: {
           balance: {
             address: custodyContract,

@@ -10,7 +10,7 @@ const assetInfos: terraswap.AssetInfo[] = [
   },
   {
     token: {
-      // bLuna
+      // aLuna
       contract_addr: 'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x',
     },
   },

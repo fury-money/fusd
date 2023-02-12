@@ -34,7 +34,7 @@ export function withdrawLiquidationBidTx($: {
   walletAddr: HumanAddr;
   liquidationQueueAddr: HumanAddr;
   bid_idx: string;
-  bLunaAddr: CW20Addr;
+  aLunaAddr: CW20Addr;
 
   txFee: u<Luna>;
   gasFee: Gas;

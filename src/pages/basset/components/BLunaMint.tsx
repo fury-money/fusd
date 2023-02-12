@@ -12,7 +12,7 @@ import {
   LUNA_INPUT_MAXIMUM_INTEGER_POINTS,
 } from '@anchor-protocol/notation';
 import { TokenIcon } from '@anchor-protocol/token-icons';
-import { bLuna } from '@anchor-protocol/types';
+import { aLuna } from '@anchor-protocol/types';
 import { useFeeEstimationFor } from '@libs/app-provider';
 import { floor } from '@libs/big-math';
 import { demicrofy, MICRO } from '@libs/formatter';
@@ -72,7 +72,7 @@ function Component({ className }: BLunaMintProps) {
   // states
   // ---------------------------------------------
   const [bondAmount, setBondAmount] = useState<Luna>('' as Luna);
-  const [mintAmount, setMintAmount] = useState<bLuna>('' as bLuna);
+  const [mintAmount, setMintAmount] = useState<aLuna>('' as aLuna);
 
   // ---------------------------------------------
   // queries
@@ -120,7 +120,7 @@ function Component({ className }: BLunaMintProps) {
     estimateFee([
       new MsgExecuteContract(
         terraWalletAddress,
-        contractAddress.bluna.hub,
+        contractAddress.aluna.hub,
         {
           bond: {
             validator: 'terravaloper1zdpgj8am5nqqvht927k3etljyl6a52kwqndjz2',
@@ -136,7 +136,7 @@ function Component({ className }: BLunaMintProps) {
     bondAmount,
     connected,
     constants.bondGasWanted,
-    contractAddress.bluna.hub,
+    contractAddress.aluna.hub,
     estimateFee,
     gasPrice.uluna,
     terraWalletAddress,
@@ -149,11 +149,11 @@ function Component({ className }: BLunaMintProps) {
     (nextBondAmount: string) => {
       if (nextBondAmount.trim().length === 0) {
         setBondAmount('' as Luna);
-        setMintAmount('' as bLuna);
+        setMintAmount('' as aLuna);
       } else {
         const bondAmount: Luna = nextBondAmount as Luna;
-        const mintAmount: bLuna = formatLunaInput(
-          big(bondAmount).div(exchangeRate?.exchange_rate ?? 1) as bLuna<Big>,
+        const mintAmount: aLuna = formatLunaInput(
+          big(bondAmount).div(exchangeRate?.exchange_rate ?? 1) as aLuna<Big>,
         );
 
         setBondAmount(bondAmount);
@@ -167,9 +167,9 @@ function Component({ className }: BLunaMintProps) {
     (nextMintAmount: string) => {
       if (nextMintAmount.trim().length === 0) {
         setBondAmount('' as Luna);
-        setMintAmount('' as bLuna);
+        setMintAmount('' as aLuna);
       } else {
-        const mintAmount: bLuna = nextMintAmount as bLuna;
+        const mintAmount: aLuna = nextMintAmount as aLuna;
         const bondAmount: Luna = formatLunaInput(
           big(mintAmount).mul(exchangeRate?.exchange_rate ?? 1) as Luna<Big>,
         );
@@ -183,7 +183,7 @@ function Component({ className }: BLunaMintProps) {
 
   const init = useCallback(() => {
     setBondAmount('' as Luna);
-    setMintAmount('' as bLuna);
+    setMintAmount('' as aLuna);
   }, []);
 
   const proceed = useCallback(
@@ -277,7 +277,7 @@ function Component({ className }: BLunaMintProps) {
           className="symbols"
           view="mint"
           fromIcon={<TokenIcon token="luna" />}
-          toIcon={<TokenIcon token="bluna" />}
+          toIcon={<TokenIcon token="aluna" />}
         />
       </ConvertSymbolsContainer>
 
@@ -339,7 +339,7 @@ function Component({ className }: BLunaMintProps) {
         error={!!invalidBondAmount}
       >
         <SelectAndTextInputContainerLabel>
-          <TokenIcon token="bluna" /> aLuna
+          <TokenIcon token="aluna" /> aLuna
         </SelectAndTextInputContainerLabel>
         <NumberMuiInput
           placeholder="0.00"

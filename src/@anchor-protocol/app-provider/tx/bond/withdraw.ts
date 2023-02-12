@@ -37,7 +37,7 @@ export function useBondWithdrawTx() {
       return bondWithdrawTx({
         // fabricatebAssetWithdrawUnbonded
         walletAddr: terraWalletAddress,
-        bAssetHubAddr: contractAddress.bluna.hub,
+        bAssetHubAddr: contractAddress.aluna.hub,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
@@ -59,7 +59,7 @@ export function useBondWithdrawTx() {
       availablePost,
       connected,
       connectedWallet,
-      contractAddress.bluna.hub,
+      contractAddress.aluna.hub,
       terraWalletAddress,
       fixedFee,
       constants.gasWanted,

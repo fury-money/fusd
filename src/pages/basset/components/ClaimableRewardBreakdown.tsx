@@ -20,7 +20,7 @@ type ClaimableRewardsBreakdownProps = {
 type TokenMetadata = { [symbol: string]: { color: string } };
 
 const tokenMetadataBySymbol: TokenMetadata = {
-  bLuna: { color: '#4bdb4b' },
+  aLuna: { color: '#4bdb4b' },
   bETH: { color: '#1f1f1f' },
 };
 

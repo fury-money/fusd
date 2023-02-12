@@ -35,7 +35,7 @@ export function AnchorWebappProvider({
   const states = useMemo<AnchorWebapp>(() => {
     return {
       indexerApiEndpoint: indexerApiEndpoints(network),
-      //bAssetsVector: [contractAddress.cw20.bEth, contractAddress.cw20.bLuna],
+      //bAssetsVector: [contractAddress.cw20.bEth, contractAddress.cw20.aLuna],
     };
   }, [indexerApiEndpoints, network]);
 

@@ -12,7 +12,7 @@ import { ANC, aToken, bAsset } from '../currencies';
 export namespace moneyMarket {
   export namespace custody {
     /**
-     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-bluna-specific#borrower
+     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-aluna-specific#borrower
      */
     export interface Borrower {
       borrower: {
@@ -21,7 +21,7 @@ export namespace moneyMarket {
     }
 
     /**
-     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-bluna-specific#borrowerresponse
+     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-aluna-specific#borrowerresponse
      */
     export interface BorrowerResponse {
       borrower: HumanAddr;
@@ -30,7 +30,7 @@ export namespace moneyMarket {
     }
 
     /**
-     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-bluna-specific#borrowers
+     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-aluna-specific#borrowers
      */
     export interface Borrowers {
       borrowers: {
@@ -40,21 +40,21 @@ export namespace moneyMarket {
     }
 
     /**
-     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-bluna-specific#borrowersresponse
+     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-aluna-specific#borrowersresponse
      */
     export interface BorrowersResponse {
       borrowers: Array<BorrowerResponse>;
     }
 
     /**
-     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-bluna-specific#config-1
+     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-aluna-specific#config-1
      */
     export interface Config {
       config: Record<string, never>;
     }
 
     /**
-     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-bluna-specific#configresponse
+     * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/custody-aluna-specific#configresponse
      */
     export interface ConfigResponse {
       owner: HumanAddr;

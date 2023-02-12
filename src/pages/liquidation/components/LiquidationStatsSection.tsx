@@ -13,7 +13,7 @@ import { useLiquidationHistoryQuery } from '@anchor-protocol/app-provider/querie
 import { LiquidationData } from '@anchor-protocol/app-fns/queries/liquidate/history';
 import { useFormatters } from '@anchor-protocol/formatter';
 import { u, UST } from '@libs/types';
-import { bLuna } from '@anchor-protocol/types';
+import { aLuna } from '@anchor-protocol/types';
 import { useMediaQuery } from 'react-responsive';
 import { useTheme } from 'styled-components';
 import { WhitelistCollateral } from 'queries';
@@ -31,16 +31,16 @@ export function LiquidationStatsSection({
 }: LiquidationStatsSectionProps) {
   const { data: liquidationHistory } = useLiquidationHistoryQuery();
 
-  const { bLuna: bluna, ust } = useFormatters();
+  const { aLuna: aluna, ust } = useFormatters();
 
   const liquidations = useMemo(
     () =>
       liquidationHistory?.map((liquidation: LiquidationData) => {
         return {
           time: new Date(Date.parse(liquidation?.date)).toLocaleString(),
-          collateral: bluna.formatOutput(
-            bluna.demicrofy(
-              liquidation?.amountLiquidated.toString() as u<bLuna>,
+          collateral: aluna.formatOutput(
+            aluna.demicrofy(
+              liquidation?.amountLiquidated.toString() as u<aLuna>,
             ),
           ),
           axlUSDC: ust.formatOutput(
@@ -49,7 +49,7 @@ export function LiquidationStatsSection({
           price: liquidation?.currentPrice,
         };
       }) ?? [],
-    [liquidationHistory, bluna, ust],
+    [liquidationHistory, aluna, ust],
   );
   
   const theme = useTheme();

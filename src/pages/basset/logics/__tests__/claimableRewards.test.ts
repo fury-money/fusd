@@ -1,4 +1,4 @@
-import { bluna } from '@anchor-protocol/types';
+import { aluna } from '@anchor-protocol/types';
 import { Dec, Int } from '@terra-money/terra.js';
 import {log} from "console";
 
@@ -18,10 +18,10 @@ test('claimable rewards error case 1', () => {
     },
   };
 
-  const holder: bluna.reward.HolderResponse = JSON.parse(
+  const holder: aluna.reward.HolderResponse = JSON.parse(
     data.data.claimableReward.Result,
   );
-  const state: bluna.reward.StateResponse = JSON.parse(
+  const state: aluna.reward.StateResponse = JSON.parse(
     data.data.rewardState.Result,
   );
 

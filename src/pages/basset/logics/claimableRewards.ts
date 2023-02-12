@@ -1,11 +1,11 @@
 import type { u, UST } from '@anchor-protocol/types';
-import { bluna } from '@anchor-protocol/types';
+import { aluna } from '@anchor-protocol/types';
 import { Dec, Int } from '@terra-money/terra.js';
 import big, { Big } from 'big.js';
 
 export function claimableRewards(
-  holder: bluna.reward.HolderResponse | undefined,
-  state: bluna.reward.StateResponse | undefined,
+  holder: aluna.reward.HolderResponse | undefined,
+  state: aluna.reward.StateResponse | undefined,
 ): u<UST<Big>> {
   return holder && state
     ? (big(

@@ -47,7 +47,7 @@ export function useBondMintTx() {
         // fabricatebAssetBond
         bondAmount,
         walletAddr: terraWalletAddress,
-        bAssetHubAddr: contractAddress.bluna.hub,
+        bAssetHubAddr: contractAddress.aluna.hub,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
@@ -70,7 +70,7 @@ export function useBondMintTx() {
       availablePost,
       connected,
       connectedWallet,
-      contractAddress.bluna.hub,
+      contractAddress.aluna.hub,
       terraWalletAddress,
       constants.gasAdjustment,
       queryClient,

@@ -5,7 +5,7 @@ import { CW20Addr, HumanAddr, NativeDenom } from '@libs/types';
 import { RegisteredLSDs } from 'env';
 
 export interface AnchorContractAddress extends AppContractAddress {
-  bluna: {
+  aluna: {
     reward: HumanAddr;
     hub: HumanAddr;
     airdropRegistry: HumanAddr;
@@ -37,7 +37,7 @@ export interface AnchorContractAddress extends AppContractAddress {
   };
   terraswap: {
     factory: HumanAddr;
-    blunaLunaPair: HumanAddr;
+    alunaLunaPair: HumanAddr;
   };
   astroport: {
     generator: HumanAddr;
@@ -45,11 +45,11 @@ export interface AnchorContractAddress extends AppContractAddress {
     ancUstPair: HumanAddr;
   };
   cw20: {
-    bLuna: CW20Addr;
+    aLuna: CW20Addr;
     aUST: CW20Addr;
     ANC: CW20Addr;
     AncUstLP: CW20Addr;
-    bLunaLunaLP: CW20Addr;
+    aLunaLunaLP: CW20Addr;
   };
   native: {
     usd: NativeDenom

@@ -1,7 +1,7 @@
 import { CW20Addr, HumanAddr } from '@anchor-protocol/types';
 
 export const TEST_ADDRESSES = {
-  bluna: {
+  aluna: {
     reward: 'terra1ac24j6pdxh53czqyrkr6ygphdeftg7u3958tl2' as HumanAddr,
     hub: 'terra1fflas6wv4snv8lsda9knvq2w0cyt493r8puh2e' as HumanAddr,
     airdropRegistry:
@@ -13,9 +13,9 @@ export const TEST_ADDRESSES = {
   moneyMarket: {
     market: 'terra15dwd5mj8v59wpj0wvt233mf5efdff808c5tkal' as HumanAddr,
     collaterals: {
-      bLuna: {
-        type: 'bLuna',
-        denom: 'ubluna',
+      aLuna: {
+        type: 'aLuna',
+        denom: 'ualuna',
         custody: 'terra1ltnkx0mv7lf2rca9f8w740ashu93ujughy4s7p' as HumanAddr,
         token: 'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x' as CW20Addr,
       },
@@ -28,8 +28,8 @@ export const TEST_ADDRESSES = {
     },
     collateralsArray: [
       {
-        type: 'bLuna',
-        denom: 'ubluna',
+        type: 'aLuna',
+        denom: 'ualuna',
         custody: 'terra1ltnkx0mv7lf2rca9f8w740ashu93ujughy4s7p' as HumanAddr,
         token: 'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x' as CW20Addr,
       },
@@ -61,19 +61,19 @@ export const TEST_ADDRESSES = {
   },
   terraswap: {
     factory: 'terra18qpjm4zkvqnpjpw0zn0tdr8gdzvt8au35v45xf' as HumanAddr,
-    blunaLunaPair: 'terra13e4jmcjnwrauvl2fnjdwex0exuzd8zrh5xk29v' as HumanAddr,
+    alunaLunaPair: 'terra13e4jmcjnwrauvl2fnjdwex0exuzd8zrh5xk29v' as HumanAddr,
   },
   astroport: {
     generator: 'terra1gjm7d9nmewn27qzrvqyhda8zsfl40aya7tvaw5' as HumanAddr,
     ancUstPair: 'terra1wfvczps2865j0awnurk9m04u7wdmd6qv3fdnvz' as HumanAddr,
   },
   cw20: {
-    bLuna: 'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x' as CW20Addr,
+    aLuna: 'terra1u0t35drzyy0mujj8rkdyzhe264uls4ug3wdp3x' as CW20Addr,
     bEth: 'terra19mkj9nec6e3y5754tlnuz4vem7lzh4n0lc2s3l' as CW20Addr,
     aUST: 'terra1ajt556dpzvjwl0kl5tzku3fc3p3knkg9mkv8jl' as CW20Addr,
     ANC: 'terra1747mad58h0w4y589y3sk84r5efqdev9q4r02pc' as CW20Addr,
     AncUstLP: 'terra1agu2qllktlmf0jdkuhcheqtchnkppzrl4759y6' as CW20Addr,
-    bLunaLunaLP: 'terra1tj4pavqjqjfm0wh73sh7yy9m4uq3m2cpmgva6n' as CW20Addr,
+    aLunaLunaLP: 'terra1tj4pavqjqjfm0wh73sh7yy9m4uq3m2cpmgva6n' as CW20Addr,
   },
   native: {
     usd: "ibc/D70F005DE981F6EFFB3AD1DF85601258D1C01B9DEDC1F7C1B95C0993E83CF389"

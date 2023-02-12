@@ -70,14 +70,15 @@ export function ANCHOR_CONSTANTS(network: NetworkInfo): AnchorConstants {
 
 export enum RegisteredLSDs {
   ampLuna = "ampLuna",
+  bLuna = "bLuna",
 }
 
 const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
 
-  bLunaHub: "terra1c4x3x5ptxw4yy436rvz5u9cru6868ksxr95gsyya55ycgll0xdas0g7htx",
-  bLunaReward: "terra1w7ssgvtetdzczyl98pdxvs79nw9g6rjejt0urxegm30dukddyesqy0g95n",
-  bLunaToken: "terra170e8mepwmndwfgs5897almdewrt6phnkksktlf958s90eh055xvsrndvku",
-  bLunaValidatorsRegistry: "terra1ftwj8jk5k5hfg0ypaj54k8ha4kzjfnrrlpgd2xsmpsalgsud957qv6q367",
+  aLunaHub: "terra1c4x3x5ptxw4yy436rvz5u9cru6868ksxr95gsyya55ycgll0xdas0g7htx",
+  aLunaReward: "terra1w7ssgvtetdzczyl98pdxvs79nw9g6rjejt0urxegm30dukddyesqy0g95n",
+  aLunaToken: "terra170e8mepwmndwfgs5897almdewrt6phnkksktlf958s90eh055xvsrndvku",
+  aLunaValidatorsRegistry: "terra1ftwj8jk5k5hfg0ypaj54k8ha4kzjfnrrlpgd2xsmpsalgsud957qv6q367",
   mmMarket: "terra1zqlcp3aty4p4rjv96h6qdascdn953v6crhwedu5vddxjnp349upscluex6",
   mmOracle: "terra1gp3a4cz9magxuvj6n0x8ra8jqc79zqvquw85xrn0suwvml2cqs4q4l7ss7",
   mmOverseer: "terra1l6rq7905263uqmayurtulzc09sfcgxdedsfen7m0y6wf28s49tvqdkwau9",  
@@ -91,8 +92,8 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
 
   stableDenom: "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
 
-  bLunaLunaPair: '',
-  bLunaLunaLPToken: '',
+  aLunaLunaPair: '',
+  aLunaLunaLPToken: '',
   ancUstPair: '',
   ancUstLPToken: '',
   gov: '',
@@ -124,20 +125,37 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         symbol: "ampLuna",
         name: "Eris Amplified Luna",
         icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
-        link: "https://www.erisprotocol.com/terra/amplifier"
+        link: "https://www.erisprotocol.com/terra/amplifier",
+        underlyingToken: "luna",
       },
       hub: "terra1neq7ds3cd2rx0ht0fycgqkf26fed2v73g7wrp5xav5dfas0fwcqqy47t5n",
       reward: "terra1zrgzj7luyw9mtqcwqdtn6p8gwy262upx3p7wa3v3cj07us7j9ztsa8r4n5",
       token: "terra173z5ggu6k6slyumrrf59rd3ywmpu6hdfftwpqlkc7fp549yk9fmqzqyepj",
       custody: "terra1tlascrgjzlut6j2g4jlgv54zg3aw3c3whcjusudk24j0d3k5aucswpwzrz",
     },
+    bLuna: {
+      info: {
+        tokenAddress: "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
+        hubAddress: "terra1l2nd99yze5fszmhl5svyh5fky9wm4nz4etlgnztfu4e8809gd52q04n3ea",
+        protocol : "Backbone Labs",
+        symbol: "bLuna",
+        name: "boneLuna",
+        icon: 'https://gravedigger.backbonelabs.io/boneluna.png',
+        link: "https://gravedigger.backbonelabs.io/ ",
+        underlyingToken: "luna",
+      },
+      hub: "terra17gvtvnmyyqwas2nanek5u8cjl57e7z2zu4dkl3de45060725ly4sep7050",
+      reward: "terra1m42u5zt3c4l7ekqy9pr4ltv2at9q78tn8fu9vhz04vt57x3z0ydq6qamvr",
+      token: "terra1uq59f5lhzg6ut605ntevvf2a8kg9t2xk2873lgx6pweagkw76r4sdzj6ap",
+      custody: "terra1sw7c9evzf44eq8k7j0kcquga0xy2ff76yhnvns4gphg37snvn26qgzjgz4"
+    },
   },
 };
 
 const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
   
-  bLunaHub: "terra100d6vr63p9sm8mlzuqzv0ep83hhhkdglkffzwkmv2ed47tv7tkrsxl8mn8",
-  bLunaToken: "terra134jnnsem9z4us90lcdm6j6mjf70kdcdzkv9mnz8z5ktl9vt0glksr0uau4",
+  aLunaHub: "terra100d6vr63p9sm8mlzuqzv0ep83hhhkdglkffzwkmv2ed47tv7tkrsxl8mn8",
+  aLunaToken: "terra134jnnsem9z4us90lcdm6j6mjf70kdcdzkv9mnz8z5ktl9vt0glksr0uau4",
   mmInterestModel: "terra1k9cn6dqyrdl0tq0rnler0jw8c7dm5gq37xvaksztayez0upkcvdqv7j4at",
   mmOracle: "terra19hxng7vgnqshlxlc5cvmtuhkzfu7rrr4aj6vjxnxcnfausjse4yqlsw0np",
   mmMarket: "terra1mz4pt5u9vs72h9tv3l2nug2kx8kmxufyszsyv0qx7p639nl0zews60360g",
@@ -146,15 +164,15 @@ const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
   aUSDC: 'terra1cfh5sw34je6a8kuwdwefcm3xh8935r0md7eyud4rt2nhnvqgh0jsle7h47',
   mmCustody:
     'terra16ulj2elu40xquhc3s9w50p288t5wz3xfl59x55m8x992dtk8t0ls2sfl75',
-  bLunaReward:
+  aLunaReward:
     'terra1xzxn94q6nf0y260nz2vwntng76c2jrkrzkj2h9696gd840efxfjshdypph',
-  bLunaValidatorsRegistry:
+  aLunaValidatorsRegistry:
     'terra1mw0x5egps68z9e2zwvuk5pevzm4gthd6d4ndscqxfpl5h8f77clq7m6dsy',
   mmDistributionModel:
     'terra1tkzmmz3x8kuxtcygjvn9tajz7xx4r0n7nw7y3cexgferscuvm6tqul4uuq',
 
-  bLunaLunaPair: '',
-  bLunaLunaLPToken: '',
+  aLunaLunaPair: '',
+  aLunaLunaLPToken: '',
   ancUstPair: '',
   ancUstLPToken: '',
   gov: '',
@@ -185,7 +203,6 @@ const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
         symbol: "ampLuna",
         name: "Eris Amplified Luna",
         icon: 'https://www.erisprotocol.com/assets/ampLuna100.png',
-        underlyingToken: "luna",
       },
       "hub": "terra1qnvjpw834f8h7wfmqku43nndjnrh6v6hnggmeng0nafzlkqpnzwqt545cd",
       "reward": "terra1pmfgs6jekpcjp3rfg3x2dw2whpex3ygms7d3h46axj6q5xs28n7qvk8375",
@@ -203,11 +220,11 @@ export const ANCHOR_CONTRACT_ADDRESS = (
     : PHOENIX_CONTRACT_ADDRESS;
 
   return {
-    bluna: {
-      reward: addressMap.bLunaReward as HumanAddr,
-      hub: addressMap.bLunaHub as HumanAddr,
+    aluna: {
+      reward: addressMap.aLunaReward as HumanAddr,
+      hub: addressMap.aLunaHub as HumanAddr,
       airdropRegistry: addressMap.airdrop as HumanAddr,
-      validatorsRegistry: addressMap.bLunaValidatorsRegistry as HumanAddr,
+      validatorsRegistry: addressMap.aLunaValidatorsRegistry as HumanAddr,
       custody: addressMap.mmCustody as HumanAddr,
     },
     moneyMarket: {
@@ -232,7 +249,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
     },
     terraswap: {
       factory: addressMap.terraswapFactory as HumanAddr,
-      blunaLunaPair: addressMap.bLunaLunaPair as HumanAddr,
+      alunaLunaPair: addressMap.aLunaLunaPair as HumanAddr,
     },
     astroport: {
       generator: addressMap.astroportGenerator as HumanAddr,
@@ -240,12 +257,12 @@ export const ANCHOR_CONTRACT_ADDRESS = (
       ancUstPair: addressMap.ancUstPair as HumanAddr,
     },
     cw20: {
-      bLuna: addressMap.bLunaToken as CW20Addr,
+      aLuna: addressMap.aLunaToken as CW20Addr,
       //bEth: addressMap.bEthToken as CW20Addr,
       aUST: addressMap.aUSDC as CW20Addr,
       ANC: addressMap.ANC as CW20Addr,
       AncUstLP: addressMap.ancUstLPToken as CW20Addr,
-      bLunaLunaLP: addressMap.bLunaLunaLPToken as CW20Addr,
+      aLunaLunaLP: addressMap.aLunaLunaLPToken as CW20Addr,
     },
     crossAnchor: {
       core: '' as HumanAddr,
@@ -264,7 +281,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
     },
     lsds: Object.assign(
       {},
-       ...Object.values(RegisteredLSDs).map((lsd: RegisteredLSDs): ({[lsd] : LSDContracts } | {}) => {
+       ...Object.values(RegisteredLSDs).map((lsd: RegisteredLSDs): ({[lsd in RegisteredLSDs] : LSDContracts } | {}) => {
         if(!addressMap.LSDs[lsd as string]){
           return {};
         }

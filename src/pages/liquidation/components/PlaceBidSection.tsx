@@ -47,7 +47,7 @@ import {
   useAnchorWebapp,
   useBidByUserByCollateralQuery,
 } from '@anchor-protocol/app-provider';
-import { bLuna } from '@anchor-protocol/types';
+import { aLuna } from '@anchor-protocol/types';
 import { useLiquidationWithdrawCollateralForm } from '@anchor-protocol/app-provider/forms/liquidate/collateral';
 import { useLiquidationWithdrawCollateralTx } from '@anchor-protocol/app-provider/tx/liquidate/collateral';
 import {

@@ -9,7 +9,7 @@ import {
 import { useExlicitWrappedTokenDetails, useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
 import { useTotalCollateralsQuery } from '@anchor-protocol/app-provider/queries/liquidate/totalLiquidations';
 import { formatBAsset, formatUST } from '@anchor-protocol/notation';
-import { bAsset, bLuna, CW20Addr, HumanAddr, liquidation, u, UST } from '@anchor-protocol/types/';
+import { bAsset, aLuna, CW20Addr, HumanAddr, liquidation, u, UST } from '@anchor-protocol/types/';
 import { demicrofy } from '@libs/formatter';
 import { RegisteredLSDs } from 'env';
 import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
@@ -133,7 +133,7 @@ export const useMyLiquidationStats = (tokenAddress?: CW20Addr, symbol?:string, h
           title: `Total locked Collateral (${symbol})`,
           value: thisLockedCollateral ?? 0,
           format_func: (v: any) =>
-            formatBAsset(big(demicrofy(v.toString() as u<bLuna>)).div(lsdExchangeRate) as bAsset<Big>),
+            formatBAsset(big(demicrofy(v.toString() as u<aLuna>)).div(lsdExchangeRate) as bAsset<Big>),
         },
         {
           id: "my_bids_stable",
@@ -165,8 +165,8 @@ export const useAllLiquidationStats = () : LiquidationStatsResponse => {
 
   const {data: collaterals} = useWhitelistCollateralQuery();
 
-  // First bLuna    
-  let bLunaStats = useMyLiquidationStats(contractAddress.cw20.bLuna, "aLuna");
+  // First aLuna    
+  let aLunaStats = useMyLiquidationStats(contractAddress.cw20.aLuna, "aLuna");
 
   // Then LSDs
   let lsdStats = Object.entries(contractAddress.lsds).map(([key, contracts] ) => {
@@ -180,9 +180,9 @@ export const useAllLiquidationStats = () : LiquidationStatsResponse => {
 
   return [...lsdStats, {
     name: "aLuna", 
-    liquidationStats: bLunaStats,
+    liquidationStats: aLunaStats,
     info: {
-      token: contractAddress.cw20.bLuna
+      token: contractAddress.cw20.aLuna
     }
   }]
 

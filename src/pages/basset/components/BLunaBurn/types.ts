@@ -1,11 +1,11 @@
-import { bLuna, Luna, u } from '@anchor-protocol/types';
+import { aLuna, Luna, u } from '@anchor-protocol/types';
 import { ConnectedWallet } from '@terra-money/wallet-provider';
 
 export interface BurnComponent {
-  burnAmount: bLuna;
+  burnAmount: aLuna;
   getAmount: Luna;
 
-  setBurnAmount: (nextBurnAmount: bLuna) => void;
+  setBurnAmount: (nextBurnAmount: aLuna) => void;
   setGetAmount: (nextGetAmount: Luna) => void;
 
   connectedWallet: ConnectedWallet | undefined;

@@ -3,13 +3,13 @@ import {
   TEST_WALLET_ADDRESS,
 } from '@anchor-protocol/app-fns/test-env';
 import { TEST_LCD_CLIENT } from '@libs/app-fns/test-env';
-import { bLunaWithdrawableAmountQuery } from '../bLunaWithdrawableAmount';
+import { aLunaWithdrawableAmountQuery } from '../aLunaWithdrawableAmount';
 
 describe('queries/withdrawable', () => {
   test('should get result from query', async () => {
-    const result = await bLunaWithdrawableAmountQuery(
+    const result = await aLunaWithdrawableAmountQuery(
       TEST_WALLET_ADDRESS,
-      TEST_ADDRESSES.bluna.hub,
+      TEST_ADDRESSES.aluna.hub,
       TEST_LCD_CLIENT,
     );
 

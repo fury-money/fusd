@@ -11,7 +11,7 @@ import {
 } from '@anchor-protocol/formatter';
 import {
   bAsset,
-  bLuna,
+  aLuna,
   Gas,
   HumanAddr,
   Rate,
@@ -162,11 +162,11 @@ export function borrowProvideWrappedCollateralTx($: {
       }
 
       try {
-        const collateralizedAmount = pickAttributeValueByKey<u<bLuna>>(
+        const collateralizedAmount = pickAttributeValueByKey<u<aLuna>>(
           fromContract,
           "amount"
         );
-        const depositedAmount = big(collateralizedAmount ?? "0").div($.exchangeRate).toString() as u<bLuna>
+        const depositedAmount = big(collateralizedAmount ?? "0").div($.exchangeRate).toString() as u<aLuna>
 
 
         const ltv = computeLtv(

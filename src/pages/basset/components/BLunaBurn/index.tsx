@@ -1,4 +1,4 @@
-import { bLuna, Luna } from '@anchor-protocol/types';
+import { aLuna, Luna } from '@anchor-protocol/types';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { useConnectedWallet } from '@terra-money/wallet-provider';
 import { fixHMR } from 'fix-hmr';
@@ -20,7 +20,7 @@ function Component({ className }: BLunaBurnProps) {
   // ---------------------------------------------
   // states
   // ---------------------------------------------
-  const [burnAmount, setBurnAmount] = useState<bLuna>('' as bLuna);
+  const [burnAmount, setBurnAmount] = useState<aLuna>('' as aLuna);
   const [getAmount, setGetAmount] = useState<Luna>('' as Luna);
 
   const [mode, setMode] = useState<'burn' | 'swap'>('burn');

@@ -3,13 +3,13 @@ import {
   TEST_WALLET_ADDRESS,
 } from '@anchor-protocol/app-fns/test-env';
 import { TEST_LCD_CLIENT } from '@libs/app-fns/test-env';
-import { bLunaClaimableRewardsQuery } from '../bLunaClaimableRewards';
+import { aLunaClaimableRewardsQuery } from '../aLunaClaimableRewards';
 
 describe('queries/claimableRewards', () => {
   test('should get result from query', async () => {
-    const result = await bLunaClaimableRewardsQuery(
+    const result = await aLunaClaimableRewardsQuery(
       TEST_WALLET_ADDRESS,
-      TEST_ADDRESSES.bluna.reward,
+      TEST_ADDRESSES.aluna.reward,
       TEST_LCD_CLIENT,
     );
 

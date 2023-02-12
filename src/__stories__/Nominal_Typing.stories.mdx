@@ -14,11 +14,11 @@ Currency Type 들에 의한 혼란을 막기 위해서 Nominal Type을 사용한
 export type Currency<
   T extends
     | 'uluna'
-    | 'ubluna'
+    | 'ualuna'
     | 'uaust'
     | 'uust'
     | 'luna'
-    | 'bluna'
+    | 'aluna'
     | 'ust'
     | 'aust'
 > = { __nominal: T };
@@ -32,8 +32,8 @@ export type UST<T = string> = T & Currency<'ust'>;
 export type uLuna<T = string> = T & Currency<'uluna'>;
 export type Luna<T = string> = T & Currency<'luna'>;
 
-export type ubLuna<T = string> = T & Currency<'ubluna'>;
-export type bLuna<T = string> = T & Currency<'bluna'>;
+export type uaLuna<T = string> = T & Currency<'ualuna'>;
+export type aLuna<T = string> = T & Currency<'aluna'>;
 ```
 
 TypeScript 자체적으로 지원되는 Nominal Type 기능이 없으므로,
@@ -88,7 +88,7 @@ TypeScript Conditional Type을 사용해서 유연함과 견고함을 동시에 
 export function microfy<
   C extends
     | Luna<BigSource>
-    | bLuna<BigSource>
+    | aLuna<BigSource>
     | UST<BigSource>
     | aUST<BigSource>
     | Token<BigSource>
@@ -96,8 +96,8 @@ export function microfy<
   amount: C,
 ): C extends Luna
   ? uLuna<Big>
-  : C extends bLuna
-  ? ubLuna<Big>
+  : C extends aLuna
+  ? uaLuna<Big>
   : C extends UST
   ? uUST<Big>
   : C extends aUST
@@ -108,7 +108,7 @@ export function microfy<
   return big(amount).mul(1000000) as any;
 }
 
-// Luna, bLuna, UST, aUST... 와 같은 0.000000 이 적용된 Type만 받아들이게 된다
+// Luna, aLuna, UST, aUST... 와 같은 0.000000 이 적용된 Type만 받아들이게 된다
 const uluna = microfy('100' as Luna);
 
 // @ts-expect-error uluna 는 Conditional Type 에 의해 uLuna<Big> 으로 추정되었기 때문에 에러가 된다.

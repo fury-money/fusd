@@ -1,4 +1,4 @@
-import { bluna, HumanAddr } from '@anchor-protocol/types';
+import { aluna, HumanAddr } from '@anchor-protocol/types';
 import {
   QueryClient,
   wasmFetch,
@@ -8,18 +8,18 @@ import {
 
 interface WithdrawableAmountWasmQuery {
   withdrawableUnbonded: WasmQuery<
-    bluna.hub.WithdrawableUnbonded,
-    bluna.hub.WithdrawableUnbondedResponse
+    aluna.hub.WithdrawableUnbonded,
+    aluna.hub.WithdrawableUnbondedResponse
   >;
   unbondedRequests: WasmQuery<
-    bluna.hub.UnbondRequests,
-    bluna.hub.UnbondRequestsResponse
+    aluna.hub.UnbondRequests,
+    aluna.hub.UnbondRequestsResponse
   >;
 }
 
 interface WithdrawableHistoryWasmQuery {
-  allHistory: WasmQuery<bluna.hub.AllHistory, bluna.hub.AllHistoryResponse>;
-  parameters: WasmQuery<bluna.hub.Parameters, bluna.hub.ParametersResponse>;
+  allHistory: WasmQuery<aluna.hub.AllHistory, aluna.hub.AllHistoryResponse>;
+  parameters: WasmQuery<aluna.hub.Parameters, aluna.hub.ParametersResponse>;
 }
 
 type BLunaWithdrawableAmountWasmQuery = WithdrawableAmountWasmQuery &
@@ -30,13 +30,13 @@ export type BLunaWithdrawableAmount = Omit<
   'parameters'
 > & {
   unbondedRequestsStartFrom: number;
-  parameters?: bluna.hub.ParametersResponse;
+  parameters?: aluna.hub.ParametersResponse;
 };
 
-export async function bLunaWithdrawableAmountQuery(
+export async function aLunaWithdrawableAmountQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  bLunaHubContract: HumanAddr,
+  aLunaHubContract: HumanAddr,
 ): Promise<BLunaWithdrawableAmount | undefined> {
   if (!walletAddr) {
     return undefined;
@@ -48,7 +48,7 @@ export async function bLunaWithdrawableAmountQuery(
       id: `bond--withdrawable-requests`,
       wasmQuery: {
         withdrawableUnbonded: {
-          contractAddress: bLunaHubContract,
+          contractAddress: aLunaHubContract,
           query: {
             withdrawable_unbonded: {
               block_time: Math.floor(Date.now() / 1000),
@@ -57,7 +57,7 @@ export async function bLunaWithdrawableAmountQuery(
           },
         },
         unbondedRequests: {
-          contractAddress: bLunaHubContract,
+          contractAddress: aLunaHubContract,
           query: {
             unbond_requests: {
               address: walletAddr,
@@ -82,7 +82,7 @@ export async function bLunaWithdrawableAmountQuery(
         id: `bond--withdraw-history`,
         wasmQuery: {
           allHistory: {
-            contractAddress: bLunaHubContract,
+            contractAddress: aLunaHubContract,
             query: {
               all_history: {
                 start_from: unbondedRequestsStartFrom,
@@ -91,7 +91,7 @@ export async function bLunaWithdrawableAmountQuery(
             },
           },
           parameters: {
-            contractAddress: bLunaHubContract,
+            contractAddress: aLunaHubContract,
             query: {
               parameters: {},
             },

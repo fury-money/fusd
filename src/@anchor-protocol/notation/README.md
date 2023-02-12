@@ -9,7 +9,7 @@ TODO
 [\_\_tests\_\_/notation.test.ts](__tests__/notation.test.ts)
 
 ```ts
-import { aUST, bLuna, Luna, Percent, Rate, UST } from '@anchor-protocol/types';
+import { aUST, aLuna, Luna, Percent, Rate, UST } from '@anchor-protocol/types';
 import { formatPercentage, formatRate } from '@libs/formatter';
 import {
   formatAUST,
@@ -53,9 +53,9 @@ describe('notation', () => {
     expect(formatLuna('1.342131' as Luna)).toBe('1.342131');
     expect(formatLuna('1.12049312' as Luna)).toBe('1.120493');
     expect(formatLuna('1.1004000' as Luna)).toBe('1.1004');
-    expect(formatLuna('1.00049312' as bLuna)).toBe('1.000493');
-    expect(formatLuna('1000.1234000' as bLuna)).toBe('1,000.1234');
-    expect(formatLuna('1000.120000' as bLuna)).toBe('1,000.12');
+    expect(formatLuna('1.00049312' as aLuna)).toBe('1.000493');
+    expect(formatLuna('1000.1234000' as aLuna)).toBe('1,000.1234');
+    expect(formatLuna('1000.120000' as aLuna)).toBe('1,000.12');
 
     expect(formatPercentage('1.342131' as Percent)).toBe('1.34');
     expect(formatPercentage('1.12049312' as Percent)).toBe('1.12');
@@ -72,7 +72,7 @@ describe('notation', () => {
     expect(formatAUSTInput('10.00' as aUST)).toBe('10');
 
     expect(formatLunaInput('10.3436' as Luna)).toBe('10.3436');
-    expect(formatLunaInput('10.00' as bLuna)).toBe('10');
+    expect(formatLunaInput('10.00' as aLuna)).toBe('10');
   });
 
   test('error cases', () => {

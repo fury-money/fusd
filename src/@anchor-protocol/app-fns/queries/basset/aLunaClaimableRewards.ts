@@ -1,4 +1,4 @@
-import { bluna, HumanAddr } from '@anchor-protocol/types';
+import { aluna, HumanAddr } from '@anchor-protocol/types';
 import {
   QueryClient,
   wasmFetch,
@@ -7,14 +7,14 @@ import {
 } from '@libs/query-client';
 
 interface BLunaClaimableRewardsWasmQuery {
-  rewardState: WasmQuery<bluna.reward.State, bluna.reward.StateResponse>;
-  claimableReward: WasmQuery<bluna.reward.Holder, bluna.reward.HolderResponse>;
+  rewardState: WasmQuery<aluna.reward.State, aluna.reward.StateResponse>;
+  claimableReward: WasmQuery<aluna.reward.Holder, aluna.reward.HolderResponse>;
 }
 
 export type BLunaClaimableRewards =
   WasmQueryData<BLunaClaimableRewardsWasmQuery>;
 
-export async function bLunaClaimableRewardsQuery(
+export async function aLunaClaimableRewardsQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
   bAssetRewardContract: HumanAddr,

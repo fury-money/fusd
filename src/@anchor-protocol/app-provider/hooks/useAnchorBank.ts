@@ -7,8 +7,8 @@ import {
   ANC,
   AncUstLP,
   aUST,
-  bLuna,
-  bLunaLunaLP,
+  aLuna,
+  aLunaLunaLP,
   CW20Addr,
   LSD,
   NominalType,
@@ -53,13 +53,13 @@ export function useAnchorBank(): AnchorBank {
     terraWalletAddress,
   );
 
-  const ubLuna = useCW20Balance<bLuna>(
-    contractAddress.cw20.bLuna,
+  const uaLuna = useCW20Balance<aLuna>(
+    contractAddress.cw20.aLuna,
     terraWalletAddress,
   );
 
-  const ubLunaLunaLP = useCW20Balance<bLunaLunaLP>(
-    contractAddress.cw20.bLunaLunaLP,
+  const uaLunaLunaLP = useCW20Balance<aLunaLunaLP>(
+    contractAddress.cw20.aLunaLunaLP,
     terraWalletAddress,
   );
 
@@ -85,8 +85,8 @@ export function useAnchorBank(): AnchorBank {
         uANC,
         uAncUstLP,
         uaUST,
-        ubLuna,
-        ubLunaLunaLP,
+        uaLuna,
+        uaLunaLunaLP,
         uLuna,
         uLSDs: lsdBalances
       }
@@ -99,8 +99,8 @@ export function useAnchorBank(): AnchorBank {
     uLuna,
     uUST,
     uaUST,
-    ubLuna,
-    ubLunaLunaLP,
+    uaLuna,
+    uaLunaLunaLP,
     lsdBalances
   ]);
 }

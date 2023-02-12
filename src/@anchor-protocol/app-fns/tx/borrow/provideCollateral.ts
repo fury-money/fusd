@@ -11,7 +11,7 @@ import {
 } from '@anchor-protocol/formatter';
 import {
   bAsset,
-  bLuna,
+  aLuna,
   Gas,
   HumanAddr,
   Rate,
@@ -131,7 +131,7 @@ export function borrowProvideCollateralTx($: {
       }
 
       try {
-        const collateralizedAmount = pickAttributeValue<u<bLuna>>(
+        const collateralizedAmount = pickAttributeValue<u<aLuna>>(
           fromContract,
           7,
         );

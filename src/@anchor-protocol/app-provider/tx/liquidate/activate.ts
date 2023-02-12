@@ -30,7 +30,7 @@ export function useActivateLiquidationBidTx() {
         walletAddr: connectedWallet.walletAddress,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
-        bLunaAddr: contractAddress.cw20.bLuna,
+        aLunaAddr: contractAddress.cw20.aLuna,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
@@ -51,7 +51,7 @@ export function useActivateLiquidationBidTx() {
     [
       connectedWallet,
       contractAddress.liquidation.liquidationQueueContract,
-      contractAddress.cw20.bLuna,
+      contractAddress.cw20.aLuna,
       constants.gasAdjustment,
       queryClient,
       txErrorReporter,

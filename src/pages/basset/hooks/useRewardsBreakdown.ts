@@ -35,13 +35,13 @@ export type RewardsBreakdown = {
   rewardBreakdowns: RewardBreakdown[];
 };
 
-const bLunaRewardBreakdown = (
+const aLunaRewardBreakdown = (
   oraclePrices: moneyMarket.oracle.PricesResponse['prices'],
   contractAddress: AnchorContractAddress,
   claimableRewards?: BLunaClaimableRewards,
 ): RewardBreakdown => {
   const tokenPriceUST = big(
-    oraclePrices.find((p) => p.asset === contractAddress.cw20.bLuna)?.price ??
+    oraclePrices.find((p) => p.asset === contractAddress.cw20.aLuna)?.price ??
       0,
   ) as u<UST<big>>;
 
@@ -57,7 +57,7 @@ const bLunaRewardBreakdown = (
     tokenReward: (tokenPriceUST.gt(big(0))
       ? tokenRewardUST.div(tokenPriceUST)
       : big(0)) as u<bAsset<big>>,
-    rewardAddr: contractAddress.bluna.reward,
+    rewardAddr: contractAddress.aluna.reward,
   };
 };
 
@@ -100,16 +100,16 @@ const useRewardsBreakdown = (
     useBAssetClaimableRewardsTotalQuery();
 
   const { contractAddress } = useAnchorWebapp();
-  const { data: bLunaClaimableRewards } = useBLunaClaimableRewards();
+  const { data: aLunaClaimableRewards } = useBLunaClaimableRewards();
 
-  const bLunaBreakdown = useMemo(
+  const aLunaBreakdown = useMemo(
     () =>
-      bLunaRewardBreakdown(
+      aLunaRewardBreakdown(
         oraclePrices,
         contractAddress,
-        bLunaClaimableRewards,
+        aLunaClaimableRewards,
       ),
-    [oraclePrices, contractAddress, bLunaClaimableRewards],
+    [oraclePrices, contractAddress, aLunaClaimableRewards],
   );
 
   const bAssetBreakdown = useMemo(
@@ -118,7 +118,7 @@ const useRewardsBreakdown = (
   );
 
   return useMemo(() => {
-    const rewardBreakdowns = [bLunaBreakdown, ...bAssetBreakdown];
+    const rewardBreakdowns = [aLunaBreakdown, ...bAssetBreakdown];
 
     return {
       totalRewardsUST: rewardBreakdowns
@@ -128,7 +128,7 @@ const useRewardsBreakdown = (
         r.tokenRewardUST.gt(big(0)),
       ),
     };
-  }, [bAssetBreakdown, bLunaBreakdown]);
+  }, [bAssetBreakdown, aLunaBreakdown]);
 };
 
 export const useClaimableRewardsBreakdown = () => {

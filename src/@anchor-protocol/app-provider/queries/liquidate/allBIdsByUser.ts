@@ -20,7 +20,7 @@ export function useAllBidByUserByCollateralQuery(): LSDLiquidationBidsResponse {
   const { queryClient, queryErrorReporter, contractAddress } =
     useAnchorWebapp();
 
-  let { data: bLunaLiquidationBids} = useBidByUserByCollateralQuery(contractAddress.cw20.bLuna);
+  let { data: aLunaLiquidationBids} = useBidByUserByCollateralQuery(contractAddress.cw20.aLuna);
 
   let allLiquidationBids = Object.entries(contractAddress.lsds).map(([key, contracts] ) => {
         const {data: bids} = useBidByUserByCollateralQuery(contracts.token as CW20Addr);
@@ -32,11 +32,11 @@ export function useAllBidByUserByCollateralQuery(): LSDLiquidationBidsResponse {
     })
   return [...allLiquidationBids, {
     name: "aLuna",
-    bids: bLunaLiquidationBids,
+    bids: aLunaLiquidationBids,
     info: {
-      token: contractAddress.cw20.bLuna,
+      token: contractAddress.cw20.aLuna,
       info: {
-        symbol: "bluna"
+        symbol: "aluna"
       }
     }
   }];

@@ -11,7 +11,7 @@ import {
   LUNA_INPUT_MAXIMUM_INTEGER_POINTS,
 } from '@anchor-protocol/notation';
 import { TokenIcon } from '@anchor-protocol/token-icons';
-import { bLuna, NativeDenom, Rate, terraswap, u } from '@anchor-protocol/types';
+import { aLuna, NativeDenom, Rate, terraswap, u } from '@anchor-protocol/types';
 import { terraswapSimulationQuery } from '@libs/app-fns';
 import {
   demicrofy,
@@ -104,7 +104,7 @@ export function Component({
   const [slippage, setSlippage] = useState<number>(0.05);
 
   const [resolveSimulation, simulation] = useResolveLast<
-    SwapSimulation<Luna, bLuna> | undefined | null
+    SwapSimulation<Luna, aLuna> | undefined | null
   >(() => null);
 
   // ---------------------------------------------
@@ -148,27 +148,27 @@ export function Component({
     async (nextBurnAmount: string, maxSpread: number) => {
       if (nextBurnAmount.trim().length === 0) {
         setGetAmount('' as Luna);
-        setBurnAmount('' as bLuna);
+        setBurnAmount('' as aLuna);
 
         resolveSimulation(null);
       } else if (isZero(nextBurnAmount)) {
         setGetAmount('' as Luna);
-        setBurnAmount(nextBurnAmount as bLuna);
+        setBurnAmount(nextBurnAmount as aLuna);
 
         resolveSimulation(null);
       } else {
-        const burnAmount: bLuna = nextBurnAmount as bLuna;
+        const burnAmount: aLuna = nextBurnAmount as aLuna;
         setBurnAmount(burnAmount);
 
-        const amount = microfy(burnAmount).toString() as u<bLuna>;
+        const amount = microfy(burnAmount).toString() as u<aLuna>;
 
         resolveSimulation(
           terraswapSimulationQuery(
-            address.terraswap.blunaLunaPair,
+            address.terraswap.alunaLunaPair,
             {
               info: {
                 token: {
-                  contract_addr: address.cw20.bLuna,
+                  contract_addr: address.cw20.aLuna,
                 },
               },
               amount,
@@ -188,8 +188,8 @@ export function Component({
       }
     },
     [
-      address.cw20.bLuna,
-      address.terraswap.blunaLunaPair,
+      address.cw20.aLuna,
+      address.terraswap.alunaLunaPair,
       bank.tax,
       queryClient,
       resolveSimulation,
@@ -201,12 +201,12 @@ export function Component({
   const updateGetAmount = useCallback(
     (nextGetAmount: string, maxSpread: number) => {
       if (nextGetAmount.trim().length === 0) {
-        setBurnAmount('' as bLuna);
+        setBurnAmount('' as aLuna);
         setGetAmount('' as Luna);
 
         resolveSimulation(null);
       } else if (isZero(nextGetAmount)) {
-        setBurnAmount('' as bLuna);
+        setBurnAmount('' as aLuna);
         setGetAmount(nextGetAmount as Luna);
 
         resolveSimulation(null);
@@ -218,7 +218,7 @@ export function Component({
 
         resolveSimulation(
           terraswapSimulationQuery(
-            address.terraswap.blunaLunaPair,
+            address.terraswap.alunaLunaPair,
             {
               info: {
                 native_token: {
@@ -242,7 +242,7 @@ export function Component({
       }
     },
     [
-      address.terraswap.blunaLunaPair,
+      address.terraswap.alunaLunaPair,
       bank.tax,
       queryClient,
       resolveSimulation,
@@ -261,11 +261,11 @@ export function Component({
 
   const init = useCallback(() => {
     setGetAmount('' as Luna);
-    setBurnAmount('' as bLuna);
+    setBurnAmount('' as aLuna);
   }, [setGetAmount, setBurnAmount]);
 
   const proceed = useCallback(
-    async (burnAmount: bLuna, beliefPrice: Rate, maxSpread: number) => {
+    async (burnAmount: aLuna, beliefPrice: Rate, maxSpread: number) => {
       if (!connected || !swap || !terraWalletAddress) {
         return;
       }
@@ -309,7 +309,7 @@ export function Component({
 
     const amount = floor(big(burnAmount).mul(MICRO));
 
-    if (amount.lt(0) || amount.gt(bank.tokenBalances.ubLuna ?? 0)) {
+    if (amount.lt(0) || amount.gt(bank.tokenBalances.uaLuna ?? 0)) {
       estimateFee(null);
       return;
     }
@@ -317,10 +317,10 @@ export function Component({
     estimateFee([
       new MsgExecuteContract(
         terraWalletAddress as string,
-        contractAddress.cw20.bLuna,
+        contractAddress.cw20.aLuna,
         {
           send: {
-            contract: contractAddress.terraswap.blunaLunaPair,
+            contract: contractAddress.terraswap.alunaLunaPair,
             amount,
             msg: createHookMsg({
               swap: {
@@ -334,13 +334,13 @@ export function Component({
     ]);
   }, [
     terraWalletAddress,
-    bank.tokenBalances.ubLuna,
+    bank.tokenBalances.uaLuna,
     burnAmount,
     connected,
     simulation?.beliefPrice,
-    contractAddress.bluna.hub,
-    contractAddress.cw20.bLuna,
-    contractAddress.terraswap.blunaLunaPair,
+    contractAddress.aluna.hub,
+    contractAddress.cw20.aLuna,
+    contractAddress.terraswap.alunaLunaPair,
     estimateFee,
     slippage,
   ]);
@@ -388,7 +388,7 @@ export function Component({
           className="symbols"
           view="burn"
           fromIcon={<TokenIcon token="luna" />}
-          toIcon={<TokenIcon token="bluna" />}
+          toIcon={<TokenIcon token="aluna" />}
         />
       </ConvertSymbolsContainer>
 
@@ -411,19 +411,19 @@ export function Component({
                 style={{ textDecoration: 'underline', cursor: 'pointer' }}
                 onClick={() =>
                   updateBurnAmount(
-                    formatLunaInput(demicrofy(bank.tokenBalances.ubLuna)),
+                    formatLunaInput(demicrofy(bank.tokenBalances.uaLuna)),
                     slippage,
                   )
                 }
               >
-                {formatLuna(demicrofy(bank.tokenBalances.ubLuna))} aLuna
+                {formatLuna(demicrofy(bank.tokenBalances.uaLuna))} aLuna
               </span>
             </span>
           )
         }
       >
         <SelectAndTextInputContainerLabel>
-          <TokenIcon token="bluna" /> aLuna
+          <TokenIcon token="aluna" /> aLuna
         </SelectAndTextInputContainerLabel>
         <NumberMuiInput
           placeholder="0.00"

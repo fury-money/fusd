@@ -22,7 +22,7 @@ function Component({ className }: BAssetMainProps) {
   // Getting LSD information
 
   const lsdCollaterals = useLSDCollateralQuery();
-
+  console.log(lsdCollaterals)
 
 
   return (
@@ -37,7 +37,7 @@ function Component({ className }: BAssetMainProps) {
         <AssetCard
           to="/aasset/aluna"
           title={<p>LUNA/aLUNA<span style={{fontSize: "0.7em"}}> (mint here)</span></p>}
-          bAssetIcon={<TokenIcon token="bluna" />}
+          bAssetIcon={<TokenIcon token="aluna" />}
           originAssetIcon={<TokenIcon token="luna" />}
           hoverText="MINT & BURN"
         >
@@ -46,9 +46,10 @@ function Component({ className }: BAssetMainProps) {
 
         {lsdCollaterals.map((collateral) => 
           <AssetCard
+            key={collateral.name}
             to={collateral.info.info.link}
-            title={<p>ampLuna (Eris Protocol)</p>}
-            bAssetIcon={<TokenIcon token={collateral.info.info.symbol} />}
+            title={<p>{collateral.info.info.symbol} ({collateral.info.info.protocol})</p>}
+            bAssetIcon={<TokenIcon token={collateral.info.info.symbol} variant="@4x" />}
             originAssetIcon={<TokenIcon token="luna" />}
             hoverText={<Box sx={{gap: "5px",display: "flex", alignItems: "center", fontSize: "1em !important"}}>MINT & BURN <OpenInNewIcon/> </Box>}
           >
@@ -56,12 +57,7 @@ function Component({ className }: BAssetMainProps) {
           </AssetCard>
         ) 
 
-        }
-
-
-
-
-        
+        }        
       </ul>
     </CenteredLayout>
   );

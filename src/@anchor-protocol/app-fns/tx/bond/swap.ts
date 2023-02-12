@@ -1,6 +1,6 @@
 import { formatLuna } from '@anchor-protocol/notation';
 import {
-  bLuna,
+  aLuna,
   CW20Addr,
   Gas,
   HumanAddr,
@@ -45,7 +45,7 @@ export function bondSwapTx($: {
   walletAddr: HumanAddr;
   bAssetTokenAddr: CW20Addr;
   bAssetPairAddr: HumanAddr;
-  burnAmount: bLuna;
+  burnAmount: aLuna;
   beliefPrice: Rate;
   maxSpread: Rate;
 
@@ -99,7 +99,7 @@ export function bondSwapTx($: {
           fromContract,
           'return_amount',
         );
-        const paidAmount = pickAttributeValueByKey<u<bLuna>>(
+        const paidAmount = pickAttributeValueByKey<u<aLuna>>(
           fromContract,
           'offer_amount',
         );

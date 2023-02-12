@@ -217,7 +217,7 @@ export function MyBidsSection({ className, collateral }: MyBidsSectionProps) {
           contractAddress.liquidation.liquidationQueueContract,
           {
             activate_bids: {
-              collateral_token: contractAddress.cw20.bLuna,
+              collateral_token: contractAddress.cw20.aLuna,
             },
           },
         ),
@@ -226,7 +226,7 @@ export function MyBidsSection({ className, collateral }: MyBidsSectionProps) {
     estimateActivationFee,
     terraWalletAddress,
     contractAddress.liquidation.liquidationQueueContract,
-    contractAddress.cw20.bLuna,
+    contractAddress.cw20.aLuna,
   ]);
 
   const [isSubmittingActivationTx, setIsSubmittingActivationTx] =

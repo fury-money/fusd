@@ -39,7 +39,7 @@ export function useAirdropClaimTx() {
 
       return airdropClaimTx({
         airdrop,
-        airdropContract: contractAddress.bluna.airdropRegistry,
+        airdropContract: contractAddress.aluna.airdropRegistry,
         walletAddress: terraWalletAddress,
         // post
         network: connectedWallet.network,
@@ -62,7 +62,7 @@ export function useAirdropClaimTx() {
       availablePost,
       connected,
       connectedWallet,
-      contractAddress.bluna.airdropRegistry,
+      contractAddress.aluna.airdropRegistry,
       terraWalletAddress,
       constants.gasAdjustment,
       constants.airdropGasWanted,

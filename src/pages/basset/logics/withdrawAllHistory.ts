@@ -1,19 +1,19 @@
-import type { bLuna, Luna, u } from '@anchor-protocol/types';
-import { bluna } from '@anchor-protocol/types';
+import type { aLuna, Luna, u } from '@anchor-protocol/types';
+import { aluna } from '@anchor-protocol/types';
 import big, { Big } from 'big.js';
 
 export interface WithdrawHistory {
-  blunaAmount: u<bLuna<Big>>;
+  alunaAmount: u<aLuna<Big>>;
   lunaAmount?: u<Luna<Big>>;
   requestTime?: Date;
   claimableTime?: Date;
 }
 
 export function withdrawAllHistory(
-  unbondRequests: bluna.hub.UnbondRequestsResponse | undefined,
+  unbondRequests: aluna.hub.UnbondRequestsResponse | undefined,
   unbondedRequestsStartFrom: number,
-  allHistory: bluna.hub.AllHistoryResponse | undefined,
-  parameters: bluna.hub.ParametersResponse | undefined,
+  allHistory: aluna.hub.AllHistoryResponse | undefined,
+  parameters: aluna.hub.ParametersResponse | undefined,
 ): WithdrawHistory[] | undefined {
   if (
     !unbondRequests ||
@@ -28,23 +28,23 @@ export function withdrawAllHistory(
     const historyIndex: number = index - unbondedRequestsStartFrom;
     const matchingHistory = allHistory.history[historyIndex - 1];
 
-    const blunaAmount = big(amount) as u<bLuna<Big>>;
+    const alunaAmount = big(amount) as u<aLuna<Big>>;
 
     if (!matchingHistory) {
       return {
-        blunaAmount,
+        alunaAmount,
       };
     }
 
     const { time, withdraw_rate } = matchingHistory;
     const { unbonding_period } = parameters;
 
-    const lunaAmount = blunaAmount.mul(withdraw_rate) as u<Luna<Big>>;
+    const lunaAmount = alunaAmount.mul(withdraw_rate) as u<Luna<Big>>;
     const requestTime = new Date(time * 1000);
     const claimableTime = new Date((time + unbonding_period) * 1000);
 
     return {
-      blunaAmount,
+      alunaAmount,
       lunaAmount,
       requestTime,
       claimableTime,

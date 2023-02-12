@@ -1,4 +1,4 @@
-import { bluna, HumanAddr } from '@anchor-protocol/types';
+import { aluna, HumanAddr } from '@anchor-protocol/types';
 import {
   QueryClient,
   wasmFetch,
@@ -7,8 +7,8 @@ import {
 } from '@libs/query-client';
 
 interface BondBLunaExchangeRateWasmQuery {
-  state: WasmQuery<bluna.hub.State, bluna.hub.StateResponse>;
-  parameters: WasmQuery<bluna.hub.Parameters, bluna.hub.ParametersResponse>;
+  state: WasmQuery<aluna.hub.State, aluna.hub.StateResponse>;
+  parameters: WasmQuery<aluna.hub.Parameters, aluna.hub.ParametersResponse>;
 }
 
 export type BondBLunaExchangeRate =
@@ -16,20 +16,20 @@ export type BondBLunaExchangeRate =
 
 export async function bondBLunaExchangeRateQuery(
   queryClient: QueryClient,
-  bLunaHubContract: HumanAddr,
+  aLunaHubContract: HumanAddr,
 ): Promise<BondBLunaExchangeRate> {
   return wasmFetch<BondBLunaExchangeRateWasmQuery>({
     ...queryClient,
-    id: `bond--bluna-exchange-rate`,
+    id: `bond--aluna-exchange-rate`,
     wasmQuery: {
       state: {
-        contractAddress: bLunaHubContract,
+        contractAddress: aLunaHubContract,
         query: {
           state: {},
         },
       },
       parameters: {
-        contractAddress: bLunaHubContract,
+        contractAddress: aLunaHubContract,
         query: {
           parameters: {},
         },

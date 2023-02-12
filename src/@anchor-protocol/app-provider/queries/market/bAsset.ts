@@ -14,9 +14,9 @@ export function useMarketBAssetQuery(): UseQueryResult<
   const result = useQuery(
     [
       ANCHOR_QUERY_KEY.MARKET_BASSET,
-      contractAddress.cw20.bLuna,
+      contractAddress.cw20.aLuna,
       contractAddress.moneyMarket.oracle,
-      contractAddress.bluna.custody,
+      contractAddress.aluna.custody,
       contractAddress.native.usd,
     ],
     createQueryFn(marketBAssetQuery, queryClient),

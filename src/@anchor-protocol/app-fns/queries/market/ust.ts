@@ -1,4 +1,4 @@
-import { aUST, bLuna, Rate, u, UST } from '@anchor-protocol/types';
+import { aUST, aLuna, Rate, u, UST } from '@anchor-protocol/types';
 
 export interface MarketUstData {
   borrow_rate: Rate;
@@ -12,7 +12,7 @@ export interface MarketUstData {
   utilization_ratio: Rate;
   prev_exchange_rate: Rate;
   market_ust_balance: u<UST>;
-  custody_bluna_balance: u<bLuna>;
+  custody_aluna_balance: u<aLuna>;
   exchange_rate: Rate;
   prev_interest_buffer: '4703286025726';
   aterra_supply: u<aUST>;

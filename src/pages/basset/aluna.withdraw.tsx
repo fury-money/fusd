@@ -48,7 +48,7 @@ function Component({ className }: BlunaWithdrawProps) {
   const { tokenBalances } = useAnchorBank();
 
   const {
-    data: bLunaWithdrawableAmount,
+    data: aLunaWithdrawableAmount,
     refetch: refetchBLunaWithdrawableAmount,
   } = useBLunaWithdrawableAmount();
 
@@ -58,7 +58,7 @@ function Component({ className }: BlunaWithdrawProps) {
     unbondedRequestsStartFrom,
     allHistory,
     parameters,
-  } = bLunaWithdrawableAmount || {};
+  } = aLunaWithdrawableAmount || {};
 
   // ---------------------------------------------
   // logics
@@ -87,7 +87,7 @@ function Component({ className }: BlunaWithdrawProps) {
       parameters,
       unbondedRequestsStartFrom,
       withdrawRequests,
-      bLunaWithdrawableAmount,
+      aLunaWithdrawableAmount,
       withdrawResult?.status,
     ],
   );
