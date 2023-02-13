@@ -67,9 +67,8 @@ function BorrowedValueBase({
           <IconSpan>
             Net APR{' '}
             <InfoTooltip>
-              Distribution APR - Borrow APR. When the net APR is a positive
-              number, ANC rewards distributed to borrowers are greater than the
-              interest to be paid for the loan
+              Borrow APR - Distribution APR. When the net APR is a positive
+              number, the interest to be paid for the loan is greater than borrower incentives distributed.
             </InfoTooltip>
           </IconSpan>
         </h5>
