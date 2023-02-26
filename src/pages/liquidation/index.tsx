@@ -23,6 +23,7 @@ import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { useAllLiquidationStats } from './components/useLiquidationGraph';
 import { StatsDoughnutCard } from './components/StatsDoughnutCard';
 import { Link } from 'react-router-dom';
+import { EmptySection } from 'pages/mypage/components/EmptySection';
 
 export interface LiquidationProps {
   className?: string;
@@ -235,6 +236,12 @@ function Component({ className }: EarnProps) {
             </HorizontalScrollTable>
         </PaddingSection>
       </section>
+        <section style={{margin: "auto 50px"}}>
+           <h2>MONITOR POSITIONS</h2>
+
+          <EmptySection to="/liquidation/monitor">Monitor Positions pending liquidations</EmptySection>
+
+        </section>
       </>
     </CenteredLayout>
   );

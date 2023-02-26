@@ -39,29 +39,28 @@ export function LiquidationQueueHistoryBase({ className, collateral }: Liquidati
       }
       return liquidationQueueHistory
         .filter(history => {
-          console.log(history.token, collateral?.collateral_token)
           return history.token == collateral?.collateral_token
         })
-        .map((history) => ({
+        .map((history) => {
+          return ({
           collateral: history.token,
           timestamp: history.timestamp,
-          amount: d3Formatter(demicrofy(history.amount as u<Token<BigSource>>))
-        }))
+          amount: demicrofy(history.amount as u<Token<BigSource>>),
+          raw_amount: history.amount,
+        })})
       },
     [liquidationQueueHistory, collateral],
   );
-  console.log(allLiquidationQueue)
 
   // We compute the liquidation diff (in % in the last day)
-
   const liquidationDiff = useMemo(() => {
       const sorted = allLiquidationQueue
           ?.sort((a,b) => a.timestamp - b.timestamp) ?? [];
 
       const length = sorted.length;
 
-      if (sorted.length >= 2 && sorted[length-2].amount != "0"){
-        return big(sorted[length - 1].amount).sub(sorted[length - 2].amount).div(sorted[length - 2].amount)
+      if (sorted.length >= 2 && !sorted[length-2].amount.eq("0")){
+        return big(sorted[length - 1].raw_amount).sub(sorted[length - 2].raw_amount).div(sorted[length - 2].raw_amount)
       }else{
         return big(0)
       }
@@ -128,7 +127,7 @@ export function LiquidationQueueHistoryBase({ className, collateral }: Liquidati
                   const isLast = i === allLiquidationQueue.length - 1;
                   const item = allLiquidationQueue[i];
                   const date = isLast ? 'Now' : mediumDay(item.timestamp as JSDateTime);
-                  div1.innerHTML = `${item.amount} axlUSDC <span>${date}</span>`;
+                  div1.innerHTML = `${d3Formatter(item.amount)} axlUSDC <span>${date}</span>`;
                 } catch (error) {
                   console.error(error);
                 }

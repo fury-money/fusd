@@ -7,7 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Divider, Grid, styled } from '@mui/material';
+import { Divider, Grid } from '@mui/material';
 import { PaddingSection } from './PaddingSection';
 import { useLiquidationHistoryQuery } from '@anchor-protocol/app-provider/queries/liquidate/history';
 import { LiquidationData } from '@anchor-protocol/app-fns/queries/liquidate/history';
@@ -15,7 +15,7 @@ import { useFormatters } from '@anchor-protocol/formatter';
 import { u, UST } from '@libs/types';
 import { aLuna } from '@anchor-protocol/types';
 import { useMediaQuery } from 'react-responsive';
-import { useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { WhitelistCollateral } from 'queries';
 
 export interface LiquidationStatsSectionProps {
@@ -25,7 +25,7 @@ export interface LiquidationStatsSectionProps {
 
 export type Period = 'total' | 'year' | 'month' | 'week' | 'day';
 
-export function LiquidationStatsSection({
+function LiquidationStatsSectionBase({
   className,
   collateral,
 }: LiquidationStatsSectionProps) {
@@ -75,14 +75,14 @@ export function LiquidationStatsSection({
         >
           <TableHead>
             <TableRow>
-              <LowPaddingTableCell>Time</LowPaddingTableCell>
-              <LowPaddingTableCell align="right">
+              <LowPaddingTableCell className="table-header">Time</LowPaddingTableCell>
+              <LowPaddingTableCell align="right" className="table-header">
                 aLuna Liquidated
               </LowPaddingTableCell>
-              <LowPaddingTableCell align="right">
+              <LowPaddingTableCell align="right" className="table-header">
                 axlUSDC Paid
               </LowPaddingTableCell>
-              <LowPaddingTableCell align="right">
+              <LowPaddingTableCell align="right" className="table-header">
                 Average Price
               </LowPaddingTableCell>
             </TableRow>
@@ -159,3 +159,11 @@ export function LiquidationStatsSection({
     padding: '5px 10px',
     backgroundColor: 'unset',
   });
+
+
+export const LiquidationStatsSection = styled(LiquidationStatsSectionBase)`
+
+  .table-header{
+    background: ${({theme})=> theme.sectionBackgroundColor}
+  }
+`

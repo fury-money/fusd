@@ -23,6 +23,7 @@ import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import '../configurations/chartjs';
 import { LiquidationInterface } from 'pages/liquidation/LiquidationInterface';
+import { MonitorPositions } from 'pages/liquidation/MonitorPositions';
 
 type TerraAppProps = {
   chainOptions: WalletControllerChainOptions | null;
@@ -68,6 +69,8 @@ export function TerraApp({ chainOptions }: TerraAppProps) {
             <Route path="/liquidation" element={<LiquidateList />} />
 
             <Route path="/liquidation/:tokenSymbol" element={<LiquidationInterface />} />
+
+            <Route path="/liquidation/monitor" element={<MonitorPositions />} />
 
             <Route path="/history" element={<History />} />
 
