@@ -1,4 +1,7 @@
-import { MonitorPositionsData, monitorPositionsQuery } from "@anchor-protocol/app-fns/queries/liquidate/monitorPositions";
+import {
+  MonitorPositionsData,
+  monitorPositionsQuery,
+} from "@anchor-protocol/app-fns/queries/liquidate/monitorPositions";
 import { createSimpleQueryFn } from "@libs/react-query-utils";
 import { useQuery, UseQueryResult } from "react-query";
 import { useAnchorWebapp } from "../../contexts/context";

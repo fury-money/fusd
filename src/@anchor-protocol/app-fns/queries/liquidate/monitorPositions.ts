@@ -4,7 +4,7 @@ export interface MonitorPositionsQueryParams {
 
 export interface MonitorPositionsData {
   borrower: string;
-  over_limit: "true" | "false"
+  over_limit: "true" | "false";
   borrow: number;
   limit: number;
 }

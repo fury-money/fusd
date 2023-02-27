@@ -126,7 +126,8 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
   tokenId: {
     whitePaper: "whitepaper",
   },
-  nameservice: "terra16a6qkmxpqzeyez8gh3w7qhrk7x3xe3arlv9nwfg944y8vzg9smrqntark3",
+  nameservice:
+    "terra16a6qkmxpqzeyez8gh3w7qhrk7x3xe3arlv9nwfg944y8vzg9smrqntark3",
   LSDs: {
     ampLuna: {
       info: {
@@ -216,7 +217,8 @@ const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
   tokenId: {
     whitePaper: "whitepaper",
   },
-  nameservice: "terra1zl866qkqmwygzcr8xwqa70mep0raqt40ddqhu9ur3yguekg7g3xq6ctmw4",
+  nameservice:
+    "terra1zl866qkqmwygzcr8xwqa70mep0raqt40ddqhu9ur3yguekg7g3xq6ctmw4",
   LSDs: {
     ampLuna: {
       info: {

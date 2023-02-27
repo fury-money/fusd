@@ -12,10 +12,23 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import big from "big.js";
 import { useNameServiceQuery } from "@anchor-protocol/app-provider/queries/nameservice/nameservice";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { fixHMR } from "fix-hmr";
 import { fromIPFSImageURLtoImageURL } from "@anchor-protocol/app-fns/ipfs";
-import { Box } from "@mui/material";
+import { Box, Divider, Grid } from "@mui/material";
+import { useMultipleBorrowerQuery } from "@anchor-protocol/app-provider";
+import { formatBAssetWithPostfixUnits, formatUSTWithPostfixUnits } from "@anchor-protocol/notation";
+import { demicrofy } from "@libs/formatter";
+import { TokenIcon } from "@anchor-protocol/token-icons";
+import { useCollaterals } from "pages/borrow/components/useCollaterals";
+import { useWhitelistCollateralQuery, WhitelistCollateral } from "queries";
+
+function getCollateralSymbol(collateral: WhitelistCollateral | undefined){
+  if(!collateral){
+    return "aluna"
+  }
+  return "info" in collateral ? collateral.info.info.symbol : collateral.symbol
+}
 
 export interface MonitorPositionsProps {
   className?: string;
@@ -40,12 +53,18 @@ function Component({className}: MonitorPositionsProps){
 
 	const {data: nameServiceData} = useNameServiceQuery(positionData?.map((position)=> position.borrower));
 
-	console.log(nameServiceData?.map((data)=> data?.domainInfo.extension.imageData))
+  const {data: collaterals} = useMultipleBorrowerQuery(positionData?.map(position=> position.borrower));
 
+  const {data: registeredCollaterals} = useWhitelistCollateralQuery();
+
+  console.log(collaterals)
+  console.log(registeredCollaterals)
 
   const {
     ust: { formatOutput: formatUSTOutput, demicrofy: demicrofyUST },
   } = useFormatters();
+
+  const theme = useTheme();
 
 	return (
 	<CenteredLayout className={className} maxWidth={2000}>
@@ -81,6 +100,14 @@ function Component({className}: MonitorPositionsProps){
                       Pending liquidation{' '}
                       <InfoTooltip>
                         States whether this address will be liquidated shortly
+                      </InfoTooltip>
+                    </IconSpan>
+                  </th>
+                  <th>
+                    <IconSpan>
+                      Collaterals deposited{' '}
+                      <InfoTooltip>
+                        All collaterals that the user has deposited on the platform
                       </InfoTooltip>
                     </IconSpan>
                   </th>
@@ -123,6 +150,19 @@ function Component({className}: MonitorPositionsProps){
                       	{over_limit == "true" && <CheckIcon style={{backgroundColor: "green"}}/>}
                       	{over_limit == "false" && <CloseIcon style={{backgroundColor: "red"}}/>}
                       </td>
+                      <td style={{textAlign:"center"}}>
+                        <Grid container spacing={2}>
+                        {collaterals?.[i]?.overseerCollaterals.collaterals.map(([collateral, lockedAmount], i) => (
+                          <Grid item xs={6}
+                            key={collateral}
+                            sx={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}
+                          >
+                             <TokenIcon token={getCollateralSymbol(registeredCollaterals?.find(token=> token.collateral_token == collateral))} variant="@4x"/> {formatBAssetWithPostfixUnits(demicrofy(lockedAmount))}
+                          </Grid>
+                        ))}
+                        </Grid>
+
+                      </td>  
                     </tr>
                   ),
                 )}
