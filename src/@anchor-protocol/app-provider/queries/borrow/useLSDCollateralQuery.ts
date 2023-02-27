@@ -14,8 +14,6 @@ export type LSDCollateralResponse = {
 export function useLSDCollateralQuery(): LSDCollateralResponse {
   const { contractAddress } = useAnchorWebapp();
 
-  console.log(Object.entries(contractAddress.lsds));
-
   let lsdHubStates = Object.entries(contractAddress.lsds).map(
     ([key, contracts]) => {
       const { data: details } = useWrappedTokenDetails(

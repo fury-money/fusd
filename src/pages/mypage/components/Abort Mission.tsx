@@ -92,9 +92,7 @@ function AbortMissionBase({ className }: AbortMissionProps) {
   const [openAbortMissionDialog, abortMissionDialogElement] = useAbortMissionDialog();
 
   const openAbortMission = useCallback(async () => {
-    console.log("try to open")
     if(!allLiquidationBids || !overseerCollaterals?.collaterals){
-      console.log("ah no, an error", allLiquidationBids, overseerCollaterals)
       return;
     }
     await openAbortMissionDialog({

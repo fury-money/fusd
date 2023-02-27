@@ -63,6 +63,7 @@ export interface AnchorContractAddress extends AppContractAddress {
   admin: {
     feeAddress: HumanAddr;
   };
+  nameservice: HumanAddr;
   lsds: {
     [key in RegisteredLSDs]: LSDContracts;
   };

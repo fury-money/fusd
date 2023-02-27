@@ -22,7 +22,6 @@ function Component({ className }: BAssetMainProps) {
   // Getting LSD information
 
   const lsdCollaterals = useLSDCollateralQuery();
-  console.log(lsdCollaterals)
 
 
   return (

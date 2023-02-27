@@ -135,7 +135,6 @@ export function getAbortMissionMessages({
       if (!collateral.rawLockedAmount || collateral.rawLockedAmount == "0") {
         return [];
       }
-      console.log(collateral.rawLockedAmount);
       return _.compact([
         // unlock collateral
         new MsgExecuteContract(

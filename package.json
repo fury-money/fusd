@@ -99,7 +99,7 @@
     "lz-string": "^1.4.4",
     "multiplerun": "^2.0.1",
     "numeral": "^2.0.6",
-    "p-map": "^5.5.0",
+    "p-map": "^4.0.0",
     "puppeteer": "^13.5.1",
     "react": "^17.0.2",
     "react-chartjs-2": "^4.3.1",

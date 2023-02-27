@@ -88,7 +88,6 @@ function Component({ className }: EarnProps) {
         collateral.name = additionalInfo?.info?.info?.name;
       }
 
-      console.log(liquidationStats)
       const bids = bidAmounts?.bids?.bidByUser.bids;
       const totalBidAmountStat = liquidationStats?.liquidationStats?.otherStats.find((c) => c.id == "pool_value_stable");
       return {

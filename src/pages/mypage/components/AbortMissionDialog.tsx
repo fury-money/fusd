@@ -181,7 +181,6 @@ function DepositDialogBase(props: DepositDialogProps) {
     );
   }
 
-  console.log(collateralsWithdrawAmount,collaterals.length)
   return (
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>

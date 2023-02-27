@@ -11,12 +11,17 @@ import { PaddingSection } from "./components/PaddingSection";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import big from "big.js";
+import { useNameServiceQuery } from "@anchor-protocol/app-provider/queries/nameservice/nameservice";
+import styled from "styled-components";
+import { fixHMR } from "fix-hmr";
+import { fromIPFSImageURLtoImageURL } from "@anchor-protocol/app-fns/ipfs";
+import { Box } from "@mui/material";
 
 export interface MonitorPositionsProps {
   className?: string;
 }
 
-export function MonitorPositions({className}: MonitorPositionsProps){
+function Component({className}: MonitorPositionsProps){
 
 
 	const {data: positionData} = useAllPositionsQuery();
@@ -31,6 +36,11 @@ export function MonitorPositions({className}: MonitorPositionsProps){
 		return positionData
 		?.reduce((acc, v)=> acc.add(v.borrow), big(0))
 	}, [positionData])
+
+
+	const {data: nameServiceData} = useNameServiceQuery(positionData?.map((position)=> position.borrower));
+
+	console.log(nameServiceData?.map((data)=> data?.domainInfo.extension.imageData))
 
 
   const {
@@ -80,14 +90,25 @@ export function MonitorPositions({className}: MonitorPositionsProps){
                 {positionData?.map(
                   ({
                   	borrower,
-					over_limit,
-					borrow,
-					limit,
-                  }) => (
+          					over_limit,
+          					borrow,
+          					limit,
+                  }, i) => (
                     <tr key={borrower}>
                       <td>
-                        <div className="value">{borrower}</div>
-                      </td>
+                      	{!!nameServiceData?.[i]?.domainInfo?.extension?.name && 
+                        <div style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "8px"}} >
+                           <img alt=""  src={fromIPFSImageURLtoImageURL(nameServiceData?.[i]?.domainInfo?.extension?.image ?? "")[0]} height="40px" />
+                        		<Box>
+                              <div className="value">{nameServiceData?.[i]?.domainInfo?.extension?.name}.luna</div>
+    	                        <p className="volatility">
+    	                        	{borrower}
+    	                        </p>
+                            </Box>
+	                        </div>
+	                    }
+	                    {!nameServiceData?.[i]?.domainInfo?.extension?.name && <div className="value">{borrower}</div>}
+                      </td>	
                       <td>
                         <div className="value">
                           {formatUSTOutput(demicrofyUST((borrow ?? 0).toString() as u<UST>))} axlUSDC
@@ -112,3 +133,16 @@ export function MonitorPositions({className}: MonitorPositionsProps){
       </>
     </CenteredLayout>)
 }
+
+
+
+const StyledComponent = styled(Component)`
+          .volatility,
+          .name {
+            font-size: 12px;
+            color: ${({ theme }) => theme.dimTextColor};
+          }
+
+          `;
+
+export const MonitorPositions = fixHMR(StyledComponent);
