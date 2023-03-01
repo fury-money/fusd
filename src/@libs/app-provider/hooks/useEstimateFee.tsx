@@ -9,6 +9,25 @@ import { simulateFetch } from '@libs/query-client';
 import React from "react";
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 
+const errorMap = {
+  "Not enough ibc/": "Too much axlUSDC was borrowed, you can't withdraw your funds for now",
+  "max borrow factor; borrow demand too high": "You can't borrow more funds, there is no axlUSDC available",
+  "Borrow amount too high; Loan liability becomes greater than borrow limit": "You can't borrow more than your borrow limit",
+  "Withdraw amount cannot exceed the user's spendable amount": "You can't withdraw locked funds. Borrow less to unlock them.",
+  "Unlock amount too high; Loan liability becomes greater than borrow limit:": "You can't withdraw locked funds. Borrow less to unlock them.",
+  "Overflow: Cannot Wub with": "Amount is too high",
+}
+
+function mapEstimateFeeError(error: Error): string{
+  const stringError = error.toString()
+  for(let [key, value] of Object.entries(errorMap)){
+    if(stringError.includes(key)){
+      return value
+    }
+  }
+  return stringError
+}
+
 export interface EstimatedFee {
   gasWanted: Gas;
   txFee: u<Luna>;
@@ -96,10 +115,13 @@ export function useFeeEstimationFor(
             setEstimatedFee(estimated);
           })
           .catch((error) => {
+
+            const mappedError = mapEstimateFeeError(error);
+
             setEstimatedFeeError(() => (<div style={{display:"flex", alignItems: "center"}}>
                 Error simulating the transaction
                 <InfoTooltip style={{display: "inline", marginLeft: 10}}>
-                  {error.toString()}
+                  {mappedError}
                 </InfoTooltip>
               </div>)); 
             setEstimatedFee(undefined);
