@@ -11,7 +11,7 @@ import aluna2x from './assets/aluna@2x.png';
 import aluna3x from './assets/aluna@3x.png';
 import aluna4x from './assets/aluna@4x.png';
 
-//import bluna from './assets/bluna.svg';
+import bluna from './assets/bluna.svg';
 import bluna2x from './assets/bluna@2x.png';
 import bluna3x from './assets/bluna@3x.png';
 import bluna4x from './assets/bluna@4x.png';
@@ -89,7 +89,7 @@ export const tokenImages: Record<Tokens, Record<IconVariant, TokenImage>> = {
     '@4x': convert(ampLuna4x),
   },
   bLuna: {
-    'svg': convert(aluna),
+    'svg': convert(bluna),
     '@2x': convert(bluna2x),
     '@3x': convert(bluna3x),
     '@4x': convert(bluna4x),

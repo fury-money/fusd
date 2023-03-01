@@ -83,6 +83,14 @@ export const defaultDarkTheme = {
           },
         },
       },
+      MuiMenu: {
+        styleOverrides: {
+          list: {
+            backgroundColor: DARK_BLUE_100,
+            color: WHITE,
+          },
+        },
+      },
     },
   }),
   MuiTouchRipple: {

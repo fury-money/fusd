@@ -24,6 +24,7 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import '../configurations/chartjs';
 import { LiquidationInterface } from 'pages/liquidation/LiquidationInterface';
 import { MonitorPositions } from 'pages/liquidation/MonitorPositions';
+import { Swap } from 'pages/swap';
 
 type TerraAppProps = {
   chainOptions: WalletControllerChainOptions | null;
@@ -75,6 +76,7 @@ export function TerraApp({ chainOptions }: TerraAppProps) {
             <Route path="/history" element={<History />} />
 
             <Route path="/mypage" element={<Mypage />} />
+            <Route path="/swap" element={<Swap />} />
             <Route path="/terms" element={<TermsOfService />} />
 
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,0 +1,705 @@
+import { validateTxFee } from '@anchor-protocol/app-fns';
+import {
+  useAnchorBank,
+  useAnchorWebapp,
+  useBondSwapTx,
+} from '@anchor-protocol/app-provider';
+import {
+  formatLuna,
+  formatLunaInput,
+  LUNA_INPUT_MAXIMUM_DECIMAL_POINTS,
+  LUNA_INPUT_MAXIMUM_INTEGER_POINTS,
+} from '@anchor-protocol/notation';
+import { TokenIcon, Tokens } from '@anchor-protocol/token-icons';
+import { aLuna, NativeDenom, Rate, terraswap, u } from '@anchor-protocol/types';
+import { terraswapSimulationQuery } from '@libs/app-fns';
+import {
+  demicrofy,
+  formatExecuteMsgNumber,
+  formatFluidDecimalPoints,
+  microfy,
+  MICRO,
+} from '@libs/formatter';
+import { isZero } from '@libs/is-zero';
+import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
+import { HorizontalHeavyRuler } from '@libs/neumorphism-ui/components/HorizontalHeavyRuler';
+import { NumberMuiInput } from '@libs/neumorphism-ui/components/NumberMuiInput';
+import {
+  SelectAndTextInputContainer,
+  SelectAndTextInputContainerLabel,
+} from '@libs/neumorphism-ui/components/SelectAndTextInputContainer';
+import { Luna } from '@libs/types';
+import { useResolveLast } from '@libs/use-resolve-last';
+import { ArrowDropDown, InfoOutlined } from '@mui/icons-material';
+import { StreamStatus } from '@rx-stream/react';
+import big from 'big.js';
+import { DiscloseSlippageSelector } from 'components/DiscloseSlippageSelector';
+import { MessageBox } from 'components/MessageBox';
+import { IconLineSeparator } from 'components/primitives/IconLineSeparator';
+import { SlippageSelectorNegativeHelpText } from 'components/SlippageSelector';
+import { TxResultRenderer } from 'components/tx/TxResultRenderer';
+import { SwapListItem, TxFeeList, TxFeeListItem } from 'components/TxFeeList';
+import { ViewAddressWarning } from 'components/ViewAddressWarning';
+import { useAccount } from 'contexts/account';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { swapSimulation } from './logic/swapSimulation';
+import { swapGetSimulation } from './logic/swapGetSimulation';
+import { validateSwapAmount } from './logic/validateSwapAmount';
+import { SwapSimulation } from './models/swapSimulation';
+import { ConvertSymbols, ConvertSymbolsContainer } from './components/ConvertSymbols';
+import styled, { useTheme } from 'styled-components';
+import { fixHMR } from 'fix-hmr';
+import { useFeeEstimationFor } from '@libs/app-provider';
+import { useAlert } from '@libs/neumorphism-ui/components/useAlert';
+import { floor } from '@libs/big-math';
+import { MsgExecuteContract } from '@terra-money/terra.js';
+import { createHookMsg } from '@libs/app-fns/tx/internal';
+import { CircleSpinner } from 'react-spinners-kit';
+import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+import { TFMToken, useTFMTokensQuery } from './queries/tfmQueries';
+
+const swapAssetsWhitelist = [
+  "uusdc",
+  "LUNA",
+  "boneLuna",
+  "Eris Amplified LUNA",
+  "Cavern Bonded Luna",
+]
+
+const swapAssetsIcons: Tokens[]  = [
+  "ust",
+  "luna",
+  "bLuna",
+  "ampLuna",
+  "aluna"  
+];
+
+function nameToIcon(name: string){
+  return swapAssetsIcons[swapAssetsWhitelist.indexOf(name)]
+}
+
+
+
+
+export interface SwapProps {
+  className?: string;
+}
+
+const SLIPPAGE_VALUES = [0.01, 0.03, 0.05];
+const LOW_SLIPPAGE = 0.03;
+const FRONTRUN_SLIPPAGE = 0.15;
+
+export function Component({
+  className,
+}: SwapProps) {
+  // ---------------------------------------------
+  // dependencies
+  // ---------------------------------------------
+  const { availablePost, connected, terraWalletAddress } = useAccount();
+
+  const {
+    queryClient,
+    contractAddress: address,
+    contractAddress,
+  } = useAnchorWebapp();
+
+  const [estimatedFee, estimatedFeeError, estimateFee] =
+    useFeeEstimationFor(terraWalletAddress);
+
+  const [swap, swapResult] = useBondSwapTx();
+
+  const [openAlert, alertElement] = useAlert();
+
+  const {data: allAvailableTokens} = useTFMTokensQuery();
+
+  const availableTokens = useMemo(()=> (allAvailableTokens ?? []).filter(({name}) => {
+    return swapAssetsWhitelist.includes(name)
+  }), [allAvailableTokens])
+
+
+  // ---------------------------------------------
+  // states
+  // ---------------------------------------------
+  const [swapAmount, setSwapAmount] = useState<aLuna>('' as aLuna);
+  const [getAmount, setGetAmount] = useState<Luna>('' as Luna);
+  const [slippage, setSlippage] = useState<number>(0.05);
+
+  const [swapTokens, setSwapTokens] = useState({in: {
+      name: "uusdc",
+      symbol:"axlUSDC"
+    }, out: {
+      name: "LUNA",
+      symbol: "LUNA"
+    }
+  });
+
+
+  const [resolveSimulation, simulation] = useResolveLast<
+    SwapSimulation<Luna, aLuna> | undefined | null
+  >(() => null);
+
+  // ---------------------------------------------
+  // queries
+  // ---------------------------------------------
+  const bank = useAnchorBank();
+
+  // ---------------------------------------------
+  // logics
+  // ---------------------------------------------
+  const invalidTxFee = useMemo(
+    () =>
+      connected && validateTxFee(bank.tokenBalances.uUST, estimatedFee?.txFee),
+    [bank, estimatedFee?.txFee, connected],
+  );
+
+  const invalidSwapAmount = useMemo(
+    () => connected && validateSwapAmount(swapAmount, bank),
+    [bank, swapAmount, connected],
+  );
+
+  // ---------------------------------------------
+  // effects
+  // ---------------------------------------------
+  useEffect(() => {
+    if (simulation?.getAmount) {
+      setGetAmount(formatLunaInput(demicrofy(simulation?.getAmount)));
+    }
+  }, [setGetAmount, simulation?.getAmount]);
+
+  useEffect(() => {
+    if (simulation?.swapAmount) {
+      setSwapAmount(formatLunaInput(demicrofy(simulation?.swapAmount)));
+    }
+  }, [setSwapAmount, simulation?.swapAmount]);
+
+  // ---------------------------------------------
+  // callbacks
+  // ---------------------------------------------
+  const updateSwapAmount = useCallback(
+    async (nextSwapAmount: string, maxSpread: number) => {
+      if (nextSwapAmount.trim().length === 0 || !queryClient) {
+        setGetAmount('' as Luna);
+        setSwapAmount('' as aLuna);
+
+        resolveSimulation(null);
+      } else if (isZero(nextSwapAmount)) {
+        setGetAmount('' as Luna);
+        setSwapAmount(nextSwapAmount as aLuna);
+
+        resolveSimulation(null);
+      } else {
+        const swapAmount: aLuna = nextSwapAmount as aLuna;
+        setSwapAmount(swapAmount);
+
+        const amount = microfy(swapAmount).toString() as u<aLuna>;
+
+        resolveSimulation(
+          terraswapSimulationQuery(
+            address.terraswap.alunaLunaPair,
+            {
+              info: {
+                token: {
+                  contract_addr: address.cw20.aLuna,
+                },
+              },
+              amount,
+            },
+            queryClient,
+          ).then(({ simulation }) => {
+            return simulation
+              ? swapGetSimulation(
+                  simulation as terraswap.pair.SimulationResponse<Luna>,
+                  amount,
+                  bank.tax,
+                  maxSpread,
+                )
+              : undefined;
+          }),
+        );
+      }
+    },
+    [
+      address.cw20.aLuna,
+      address.terraswap.alunaLunaPair,
+      bank.tax,
+      queryClient,
+      resolveSimulation,
+      setSwapAmount,
+      setGetAmount,
+    ],
+  );
+
+  const updateGetAmount = useCallback(
+    (nextGetAmount: string, maxSpread: number) => {
+      if (nextGetAmount.trim().length === 0 || !queryClient) {
+        setSwapAmount('' as aLuna);
+        setGetAmount('' as Luna);
+
+        resolveSimulation(null);
+      } else if (isZero(nextGetAmount)) {
+        setSwapAmount('' as aLuna);
+        setGetAmount(nextGetAmount as Luna);
+
+        resolveSimulation(null);
+      } else {
+        const getAmount: Luna = nextGetAmount as Luna;
+        setGetAmount(getAmount);
+
+        const amount = microfy(getAmount).toString() as u<Luna>;
+
+        resolveSimulation(
+          terraswapSimulationQuery(
+            address.terraswap.alunaLunaPair,
+            {
+              info: {
+                native_token: {
+                  denom: 'uluna' as NativeDenom,
+                },
+              },
+              amount,
+            },
+            queryClient,
+          ).then(({ simulation }) => {
+            return simulation
+              ? swapSimulation(
+                  simulation as terraswap.pair.SimulationResponse<Luna>,
+                  amount,
+                  bank.tax,
+                  maxSpread,
+                )
+              : undefined;
+          }),
+        );
+      }
+    },
+    [
+      address.terraswap.alunaLunaPair,
+      bank.tax,
+      queryClient,
+      resolveSimulation,
+      setSwapAmount,
+      setGetAmount,
+    ],
+  );
+
+  const updateSlippage = useCallback(
+    (nextSlippage: number) => {
+      setSlippage(nextSlippage);
+      updateSwapAmount(swapAmount, nextSlippage);
+    },
+    [swapAmount, updateSwapAmount],
+  );
+
+  const init = useCallback(() => {
+    setGetAmount('' as Luna);
+    setSwapAmount('' as aLuna);
+  }, [setGetAmount, setSwapAmount]);
+
+  const proceed = useCallback(
+    async (swapAmount: aLuna, beliefPrice: Rate, maxSpread: number) => {
+      if (!connected || !swap || !terraWalletAddress) {
+        return;
+      }
+
+      if (estimatedFee) {
+        swap({
+          swapAmount,
+          gasWanted: estimatedFee.gasWanted,
+          txFee: estimatedFee.txFee,
+          beliefPrice: formatExecuteMsgNumber(big(1).div(beliefPrice)) as Rate,
+          maxSpread,
+          onTxSucceed: () => {
+            init();
+          },
+        });
+      } else {
+        await openAlert({
+          description: (
+            <>
+              Broadcasting failed,
+              <br />
+              please retry after some time.
+            </>
+          ),
+          agree: 'OK',
+        });
+      }
+    },
+    [connected, swap, init, estimatedFee, openAlert, terraWalletAddress],
+  );
+
+  // ---------------------------------------------
+  // effects
+  // ---------------------------------------------
+
+  useEffect(() => {
+    if (!connected || swapAmount.length === 0) {
+      estimateFee(null);
+      return;
+    }
+
+    const amount = floor(big(swapAmount).mul(MICRO));
+
+    if (amount.lt(0) || amount.gt(bank.tokenBalances.uaLuna ?? 0)) {
+      estimateFee(null);
+      return;
+    }
+
+    estimateFee([
+      new MsgExecuteContract(
+        terraWalletAddress as string,
+        contractAddress.cw20.aLuna,
+        {
+          send: {
+            contract: contractAddress.terraswap.alunaLunaPair,
+            amount,
+            msg: createHookMsg({
+              swap: {
+                belief_price: simulation?.beliefPrice,
+                max_spread: slippage,
+              },
+            }),
+          },
+        },
+      ),
+    ]);
+  }, [
+    terraWalletAddress,
+    bank.tokenBalances.uaLuna,
+    swapAmount,
+    connected,
+    simulation?.beliefPrice,
+    contractAddress.aluna.hub,
+    contractAddress.cw20.aLuna,
+    contractAddress.terraswap.alunaLunaPair,
+    estimateFee,
+    slippage,
+  ]);
+
+  useEffect(() => {
+    if (swapAmount.length > 0) {
+      updateSwapAmount(swapAmount, slippage);
+    }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // ---------------------------------------------
+  // presentation
+  // ---------------------------------------------
+  const theme = useTheme();
+
+  // Token selector
+  const [anchorEl, setAnchorEl] = React.useState<{in: null | HTMLElement, out:null | HTMLElement}>({
+    in: null,
+    out: null
+  });
+  const open = {
+    in: Boolean(anchorEl.in),
+    out: Boolean(anchorEl.out)
+  }
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, type: "in" | "out") => {
+    setAnchorEl((el)=> ({
+      ...el,
+      [type]: event.currentTarget
+    }));
+  };
+
+  const handleClose = (type: "in" | "out", token?: TFMToken) => {
+    if(token && type){  
+      console.log(type)
+      setSwapTokens((swapToken) => ({
+        ...swapToken,
+        [type]: {
+          name: token.name,
+          symbol: token.symbol
+        }
+      }))
+    }
+
+    setAnchorEl((el) => ({
+      ...el,
+      [type]: null,
+    }));
+  };
+
+  console.log(swapTokens);
+
+
+
+  if (
+    swapResult?.status === StreamStatus.IN_PROGRESS ||
+    swapResult?.status === StreamStatus.DONE
+  ) {
+    return (
+      <TxResultRenderer
+        resultRendering={swapResult.value}
+        onExit={() => {
+          init();
+          switch (swapResult.status) {
+            case StreamStatus.IN_PROGRESS:
+              swapResult.abort();
+              break;
+            case StreamStatus.DONE:
+              swapResult.clear();
+              break;
+          }
+        }}
+      />
+    );
+  }
+
+  return (
+    <div className={className} style={{
+      display: "flex",
+      flexDirection: "column",
+      gap: "10px",
+    }}>
+      {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
+
+      <ConvertSymbolsContainer>
+        <ConvertSymbols
+          className="symbols"
+          view="swap"
+          fromIcon={<TokenIcon token={nameToIcon(swapTokens.in.name)} />}
+          toIcon={<TokenIcon token={nameToIcon(swapTokens.out.name)} />}
+        />
+      </ConvertSymbolsContainer>
+
+      {/* Swap any asset (related to Cavern) */}
+      <div className="swap-description">
+        <p>I want to swap</p>
+        <p />
+      </div>
+
+      <SelectAndTextInputContainer
+        className="swap"
+        gridColumns={[140, '1fr']}
+        error={!!invalidSwapAmount}
+        leftHelperText={invalidSwapAmount}
+        rightHelperText={
+          connected && (
+            <span>
+              Balance:{' '}
+              <span
+                style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                onClick={() =>
+                  updateSwapAmount(
+                    formatLunaInput(demicrofy(bank.tokenBalances.uaLuna)),
+                    slippage,
+                  )
+                }
+              >
+                {formatLuna(demicrofy(bank.tokenBalances.uaLuna))} aLuna
+              </span>
+            </span>
+          )
+        }
+      >
+        <SelectAndTextInputContainerLabel>
+          <Button
+            id="basic-button"
+            aria-controls={open.in ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open.in ? 'true' : undefined}
+            onClick={(event) => handleClick(event, "in")}
+            sx={{color: theme.textColor, textTransform: "unset"}}
+          >
+            <TokenIcon token={nameToIcon(swapTokens.in.name)} /> {swapTokens.in.symbol} <ArrowDropDown/>
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl.in}
+            open={open.in}
+            onClose={() => handleClose("in")}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            {availableTokens.map(token => {
+              return (
+                <MenuItem key={`${token.name}-${token.id}-in`} onClick={() => handleClose("in",token)}>
+                  <ListItemIcon>
+                    <TokenIcon token={nameToIcon(token.name)} />
+                  </ListItemIcon>
+                  <ListItemText>{token.symbol}</ListItemText>
+                </MenuItem>
+               )
+            })}
+          </Menu>
+        </SelectAndTextInputContainerLabel>
+        <NumberMuiInput
+          placeholder="0.00"
+          error={!!invalidSwapAmount}
+          value={swapAmount}
+          maxIntegerPoinsts={LUNA_INPUT_MAXIMUM_INTEGER_POINTS}
+          maxDecimalPoints={LUNA_INPUT_MAXIMUM_DECIMAL_POINTS}
+          onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
+            updateSwapAmount(target.value, slippage)
+          }
+        />
+      </SelectAndTextInputContainer>
+
+      <IconLineSeparator />
+
+      {/* Get (Asset) */}
+      <div className="gett-description">
+        <p>and get</p>
+        <p />
+      </div>
+
+      <SelectAndTextInputContainer
+        className="gett"
+        gridColumns={[140, '1fr']}
+        error={!!invalidSwapAmount}
+      >
+        <SelectAndTextInputContainerLabel>
+          <Button
+            id="basic-button"
+            aria-controls={open.out ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open.out ? 'true' : undefined}
+            onClick={(event) => handleClick(event, "out")}
+            sx={{color: theme.textColor, textTransform: "unset"}}
+          >
+            <TokenIcon token={nameToIcon(swapTokens.out.name)} /> {swapTokens.out.symbol} <ArrowDropDown/>
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl.out}
+            open={open.out}
+            onClose={() => handleClose("out")}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            {availableTokens.map(token => {
+              return (
+                <MenuItem key={`${token.name}-${token.id}-out`} onClick={() => handleClose("out", token)}>
+                  <ListItemIcon>
+                    <TokenIcon token={nameToIcon(token.name)} />
+                  </ListItemIcon>
+                  <ListItemText>{token.symbol}</ListItemText>
+                </MenuItem>
+               )
+            })}
+          </Menu>
+        </SelectAndTextInputContainerLabel>
+        <NumberMuiInput
+          placeholder="0.00"
+          error={!!invalidSwapAmount}
+          value={getAmount}
+          maxIntegerPoinsts={LUNA_INPUT_MAXIMUM_INTEGER_POINTS}
+          maxDecimalPoints={LUNA_INPUT_MAXIMUM_DECIMAL_POINTS}
+          onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
+            updateGetAmount(target.value, slippage)
+          }
+        />
+      </SelectAndTextInputContainer>
+
+      <HorizontalHeavyRuler />
+
+      <DiscloseSlippageSelector
+        className="slippage"
+        items={SLIPPAGE_VALUES}
+        value={slippage}
+        onChange={updateSlippage}
+        helpText={
+          slippage < LOW_SLIPPAGE ? (
+            <SlippageSelectorNegativeHelpText>
+              The transaction may fail
+            </SlippageSelectorNegativeHelpText>
+          ) : slippage > FRONTRUN_SLIPPAGE ? (
+            <SlippageSelectorNegativeHelpText>
+              The transaction may be frontrun
+            </SlippageSelectorNegativeHelpText>
+          ) : undefined
+        }
+      />
+
+      {swapAmount.length > 0 && simulation && (
+        <TxFeeList className="receipt">
+          <SwapListItem
+            label="Price"
+            currencyA="bLUNA"
+            currencyB="LUNA"
+            exchangeRateAB={simulation.beliefPrice}
+            initialDirection="a/b"
+            formatExchangeRate={(price) =>
+              formatFluidDecimalPoints(
+                price,
+                LUNA_INPUT_MAXIMUM_DECIMAL_POINTS,
+                { delimiter: true },
+              )
+            }
+          />
+          <TxFeeListItem label="Minimum Received">
+            {formatLuna(demicrofy(simulation.minimumReceived))} LUNA
+          </TxFeeListItem>
+          <TxFeeListItem label="Trading Fee">
+            {formatLuna(demicrofy(simulation.swapFee))} LUNA
+          </TxFeeListItem>
+          <TxFeeListItem label="Tx Fee">
+            {!estimatedFeeError && !estimatedFee && (
+              <span className="spinner">
+                <CircleSpinner size={14} color={theme.colors.positive} />
+              </span>
+            )}
+            {estimatedFee &&
+              `≈ ${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}{' '}
+            {estimatedFeeError}
+          </TxFeeListItem>
+        </TxFeeList>
+      )}
+
+      {/* Submit */}
+      <Box sx={{
+        textAlign: "center",
+        marginTop: "30px",
+      }}>
+      <ViewAddressWarning >
+        <ActionButton
+          className="submit"
+          sx={{
+            padding: "20px 50px"
+          }}
+          disabled={
+            !availablePost ||
+            !connected ||
+            !swap ||
+            !simulation ||
+            swapAmount.length === 0 ||
+            big(swapAmount).lte(0) ||
+            !!invalidTxFee ||
+            !!invalidSwapAmount ||
+            big(simulation?.swapFee ?? 0).lte(0)
+          }
+          onClick={() =>
+            simulation && proceed(swapAmount, simulation.beliefPrice, slippage)
+          }
+        >
+          Swap
+        </ActionButton>
+      </ViewAddressWarning>
+      </Box>
+      {alertElement}
+    </div>
+  );
+}
+
+const StyledComponent = styled(Component)`
+  .swap,
+  .gett {
+    img {
+      font-size: 12px;
+    }
+  }
+  padding: 20px;
+`;
+
+export const SwapCard = fixHMR(StyledComponent);
