@@ -1,16 +1,15 @@
-import type { aLuna } from "@anchor-protocol/types";
-import { AnchorBank } from "@anchor-protocol/app-provider/hooks/useAnchorBank";
+import type { Token } from "@anchor-protocol/types";
 import { microfy } from "@libs/formatter";
 import { ReactNode } from "react";
 
 export function validateSwapAmount(
-  burnAmount: aLuna,
-  bank: AnchorBank
+  swapAmount: Token,
+  balance: Token,
 ): ReactNode {
-  if (burnAmount.length === 0) {
+  if (swapAmount.length === 0) {
     return undefined;
-  } else if (microfy(burnAmount).gt(bank.tokenBalances.uaLuna ?? 0)) {
-    return `Not enough aAssets`;
+  } else if (microfy(swapAmount).gt(balance ?? "0")) {
+    return `Not enough assets`;
   }
   return undefined;
 }

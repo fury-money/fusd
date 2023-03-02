@@ -2,7 +2,6 @@ import { validateTxFee } from '@anchor-protocol/app-fns';
 import {
   useAnchorBank,
   useAnchorWebapp,
-  useBondSwapTx,
 } from '@anchor-protocol/app-provider';
 import {
   formatLuna,
@@ -11,11 +10,9 @@ import {
   LUNA_INPUT_MAXIMUM_INTEGER_POINTS,
 } from '@anchor-protocol/notation';
 import { TokenIcon, Tokens } from '@anchor-protocol/token-icons';
-import { aLuna, NativeDenom, Rate, terraswap, u } from '@anchor-protocol/types';
-import { terraswapSimulationQuery } from '@libs/app-fns';
+import { aLuna, u } from '@anchor-protocol/types';
 import {
   demicrofy,
-  formatExecuteMsgNumber,
   formatFluidDecimalPoints,
   microfy,
   MICRO,
@@ -28,11 +25,11 @@ import {
   SelectAndTextInputContainer,
   SelectAndTextInputContainerLabel,
 } from '@libs/neumorphism-ui/components/SelectAndTextInputContainer';
-import { Luna } from '@libs/types';
+import { Luna, Token } from '@libs/types';
 import { useResolveLast } from '@libs/use-resolve-last';
-import { ArrowDropDown, InfoOutlined } from '@mui/icons-material';
+import { ArrowDropDown } from '@mui/icons-material';
 import { StreamStatus } from '@rx-stream/react';
-import big from 'big.js';
+import big, { Big, BigSource } from 'big.js';
 import { DiscloseSlippageSelector } from 'components/DiscloseSlippageSelector';
 import { MessageBox } from 'components/MessageBox';
 import { IconLineSeparator } from 'components/primitives/IconLineSeparator';
@@ -48,21 +45,21 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { swapSimulation } from './logic/swapSimulation';
-import { swapGetSimulation } from './logic/swapGetSimulation';
 import { validateSwapAmount } from './logic/validateSwapAmount';
-import { SwapSimulation } from './models/swapSimulation';
 import { ConvertSymbols, ConvertSymbolsContainer } from './components/ConvertSymbols';
 import styled, { useTheme } from 'styled-components';
 import { fixHMR } from 'fix-hmr';
 import { useFeeEstimationFor } from '@libs/app-provider';
 import { useAlert } from '@libs/neumorphism-ui/components/useAlert';
 import { floor } from '@libs/big-math';
-import { MsgExecuteContract } from '@terra-money/terra.js';
-import { createHookMsg } from '@libs/app-fns/tx/internal';
 import { CircleSpinner } from 'react-spinners-kit';
 import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { TFMToken, useTFMTokensQuery } from './queries/tfmQueries';
+import { SwapResponse, SwapSimulationAndSwapResponse, tfmEstimation, TFMToken, useTFMTokensQuery } from './queries/tfmQueries';
+import { useBalance } from './queries/balanceQuery';
+import { getTFMSwapMsg } from '@anchor-protocol/app-fns/tx/swap/tfm';
+import { useTFMSwapTx } from '@anchor-protocol/app-provider/tx/swap/tfm';
+import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+
 
 const swapAssetsWhitelist = [
   "uusdc",
@@ -80,11 +77,10 @@ const swapAssetsIcons: Tokens[]  = [
   "aluna"  
 ];
 
+
 function nameToIcon(name: string){
   return swapAssetsIcons[swapAssetsWhitelist.indexOf(name)]
 }
-
-
 
 
 export interface SwapProps {
@@ -105,14 +101,13 @@ export function Component({
 
   const {
     queryClient,
-    contractAddress: address,
     contractAddress,
   } = useAnchorWebapp();
 
   const [estimatedFee, estimatedFeeError, estimateFee] =
     useFeeEstimationFor(terraWalletAddress);
 
-  const [swap, swapResult] = useBondSwapTx();
+  const [swap, swapResult] = useTFMSwapTx();
 
   const [openAlert, alertElement] = useAlert();
 
@@ -127,22 +122,29 @@ export function Component({
   // states
   // ---------------------------------------------
   const [swapAmount, setSwapAmount] = useState<aLuna>('' as aLuna);
-  const [getAmount, setGetAmount] = useState<Luna>('' as Luna);
+  const [getAmount, setGetAmount] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(0.05);
 
-  const [swapTokens, setSwapTokens] = useState({in: {
+  const [swapTokens, setSwapTokens] = useState({out: {
+      contract_addr: contractAddress.native.usd as string,
       name: "uusdc",
       symbol:"axlUSDC"
-    }, out: {
+    }, in: {
+      contract_addr: "uluna",
       name: "LUNA",
       symbol: "LUNA"
     }
   });
 
+  const swapTokenBalances = {
+    in: useBalance(swapTokens.in.contract_addr),
+    out: useBalance(swapTokens.out.contract_addr)
+  };
 
+  const [resolving, setResolving] = useState(false);
   const [resolveSimulation, simulation] = useResolveLast<
-    SwapSimulation<Luna, aLuna> | undefined | null
-  >(() => null);
+    SwapSimulationAndSwapResponse | undefined | null
+  >(() => null, () => setResolving(false));
 
   // ---------------------------------------------
   // queries
@@ -159,7 +161,7 @@ export function Component({
   );
 
   const invalidSwapAmount = useMemo(
-    () => connected && validateSwapAmount(swapAmount, bank),
+    () => connected && validateSwapAmount(swapAmount, swapTokenBalances.in as Token<string>),
     [bank, swapAmount, connected],
   );
 
@@ -167,124 +169,63 @@ export function Component({
   // effects
   // ---------------------------------------------
   useEffect(() => {
-    if (simulation?.getAmount) {
-      setGetAmount(formatLunaInput(demicrofy(simulation?.getAmount)));
+    if (simulation?.quote?.return_amount) {
+      setGetAmount(simulation?.quote?.return_amount ?? 0);
     }
-  }, [setGetAmount, simulation?.getAmount]);
-
-  useEffect(() => {
-    if (simulation?.swapAmount) {
-      setSwapAmount(formatLunaInput(demicrofy(simulation?.swapAmount)));
-    }
-  }, [setSwapAmount, simulation?.swapAmount]);
+  }, [setGetAmount, simulation?.quote?.return_amount]);
 
   // ---------------------------------------------
   // callbacks
   // ---------------------------------------------
-  const updateSwapAmount = useCallback(
-    async (nextSwapAmount: string, maxSpread: number) => {
-      if (nextSwapAmount.trim().length === 0 || !queryClient) {
-        setGetAmount('' as Luna);
-        setSwapAmount('' as aLuna);
 
-        resolveSimulation(null);
-      } else if (isZero(nextSwapAmount)) {
-        setGetAmount('' as Luna);
-        setSwapAmount(nextSwapAmount as aLuna);
 
+  
+  const runtfmEstimation = useCallback(
+    async (nextSwapAmount: string, slippage: number) => {
+      if (nextSwapAmount.trim().length === 0 || isZero(nextSwapAmount)) {
         resolveSimulation(null);
       } else {
         const swapAmount: aLuna = nextSwapAmount as aLuna;
-        setSwapAmount(swapAmount);
-
         const amount = microfy(swapAmount).toString() as u<aLuna>;
 
         resolveSimulation(
-          terraswapSimulationQuery(
-            address.terraswap.alunaLunaPair,
-            {
-              info: {
-                token: {
-                  contract_addr: address.cw20.aLuna,
-                },
-              },
-              amount,
-            },
-            queryClient,
-          ).then(({ simulation }) => {
-            return simulation
-              ? swapGetSimulation(
-                  simulation as terraswap.pair.SimulationResponse<Luna>,
-                  amount,
-                  bank.tax,
-                  maxSpread,
-                )
-              : undefined;
-          }),
+          tfmEstimation({tokenIn: swapTokens.in.contract_addr, tokenOut: swapTokens.out.contract_addr, amount, slippage})
         );
+        setResolving(true);
       }
     },
     [
-      address.cw20.aLuna,
-      address.terraswap.alunaLunaPair,
-      bank.tax,
-      queryClient,
       resolveSimulation,
-      setSwapAmount,
-      setGetAmount,
+      swapTokens.in.contract_addr,
+      swapTokens.out.contract_addr,
     ],
   );
 
-  const updateGetAmount = useCallback(
-    (nextGetAmount: string, maxSpread: number) => {
-      if (nextGetAmount.trim().length === 0 || !queryClient) {
-        setSwapAmount('' as aLuna);
-        setGetAmount('' as Luna);
 
-        resolveSimulation(null);
-      } else if (isZero(nextGetAmount)) {
+  const updateSwapAmount = useCallback(
+    async (nextSwapAmount: string, slippage: number) => {
+      if (nextSwapAmount.trim().length === 0 || !queryClient) {
+        setGetAmount(0);
         setSwapAmount('' as aLuna);
-        setGetAmount(nextGetAmount as Luna);
 
-        resolveSimulation(null);
+      } else if (isZero(nextSwapAmount)) {
+        setGetAmount(0);
+        setSwapAmount(nextSwapAmount as aLuna);
+
       } else {
-        const getAmount: Luna = nextGetAmount as Luna;
-        setGetAmount(getAmount);
-
-        const amount = microfy(getAmount).toString() as u<Luna>;
-
-        resolveSimulation(
-          terraswapSimulationQuery(
-            address.terraswap.alunaLunaPair,
-            {
-              info: {
-                native_token: {
-                  denom: 'uluna' as NativeDenom,
-                },
-              },
-              amount,
-            },
-            queryClient,
-          ).then(({ simulation }) => {
-            return simulation
-              ? swapSimulation(
-                  simulation as terraswap.pair.SimulationResponse<Luna>,
-                  amount,
-                  bank.tax,
-                  maxSpread,
-                )
-              : undefined;
-          }),
-        );
+        const swapAmount: aLuna = nextSwapAmount as aLuna;
+        setSwapAmount(swapAmount);
+        const amount = microfy(swapAmount).toString() as u<aLuna>;
       }
+      runtfmEstimation(nextSwapAmount, slippage);
     },
     [
-      address.terraswap.alunaLunaPair,
-      bank.tax,
       queryClient,
       resolveSimulation,
       setSwapAmount,
       setGetAmount,
+      swapTokens.in.contract_addr,
+      swapTokens.out.contract_addr,
     ],
   );
 
@@ -295,25 +236,27 @@ export function Component({
     },
     [swapAmount, updateSwapAmount],
   );
-
+  
+  useEffect(
+    () => {
+      runtfmEstimation(swapAmount, slippage);
+    }, [swapAmount, updateSwapAmount, slippage, swapTokens])
+    
   const init = useCallback(() => {
-    setGetAmount('' as Luna);
+    setGetAmount(0);
     setSwapAmount('' as aLuna);
   }, [setGetAmount, setSwapAmount]);
 
   const proceed = useCallback(
-    async (swapAmount: aLuna, beliefPrice: Rate, maxSpread: number) => {
-      if (!connected || !swap || !terraWalletAddress) {
+    async (simulation: SwapResponse | undefined) => {
+      if (!connected || !swap || !terraWalletAddress || !simulation) {
         return;
       }
-
       if (estimatedFee) {
         swap({
-          swapAmount,
+          simulation,
           gasWanted: estimatedFee.gasWanted,
           txFee: estimatedFee.txFee,
-          beliefPrice: formatExecuteMsgNumber(big(1).div(beliefPrice)) as Rate,
-          maxSpread,
           onTxSucceed: () => {
             init();
           },
@@ -339,42 +282,27 @@ export function Component({
   // ---------------------------------------------
 
   useEffect(() => {
-    if (!connected || swapAmount.length === 0) {
+    if (!connected || swapAmount.length === 0 || !simulation?.swap.value.execute_msg || !terraWalletAddress) {
       estimateFee(null);
       return;
     }
 
     const amount = floor(big(swapAmount).mul(MICRO));
 
-    if (amount.lt(0) || amount.gt(bank.tokenBalances.uaLuna ?? 0)) {
+    if (amount.lt(0) || amount.gt(swapTokenBalances.in)) {
       estimateFee(null);
       return;
     }
 
-    estimateFee([
-      new MsgExecuteContract(
-        terraWalletAddress as string,
-        contractAddress.cw20.aLuna,
-        {
-          send: {
-            contract: contractAddress.terraswap.alunaLunaPair,
-            amount,
-            msg: createHookMsg({
-              swap: {
-                belief_price: simulation?.beliefPrice,
-                max_spread: slippage,
-              },
-            }),
-          },
-        },
-      ),
-    ]);
+    let msg = getTFMSwapMsg(simulation?.swap, terraWalletAddress);
+    estimateFee([msg]);
+
   }, [
     terraWalletAddress,
     bank.tokenBalances.uaLuna,
     swapAmount,
     connected,
-    simulation?.beliefPrice,
+    simulation?.swap?.value?.execute_msg,
     contractAddress.aluna.hub,
     contractAddress.cw20.aLuna,
     contractAddress.terraswap.alunaLunaPair,
@@ -412,14 +340,16 @@ export function Component({
 
   const handleClose = (type: "in" | "out", token?: TFMToken) => {
     if(token && type){  
-      console.log(type)
-      setSwapTokens((swapToken) => ({
-        ...swapToken,
-        [type]: {
-          name: token.name,
-          symbol: token.symbol
-        }
-      }))
+      if((type == "in" && swapTokens.out.name != token.name) || (type == "out" && swapTokens.in.name != token.name) ){
+        setSwapTokens((swapToken) => ({
+          ...swapToken,
+          [type]: {
+            name: token.name,
+            symbol: token.symbol,
+            contract_addr: token.contract_addr
+          }
+        }))
+      }
     }
 
     setAnchorEl((el) => ({
@@ -428,9 +358,12 @@ export function Component({
     }));
   };
 
-  console.log(swapTokens);
-
-
+  const switchAssets = () => {
+    setSwapTokens((swapToken) => ({
+      in: swapTokens.out,
+      out: swapTokens.in,
+    }))
+  }
 
   if (
     swapResult?.status === StreamStatus.IN_PROGRESS ||
@@ -455,12 +388,16 @@ export function Component({
   }
 
   return (
+    <>
+      <Box sx={{textAlign: "right", display: "flex", alignItems: "center", justifyContent: "end", color: theme.dimTextColor}}>
+        Powered by TFM <img style={{marginLeft: "8px"}} src="/tfm-logo.png" />
+      </Box>
     <div className={className} style={{
       display: "flex",
       flexDirection: "column",
       gap: "10px",
     }}>
-      {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
+
 
       <ConvertSymbolsContainer>
         <ConvertSymbols
@@ -490,12 +427,12 @@ export function Component({
                 style={{ textDecoration: 'underline', cursor: 'pointer' }}
                 onClick={() =>
                   updateSwapAmount(
-                    formatLunaInput(demicrofy(bank.tokenBalances.uaLuna)),
+                    formatLunaInput(demicrofy(swapTokenBalances.in as u<Luna>) as Luna<Big>),
                     slippage,
                   )
                 }
               >
-                {formatLuna(demicrofy(bank.tokenBalances.uaLuna))} aLuna
+                {formatLuna(demicrofy(swapTokenBalances.in as u<Luna>) as Luna<Big>)} {swapTokens.in.symbol}
               </span>
             </span>
           )
@@ -545,7 +482,9 @@ export function Component({
         />
       </SelectAndTextInputContainer>
 
-      <IconLineSeparator />
+      <Button role="button" onClick={switchAssets} sx={{maxWidth: "100px", margin: "auto"}}>
+        <CompareArrowsIcon style={{transform:"rotate(90deg)"}}/>
+      </Button>
 
       {/* Get (Asset) */}
       <div className="gett-description">
@@ -557,6 +496,7 @@ export function Component({
         className="gett"
         gridColumns={[140, '1fr']}
         error={!!invalidSwapAmount}
+        rightHelperText={resolving && <CircleSpinner size={14} color={theme.colors.positive} />}
       >
         <SelectAndTextInputContainerLabel>
           <Button
@@ -596,13 +536,11 @@ export function Component({
           value={getAmount}
           maxIntegerPoinsts={LUNA_INPUT_MAXIMUM_INTEGER_POINTS}
           maxDecimalPoints={LUNA_INPUT_MAXIMUM_DECIMAL_POINTS}
-          onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
-            updateGetAmount(target.value, slippage)
-          }
         />
       </SelectAndTextInputContainer>
 
-      <HorizontalHeavyRuler />
+      {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
+
 
       <DiscloseSlippageSelector
         className="slippage"
@@ -626,9 +564,9 @@ export function Component({
         <TxFeeList className="receipt">
           <SwapListItem
             label="Price"
-            currencyA="bLUNA"
-            currencyB="LUNA"
-            exchangeRateAB={simulation.beliefPrice}
+            currencyA={swapTokens.out.symbol}
+            currencyB={swapTokens.in.symbol}
+            exchangeRateAB={big(simulation.quote.return_amount ?? "0").div(simulation.quote.input_amount ?? "1")}
             initialDirection="a/b"
             formatExchangeRate={(price) =>
               formatFluidDecimalPoints(
@@ -639,21 +577,20 @@ export function Component({
             }
           />
           <TxFeeListItem label="Minimum Received">
-            {formatLuna(demicrofy(simulation.minimumReceived))} LUNA
+            {formatLuna(simulation.quote.return_amount * (1 - slippage) as Luna<BigSource>)} {swapTokens.out.symbol}
           </TxFeeListItem>
-          <TxFeeListItem label="Trading Fee">
-            {formatLuna(demicrofy(simulation.swapFee))} LUNA
-          </TxFeeListItem>
-          <TxFeeListItem label="Tx Fee">
-            {!estimatedFeeError && !estimatedFee && (
-              <span className="spinner">
-                <CircleSpinner size={14} color={theme.colors.positive} />
-              </span>
-            )}
-            {estimatedFee &&
-              `≈ ${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}{' '}
-            {estimatedFeeError}
-          </TxFeeListItem>
+          {!invalidTxFee && !invalidSwapAmount &&
+            <TxFeeListItem label="Tx Fee">
+              {!estimatedFeeError && !estimatedFee && (
+                <span className="spinner">
+                  <CircleSpinner size={14} color={theme.colors.positive} />
+                </span>
+              )}
+              {estimatedFee &&
+                `≈ ${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}{' '}
+              {estimatedFeeError}
+            </TxFeeListItem>
+          }
         </TxFeeList>
       )}
 
@@ -676,11 +613,10 @@ export function Component({
             swapAmount.length === 0 ||
             big(swapAmount).lte(0) ||
             !!invalidTxFee ||
-            !!invalidSwapAmount ||
-            big(simulation?.swapFee ?? 0).lte(0)
+            !!invalidSwapAmount
           }
           onClick={() =>
-            simulation && proceed(swapAmount, simulation.beliefPrice, slippage)
+            simulation && proceed(simulation?.swap)
           }
         >
           Swap
@@ -689,6 +625,7 @@ export function Component({
       </Box>
       {alertElement}
     </div>
+    </>
   );
 }
 

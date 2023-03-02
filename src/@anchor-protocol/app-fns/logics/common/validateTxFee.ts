@@ -6,7 +6,7 @@ export function validateTxFee(
   txFee: u<Luna<BigSource>> | undefined
 ): string | undefined {
   if (big(ustBalance ?? 0).lt(txFee ?? 1)) {
-    return "Not enough transaction fees";
+    return "Not enough for transaction fees";
   }
   return undefined;
 }

@@ -1,3 +1,4 @@
+import { Coin } from "@cosmjs/stargate";
 import { hiveFetch, QueryClient } from "@libs/query-client";
 import {
   AUD,
@@ -53,7 +54,16 @@ interface NativeBalancesQueryResult {
 
 interface LcdBankBalances {
   height: Num;
-  result: Array<{ denom: NativeDenom; amount: u<Token> }>;
+  result: {
+    balances: Array<{ denom: NativeDenom; amount: u<Token> }>;
+  }
+}
+
+interface LcdBankBalance {
+  height: Num;
+  result: {
+    balance: { denom: NativeDenom; amount: u<Token> }
+  }
 }
 
 export interface NativeBalances {
@@ -119,11 +129,11 @@ export async function terraNativeBalancesQuery(
   if ("lcdEndpoint" in queryClient) {
     balancesPromise = queryClient
       .lcdFetcher<LcdBankBalances>(
-        `${queryClient.lcdEndpoint}/bank/balances/${walletAddr}`,
+        `${queryClient.lcdEndpoint}/cosmos/bank/v1beta1/balances/${walletAddr}`,
         queryClient.requestInit
       )
       .then(({ result }) => {
-        return result.map(({ denom, amount }) => ({
+        return result.balances.map(({ denom, amount }) => ({
           amount,
           denom: denom
             .replace(
@@ -255,6 +265,63 @@ export async function terraNativeBalancesQuery(
   }
 
   return result;
+}
+
+
+export async function oneTerraNativeBalanceQuery(
+  queryClient: QueryClient,
+  walletAddr: HumanAddr | undefined,
+  denom: string | undefined,
+): Promise<Coin> {
+  if (!walletAddr || !denom) {
+    return { denom: "", amount: "0" as u<Token> }
+  }
+
+  let balancesPromise: Promise<{ denom: NativeDenom; amount: u<Token> }>;
+
+
+  if ("lcdEndpoint" in queryClient) {
+    balancesPromise = queryClient
+      .lcdFetcher<LcdBankBalance>(
+        `${queryClient.lcdEndpoint}/cosmos/bank/v1beta1/balances/${walletAddr}/by_denom?denom=${denom}`,
+        queryClient.requestInit
+      )
+      .then(({ result }) => {
+        return ({
+          amount: result.balance.amount,
+          denom: result.balance.denom
+            .replace(
+              "ibc/D70F005DE981F6EFFB3AD1DF85601258D1C01B9DEDC1F7C1B95C0993E83CF389",
+              "uusd"
+            )
+            .replace(
+              "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
+              "uusd"
+            ) as NativeDenom,
+        });
+      });
+  } else if ("hiveEndpoint" in queryClient) {
+    throw "Not implemented";
+  } else {
+    balancesPromise = queryClient
+      .batchFetcher!.bank.balance(walletAddr, denom)
+      .then((coin) => {
+        return ({
+          denom: coin.denom
+            .replace(
+              "ibc/D70F005DE981F6EFFB3AD1DF85601258D1C01B9DEDC1F7C1B95C0993E83CF389",
+              "uusd"
+            )
+            .replace(
+              "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
+              "uusd"
+            ) as NativeDenom,
+          amount: coin.amount as u<Token<string>>,
+        });
+      });
+  }
+
+  return balancesPromise;
 }
 
 export function pickNativeBalance<T extends Token>(

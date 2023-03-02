@@ -1,6 +1,7 @@
 import {
   EMPTY_NATIVE_BALANCES,
   NativeBalances,
+  oneTerraNativeBalanceQuery,
   pickNativeBalance,
   terraNativeBalancesQuery,
 } from "@libs/app-fns";
@@ -40,6 +41,31 @@ export function useTerraNativeBalances(walletAddr?: HumanAddr): NativeBalances {
 
   return nativeBalances;
 }
+
+
+export function useNativeBalanceQuery(denom: string | undefined){
+  const { queryClient, queryErrorReporter } = useApp();
+
+  const { connected, terraWalletAddress } = useAccount();
+
+  const result = useQuery(
+    [TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES, terraWalletAddress, denom],
+    createQueryFn( oneTerraNativeBalanceQuery, queryClient!),
+    {
+      refetchInterval: connected && 1000 * 60 * 5,
+      keepPreviousData: true,
+      onError: queryErrorReporter,
+      enabled: !!queryClient,
+      placeholderData: () => ({
+        denom: denom ?? "",
+        amount: "0"
+      })
+    }
+  );
+
+  return result;
+}
+
 
 export function useTerraNativeBalanceQuery<T extends Token>(
   denom: NativeDenom,

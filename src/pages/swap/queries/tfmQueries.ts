@@ -2,14 +2,20 @@ import {
   ANCHOR_QUERY_KEY,
   useAnchorWebapp,
 } from "@anchor-protocol/app-provider";
+import { Token, u } from "@libs/types";
+import { Coin } from "@terra-money/terra.js";
 import { useQuery, UseQueryResult } from "react-query";
+
+export async function simpleQuery<T>(queryUrl: string) : Promise<T>{
+  return fetch(queryUrl).then((res) => res.json())
+}
 
 export function useSimpleQuery<T>(queryUrl: string): UseQueryResult<T> {
   const { queryErrorReporter } = useAnchorWebapp();
 
   return useQuery(
     [ANCHOR_QUERY_KEY.TFM_AVAILABLE_TOKENS, queryUrl],
-    () => fetch(queryUrl).then((res) => res.json()),
+    () => simpleQuery(queryUrl),
     {
       refetchInterval: 1000 * 60 * 2,
       keepPreviousData: true,
@@ -18,7 +24,7 @@ export function useSimpleQuery<T>(queryUrl: string): UseQueryResult<T> {
   );
 }
 
-const TFM_API = "https://api-terra2.tfm.com/";
+const TFM_API = "https://api-terra2.tfm.com";
 
 export interface TFMToken {
   contract_addr: string;
@@ -31,4 +37,73 @@ export interface TFMToken {
 
 export function useTFMTokensQuery() {
   return useSimpleQuery<TFMToken[]>(`${TFM_API}/tokens`);
+}
+
+export interface SimulationParameters{
+  tokenIn: string,
+  tokenOut: string,
+  amount: u<Token>,
+}
+export interface SwapSimulationResponse {
+  "alternatives": any,
+  "input_amount": number,
+  "price_impact": number,
+  "return_amount": number
+  "routes": any
+}
+
+export function tfmSwapQuoteURL({
+  tokenIn,
+  tokenOut,
+  amount
+}: SimulationParameters){
+  return `${TFM_API}/route?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${true}`;
+}
+
+export interface SwapParameters{
+  tokenIn: string,
+  tokenOut: string,
+  amount: u<Token>,
+  slippage: number
+}
+
+export interface SwapResponse {
+    "type": string,
+    "value": {
+        "coins": Coin[],
+        "contract": "REPLACE_ROUTER",
+        "execute_msg": any,
+        "sender": "REPLACE_SENDER"
+    }
+}
+
+export function tfmSwapURL({
+  tokenIn,
+  tokenOut,
+  amount,
+  slippage
+}: SwapParameters){
+  return `${TFM_API}/swap?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${true}&slippage=${slippage}`;
+}
+
+export interface SwapSimulationAndSwapResponse {
+  quote: SwapSimulationResponse,
+  swap: SwapResponse
+}
+
+export async function tfmEstimation({
+  tokenIn,
+  tokenOut,
+  amount,
+  slippage
+}: SwapParameters): Promise<SwapSimulationAndSwapResponse>{
+  const [swapSimulation, swapOperation] = await Promise.all([
+    simpleQuery<SwapSimulationResponse>(tfmSwapQuoteURL({tokenIn, tokenOut, amount})),
+    simpleQuery<SwapResponse>(tfmSwapURL({tokenIn, tokenOut, amount, slippage}))
+  ]);
+
+  return {
+    quote: swapSimulation,
+    swap: swapOperation
+  }
 }

@@ -57,9 +57,6 @@ function Component({className}: MonitorPositionsProps){
 
   const {data: registeredCollaterals} = useWhitelistCollateralQuery();
 
-  console.log(collaterals)
-  console.log(registeredCollaterals)
-
   const {
     ust: { formatOutput: formatUSTOutput, demicrofy: demicrofyUST },
   } = useFormatters();
