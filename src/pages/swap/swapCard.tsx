@@ -59,6 +59,7 @@ import { useBalance } from './queries/balanceQuery';
 import { getTFMSwapMsg } from '@anchor-protocol/app-fns/tx/swap/tfm';
 import { useTFMSwapTx } from '@anchor-protocol/app-provider/tx/swap/tfm';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
+import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 
 
 const swapAssetsWhitelist = [
@@ -128,11 +129,13 @@ export function Component({
   const [swapTokens, setSwapTokens] = useState({out: {
       contract_addr: contractAddress.native.usd as string,
       name: "uusdc",
-      symbol:"axlUSDC"
+      symbol:"axlUSDC",
+      is_token_liquid: true,
     }, in: {
       contract_addr: "uluna",
       name: "LUNA",
-      symbol: "LUNA"
+      symbol: "LUNA",
+      is_token_liquid: true,
     }
   });
 
@@ -346,7 +349,7 @@ export function Component({
           [type]: {
             name: token.name,
             symbol: token.symbol,
-            contract_addr: token.contract_addr
+            contract_addr: token.contract_addr,
           }
         }))
       }
@@ -464,7 +467,9 @@ export function Component({
                   <ListItemIcon>
                     <TokenIcon token={nameToIcon(token.name)} />
                   </ListItemIcon>
-                  <ListItemText>{token.symbol}</ListItemText>
+                  <ListItemText>
+                  {token.symbol} 
+                  </ListItemText>
                 </MenuItem>
                )
             })}
@@ -524,7 +529,9 @@ export function Component({
                   <ListItemIcon>
                     <TokenIcon token={nameToIcon(token.name)} />
                   </ListItemIcon>
-                  <ListItemText>{token.symbol}</ListItemText>
+                   <ListItemText>
+                  {token.symbol} 
+                  </ListItemText>
                 </MenuItem>
                )
             })}
@@ -539,6 +546,7 @@ export function Component({
         />
       </SelectAndTextInputContainer>
 
+      {((simulation?.quote.price_impact ?? 0) > slippage) && <MessageBox style={{color: theme.colors.negative, borderColor: theme.colors.negative}}>Slippage is big, be careful when trading this asset</MessageBox>}
       {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
 
 
