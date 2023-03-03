@@ -6,7 +6,7 @@ import { SwapCard } from "./swapCard";
 
 
 export interface SwapProps{
-  className: string
+  className?: string
 }
 
 export function Swap({className}: SwapProps){

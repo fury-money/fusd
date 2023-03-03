@@ -42,7 +42,7 @@ function Component({className}: MonitorPositionsProps){
 	const displayData = useMemo(()=>{
 		return positionData
 			?.sort((a, b) => b.borrow - a.borrow)
-			?.sort((a, b)=> +(a.over_limit == "true") - +(b.over_limit == "true"))
+			?.sort((a, b)=> +(a.over_limit == "false") - +(b.over_limit == "false"))
 	},[positionData])
 
 	const totalBorrowed = useMemo(()=> {
