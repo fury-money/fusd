@@ -69,7 +69,7 @@ function LiquidationStatsSectionBase({
       {!isVerySmall && 
       <TableContainer style={{ maxHeight: 300, overflow: 'scroll' }}>
         <Table
-          sx={{ minWidth: 650, padding: '5px 10px' }}
+          sx={{ minWidth: 550, padding: '5px 10px' }}
           aria-label="simple table"
           stickyHeader
         >
