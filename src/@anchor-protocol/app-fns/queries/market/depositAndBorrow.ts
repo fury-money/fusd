@@ -82,7 +82,7 @@ export async function marketDepositAndBorrowQuery({
   );
 
   const borrowings = group(borrowHistory, (k) => gmt9am(k.timestamp));
-  
+
   const combined = Array.from(deposits).map(([timestamp, deposit]) => {
     const borrowing = borrowings.get(timestamp);
     return {

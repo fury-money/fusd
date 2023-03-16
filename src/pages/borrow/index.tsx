@@ -5,6 +5,7 @@ import { links, screen } from 'env';
 import { Overview } from 'pages/borrow/components/Overview';
 import styled from 'styled-components';
 import { CollateralList } from './components/CollateralList';
+import { Loop } from './components/Loop';
 export interface BorrowProps {
   className?: string;
 }
@@ -20,6 +21,7 @@ function BorrowBase({ className }: BorrowProps) {
 
       <Overview className="borrow" />
       <CollateralList className="collateral-list" />
+      <Loop className="loop" />
     </PaddedLayout>
   );
 }

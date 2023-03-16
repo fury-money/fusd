@@ -42,15 +42,14 @@ export function useTerraNativeBalances(walletAddr?: HumanAddr): NativeBalances {
   return nativeBalances;
 }
 
-
-export function useNativeBalanceQuery(denom: string | undefined){
+export function useNativeBalanceQuery(denom: string | undefined) {
   const { queryClient, queryErrorReporter } = useApp();
 
   const { connected, terraWalletAddress } = useAccount();
 
   const result = useQuery(
     [TERRA_QUERY_KEY.TERRA_NATIVE_BALANCES, terraWalletAddress, denom],
-    createQueryFn( oneTerraNativeBalanceQuery, queryClient!),
+    createQueryFn(oneTerraNativeBalanceQuery, queryClient!),
     {
       refetchInterval: connected && 1000 * 60 * 5,
       keepPreviousData: true,
@@ -58,14 +57,13 @@ export function useNativeBalanceQuery(denom: string | undefined){
       enabled: !!queryClient,
       placeholderData: () => ({
         denom: denom ?? "",
-        amount: "0"
-      })
+        amount: "0",
+      }),
     }
   );
 
   return result;
 }
-
 
 export function useTerraNativeBalanceQuery<T extends Token>(
   denom: NativeDenom,

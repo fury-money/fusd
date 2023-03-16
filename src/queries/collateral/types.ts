@@ -9,6 +9,12 @@ export interface WhitelistWasmQuery {
   >;
 }
 
+export function isWrappedCollateral(
+  collateral: WhitelistCollateral
+): collateral is WhitelistWrappedCollateral {
+  return "info" in collateral;
+}
+
 export type WhitelistWrappedCollateral =
   moneyMarket.overseer.WhitelistResponse["elems"][0] & {
     icon?: string;

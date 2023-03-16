@@ -1,7 +1,6 @@
-import { useAnchorBank, useAnchorWebapp, useNetwork } from '@anchor-protocol/app-provider';
+import { useAnchorWebapp, useNetwork } from '@anchor-protocol/app-provider';
 import { Gas, HumanAddr, Luna, u } from '@libs/types';
 import { Msg } from '@terra-money/terra.js';
-import big from 'big.js';
 import { useCallback, useMemo, useState } from 'react';
 import { useApp } from '../contexts/app';
 import debounce from 'lodash.debounce';
@@ -90,6 +89,7 @@ export function useFeeEstimationFor(
   EstimatedFee | undefined,
   string | JSX.Element | undefined,
   (msgs: Msg[] | null) => void,
+  boolean
 ] {
   const estimateFee = useEstimateFee(walletAddress);
   const [estimatedFeeError, setEstimatedFeeError] = useState<
@@ -97,6 +97,7 @@ export function useFeeEstimationFor(
   >();
 
   const [estimatedFee, setEstimatedFee] = useState<EstimatedFee | undefined>();
+  const [isEstimatingFee, setIsEstimatingFee] = useState(false);
 
   return [
     estimatedFee,
@@ -106,18 +107,20 @@ export function useFeeEstimationFor(
         setEstimatedFeeError(undefined);
         setEstimatedFee(undefined);
         if (!msgs) {
+          setIsEstimatingFee(false);
           return;
         }
+        setIsEstimatingFee(true);
 
         estimateFee(msgs)
           .then((estimated) => {
             setEstimatedFeeError(undefined);
             setEstimatedFee(estimated);
+            setIsEstimatingFee(false);
           })
           .catch((error) => {
 
             const mappedError = mapEstimateFeeError(error);
-
             setEstimatedFeeError(() => (<div style={{display:"flex", alignItems: "center"}}>
                 Error simulating the transaction
                 <InfoTooltip style={{display: "inline", marginLeft: 10}}>
@@ -125,9 +128,11 @@ export function useFeeEstimationFor(
                 </InfoTooltip>
               </div>)); 
             setEstimatedFee(undefined);
+            setIsEstimatingFee(false);
           })
           .then((ui) => {});
       }, 500);
     }, [estimateFee, setEstimatedFeeError, setEstimatedFee]),
+    isEstimatingFee
   ];
 }

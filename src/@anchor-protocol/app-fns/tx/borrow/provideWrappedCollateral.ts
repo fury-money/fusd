@@ -17,6 +17,8 @@ import {
   Rate,
   u,
   UST,
+  Token,
+  CW20Addr,
 } from "@anchor-protocol/types";
 import {
   pickAttributeValue,
@@ -52,6 +54,51 @@ import { BorrowMarket } from "../../queries/borrow/market";
 import { _fetchBorrowData } from "./_fetchBorrowData";
 import big from "big.js";
 
+export function getWrappedCollateralMessages(
+  walletAddr: HumanAddr,
+  depositAmount: bAsset,
+  lunaAmount: u<bAsset>,
+  underlyingToken: CW20Addr,
+  collateralToken: CW20Addr,
+  custodyContract: HumanAddr,
+  overseerAddr: HumanAddr,
+  decimals: number
+) {
+  return [
+    // Raise allowance on the actual token
+    new MsgExecuteContract(walletAddr, underlyingToken, {
+      increase_allowance: {
+        spender: collateralToken,
+        amount: formatInput(microfy(depositAmount, decimals), decimals),
+      },
+    }),
+    // Wrap the tokens
+    new MsgExecuteContract(walletAddr, collateralToken, {
+      mint: {
+        recipient: walletAddr,
+        amount: formatInput(lunaAmount, decimals),
+      },
+    }),
+    // provide_collateral call
+    new MsgExecuteContract(walletAddr, collateralToken, {
+      send: {
+        contract: custodyContract,
+        amount: formatInput(lunaAmount, decimals),
+        msg: createHookMsg({
+          deposit_collateral: {},
+        }),
+      },
+    }),
+    // lock_collateral call
+    new MsgExecuteContract(walletAddr, overseerAddr, {
+      // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L75
+      lock_collateral: {
+        collaterals: [[collateralToken, formatInput(lunaAmount, decimals)]],
+      },
+    }),
+  ];
+}
+
 export function borrowProvideWrappedCollateralTx($: {
   collateral: WhitelistWrappedCollateral;
   walletAddr: HumanAddr;
@@ -78,51 +125,16 @@ export function borrowProvideWrappedCollateralTx($: {
 
   return pipe(
     _createTxOptions({
-      msgs: [
-        // Raise allowance on the actual token
-        new MsgExecuteContract(
-          $.walletAddr,
-          $.collateral.info.info.tokenAddress,
-          {
-            increase_allowance: {
-              spender: $.collateral.collateral_token,
-              amount: formatInput(
-                microfy($.depositAmount, $.collateral.decimals),
-                $.collateral.decimals
-              ),
-            },
-          }
-        ),
-        // Wrap the tokens
-        new MsgExecuteContract($.walletAddr, $.collateral.collateral_token, {
-          mint: {
-            recipient: $.walletAddr,
-            amount: formatInput($.lunaAmount, $.collateral.decimals),
-          },
-        }),
-        // provide_collateral call
-        new MsgExecuteContract($.walletAddr, $.collateral.collateral_token, {
-          send: {
-            contract: $.collateral.custody_contract,
-            amount: formatInput($.lunaAmount, $.collateral.decimals),
-            msg: createHookMsg({
-              deposit_collateral: {},
-            }),
-          },
-        }),
-        // lock_collateral call
-        new MsgExecuteContract($.walletAddr, $.overseerAddr, {
-          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L75
-          lock_collateral: {
-            collaterals: [
-              [
-                $.collateral.collateral_token,
-                formatInput($.lunaAmount, $.collateral.decimals),
-              ],
-            ],
-          },
-        }),
-      ],
+      msgs: getWrappedCollateralMessages(
+        $.walletAddr,
+        $.depositAmount,
+        $.lunaAmount,
+        $.collateral.info.info.tokenAddress as CW20Addr,
+        $.collateral.collateral_token,
+        $.collateral.custody_contract,
+        $.overseerAddr,
+        $.collateral.decimals
+      ),
       fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),

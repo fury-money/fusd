@@ -9,6 +9,7 @@ export * from "./forms/borrow/provideCollateral";
 export * from "./forms/borrow/redeemCollateral";
 export * from "./forms/borrow/redeemWrappedCollateral";
 export * from "./forms/borrow/repay";
+export * from "./forms/borrow/loop";
 export * from "./forms/earn/deposit";
 export * from "./forms/earn/withdraw";
 export * from "./functions/cw20Decimals";

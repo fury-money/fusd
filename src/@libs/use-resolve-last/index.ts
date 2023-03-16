@@ -47,8 +47,8 @@ export function useResolveLast<T>(
 
   useEffect(() => {
     resolver.subscribe(setState);
-    if(onResolve){
-      resolver.subscribe(onResolve)
+    if (onResolve) {
+      resolver.subscribe(onResolve);
     }
 
     return () => {

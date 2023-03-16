@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 
 export function validateSwapAmount(
   swapAmount: Token,
-  balance: Token,
+  balance: Token
 ): ReactNode {
   if (swapAmount.length === 0) {
     return undefined;

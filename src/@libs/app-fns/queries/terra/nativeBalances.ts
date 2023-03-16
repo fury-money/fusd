@@ -56,14 +56,14 @@ interface LcdBankBalances {
   height: Num;
   result: {
     balances: Array<{ denom: NativeDenom; amount: u<Token> }>;
-  }
+  };
 }
 
 interface LcdBankBalance {
   height: Num;
   result: {
-    balance: { denom: NativeDenom; amount: u<Token> }
-  }
+    balance: { denom: NativeDenom; amount: u<Token> };
+  };
 }
 
 export interface NativeBalances {
@@ -267,18 +267,16 @@ export async function terraNativeBalancesQuery(
   return result;
 }
 
-
 export async function oneTerraNativeBalanceQuery(
   queryClient: QueryClient,
   walletAddr: HumanAddr | undefined,
-  denom: string | undefined,
+  denom: string | undefined
 ): Promise<Coin> {
   if (!walletAddr || !denom) {
-    return { denom: "", amount: "0" as u<Token> }
+    return { denom: "", amount: "0" as u<Token> };
   }
 
   let balancesPromise: Promise<{ denom: NativeDenom; amount: u<Token> }>;
-
 
   if ("lcdEndpoint" in queryClient) {
     balancesPromise = queryClient
@@ -287,7 +285,7 @@ export async function oneTerraNativeBalanceQuery(
         queryClient.requestInit
       )
       .then(({ result }) => {
-        return ({
+        return {
           amount: result.balance.amount,
           denom: result.balance.denom
             .replace(
@@ -298,7 +296,7 @@ export async function oneTerraNativeBalanceQuery(
               "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
               "uusd"
             ) as NativeDenom,
-        });
+        };
       });
   } else if ("hiveEndpoint" in queryClient) {
     throw "Not implemented";
@@ -306,7 +304,7 @@ export async function oneTerraNativeBalanceQuery(
     balancesPromise = queryClient
       .batchFetcher!.bank.balance(walletAddr, denom)
       .then((coin) => {
-        return ({
+        return {
           denom: coin.denom
             .replace(
               "ibc/D70F005DE981F6EFFB3AD1DF85601258D1C01B9DEDC1F7C1B95C0993E83CF389",
@@ -317,7 +315,7 @@ export async function oneTerraNativeBalanceQuery(
               "uusd"
             ) as NativeDenom,
           amount: coin.amount as u<Token<string>>,
-        });
+        };
       });
   }
 

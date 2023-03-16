@@ -1,10 +1,4 @@
-import {
-  Gas,
-  HumanAddr,
-  Rate,
-  u,
-  UST,
-} from "@anchor-protocol/types";
+import { Gas, HumanAddr, Rate, u, UST } from "@anchor-protocol/types";
 import {
   pickEvent,
   pickRawLog,
@@ -30,31 +24,27 @@ import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
 import { SwapResponse } from "pages/swap/queries/tfmQueries";
 import { Observable } from "rxjs";
 
-const TFM_ROUTER_ADDRESS = "terra19hz374h6ruwtzrnm8ytkae782uv79h9yt9tuytgvt94t26c4793qnfg7vn";
+const TFM_ROUTER_ADDRESS =
+  "terra19hz374h6ruwtzrnm8ytkae782uv79h9yt9tuytgvt94t26c4793qnfg7vn";
 
-export function getTFMSwapMsg(simulation: SwapResponse, walletAddr: HumanAddr){
-  if(simulation?.value.coins[0]){
+export function getTFMSwapMsg(simulation: SwapResponse, walletAddr: HumanAddr) {
+  if (simulation?.value.coins[0]) {
     return new MsgExecuteContract(
       walletAddr,
       TFM_ROUTER_ADDRESS,
       simulation?.value.execute_msg,
       `${simulation?.value.coins[0].amount}${simulation?.value.coins[0].denom}`
     );
-  }else{
-    return new MsgExecuteContract(
-      walletAddr,
-      simulation.value.contract,
-      {
-        ...simulation?.value.execute_msg,
-        send:{
-          ...simulation?.value.execute_msg.send,
-          contract: TFM_ROUTER_ADDRESS,
-        }
+  } else {
+    return new MsgExecuteContract(walletAddr, simulation.value.contract, {
+      ...simulation?.value.execute_msg,
+      send: {
+        ...simulation?.value.execute_msg.send,
+        contract: TFM_ROUTER_ADDRESS,
       },
-    )
+    });
   }
 }
-
 
 export function tfmSwapTx($: {
   walletAddr: HumanAddr;
@@ -74,9 +64,7 @@ export function tfmSwapTx($: {
 
   return pipe(
     _createTxOptions({
-      msgs: [
-        getTFMSwapMsg($.simulation, $.walletAddr)
-      ],
+      msgs: [getTFMSwapMsg($.simulation, $.walletAddr)],
       fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
@@ -99,10 +87,7 @@ export function tfmSwapTx($: {
         return {
           value: null,
           phase: TxStreamPhase.SUCCEED,
-          receipts: [
-            helper.txHashReceipt(),
-            helper.txFeeReceipt(),
-          ],
+          receipts: [helper.txHashReceipt(), helper.txFeeReceipt()],
         } as TxResultRendering;
       } catch (error) {
         return helper.failedToParseTxResult();

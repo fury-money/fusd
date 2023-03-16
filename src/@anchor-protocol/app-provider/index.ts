@@ -36,6 +36,7 @@ export * from "./queries/borrow/borrower";
 export * from "./queries/borrow/market";
 export * from "./queries/borrow/utils/index";
 export * from "./queries/borrow/utils/tokenDisplay";
+export * from "./queries/borrow/useLSDCollateralQuery";
 export * from "./queries/earn/apyHistory";
 export * from "./queries/earn/epochStates";
 export * from "./queries/gov/config";

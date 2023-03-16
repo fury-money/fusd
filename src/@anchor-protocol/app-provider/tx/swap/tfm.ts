@@ -9,12 +9,11 @@ import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
 import { SwapResponse } from "pages/swap/queries/tfmQueries";
 
-
 export interface TFMSwapTxParams {
-	simulation: SwapResponse;
-	gasWanted: Gas;
-	txFee: u<UST>;
-  	onTxSucceed?: () => void;
+  simulation: SwapResponse;
+  gasWanted: Gas;
+  txFee: u<UST>;
+  onTxSucceed?: () => void;
 }
 
 export function useTFMSwapTx() {
@@ -28,12 +27,7 @@ export function useTFMSwapTx() {
   const refetchQueries = useRefetchQueries();
 
   const stream = useCallback(
-    ({
-     	simulation,
-     	onTxSucceed,
-      	txFee,
-      	gasWanted,
-    }: TFMSwapTxParams) => {
+    ({ simulation, onTxSucceed, txFee, gasWanted }: TFMSwapTxParams) => {
       if (
         !availablePost ||
         !connected ||

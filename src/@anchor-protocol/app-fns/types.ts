@@ -38,7 +38,7 @@ export interface AnchorTokenBalances {
   uAncUstLP: u<AncUstLP>;
   uaLunaLunaLP: u<aLunaLunaLP>;
   uLSDs: {
-    [key in RegisteredLSDs]: string;
+    [key in RegisteredLSDs]: u<LSD<RegisteredLSDs>>;
   };
 }
 
