@@ -11,7 +11,6 @@ import {
   Coin,
   Coins,
   MsgExecuteContract,
-  MsgSend,
 } from "@terra-money/terra.js";
 import { useAccount } from "contexts/account";
 import { useBalances } from "contexts/balances";
@@ -24,7 +23,7 @@ export interface EarnDepositFormReturn extends EarnDepositFormStates {
 
 export function useEarnDepositForm(): EarnDepositFormReturn {
   const { connected, terraWalletAddress } = useAccount();
-  const { contractAddress, constants } = useAnchorWebapp();
+  const { contractAddress } = useAnchorWebapp();
 
   const [estimatedFee, estimatedFeeError, estimateFee] =
     useFeeEstimationFor(terraWalletAddress);
@@ -42,7 +41,6 @@ export function useEarnDepositForm(): EarnDepositFormReturn {
       taxRate: taxRate,
       maxTaxUUSD: maxTax,
       userUUSTBalance: uUST,
-      depositFeeAmount: constants.depositFeeAmount,
     },
     () => ({ depositAmount: "" as UST })
   );
@@ -68,21 +66,6 @@ export function useEarnDepositForm(): EarnDepositFormReturn {
                 contractAddress.native.usd,
                 formatTokenInput(
                   big(depositAmount)
-                    .mul(1 - constants.depositFeeAmount)
-                    .toString() as UST<string>
-                )
-              ),
-            ])
-          ),
-          new MsgSend(
-            terraWalletAddress,
-            contractAddress.admin.feeAddress,
-            new Coins([
-              new Coin(
-                contractAddress.native.usd,
-                formatTokenInput(
-                  big(depositAmount)
-                    .mul(constants.depositFeeAmount)
                     .toString() as UST<string>
                 )
               ),

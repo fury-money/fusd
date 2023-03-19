@@ -74,7 +74,6 @@ export interface AnchorConstants extends AppConstants {
   airdropGas: Gas;
   bondGasWanted: Gas;
   astroportGasWanted: Gas;
-  depositFeeAmount: number;
 }
 
 export interface LSDContracts {
