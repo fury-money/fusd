@@ -29,7 +29,7 @@ interface DepositDialogParams extends UIElementProps, EarnDepositFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
 
-type DepositDialogReturn = void;
+type  DepositDialogReturn = void;
 type DepositDialogProps = DialogProps<
   DepositDialogParams,
   DepositDialogReturn
@@ -45,7 +45,6 @@ function DepositDialogBase(props: DepositDialogProps) {
     closeDialog,
     depositAmount,
     receiveAmount,
-    cavernFee,
     estimatedFee,
     estimatedFeeError,
     maxAmount,
@@ -167,11 +166,6 @@ function DepositDialogBase(props: DepositDialogProps) {
             {receiveAmount &&
               <TxFeeListItem label="Receive Amount">
                 {`${formatOutput(demicrofy(receiveAmount))} ${symbol}`}
-              </TxFeeListItem>
-            }
-            {cavernFee &&
-              <TxFeeListItem label="Cavern Protocol Fee (0.5% - 18 days APR)">
-                {`${formatOutput(demicrofy(cavernFee))} ${symbol}`}
               </TxFeeListItem>
             }
           </TxFeeList>

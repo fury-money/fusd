@@ -33,8 +33,6 @@ export function useEarnDepositTx() {
         marketAddr: contractAddress.moneyMarket.market,
         depositAmount,
         stableDenom: contractAddress.native.usd,
-        depositFeeAmount: constants.depositFeeAmount,
-        depositFeeAddress: contractAddress.admin.feeAddress,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,

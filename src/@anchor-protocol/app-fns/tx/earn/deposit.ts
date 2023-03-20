@@ -50,8 +50,6 @@ export function earnDepositTx($: {
   marketAddr: HumanAddr;
   depositAmount: UST;
   stableDenom: NativeDenom;
-  depositFeeAmount: number;
-  depositFeeAddress: HumanAddr;
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -81,26 +79,11 @@ export function earnDepositTx($: {
               $.stableDenom,
               formatTokenInput(
                 big($.depositAmount)
-                  .mul(1 - $.depositFeeAmount)
                   .toString() as UST<string>
               )
             ),
           ])
-        ),
-        new MsgSend(
-          $.walletAddr,
-          $.depositFeeAddress,
-          new Coins([
-            new Coin(
-              $.stableDenom,
-              formatTokenInput(
-                big($.depositAmount)
-                  .mul($.depositFeeAmount)
-                  .toString() as UST<string>
-              )
-            ),
-          ])
-        ),
+        )
       ],
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
