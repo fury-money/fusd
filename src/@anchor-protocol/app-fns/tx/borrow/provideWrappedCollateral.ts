@@ -46,7 +46,7 @@ import {
   MsgExecuteContract,
 } from "@terra-money/terra.js";
 import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
-import { WhitelistCollateral, WhitelistWrappedCollateral } from "queries";
+import { WhitelistWrappedCollateral } from "queries";
 import { QueryObserverResult } from "react-query";
 import { Observable } from "rxjs";
 import { BorrowBorrower } from "../../queries/borrow/borrower";
@@ -74,9 +74,9 @@ export function getWrappedCollateralMessages(
     }),
     // Wrap the tokens
     new MsgExecuteContract(walletAddr, collateralToken, {
-      mint: {
+      mint_with: {
         recipient: walletAddr,
-        amount: formatInput(lunaAmount, decimals),
+        lsd_amount: formatInput(microfy(depositAmount, decimals), decimals),
       },
     }),
     // provide_collateral call

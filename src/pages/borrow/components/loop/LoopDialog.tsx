@@ -98,37 +98,43 @@ function BorrowDialogBase(props: BorrowDialogProps) {
 
   const [openConfirm, confirmElement] = useConfirm();
 
+  const [estimatedFee, estimatedFeeError, estimateFee, isEstimatingFee] =
+    useFeeEstimationFor(terraWalletAddress);
+  const [feeEstimationValid, setFeeEstimationValid] = useState(false);
+
   const updateCollateralAmount = useCallback(
     (nextCollateralAmount: string, maxCollateralAmount: string) => {
+      setFeeEstimationValid(false);
+
       input({
         collateralAmount: nextCollateralAmount as CollateralAmount,
         maxCollateralAmount: maxCollateralAmount as CollateralAmount,
       });
     },
-    [input],
+    [input, setFeeEstimationValid],
   );
 
   const updateTargetLeverage = useCallback(
     (nextLeverage: string | number) => {
+      setFeeEstimationValid(false);
       input({
         targetLeverage: nextLeverage.toString() as Rate,
       });
     },
-    [input],
+    [input, setFeeEstimationValid],
   );
 
   const updateMaximumLTV = useCallback(
     (maximumLTV: Rate<Big>) => {
+      setFeeEstimationValid(false);
       input({
         maximumLTV: maximumLTV.toString() as Rate
       });
     },
-    [input],
+    [input, setFeeEstimationValid],
   );
 
 
-  const [estimatedFee, estimatedFeeError, estimateFee, isEstimatingFee] =
-    useFeeEstimationFor(terraWalletAddress);
 
   const {data: allCollaterals} = useWhitelistCollateralQuery();
 
@@ -268,6 +274,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
     ).then(msgs => {
       setLoopMsgs(msgs);
       console.log(msgs);
+      setFeeEstimationValid(true);
       estimateFee(msgs)
     })
     .finally(() => setFeeEstimationTriggered(false));
@@ -339,8 +346,10 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           maxDecimalPoints={UST_INPUT_MAXIMUM_DECIMAL_POINTS}
           label="Initial collateral deposit"
           error={!!states.invalidCollateralAmount}
-          onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
+          onChange={({ target }: ChangeEvent<HTMLInputElement>) => {
+            setFeeEstimationValid(false);
             updateCollateralAmount(target.value, loopTokenBalance)
+          }
           }
           InputProps={{
             endAdornment: (
@@ -399,8 +408,10 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                 textDecoration: 'underline',
                 cursor: 'pointer',
               }}
-              onClick={() =>
+              onClick={() =>{
+                setFeeEstimationValid(false);
                 updateTargetLeverage(states.maximumLeverage.toFixed(2))
+              }
               }
             >
             Max : {formatOutput(demicrofy(loopTokenBalance as u<Token>))} {loopToken?.info.info.symbol}
@@ -452,7 +463,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           onChange={(
             { target }: Event,
             newValue: number | number[],
-          ) => {
+          ) => {        
             updateTargetLeverage(Array.isArray(newValue) ? newValue[0] : newValue)
           }}
           valueLabelFormat={(value) => `${value}x`}
@@ -471,8 +482,9 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                 textDecoration: 'underline',
                 cursor: 'pointer',
               }}
-              onClick={() =>
+              onClick={() =>{
                 updateTargetLeverage(states.maximumLeverage.toFixed(2))
+              }
               }
             >
             Max : {states.maximumLeverage.toFixed(2)}x
@@ -534,10 +546,10 @@ function BorrowDialogBase(props: BorrowDialogProps) {
         </div>
         {(estimatedFee || estimatedFeeError || isEstimatingFee || feeEstimationTriggered) && <TxFeeList className="receipt">
           <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-            {estimatedFee &&
+            {estimatedFee && !feeEstimationTriggered &&
               big(estimatedFee.txFee).gt(0) &&
               `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
-            {!estimatedFeeError && !estimatedFee && (
+            {(!estimatedFeeError && !estimatedFee || feeEstimationTriggered) && (
               <span className="spinner">
                 <CircleSpinner size={14} color={theme.colors.positive} />
               </span>
@@ -545,7 +557,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
             {estimatedFeeError}
           </TxFeeListItem>
         </TxFeeList>}
-        {!estimatedFee && <div style={{textAlign: "center", marginTop: "10px"}}>
+        {(!estimatedFee || !feeEstimationValid) && <div style={{textAlign: "center", marginTop: "10px"}}>
           <ActionButton 
             style={{padding: "10px", margin :"auto"}}
             className="estimateFee"
@@ -562,7 +574,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           </ActionButton>
 
           </div>}
-        {estimatedFee && 
+        {estimatedFee && feeEstimationValid && 
 
 
         <ViewAddressWarning>

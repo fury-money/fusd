@@ -9,7 +9,7 @@ import { demicrofy, formatTokenInput, microfy } from "@libs/formatter";
 import { tfmEstimation } from "pages/swap/queries/tfmQueries";
 import { getTFMSwapMsg } from "../swap/tfm";
 import pMap from "p-map";
-const SLIPPAGE = 0.01;
+const SLIPPAGE = 0.02;
 
 export function getLoopAmounts(
   collateralAmount: CollateralAmount,
@@ -79,7 +79,7 @@ export async function getLoopMessages(
     const provideMsgs = getWrappedCollateralMessages(
       walletAddr,
       demicrofy(big(provideAmount).round() as u<Token<Big>>).toString() as bAsset,
-      big(provideAmount).mul(collateralExchangeRate).round().toString() as u<bAsset>,
+      big(provideAmount).mul(collateralExchangeRate).round().minus(1).toString() as u<bAsset>,
       collateral.info.info.tokenAddress as CW20Addr,
       collateral.collateral_token,
       collateral.custody_contract,
@@ -106,7 +106,7 @@ export async function getLoopMessages(
     });
     const swapMsg = getTFMSwapMsg(swapEstimation.swap, walletAddr);
 
-    return [...provideMsgs, /*...borrowMsg, swapMsg*/]; // TODO, not tested yet fully
+    return [...provideMsgs, ...borrowMsg, swapMsg]; // TODO, not tested yet fully
   })).flat();
 
   return loopMessages;
