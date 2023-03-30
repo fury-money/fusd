@@ -21,8 +21,6 @@ export * from "./queries/cw20/nativeTokenInfo";
 export * from "./queries/cw20/poolInfo";
 export * from "./queries/cw20/tokenDisplayInfos";
 export * from "./queries/cw20/tokenInfo";
-export * from "./queries/erc20/balanceOf";
-export * from "./queries/evm/nativeBalance";
 export * from "./queries/gasPrice";
 export * from "./queries/lastSyncedHeight";
 export * from "./queries/lp/minter";

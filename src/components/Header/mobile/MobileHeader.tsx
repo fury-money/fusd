@@ -9,7 +9,6 @@ import LogoAvax from '../assets/LogoAvax.svg';
 import LogoEth from '../assets/LogoEth.svg';
 import LogoTerra from '../assets/LogoTerra.svg';
 import { DeploymentSwitch } from 'components/layouts/DeploymentSwitch';
-import { TransactionWidget } from '../transactions/TransactionWidget';
 import { ChainSelector } from '../chain/ChainSelector';
 import { useAnchorWebapp, useNetwork } from '@anchor-protocol/app-provider';
 
@@ -77,10 +76,6 @@ function MobileHeaderBase({
           </a>
           <div />
 
-          <TransactionWidget
-            className="transaction-widget"
-            color={theme.header.textColor}
-          />
           <ChainSelector className="chain-selector" />
 
           <IconToggleButton
