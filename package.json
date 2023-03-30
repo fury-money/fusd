@@ -55,6 +55,7 @@
     "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.14",
     "@mui/styles": "^5.10.14",
+    "@rewiko/crud-request": "^5.1.12",
     "@rocket-scripts/utils": "^3.2.0",
     "@rx-stream/pipe": "^0.7.1",
     "@rx-stream/react": "^0.7.1",

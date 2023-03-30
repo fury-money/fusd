@@ -141,6 +141,10 @@ const StyledComponent = styled(Component)`
       justify-content: end;
       grid-gap: 20px;
     }
+
+    .profit-amount {
+      color: ${({ theme }) => theme.colors.primary};
+    }
   }
 
   .interest {
