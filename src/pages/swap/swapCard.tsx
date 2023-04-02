@@ -88,9 +88,9 @@ export interface SwapProps {
   className?: string;
 }
 
-const SLIPPAGE_VALUES = [0.01, 0.03, 0.05];
-const LOW_SLIPPAGE = 0.03;
-const FRONTRUN_SLIPPAGE = 0.15;
+export const SLIPPAGE_VALUES = [0.01, 0.03, 0.05];
+export const LOW_SLIPPAGE = 0.03;
+export const FRONTRUN_SLIPPAGE = 0.15;
 
 export function Component({
   className,

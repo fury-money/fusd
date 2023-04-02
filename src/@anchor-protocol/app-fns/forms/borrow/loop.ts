@@ -3,15 +3,21 @@ import {
   ANCHOR_SAFE_RATIO,
   computeBorrowAPR,
 } from "@anchor-protocol/app-fns";
+import { getLoopAmountsAndMessages, SLIPPAGE } from "@anchor-protocol/app-fns/tx/borrow/loop";
+import { AnchorContractAddress, LSDCollateralResponse } from "@anchor-protocol/app-provider";
 import { CollateralAmount, moneyMarket, Rate } from "@anchor-protocol/types";
-import { EstimatedFee } from "@libs/app-provider";
+import { AppContractAddress, EstimatedFee } from "@libs/app-provider";
 import { formatRate, microfy } from "@libs/formatter";
-import { Luna, u } from "@libs/types";
+import { Denom, HumanAddr, Luna, Token, u, UST } from "@libs/types";
 import { FormReturn } from "@libs/use-form";
+import { MsgExecuteContract } from "@terra-money/terra.js";
 import big, { Big } from "big.js";
+import { simpleQuery, SwapSimulationAndSwapResponse, SwapSimulationResponse, tfmEstimation, tfmSwapQuoteURL } from "pages/swap/queries/tfmQueries";
 import { WhitelistWrappedCollateral } from "queries";
 
 export const MAX_LOOPS = 10;
+export const MIN_SWAP_AMOUNT = 0.1;
+export const TFM_ESTIMATION_BUFFER = 1.1;
 
 export interface BorrowLoopFormInput {
   collateral: WhitelistWrappedCollateral | undefined;
@@ -21,15 +27,19 @@ export interface BorrowLoopFormInput {
   minimumLeverage: number;
   maximumLeverage: number;
   maximumLTV: Rate;
-  estimatedFee: EstimatedFee | undefined;
+  slippage: Rate;
 }
 
 export interface BorrowLoopFormDependency {
-  userLunaBalance: u<Luna>;
   oraclePrices: moneyMarket.oracle.PricesResponse | undefined;
+  lsdHubStates: LSDCollateralResponse | undefined;
   connected: boolean;
+  terraWalletAddress: HumanAddr | undefined,
+
+  contractAddress: AnchorContractAddress,
 
   borrowRate: moneyMarket.interestModel.BorrowRateResponse | undefined;
+  stableDenom: Denom;
   blocksPerYear: number;
 }
 
@@ -41,53 +51,53 @@ export interface BorrowLoopFormStates extends BorrowLoopFormInput {
   actualMaximumLTV: number;
   apr: Rate<Big>;
 
-  invalidTxFee: string | undefined;
   invalidLTV: string | undefined;
   invalidLeverage: string | undefined;
   invalidCollateralAmount: string | undefined;
   invalidLoopNumber: string | undefined;
   warningOverSafeLtv: string | undefined;
 
-  txFee: u<Luna<Big>> | undefined;
-
   availablePost: boolean;
 }
 
-export interface BorrowLoopFormAsyncStates {}
+export interface BorrowLoopFormAsyncStates {
+  swapSimulation: SwapSimulationAndSwapResponse | undefined
+  allLoopData: {
+    provideAmount: u<Token>,
+    stableAmount: u<UST>
+  }[],
+  finalLoopData: u<Token>,
+  executeMsgs: MsgExecuteContract[]
+}
 
 export const borrowLoopForm = ({
-  userLunaBalance,
   oraclePrices,
+  lsdHubStates,
+
   connected,
+  terraWalletAddress,
+
+  contractAddress,
+
   borrowRate,
+  stableDenom,
   blocksPerYear,
 }: BorrowLoopFormDependency) => {
   const apr = computeBorrowAPR(borrowRate, blocksPerYear);
 
+  console.log("input: borrow loop form ?");
   return ({
     collateral,
     collateralAmount,
     maxCollateralAmount,
     targetLeverage,
     maximumLTV,
-    estimatedFee,
+    slippage, 
   }: BorrowLoopFormInput): FormReturn<
     BorrowLoopFormStates,
-    BorrowLoopFormAsyncStates
+    Partial<BorrowLoopFormAsyncStates>
   > => {
-    // txFee
-    const txFee = (() => {
-      if (!connected) {
-        return undefined;
-      }
-      return big(estimatedFee?.txFee ?? "0") as u<Luna<Big>>;
-    })();
-
-    const invalidTxFee = (() => {
-      return connected && txFee && big(userLunaBalance).lt(txFee)
-        ? "Not enough transaction fees"
-        : undefined;
-    })();
+  console.log("input: called");
 
     // We suppose here that the user has no coins in Anchor Protocol and that they want to enter with
     // collateralAmount collateral and loop up to a leverage of targetLeverage
@@ -107,30 +117,30 @@ export const borrowLoopForm = ({
     let maximumLeverage = 1;
     const actualMaximumLTV =
       parsedMaximumLTV * parseFloat(collateral?.max_ltv ?? "0");
-    console.log(actualMaximumLTV, collateral?.max_ltv);
+
     if (!invalidLTV) {
       maximumLeverage =
         (1 - Math.pow(actualMaximumLTV, MAX_LOOPS)) / (1 - actualMaximumLTV);
     }
 
     // We must also check that the last borrow amount is not < 1 in decimal units (assuming 6 decimals here)
-    const ratioToOne = big(10)
-      .pow(-6)
-      .div(
+    const ratioToOne = MIN_SWAP_AMOUNT/
+      (
         !collateralAmount ||
           collateralAmount.length === 0 ||
           big(collateralAmount).eq(0)
-          ? big(10).pow(-6)
-          : collateralAmount
+          ? MIN_SWAP_AMOUNT
+          : parseFloat(collateralAmount)
       );
-    const maxLeverageRelativeToAmount =
-      Math.log(ratioToOne.toNumber()) / Math.log(actualMaximumLTV);
-    console.log("new leverage loop number", maxLeverageRelativeToAmount);
+    const maxLeverageRelativeToAmount = 
+      (1 - actualMaximumLTV*ratioToOne)/(1 - actualMaximumLTV);
+    maximumLeverage = Math.min(maximumLeverage, maxLeverageRelativeToAmount)
+
 
     // Then we check the target Leverage, it should be between 1 and maximumLeverage
     const parsedTargetLeverage = parseFloat(targetLeverage);
     const invalidLeverage =
-      parsedTargetLeverage >= maximumLeverage || parsedTargetLeverage <= 1
+      parsedTargetLeverage > maximumLeverage || parsedTargetLeverage <= 1
         ? "Leverage should be between 1 and the maximum leverage"
         : undefined;
     let numberOfLoops = 0;
@@ -173,10 +183,76 @@ export const borrowLoopForm = ({
       connected &&
       collateralAmount != undefined &&
       collateralAmount.length > 0 &&
-      !invalidTxFee &&
       !invalidLTV &&
       !invalidLeverage &&
       !invalidCollateralAmount;
+
+
+    // Computing the asyncStates (swaps simulation and swapAmounts)
+    const emptyAsyncStates: Promise<Partial<BorrowLoopFormAsyncStates>> = new Promise((resolve) => resolve({
+        swapSimulation:undefined,
+        allLoopData:undefined,
+        finalLoopData:undefined,
+        executeMsgs:undefined,
+      }));
+
+    const asyncStates = (() => {
+      if(!collateralAmount || collateralAmount.length == 0){
+        return emptyAsyncStates;
+      }
+
+      if(!oraclePrices || !collateral || ! lsdHubStates || !terraWalletAddress){
+        return emptyAsyncStates
+      }
+      const rawCollateralPrice = parseFloat(oraclePrices.prices.find((price) => price.asset == collateral.collateral_token)?.price ?? "1");
+      const collateralExchangeRate = parseFloat(lsdHubStates.find((state) => state.info.token == collateral.info.token)?.additionalInfo?.hubState.exchange_rate ?? "1");
+
+      // In an async call we get an quote price approximation  
+      const totalBorrowAmount = microfy(Big(collateralAmount)
+        .mul(targetLeverage)
+        .mul(actualMaximumLTV)
+        .mul(rawCollateralPrice)
+        .mul(collateralExchangeRate)
+        .mul(TFM_ESTIMATION_BUFFER) as Token<Big>
+      ).round();
+      
+      return tfmEstimation({
+        tokenIn: stableDenom,
+        tokenOut: collateral.info.info.tokenAddress,
+        amount: totalBorrowAmount.toString() as u<Token>,
+        slippage: SLIPPAGE,
+        useSplit: false
+      }).then(async (response)=> {
+          // We get the loop amounts and messages
+          const {
+            allLoopData,
+            finalLoopData,
+            executeMsgs
+          } = getLoopAmountsAndMessages(
+          terraWalletAddress,
+          contractAddress, 
+
+          collateral,
+          collateralAmount,
+          rawCollateralPrice,
+          collateralExchangeRate,
+
+          actualMaximumLTV,
+          numberOfLoops,
+          targetLeverage,
+          
+          response
+        )
+
+        return {
+          swapSimulation:response,
+          allLoopData,
+          finalLoopData,
+          executeMsgs,
+        }
+      })
+
+    })();
 
     return [
       {
@@ -184,14 +260,11 @@ export const borrowLoopForm = ({
         estimatedLiquidationPrice,
         userMaxLtv: ANCHOR_DANGER_RATIO,
 
-        invalidTxFee,
         invalidLTV,
         invalidLeverage,
         invalidCollateralAmount,
         invalidLoopNumber,
         warningOverSafeLtv,
-
-        txFee,
 
         collateral,
         collateralAmount,
@@ -201,13 +274,13 @@ export const borrowLoopForm = ({
         maximumLeverage,
         maximumLTV,
         actualMaximumLTV,
-        estimatedFee,
+        slippage,
 
         apr,
 
         availablePost,
       },
-      undefined,
+      asyncStates
     ];
   };
 };

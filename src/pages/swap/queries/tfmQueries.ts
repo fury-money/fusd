@@ -4,6 +4,7 @@ import {
 } from "@anchor-protocol/app-provider";
 import { Token, u } from "@libs/types";
 import { Coin } from "@terra-money/terra.js";
+import debounce from "lodash.debounce";
 import { useQuery, UseQueryResult } from "react-query";
 
 export async function simpleQuery<T>(queryUrl: string): Promise<T> {
@@ -15,7 +16,7 @@ export function useSimpleQuery<T>(queryUrl: string): UseQueryResult<T> {
 
   return useQuery(
     [ANCHOR_QUERY_KEY.TFM_AVAILABLE_TOKENS, queryUrl],
-    () => simpleQuery(queryUrl),
+    debounce(() => simpleQuery(queryUrl)),
     {
       refetchInterval: 1000 * 60 * 2,
       keepPreviousData: true,
@@ -39,10 +40,22 @@ export function useTFMTokensQuery() {
   return useSimpleQuery<TFMToken[]>(`${TFM_API}/tokens`);
 }
 
+
+export function useTFMQuoteQuery({
+    tokenIn,
+    tokenOut,
+    amount,
+  }: SimulationParameters) {
+  return useSimpleQuery<TFMToken[]>(tfmSwapQuoteURL({
+    tokenIn, tokenOut, amount
+  }));
+}
+
 export interface SimulationParameters {
   tokenIn: string;
   tokenOut: string;
   amount: u<Token>;
+  useSplit?: boolean;
 }
 export interface SwapSimulationResponse {
   alternatives: any;
@@ -56,8 +69,9 @@ export function tfmSwapQuoteURL({
   tokenIn,
   tokenOut,
   amount,
+  useSplit
 }: SimulationParameters) {
-  return `${TFM_API}/route?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${true}`;
+  return `${TFM_API}/route?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${useSplit ?? true}`;
 }
 
 export interface SwapParameters {
@@ -65,6 +79,7 @@ export interface SwapParameters {
   tokenOut: string;
   amount: u<Token>;
   slippage: number;
+  useSplit?: boolean
 }
 
 export interface SwapResponse {
@@ -82,8 +97,9 @@ export function tfmSwapURL({
   tokenOut,
   amount,
   slippage,
+  useSplit,
 }: SwapParameters) {
-  return `${TFM_API}/swap?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${true}&slippage=${slippage}`;
+  return `${TFM_API}/swap?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${useSplit ?? true}&slippage=${slippage}`;
 }
 
 export interface SwapSimulationAndSwapResponse {
@@ -96,13 +112,14 @@ export async function tfmEstimation({
   tokenOut,
   amount,
   slippage,
+  useSplit
 }: SwapParameters): Promise<SwapSimulationAndSwapResponse> {
   const [swapSimulation, swapOperation] = await Promise.all([
     simpleQuery<SwapSimulationResponse>(
-      tfmSwapQuoteURL({ tokenIn, tokenOut, amount })
+      tfmSwapQuoteURL({ tokenIn, tokenOut, amount, useSplit })
     ),
     simpleQuery<SwapResponse>(
-      tfmSwapURL({ tokenIn, tokenOut, amount, slippage })
+      tfmSwapURL({ tokenIn, tokenOut, amount, slippage, useSplit })
     ),
   ]);
 

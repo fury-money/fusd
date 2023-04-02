@@ -25,7 +25,7 @@ export type FormInput<Input> = (
   input: Partial<Input> | ((prev: Input) => Input)
 ) => void;
 
-export type FormStates<States, AsyncStates> = States & (AsyncStates | {});
+export type FormStates<States, AsyncStates> = States & Partial<AsyncStates>;
 
 export type FormReturn<States, AsyncStates> = [
   States,
@@ -105,6 +105,7 @@ export function useForm<
     ) {
       return;
     } else {
+      
       depResolved.current = initialForm.current(
         dependency,
         lastDependency.current
@@ -118,6 +119,7 @@ export function useForm<
       setStates(nextStates);
 
       if (nextAsyncStates) {
+        setAsyncStates(undefined);
         resolver.next(nextAsyncStates);
       } else {
         resolver.clear();
@@ -144,6 +146,7 @@ export function useForm<
         setStates(nextStates);
 
         if (nextAsyncStates) {
+          setAsyncStates(undefined);
           resolver.next(nextAsyncStates);
         } else {
           resolver.clear();

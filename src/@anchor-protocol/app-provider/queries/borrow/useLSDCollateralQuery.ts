@@ -1,5 +1,6 @@
 import { LSDContracts, useAnchorWebapp } from "@anchor-protocol/app-provider";
 import { RegisteredLSDs } from "env";
+import { useMemo } from "react";
 import {
   UnderlyingHubState,
   useWrappedTokenDetails,
@@ -14,17 +15,27 @@ export type LSDCollateralResponse = {
 export function useLSDCollateralQuery(): LSDCollateralResponse {
   const { contractAddress } = useAnchorWebapp();
 
-  let lsdHubStates = Object.entries(contractAddress.lsds).map(
-    ([key, contracts]) => {
+  let lsdHubStates: {
+    name: RegisteredLSDs,
+    additionalInfo: UnderlyingHubState | undefined,
+    info: LSDContracts
+  }[] = useMemo(()=> Object.entries(contractAddress.lsds).map(([key, contracts]) => {
+    return {
+      name: key as RegisteredLSDs,
+      additionalInfo: undefined, 
+      info: contracts
+    }
+  }), [contractAddress.lsds]);
+
+
+  Object.entries(contractAddress.lsds).forEach(
+    ([key, contracts], i) => {
       const { data: details } = useWrappedTokenDetails(
         contracts as LSDContracts
       );
-      return {
-        name: key as RegisteredLSDs,
-        additionalInfo: details,
-        info: contracts,
-      };
+      lsdHubStates[i].additionalInfo = details
     }
   );
+
   return lsdHubStates;
 }

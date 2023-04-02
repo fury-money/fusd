@@ -55,6 +55,9 @@ export function LoopButtons() {
   return (
     <>
       <ActionButton
+        disabled={
+          !connected || !borrowMarket || !borrowBorrower || borrowed.lte(0)
+        }
         //disabled={enableBorrowing !== true}
         onClick={() =>
           borrowMarket &&
@@ -68,7 +71,7 @@ export function LoopButtons() {
       </ActionButton>
       <ActionButton
         disabled={
-          !connected || !borrowMarket || !borrowBorrower || borrowed.lte(0)
+          true
         }
         onClick={() =>
           borrowMarket &&

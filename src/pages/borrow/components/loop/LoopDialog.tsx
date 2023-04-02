@@ -3,6 +3,7 @@ import {
   MAX_LOOPS,
 } from '@anchor-protocol/app-fns';
 import {
+    useAnchorBank,
   useAnchorWebapp,
   useBorrowMarketQuery,
   useLSDCollateralQuery,
@@ -12,7 +13,7 @@ import {
   UST_INPUT_MAXIMUM_DECIMAL_POINTS,
   UST_INPUT_MAXIMUM_INTEGER_POINTS,
 } from '@anchor-protocol/notation';
-import { CollateralAmount, Rate, Token, u, UST } from '@anchor-protocol/types';
+import { CollateralAmount, Luna, Rate, Token, u, UST } from '@anchor-protocol/types';
 import { TxResultRendering } from '@libs/app-fns';
 import { demicrofy, formatRate } from '@libs/formatter';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
@@ -50,11 +51,13 @@ import { CavernSlider } from 'pages/liquidation/components/PlaceBidSection';
 import { SelectAndTextInputContainerLabel } from '@libs/neumorphism-ui/components/SelectAndTextInputContainer';
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { ArrowDropDown } from '@mui/icons-material';
-import { getLoopAmounts, getLoopMessages } from '@anchor-protocol/app-fns/tx/borrow/loop';
 import { useBalance } from 'pages/swap/queries/balanceQuery';
 import { formatOutput } from '@anchor-protocol/formatter';
 import { useGenericTx } from '@anchor-protocol/app-provider/tx/genericTx';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
+import { FRONTRUN_SLIPPAGE, LOW_SLIPPAGE, SLIPPAGE_VALUES } from 'pages/swap/swapCard';
+import { SlippageSelectorNegativeHelpText } from 'components/SlippageSelector';
+import { DiscloseSlippageSelector } from 'components/DiscloseSlippageSelector';
 
 export interface BorrowDialogParams extends UIElementProps {
   txResult: StreamResult<TxResultRendering> | null;
@@ -92,7 +95,9 @@ function BorrowDialogBase(props: BorrowDialogProps) {
   const { availablePost, connected, terraWalletAddress } = useAccount();
 
   const { fetchWalletBalance } = useBalances();
-  const { contractAddress } = useAnchorWebapp();
+  const {
+    tokenBalances: { uLuna },
+  } = useAnchorBank();
 
   const [input, states] = useBorrowLoopForm();
 
@@ -100,38 +105,42 @@ function BorrowDialogBase(props: BorrowDialogProps) {
 
   const [estimatedFee, estimatedFeeError, estimateFee, isEstimatingFee] =
     useFeeEstimationFor(terraWalletAddress);
-  const [feeEstimationValid, setFeeEstimationValid] = useState(false);
 
   const updateCollateralAmount = useCallback(
     (nextCollateralAmount: string, maxCollateralAmount: string) => {
-      setFeeEstimationValid(false);
-
       input({
         collateralAmount: nextCollateralAmount as CollateralAmount,
         maxCollateralAmount: maxCollateralAmount as CollateralAmount,
       });
     },
-    [input, setFeeEstimationValid],
+    [input],
   );
 
   const updateTargetLeverage = useCallback(
     (nextLeverage: string | number) => {
-      setFeeEstimationValid(false);
       input({
         targetLeverage: nextLeverage.toString() as Rate,
       });
     },
-    [input, setFeeEstimationValid],
+    [input],
   );
 
   const updateMaximumLTV = useCallback(
     (maximumLTV: Rate<Big>) => {
-      setFeeEstimationValid(false);
       input({
         maximumLTV: maximumLTV.toString() as Rate
       });
     },
-    [input, setFeeEstimationValid],
+    [input],
+  );
+
+  const updateSlippage = useCallback(
+    (nextSlippage: number) => {
+      input({
+        slippage: nextSlippage.toString() as Rate
+      })
+    },
+    [input],
   );
 
 
@@ -151,7 +160,6 @@ function BorrowDialogBase(props: BorrowDialogProps) {
       });
 
       fetchWalletBalance(collateral).then((maxCollateralAmount) => {
-
         input({ maxCollateralAmount: maxCollateralAmount.toString() as CollateralAmount });
       });
     },
@@ -185,8 +193,6 @@ function BorrowDialogBase(props: BorrowDialogProps) {
     [onProceed, connected, estimatedFee, openConfirm, availablePost],
   );
 
-  const lsdHubStates = useLSDCollateralQuery();
-
   const {
     data: { oraclePrices } = {data: {oraclePrices: undefined}}
   } = useBorrowMarketQuery();
@@ -202,7 +208,6 @@ function BorrowDialogBase(props: BorrowDialogProps) {
 
   const [collateralAnchorEl, setCollaterallAnchorEl] = useState<null | HTMLElement>(null);
   const collateralDialogOpen = Boolean(collateralAnchorEl);
-
 
   useEffect(() => {
     input({
@@ -222,74 +227,35 @@ function BorrowDialogBase(props: BorrowDialogProps) {
     setCollaterallAnchorEl(null);
   }, [setLoopToken, setCollaterallAnchorEl]);
 
-
-  const {
-    allLoopData,
-    finalLoopData
-  } = useMemo(() => {
-    if(!loopToken || !terraWalletAddress || !states.collateralAmount || !oraclePrices){
-      return {
-        allLoopData:undefined,
-        finalLoopData: undefined
-      }
-    }
-    return getLoopAmounts(
-      states.collateralAmount,
-
-      parseFloat(oraclePrices.prices.find((price) => price.asset == loopToken.collateral_token)?.price ?? "1"),
-      parseFloat(lsdHubStates.find((state) => state.info.token == loopToken.info.token)?.additionalInfo?.hubState.exchange_rate ?? "1"),
-
-      states.actualMaximumLTV,
-      states.numberOfLoops
-    );
-  },[
-      contractAddress, 
-      terraWalletAddress, 
-      loopToken, 
-      oraclePrices, 
-      lsdHubStates, 
-      states.collateralAmount, 
-      states.numberOfLoops,
-      states.actualMaximumLTV,
-      states.targetLeverage
-    ])
-
-  const [feeEstimationTriggered, setFeeEstimationTriggered] = useState(false);
-  const [loopMsgs, setLoopMsgs] = useState<MsgExecuteContract[] | undefined>(undefined);
-  const triggerFeeEstimation = useCallback(async () => {
-    if(!loopToken || !terraWalletAddress || !states.collateralAmount || !allLoopData || !finalLoopData){
+  useEffect(() => {
+    if(!states.executeMsgs){
       return undefined;
     }
-    setFeeEstimationTriggered(true);
-
-    getLoopMessages(
-      contractAddress,
-      loopToken,
-      terraWalletAddress,
-      states.collateralAmount,
-
-      parseFloat(lsdHubStates.find((state) => state.info.token == loopToken.info.token)?.additionalInfo?.hubState.exchange_rate ?? "1"),
-
-      allLoopData
-    ).then(msgs => {
-      setLoopMsgs(msgs);
-      console.log(msgs);
-      setFeeEstimationValid(true);
-      estimateFee(msgs)
-    })
-    .finally(() => setFeeEstimationTriggered(false));
+    console.log(states.executeMsgs)
+    estimateFee(states.executeMsgs);
 
   }, [
-      contractAddress, 
-      terraWalletAddress, 
-      loopToken, 
-      allLoopData, 
-      lsdHubStates, 
-      states.collateralAmount, 
-      estimateFee,
-      setFeeEstimationTriggered,
-      setLoopMsgs
-    ]);
+    states.executeMsgs,
+    estimateFee,
+  ]);
+
+  // We have to handle the txFee outside of states, or there is a infinite render loop
+  const invalidTxFee = useMemo(() => {
+    // txFee
+    const txFee = (() => {
+      if (!connected) {
+        return undefined;
+      }
+      return big(estimatedFee?.txFee ?? "0") as u<Luna<Big>>;
+    })();
+
+    return (() => {
+      return connected && txFee && big(uLuna).lt(txFee)
+        ? "Not enough transaction fees"
+        : undefined;
+    })();
+  }, [estimatedFee?.txFee, uLuna])
+
 
   // ---------------------------------------------
   // presentation
@@ -333,8 +299,8 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           </p>
         </h1>
 
-        {!!states.invalidTxFee && (
-          <MessageBox>{states.invalidTxFee}</MessageBox>
+        {!!invalidTxFee && (
+          <MessageBox>{invalidTxFee}</MessageBox>
         )}
 
         
@@ -347,7 +313,6 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           label="Initial collateral deposit"
           error={!!states.invalidCollateralAmount}
           onChange={({ target }: ChangeEvent<HTMLInputElement>) => {
-            setFeeEstimationValid(false);
             updateCollateralAmount(target.value, loopTokenBalance)
           }
           }
@@ -409,7 +374,6 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                 cursor: 'pointer',
               }}
               onClick={() =>{
-                setFeeEstimationValid(false);
                 updateTargetLeverage(states.maximumLeverage.toFixed(2))
               }
               }
@@ -483,7 +447,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                 cursor: 'pointer',
               }}
               onClick={() =>{
-                updateTargetLeverage(states.maximumLeverage.toFixed(2))
+                updateTargetLeverage((states.maximumLeverage).toFixed(2))
               }
               }
             >
@@ -491,9 +455,30 @@ function BorrowDialogBase(props: BorrowDialogProps) {
             </span>
           </span>
         </div>
+
+        <div style={{margin: "20px auto"}}>
+          <DiscloseSlippageSelector
+            className="slippage"
+            items={SLIPPAGE_VALUES}
+            value={parseFloat(states.slippage)}
+            onChange={updateSlippage}
+            helpText={
+              parseFloat(states.slippage) < LOW_SLIPPAGE ? (
+                <SlippageSelectorNegativeHelpText>
+                  The transaction may fail
+                </SlippageSelectorNegativeHelpText>
+              ) : parseFloat(states.slippage) > FRONTRUN_SLIPPAGE ? (
+                <SlippageSelectorNegativeHelpText>
+                  The transaction may be frontrun
+                </SlippageSelectorNegativeHelpText>
+              ) : undefined
+            }
+          />
+        </div>
+
         <Box sx={{gap: "10px", display: "flex", flexDirection: "column"}}>
         {
-          allLoopData?.map(({provideAmount, stableAmount}, i) => {
+          states.allLoopData?.map(({provideAmount, stableAmount}, i) => {
             return (<div key={`provideAmount-${i}`}>
               Loop n° {i +1 }
             <div className="wallet">
@@ -517,14 +502,25 @@ function BorrowDialogBase(props: BorrowDialogProps) {
             </div>)
           })
         }
-        {finalLoopData && 
+        {states.finalLoopData && 
           <div className="wallet" style={{marginTop: "15px"}}>
             <span>
               Collateral left in wallet after looping
             </span>
             {' '}
             <span>
-              {formatOutput(demicrofy(finalLoopData))} {loopToken?.info.info.symbol}
+              {formatOutput(demicrofy(states.finalLoopData))} {loopToken?.info.info.symbol}
+            </span>
+          </div>
+        }
+        {states?.swapSimulation?.quote.price_impact && 
+          <div className="wallet" style={{marginTop: "15px"}}>
+            <span>
+              TFM Swap Price Impact
+            </span>
+            {' '}
+            <span>
+              {formatRate((states.swapSimulation.quote.price_impact) as Rate<number>)} %
             </span>
           </div>
         }
@@ -544,12 +540,12 @@ function BorrowDialogBase(props: BorrowDialogProps) {
             </span>
           </div>
         </div>
-        {(estimatedFee || estimatedFeeError || isEstimatingFee || feeEstimationTriggered) && <TxFeeList className="receipt">
+        {(estimatedFee || estimatedFeeError || isEstimatingFee) && <TxFeeList className="receipt">
           <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-            {estimatedFee && !feeEstimationTriggered &&
+            {estimatedFee &&
               big(estimatedFee.txFee).gt(0) &&
               `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
-            {(!estimatedFeeError && !estimatedFee || feeEstimationTriggered) && (
+            {(!estimatedFeeError && !estimatedFee) && (
               <span className="spinner">
                 <CircleSpinner size={14} color={theme.colors.positive} />
               </span>
@@ -557,25 +553,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
             {estimatedFeeError}
           </TxFeeListItem>
         </TxFeeList>}
-        {(!estimatedFee || !feeEstimationValid) && <div style={{textAlign: "center", marginTop: "10px"}}>
-          <ActionButton 
-            style={{padding: "10px", margin :"auto"}}
-            className="estimateFee"
-            disabled={
-              !connected ||
-              !loopToken ||
-              !terraWalletAddress ||
-              !states.collateralAmount ||
-              !oraclePrices
-            }
-            onClick={triggerFeeEstimation}
-          >
-            Estimate the transaction Fee
-          </ActionButton>
-
-          </div>}
-        {estimatedFee && feeEstimationValid && 
-
+        {estimatedFee && 
 
         <ViewAddressWarning>
           <div style={{textAlign: "center", marginTop: "10px"}}>
@@ -588,10 +566,10 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                 !terraWalletAddress ||
                 !states.collateralAmount ||
                 !oraclePrices ||
-                !loopMsgs ||
+                !states.executeMsgs ||
                 !availablePost
               }
-              onClick={() => proceed(loopMsgs, states.warningOverSafeLtv)}
+              onClick={() => proceed(states.executeMsgs, states.warningOverSafeLtv)}
             >
               Loop !
             </ActionButton>
@@ -602,91 +580,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
         </>
 
       }
-
-{/*
-        {states.nextLtv?.gt(ANCHOR_SAFE_RATIO) && (
-          <MessageBox
-            level="error"
-            hide={{ id: 'borrow-ltv', period: 1000 * 60 * 60 * 24 * 5 }}
-            style={{ userSelect: 'none', fontSize: 12 }}
-          >
-            Caution: Borrowing is available only up to 95% borrow usage. If the
-            borrow usage reaches the maximum (100%), a portion of your
-            collateral may be immediately liquidated to repay part of the loan.
-          </MessageBox>
-        )}
-
-        {states.nextLtv?.gt(states.currentLtv ?? 0) && (
-          <EstimatedLiquidationPrice>
-            {states.estimatedLiquidationPrice}
-          </EstimatedLiquidationPrice>
-        )}
-
-        {isNative === false ||
-          (false && (
-            <>
-              <PageDivider />
-              <BorrowCollateralInput
-                collateral={states.collateral}
-                onCollateralChange={onCollateralChanged}
-                maxCollateralAmount={states.maxCollateralAmount}
-                warningMessage={states.invalidCollateralAmount}
-                amount={states.collateralAmount}
-                onAmountChange={(collateralAmount) => {
-                  input({
-                    collateralAmount,
-                  });
-                }}
-              />
-            </>
-          ))}
-
-        {states.receiveAmount && states.receiveAmount.gt(0) && (
-          <TxFeeList className="receipt">
-            <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-              {estimatedFee &&
-                big(estimatedFee.txFee).gt(0) &&
-                `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
-              {!estimatedFeeError && !estimatedFee && (
-                <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
-                </span>
-              )}
-              {estimatedFeeError}
-            </TxFeeListItem>
-            <TxFeeListItem label="Receive Amount">
-              {states.borrowAmount} alxUSDC
-            </TxFeeListItem>
-          </TxFeeList>
-        )}
-
-        <ViewAddressWarning>
-          <ActionButton
-            className="proceed"
-            disabled={
-              !availablePost ||
-              !connected ||
-              !states.availablePost ||
-              !proceedable ||
-              !estimatedFee
-            }
-            onClick={() =>
-              states.txFee &&
-              proceed(
-                states.borrowAmount,
-                states.warningOverSafeLtv,
-                states.collateral,
-                states.collateralAmount,
-              )
-            }
-          >
-            Proceed
-          </ActionButton>
-        </ViewAddressWarning>
-
-        */}
-
-        {confirmElement}
+      {confirmElement}
       </Dialog>
     </Modal>
   );

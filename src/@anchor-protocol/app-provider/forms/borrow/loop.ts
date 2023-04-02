@@ -1,43 +1,43 @@
 import { borrowLoopForm } from "@anchor-protocol/app-fns";
+import { SLIPPAGE } from "@anchor-protocol/app-fns/tx/borrow/loop";
 import {
-  BorrowMarketWithDisplay,
   useAnchorBank,
   useAnchorWebapp,
-  useDeploymentTarget,
+  useLSDCollateralQuery,
 } from "@anchor-protocol/app-provider";
 import { CollateralAmount } from "@anchor-protocol/types";
-import { useFixedFee } from "@libs/app-provider";
-import { Rate, UST } from "@libs/types";
+import { Rate } from "@libs/types";
 import { useForm } from "@libs/use-form";
 import { useAccount } from "contexts/account";
 import { WhitelistWrappedCollateral } from "queries";
 import { useBorrowMarketQuery } from "../../queries/borrow/market";
 
 export function useBorrowLoopForm() {
-  const { target } = useDeploymentTarget();
 
-  const { connected } = useAccount();
-
-  const fixedFee = useFixedFee();
+  const { connected, terraWalletAddress } = useAccount();
 
   const {
-    constants: { blocksPerYear },
+    constants: { blocksPerYear }, contractAddress
   } = useAnchorWebapp();
-
-  const {
-    tokenBalances: { uLuna },
-  } = useAnchorBank();
 
   const { data: { borrowRate, oraclePrices } = { data: undefined } } =
     useBorrowMarketQuery();
 
+  const lsdHubStates = useLSDCollateralQuery();
+  console.log("input: borrow loop form ?");
+
+
   return useForm(
     borrowLoopForm,
     {
-      userLunaBalance: uLuna,
+      contractAddress,
       connected,
+      terraWalletAddress,
       oraclePrices,
+      lsdHubStates,
+
       borrowRate,
+      stableDenom: contractAddress.native.usd,
       blocksPerYear,
     },
     () => ({
@@ -46,7 +46,7 @@ export function useBorrowLoopForm() {
       maxCollateralAmount: undefined as CollateralAmount | undefined,
       targetLeverage: "1" as Rate,
       maximumLTV: "0" as Rate,
-      estimatedFee: undefined,
+      slippage: SLIPPAGE.toString() as Rate,
       minimumLeverage: 0,
       maximumLeverage: 0,
     })
