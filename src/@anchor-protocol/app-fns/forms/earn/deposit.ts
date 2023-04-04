@@ -22,7 +22,6 @@ export interface EarnDepositFormStates extends EarnDepositFormInput {
   availablePost: boolean;
   maxAmount: u<UST>;
   receiveAmount?: u<UST>;
-  cavernFee?: u<UST>;
   estimatedFee?: EstimatedFee;
   estimatedFeeError?: string | JSX.Element;
   invalidTxFee?: string;

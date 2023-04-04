@@ -10,8 +10,6 @@ import LogoEth from './assets/LogoEth.svg';
 import LogoTerra from './assets/LogoTerra.svg';
 import { ChainSelector } from './chain/ChainSelector';
 import { DesktopNotification } from './desktop/DesktopNotification';
-import { TransactionWidget } from './transactions/TransactionWidget';
-import { EvmWalletSelector } from './wallet/evm/EvmWalletSelector';
 import { TerraWalletSelector } from './wallet/terra/TerraWalletSelector';
 
 export interface DesktopHeaderProps {
@@ -60,11 +58,9 @@ function DesktopHeaderBase({ className }: DesktopHeaderProps) {
         className="wallet"
         style={{ display: 'flex', alignItems: 'center' }}
       >
-        <TransactionWidget className="transaction-widget" />
         <ChainSelector className="chain-selector" />
         <DeploymentSwitch
           terra={() => <TerraWalletSelector />}
-          ethereum={() => <EvmWalletSelector />}
         />
       </section>
 

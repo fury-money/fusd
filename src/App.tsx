@@ -1,7 +1,6 @@
 import React from 'react';
 import { DeploymentSwitch } from 'components/layouts/DeploymentSwitch';
 import { TerraApp } from 'apps/TerraApp';
-import { EvmApp } from 'apps/EvmApp';
 import { DeploymentTargetProvider } from '@anchor-protocol/app-provider/contexts/target';
 import { useChainOptions } from '@terra-money/wallet-provider';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,7 +13,6 @@ export function App() {
       <CssBaseline />
       <DeploymentSwitch
         terra={<TerraApp chainOptions={chainOptions} />}
-        ethereum={<EvmApp />}
       />
     </DeploymentTargetProvider>
   );

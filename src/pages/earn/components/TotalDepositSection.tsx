@@ -19,6 +19,9 @@ import { useBalances } from 'contexts/balances';
 import { useDepositDialog } from './useDepositDialog';
 import { useWithdrawDialog } from './useWithdrawDialog';
 import Big from 'big.js';
+import { useLenderValue } from '@anchor-protocol/app-provider/queries/earn/lenderValue';
+import { u, UST } from '@libs/types';
+import { Box, Grid } from '@mui/material';
 
 export interface TotalDepositSectionProps {
   className?: string;
@@ -37,6 +40,8 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
 
   const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
 
+  const { data: lenderValue } = useLenderValue();
+
   // ---------------------------------------------
   // computes
   // ---------------------------------------------
@@ -45,6 +50,13 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
       totalDeposit: computeTotalDeposit(uaUST, moneyMarketEpochState),
     };
   }, [moneyMarketEpochState, uaUST]);
+
+  const totalProfit = useMemo(() => {
+    if(lenderValue?.lenderValue.stableAmount == "0"){
+      return Big(0) as u<UST<Big>>
+    }
+    return totalDeposit.minus(lenderValue?.lenderValue.stableAmount ?? 0) as u<UST<Big>>
+  },[lenderValue, totalDeposit])
 
   // ---------------------------------------------
   // dialogs
@@ -66,29 +78,61 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
   // ---------------------------------------------
   return (
     <Section className={className}>
-      <h2>
-        <IconSpan>
-          TOTAL DEPOSIT{' '}
-          <InfoTooltip>
-            Total amount of axlUSDC deposited and interest earned by the user
-          </InfoTooltip>
-        </IconSpan>
-      </h2>
 
-      <div className="amount">
-        <AnimateNumber format={formatUSTWithPostfixUnits}>
-          {demicrofy(totalDeposit)}
-        </AnimateNumber>{' '}
-        <span className="denom">axlUSDC</span>
-        {totalDeposit.gt(MILLION * MICRO) && (
-          <SubAmount style={{ fontSize: '16px' }}>
-            <AnimateNumber format={formatUST}>
-              {demicrofy(totalDeposit)}
-            </AnimateNumber>{' '}
-            axlUSDC
-          </SubAmount>
-        )}
-      </div>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
+        <h2>
+          <IconSpan>
+            TOTAL DEPOSIT{' '}
+            <InfoTooltip>
+              Total amount of axlUSDC deposited and interest earned by the user
+            </InfoTooltip>
+          </IconSpan>
+        </h2>
+
+        <div className="amount">
+          <AnimateNumber format={formatUSTWithPostfixUnits}>
+            {demicrofy(totalDeposit)}
+          </AnimateNumber>{' '}
+          <span className="denom">axlUSDC</span>
+          {totalDeposit.gt(MILLION * MICRO) && (
+            <SubAmount style={{ fontSize: '16px' }}>
+              <AnimateNumber format={formatUST}>
+                {demicrofy(totalDeposit)}
+              </AnimateNumber>{' '}
+              axlUSDC
+            </SubAmount>
+          )}
+        </div>
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <h2>
+          <IconSpan>
+            TOTAL PROFIT{' '}
+            <InfoTooltip>
+              Total amount of axlUSDC earned while depositing on Cavern 
+                (This doesn't account for token transfers outside the platform)
+            </InfoTooltip>
+          </IconSpan>
+        </h2>
+
+        <div className="amount profit-amount">
+          <AnimateNumber format={formatUSTWithPostfixUnits}>
+            {demicrofy(totalProfit)}
+          </AnimateNumber>{' '}
+          <span className="denom">axlUSDC</span>
+          {totalProfit.gt(MILLION * MICRO) && (
+            <SubAmount style={{ fontSize: '16px' }}>
+              <AnimateNumber format={formatUST}>
+                {demicrofy(totalProfit)}
+              </AnimateNumber>{' '}
+              axlUSDC
+            </SubAmount>
+          )}
+        </div>
+      </Grid>
+    </Grid>
 
       <aside className="total-deposit-buttons">
         <ActionButton

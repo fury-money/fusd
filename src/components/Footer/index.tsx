@@ -12,7 +12,6 @@ import styled from 'styled-components';
 import { useDeploymentTarget } from '@anchor-protocol/app-provider';
 import { BlockInfo } from './BlockInfo';
 import { Chain } from '@anchor-protocol/app-provider';
-import { EvmBlockInfo } from './EvmBlockInfo';
 import { getBlockUrl } from 'utils/terrascope';
 import { Discord } from '@anchor-protocol/icons';
 
@@ -49,7 +48,6 @@ function FooterBase({ className, style }: FooterProps) {
             />
           </a>
 
-          {isEVM && <EvmBlockInfo />}
         </div>
 
         {appVersion && <p>{appVersion}</p>}

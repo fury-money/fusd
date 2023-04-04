@@ -3,7 +3,7 @@ import React, { FunctionComponent, ReactNode } from 'react';
 
 interface DeploymentSwitchProps {
   terra: FunctionComponent | ReactNode;
-  ethereum: FunctionComponent | ReactNode;
+  ethereum?: FunctionComponent | ReactNode;
   avalanche?: FunctionComponent | ReactNode;
 }
 

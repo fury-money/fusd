@@ -50,7 +50,6 @@ export function earnDepositTx($: {
   marketAddr: HumanAddr;
   depositAmount: UST;
   stableDenom: NativeDenom;
-  depositFeeAddress: HumanAddr;
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
