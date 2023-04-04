@@ -85,7 +85,6 @@ export const borrowLoopForm = ({
 }: BorrowLoopFormDependency) => {
   const apr = computeBorrowAPR(borrowRate, blocksPerYear);
 
-  console.log("input: borrow loop form ?");
   return ({
     collateral,
     collateralAmount,
@@ -97,7 +96,6 @@ export const borrowLoopForm = ({
     BorrowLoopFormStates,
     Partial<BorrowLoopFormAsyncStates>
   > => {
-  console.log("input: called");
 
     // We suppose here that the user has no coins in Anchor Protocol and that they want to enter with
     // collateralAmount collateral and loop up to a leverage of targetLeverage

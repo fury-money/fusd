@@ -58,6 +58,7 @@ import { ViewAddressWarning } from 'components/ViewAddressWarning';
 import { FRONTRUN_SLIPPAGE, LOW_SLIPPAGE, SLIPPAGE_VALUES } from 'pages/swap/swapCard';
 import { SlippageSelectorNegativeHelpText } from 'components/SlippageSelector';
 import { DiscloseSlippageSelector } from 'components/DiscloseSlippageSelector';
+import { useBorrowOverviewData } from 'pages/borrow/logics/useBorrowOverviewData';
 
 export interface BorrowDialogParams extends UIElementProps {
   txResult: StreamResult<TxResultRendering> | null;
@@ -90,6 +91,10 @@ function BorrowDialogBase(props: BorrowDialogProps) {
     onProceed,
     renderTxResult,
   } = props;
+
+  const {
+    netAPR,
+  } = useBorrowOverviewData();
 
 
   const { availablePost, connected, terraWalletAddress } = useAccount();
@@ -231,7 +236,6 @@ function BorrowDialogBase(props: BorrowDialogProps) {
     if(!states.executeMsgs){
       return undefined;
     }
-    console.log(states.executeMsgs)
     estimateFee(states.executeMsgs);
 
   }, [
@@ -290,7 +294,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           Borrow with Leverage{' '}
           <p>
             <IconSpan>
-              Borrow APR : {formatRate(states.apr)}%{' '}
+              Borrow APR : {formatRate(netAPR)}%{' '}
               <InfoTooltip>
                 Current rate of annualized borrowing interest applied for this
                 stablecoin

@@ -6,9 +6,8 @@ import { WhitelistWrappedCollateral } from "queries";
 import big, { Big } from "big.js";
 import { getWrappedCollateralMessages } from "./provideWrappedCollateral";
 import { demicrofy, microfy } from "@libs/formatter";
-import { SwapSimulationAndSwapResponse, SwapSimulationResponse, tfmEstimation } from "pages/swap/queries/tfmQueries";
+import { SwapSimulationAndSwapResponse } from "pages/swap/queries/tfmQueries";
 import { getTFMSwapMsg } from "../swap/tfm";
-import pMap from "p-map";
 const _ = require("lodash");
 
 import { MIN_SWAP_AMOUNT } from "@anchor-protocol/app-fns";
@@ -124,11 +123,6 @@ export function getLoopAmountsAndMessages(
 
     messages = messages.concat([...provideMsgs, ...borrowMsg, swapMsg])
   }
-
-  console.log(axlUSDCNeeded.map((usd, i) => ({
-      provideAmount: collateralTotal[i] as u<Token>,
-      stableAmount: usd as u<UST>
-    })))
 
   return {
     allLoopData: axlUSDCNeeded.map((usd, i) => ({

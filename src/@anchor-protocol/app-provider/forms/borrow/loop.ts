@@ -24,8 +24,6 @@ export function useBorrowLoopForm() {
     useBorrowMarketQuery();
 
   const lsdHubStates = useLSDCollateralQuery();
-  console.log("input: borrow loop form ?");
-
 
   return useForm(
     borrowLoopForm,

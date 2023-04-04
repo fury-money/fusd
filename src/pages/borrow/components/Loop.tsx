@@ -32,18 +32,6 @@ export interface OverviewProps {
 }
 
 function Component({ className }: OverviewProps) {
-  const {
-    borrowAPR,
-    borrowedValue,
-    collateralValue,
-    borrowLimit,
-    netAPR,
-    currentLtv,
-    //dangerLtv,
-    borrowerDistributionAPYs,
-  } = useBorrowOverviewData();
-
-  const { ust } = useFormatters();
 
   // ---------------------------------------------
   // presentation
@@ -56,8 +44,12 @@ function Component({ className }: OverviewProps) {
           <LoopButtons />
         </div>
       </header>
-      Cavern Protocol allows you to borrow funds with leverage. By borrowing with leverage, you understand that you will be more exposed to the price of the underlying collateral.
-      This function is for advanced user only.
+      <strong>Cavern Protocol</strong> allows you to borrow funds with leverage. 
+      <br/>
+      This feature enables single transaction borrowing loops and unlocks simple decentralized leverage trading.leverage
+      <br/> 
+      This function is for advanced user only. 
+      By borrowing with leverage, you understand that you will be more exposed to the price of the underlying collateral.
     </Section>
   );
 }
