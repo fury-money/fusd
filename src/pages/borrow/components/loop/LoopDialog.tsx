@@ -481,6 +481,10 @@ function BorrowDialogBase(props: BorrowDialogProps) {
         </div>
 
         <Box sx={{gap: "10px", display: "flex", flexDirection: "column"}}>
+        {states.numberOfLoops && !states.finalLoopData && 
+          <span className="spinner">
+            <CircleSpinner size={14} color={theme.colors.positive} />
+          </span>}
         {
           states.allLoopData?.map(({provideAmount, stableAmount}, i) => {
             return (<div key={`provideAmount-${i}`}>

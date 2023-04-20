@@ -43,20 +43,11 @@ export function LoopButtons() {
     return computeBorrowedAmount(borrowBorrower?.marketBorrowerInfo);
   }, [borrowBorrower?.marketBorrowerInfo]);
 
-  const enableBorrowing = isNative
-    ? Boolean(
-        connected &&
-          borrowMarket &&
-          borrowBorrower &&
-          big(collateralsValue).gt(0),
-      )
-    : Boolean(connected && borrowMarket);
-
   return (
     <>
       <ActionButton
         disabled={
-          !connected || !borrowMarket || !borrowBorrower || borrowed.lte(0)
+          !connected || !borrowMarket
         }
         //disabled={enableBorrowing !== true}
         onClick={() =>

@@ -3,16 +3,15 @@ import {
   ANCHOR_SAFE_RATIO,
   computeBorrowAPR,
 } from "@anchor-protocol/app-fns";
-import { getLoopAmountsAndMessages, SLIPPAGE } from "@anchor-protocol/app-fns/tx/borrow/loop";
 import { AnchorContractAddress, LSDCollateralResponse } from "@anchor-protocol/app-provider";
+import { LoopsAndMessageQueryArgs } from "@anchor-protocol/app-provider/forms/borrow/loop";
 import { CollateralAmount, moneyMarket, Rate } from "@anchor-protocol/types";
-import { AppContractAddress, EstimatedFee } from "@libs/app-provider";
 import { formatRate, microfy } from "@libs/formatter";
 import { Denom, HumanAddr, Luna, Token, u, UST } from "@libs/types";
 import { FormReturn } from "@libs/use-form";
 import { MsgExecuteContract } from "@terra-money/terra.js";
 import big, { Big } from "big.js";
-import { simpleQuery, SwapSimulationAndSwapResponse, SwapSimulationResponse, tfmEstimation, tfmSwapQuoteURL } from "pages/swap/queries/tfmQueries";
+import { SwapSimulationAndSwapResponse } from "pages/swap/queries/tfmQueries";
 import { WhitelistWrappedCollateral } from "queries";
 
 export const MAX_LOOPS = 10;
@@ -41,6 +40,8 @@ export interface BorrowLoopFormDependency {
   borrowRate: moneyMarket.interestModel.BorrowRateResponse | undefined;
   stableDenom: Denom;
   blocksPerYear: number;
+
+  getLoopsAndMessages: (l: LoopsAndMessageQueryArgs)=> (Promise<Partial<BorrowLoopFormAsyncStates>> | undefined)
 }
 
 export interface BorrowLoopFormStates extends BorrowLoopFormInput {
@@ -82,6 +83,8 @@ export const borrowLoopForm = ({
   borrowRate,
   stableDenom,
   blocksPerYear,
+
+  getLoopsAndMessages
 }: BorrowLoopFormDependency) => {
   const apr = computeBorrowAPR(borrowRate, blocksPerYear);
 
@@ -187,70 +190,15 @@ export const borrowLoopForm = ({
 
 
     // Computing the asyncStates (swaps simulation and swapAmounts)
-    const emptyAsyncStates: Promise<Partial<BorrowLoopFormAsyncStates>> = new Promise((resolve) => resolve({
-        swapSimulation:undefined,
-        allLoopData:undefined,
-        finalLoopData:undefined,
-        executeMsgs:undefined,
-      }));
+   
 
-    const asyncStates = (() => {
-      if(!collateralAmount || collateralAmount.length == 0){
-        return emptyAsyncStates;
-      }
-
-      if(!oraclePrices || !collateral || ! lsdHubStates || !terraWalletAddress){
-        return emptyAsyncStates
-      }
-      const rawCollateralPrice = parseFloat(oraclePrices.prices.find((price) => price.asset == collateral.collateral_token)?.price ?? "1");
-      const collateralExchangeRate = parseFloat(lsdHubStates.find((state) => state.info.token == collateral.info.token)?.additionalInfo?.hubState.exchange_rate ?? "1");
-
-      // In an async call we get an quote price approximation  
-      const totalBorrowAmount = microfy(Big(collateralAmount)
-        .mul(targetLeverage)
-        .mul(actualMaximumLTV)
-        .mul(rawCollateralPrice)
-        .mul(collateralExchangeRate)
-        .mul(TFM_ESTIMATION_BUFFER) as Token<Big>
-      ).round();
-      
-      return tfmEstimation({
-        tokenIn: stableDenom,
-        tokenOut: collateral.info.info.tokenAddress,
-        amount: totalBorrowAmount.toString() as u<Token>,
-        slippage: SLIPPAGE,
-        useSplit: false
-      }).then(async (response)=> {
-          // We get the loop amounts and messages
-          const {
-            allLoopData,
-            finalLoopData,
-            executeMsgs
-          } = getLoopAmountsAndMessages(
-          terraWalletAddress,
-          contractAddress, 
-
-          collateral,
-          collateralAmount,
-          rawCollateralPrice,
-          collateralExchangeRate,
-
-          actualMaximumLTV,
-          numberOfLoops,
-          targetLeverage,
-          
-          response
-        )
-
-        return {
-          swapSimulation:response,
-          allLoopData,
-          finalLoopData,
-          executeMsgs,
-        }
-      })
-
-    })();
+    const asyncStates = getLoopsAndMessages({
+      collateral,
+      collateralAmount,
+      targetLeverage,
+      actualMaximumLTV,
+      numberOfLoops,
+    })
 
     return [
       {
