@@ -54,7 +54,7 @@ export function getLoopAmountsAndMessages(
 
   if(big(priceImpact).lte(0)){
     return {
-      error: "Initial collateral deposit is too low"
+      error: "Initial collateral deposit is too low (TFM slippage is not positive)"
     }
   }
 
