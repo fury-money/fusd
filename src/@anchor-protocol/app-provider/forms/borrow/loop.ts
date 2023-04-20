@@ -87,7 +87,7 @@ export function useBorrowLoopForm() {
       });
       // We get the loop amounts and messages
       const {
-          allLoopData, finalLoopData, executeMsgs
+          allLoopData, finalLoopData, executeMsgs, error
       } = getLoopAmountsAndMessages(
           terraWalletAddress,
           contractAddress,
@@ -108,6 +108,7 @@ export function useBorrowLoopForm() {
           allLoopData,
           finalLoopData,
           executeMsgs,
+          loopError: error
       };
     }, 1000);
   }, [emptyAsyncStates, oraclePrices, lsdHubStates, terraWalletAddress, contractAddress, contractAddress.native.usd]);

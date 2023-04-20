@@ -68,7 +68,8 @@ export interface BorrowLoopFormAsyncStates {
     stableAmount: u<UST>
   }[],
   finalLoopData: u<Token>,
-  executeMsgs: MsgExecuteContract[]
+  executeMsgs: MsgExecuteContract[],
+  loopError: string | undefined
 }
 
 export const borrowLoopForm = ({

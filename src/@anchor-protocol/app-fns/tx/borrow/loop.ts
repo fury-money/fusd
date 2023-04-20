@@ -29,14 +29,15 @@ export function getLoopAmountsAndMessages(
   targetLeverage: Rate<string>,
 
   swapQuote: SwapSimulationAndSwapResponse
-): {
+): Partial<{
   allLoopData: {
     provideAmount: u<Token>,
     stableAmount: u<UST>
   }[],
   finalLoopData: u<Token>,
-  executeMsgs: MsgExecuteContract[]
-} {
+  executeMsgs: MsgExecuteContract[],
+  error: string | undefined
+}> {
 
     console.log('getting loop amounts and messages')
   let thisDepositAmount = microfy(collateralAmount); //The actual number of tokens the user wants to deposit
@@ -49,10 +50,20 @@ export function getLoopAmountsAndMessages(
   const expectedAmount = swapQuote.swap.value.execute_msg.execute_swap_operations.expect_amount;
   const offerAmount = swapQuote.swap.value.execute_msg.execute_swap_operations.offer_amount;
   const priceImpact = swapQuote.quote.price_impact;
+  console.log(priceImpact)
+
+  if(big(priceImpact).lte(0)){
+    return {
+      error: "Initial collateral deposit is too low"
+    }
+  }
+
 
   let swapPoolY = big(expectedAmount).div(priceImpact)
   let swapPoolX = big(offerAmount).mul(
-      big(1).div(priceImpact).minus(1)
+      big(1).div(
+        big(priceImpact)  // Account for a negative price impact
+      ).minus(1)
     );
 
   let messages: MsgExecuteContract[] = [];
@@ -131,5 +142,6 @@ export function getLoopAmountsAndMessages(
     })),
     finalLoopData: collateralTotal[collateralTotal.length - 1] as u<Token>,
     executeMsgs : messages,
+    error: undefined
   }
 }
