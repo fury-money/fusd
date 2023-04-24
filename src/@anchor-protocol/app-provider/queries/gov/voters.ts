@@ -12,7 +12,6 @@ interface VotersReturn {
   reload: () => void;
 }
 
-// TODO use react-query infinite scroll
 export function useGovVotersQuery(pollId?: number): VotersReturn {
   const { queryClient, contractAddress, queryErrorReporter } =
     useAnchorWebapp();

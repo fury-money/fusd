@@ -74,7 +74,7 @@ export function LiquidationQueueHistoryBase({ className, collateral }: Liquidati
   const liquidationStats = useMyLiquidationStats(
     collateral?.collateral_token, 
     collateral?.symbol, 
-    collateral && "info" in collateral ? collateral.info.info.hubAddress as HumanAddr : undefined
+    collateral && "info" in collateral ? collateral.info : undefined
   );
 
   const totalPoolValueStat = useMemo(() => liquidationStats?.otherStats.find(el=> el.id == "pool_value_stable"), [liquidationStats])

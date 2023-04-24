@@ -19,7 +19,6 @@ import {
 } from '@libs/formatter';
 import { isZero } from '@libs/is-zero';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
-import { HorizontalHeavyRuler } from '@libs/neumorphism-ui/components/HorizontalHeavyRuler';
 import { NumberMuiInput } from '@libs/neumorphism-ui/components/NumberMuiInput';
 import {
   SelectAndTextInputContainer,
@@ -32,7 +31,6 @@ import { StreamStatus } from '@rx-stream/react';
 import big, { Big, BigSource } from 'big.js';
 import { DiscloseSlippageSelector } from 'components/DiscloseSlippageSelector';
 import { MessageBox } from 'components/MessageBox';
-import { IconLineSeparator } from 'components/primitives/IconLineSeparator';
 import { SlippageSelectorNegativeHelpText } from 'components/SlippageSelector';
 import { TxResultRenderer } from 'components/tx/TxResultRenderer';
 import { SwapListItem, TxFeeList, TxFeeListItem } from 'components/TxFeeList';
@@ -59,7 +57,6 @@ import { useBalance } from './queries/balanceQuery';
 import { getTFMSwapMsg } from '@anchor-protocol/app-fns/tx/swap/tfm';
 import { useTFMSwapTx } from '@anchor-protocol/app-provider/tx/swap/tfm';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
-import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 
 
 const swapAssetsWhitelist = [
@@ -70,7 +67,7 @@ const swapAssetsWhitelist = [
   "Cavern Bonded Luna",
 ]
 
-const swapAssetsIcons: Tokens[]  = [
+const swapAssetsIcons: Tokens[] = [
   "ust",
   "luna",
   "bLuna",

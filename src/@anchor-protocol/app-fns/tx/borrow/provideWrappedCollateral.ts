@@ -53,32 +53,53 @@ import { BorrowBorrower } from "../../queries/borrow/borrower";
 import { BorrowMarket } from "../../queries/borrow/market";
 import { _fetchBorrowData } from "./_fetchBorrowData";
 import big from "big.js";
+import { LSDContracts } from "@anchor-protocol/app-provider";
+import _ from "lodash";
 
 export function getWrappedCollateralMessages(
   walletAddr: HumanAddr,
   depositAmount: bAsset,
   lunaAmount: u<bAsset>,
-  underlyingToken: CW20Addr,
+  collateral_info: LSDContracts,
   collateralToken: CW20Addr,
   custodyContract: HumanAddr,
   overseerAddr: HumanAddr,
   decimals: number
 ) {
-  return [
-    // Raise allowance on the actual token
-    new MsgExecuteContract(walletAddr, underlyingToken, {
+
+  let allowanceMessage = undefined;
+  let mintMessage = undefined;
+  // First in case of a cw20 like collateral LSD
+  if(collateral_info.info.cw20){
+    // Raise allowance on the actual token in case of a cw20 token
+    allowanceMessage = new MsgExecuteContract(walletAddr, collateral_info.info.cw20?.tokenAddress, {
       increase_allowance: {
         spender: collateralToken,
         amount: formatInput(microfy(depositAmount, decimals), decimals),
       },
-    }),
-    // Wrap the tokens
-    new MsgExecuteContract(walletAddr, collateralToken, {
-      mint_with: {
-        recipient: walletAddr,
-        lsd_amount: formatInput(microfy(depositAmount, decimals), decimals),
-      },
-    }),
+    });
+
+    mintMessage = // Wrap the tokens
+      new MsgExecuteContract(walletAddr, collateralToken, {
+        mint_with: {
+          recipient: walletAddr,
+          lsd_amount: formatInput(microfy(depositAmount, decimals), decimals),
+        },
+      });
+  }else{
+    mintMessage = // Wrap the tokens
+      new MsgExecuteContract(walletAddr, collateralToken, {
+        mint_with: {
+          recipient: walletAddr,
+          lsd_amount: formatInput(microfy(depositAmount, decimals), decimals),
+        },
+      },`${formatInput(microfy(depositAmount, decimals), decimals)}${collateral_info.info.coin?.denom}`);
+  }
+
+
+  return _.compact([
+    allowanceMessage,
+    mintMessage,
     // provide_collateral call
     new MsgExecuteContract(walletAddr, collateralToken, {
       send: {
@@ -96,7 +117,7 @@ export function getWrappedCollateralMessages(
         collaterals: [[collateralToken, formatInput(lunaAmount, decimals)]],
       },
     }),
-  ];
+  ]);
 }
 
 export function borrowProvideWrappedCollateralTx($: {
@@ -129,7 +150,7 @@ export function borrowProvideWrappedCollateralTx($: {
         $.walletAddr,
         $.depositAmount,
         $.lunaAmount,
-        $.collateral.info.info.tokenAddress as CW20Addr,
+        $.collateral.info,
         $.collateral.collateral_token,
         $.collateral.custody_contract,
         $.overseerAddr,

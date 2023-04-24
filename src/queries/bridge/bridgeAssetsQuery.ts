@@ -51,64 +51,6 @@ function bridgeTerraAssetsQuery(
   );
 }
 
-// async function bridgeEvmAssetsQuery(
-//   whitelist: WhitelistCollateral[],
-//   target: DeploymentTarget,
-//   network: NetworkInfo,
-// ): Promise<BridgeAssets> {
-//   const ETH_ADDR_ZERO = '0x0000000000000000000000000000000000000000';
-
-//   const lcd = new LCDClient({
-//     URL: network.lcd,
-//     chainID: network.chainID,
-//   });
-
-//   const provider = ethers.getDefaultProvider(getEvmChainId(target, network));
-
-//   const wormholeChainId = getWormholeChainId(target, network);
-
-//   const map = new Map<CW20Addr, CW20Addr | ERC20Addr>();
-
-//   for (let collateral of whitelist) {
-//     const wormhole = await getOriginalAssetTerra(
-//       lcd as any,
-//       collateral.collateral_token,
-//     );
-//     if (wormhole.isWrapped) {
-//       // the token is wrapped on terra which means this
-//       // the information we get back is the original
-//       if (wormhole.chainId === wormholeChainId) {
-//         map.set(
-//           collateral.collateral_token,
-//           uint8ArrayToNative(
-//             wormhole.assetAddress,
-//             wormhole.chainId,
-//           ) as ERC20Addr,
-//         );
-//       }
-//     } else {
-//       // the token is on Terra so need to check if
-//       // it is wrapped onto our selected chain
-//       const foreignAsset = await getForeignAssetEth(
-//         // TODO: need a better way to handle this
-//         network.chainID === 'bombay-12'
-//           ? '0x61E44E506Ca5659E6c0bba9b678586fA2d729756'
-//           : '0x0e082F06FF657D94310cB8cE8B0D9a04541d8052',
-//         provider,
-//         CHAIN_ID_TERRA,
-//         hexToUint8Array(
-//           await getEmitterAddressTerra(collateral.collateral_token),
-//         ),
-//       );
-//       if (foreignAsset && foreignAsset !== ETH_ADDR_ZERO) {
-//         map.set(collateral.collateral_token, foreignAsset as ERC20Addr);
-//       }
-//     }
-//   }
-
-//   return map;
-// }
-
 async function bridgeEvmAssetsQuery(
   whitelist: WhitelistCollateral[],
   target: DeploymentTarget,
@@ -176,7 +118,6 @@ const fetchEvmAddr = async (
   // the token is on Terra so need to check if
   // it is wrapped onto our selected chain
   const foreignAsset = await getForeignAssetEth(
-    // TODO: need a better way to handle this
     network.chainID === "bombay-12"
       ? "0x61E44E506Ca5659E6c0bba9b678586fA2d729756"
       : "0x0e082F06FF657D94310cB8cE8B0D9a04541d8052",

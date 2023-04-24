@@ -59,7 +59,8 @@ export function useBorrowLoopForm() {
         return emptyAsyncStates;
       }
 
-      if(!oraclePrices || !collateral?.info?.info?.tokenAddress || ! lsdHubStates || !terraWalletAddress){
+      //TODO adapt for native tokens
+      if(!oraclePrices || !collateral?.info?.info.cw20 || ! lsdHubStates || !terraWalletAddress){
         return emptyAsyncStates
       }
       const rawCollateralPrice = parseFloat(oraclePrices.prices.find((price) => price.asset == collateral.collateral_token)?.price ?? "1");
@@ -77,10 +78,10 @@ export function useBorrowLoopForm() {
       if(totalBorrowAmount.lte(0)){
         return emptyAsyncStates;
       }
-
+      //TODO adapt for native tokens
       const estimation = await tfmEstimation({
           tokenIn: contractAddress.native.usd,
-          tokenOut: collateral.info.info.tokenAddress,
+          tokenOut: collateral.info.info.cw20.tokenAddress,
           amount: totalBorrowAmount.toString() as u<Token>,
           slippage: SLIPPAGE,
           useSplit: false

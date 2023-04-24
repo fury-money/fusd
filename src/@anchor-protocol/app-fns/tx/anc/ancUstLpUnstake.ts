@@ -60,7 +60,6 @@ export function ancAncUstLpUnstakeTx($: {
             amount: formatTokenInput($.lpAmount),
           },
         }),
-        // TODO execute_msg type
       ],
       fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,

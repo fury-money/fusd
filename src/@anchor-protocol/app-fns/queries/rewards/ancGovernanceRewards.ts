@@ -30,7 +30,7 @@ export async function rewardsAncGovernanceRewardsQuery(
   govContract: HumanAddr,
   ancContract: CW20Addr
 ): Promise<RewardsAncGovernanceRewards | undefined> {
-  if (!walletAddr) {
+  if (!walletAddr || !govContract || !ancContract) {
     return undefined;
   }
 

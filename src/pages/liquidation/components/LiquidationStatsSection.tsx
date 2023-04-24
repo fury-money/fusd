@@ -51,7 +51,8 @@ function LiquidationStatsSectionBase({
       }) ?? [],
     [liquidationHistory, aluna, ust],
   );
-  
+    console.log(liquidations.length);
+
   const theme = useTheme();
   const isVerySmall = useMediaQuery({ maxWidth: 755 });
 

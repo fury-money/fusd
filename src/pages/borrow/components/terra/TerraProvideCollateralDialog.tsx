@@ -10,6 +10,7 @@ import { ProvideCollateralFormParams } from '../types';
 import { normalize } from '@anchor-protocol/formatter';
 import { ProvideWrappedCollateralDialog } from '../ProvideWrappedCollateralDialog';
 import { useBorrowProvideWrappedCollateralTx } from '@anchor-protocol/app-provider/tx/borrow/provideWrappedCollateral';
+import { useLSDBalance } from 'pages/swap/queries/balanceQuery';
 
 export const TerraProvideCollateralDialog = (
   props: DialogProps<ProvideCollateralFormParams>,
@@ -51,11 +52,10 @@ export const TerraProvideCollateralDialog = (
     />)
 
   }else{
-    const cw20Balance = useCW20Balance<bAsset>(
-      collateral.info.info.tokenAddress as CW20Addr,
-      terraWalletAddress,
-    );   
-    const uTokenBalance = normalize(cw20Balance, 6, collateral.decimals);
+    const balance = useLSDBalance(
+      collateral.info,
+    ) as u<bAsset>;   
+    const uTokenBalance = normalize(balance, 6, collateral.decimals);
 
     const [postTx, txResult] = useBorrowProvideWrappedCollateralTx(collateral);
 

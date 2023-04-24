@@ -34,15 +34,13 @@ import {
   formatInput,
   formatOutput,
   demicrofy,
-  useFormatters,
-  microfy,
+  useFormatters
 } from '@anchor-protocol/formatter';
 import { BroadcastTxStreamResult } from 'pages/earn/components/types';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
-import { MsgExecuteContract } from '@terra-money/terra.js';
-import { createHookMsg } from '@libs/app-fns/tx/internal';
 import { CircleSpinner } from 'react-spinners-kit';
 import { WhitelistWrappedCollateral } from 'queries';
+import { getWrappedCollateralMessages } from '@anchor-protocol/app-fns';
 
 export interface ProvideCollateralDialogParams
   extends UIElementProps,
@@ -108,76 +106,16 @@ function ProvideWrappedCollateralDialogBase(props: ProvideCollateralDialogProps)
       return;
     }
 
-    estimateFee([
-
-      // Raise allowance on the actual token
-      new MsgExecuteContract(
-        terraWalletAddress as string,
-        props.collateral.info.info.tokenAddress,
-        {
-          increase_allowance: {
-            spender: props.collateral.collateral_token,
-            amount: formatInput(
-              microfy(states.depositAmount, props.collateral.decimals),
-              props.collateral.decimals,
-            ),
-          },
-        },
-      ),
-      // Wrap the tokens
-      new MsgExecuteContract(
-        terraWalletAddress as string,
-        props.collateral.collateral_token,
-        {
-          mint_with: {
-            recipient: terraWalletAddress,
-            lsd_amount: formatInput(
-              microfy(states.depositAmount, props.collateral.decimals),
-              props.collateral.decimals,
-            ),
-          },
-        },
-      ),
-      
-      // provide_collateral call
-      new MsgExecuteContract(
-        terraWalletAddress as string,
-        props.collateral.collateral_token,
-        {
-          send: {
-            contract: props.collateral.custody_contract,
-            amount: formatInput(
-              states.lunaAmount,
-              props.collateral.decimals,
-            ),
-            msg: createHookMsg({
-              deposit_collateral: {},
-            }),
-          },
-        },
-      ),
-      
-      // lock_collateral call
-      new MsgExecuteContract(
-        terraWalletAddress as string,
-        contractAddress.moneyMarket.overseer,
-        {
-          // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L75
-          lock_collateral: {
-            collaterals: [
-              [
-                props.collateral.collateral_token,
-                formatInput(
-                  states.lunaAmount,
-                  props.collateral.decimals,
-                ),
-              ],
-            ],
-          },
-        },
-      ),
-      
-    ]);
+    estimateFee(getWrappedCollateralMessages(
+      terraWalletAddress, 
+      states.depositAmount, 
+      states.lunaAmount, 
+      props.collateral.info, 
+      props.collateral.collateral_token, 
+      props.collateral.custody_contract, 
+      contractAddress.moneyMarket.overseer, 
+      props.collateral.decimals
+    ));
   }, [
     terraWalletAddress,
     contractAddress.moneyMarket.overseer,

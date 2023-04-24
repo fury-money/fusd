@@ -209,7 +209,7 @@ function Component({ className, collateral, setClickedBar }: LiquidationQueuePro
   const liquidationStats = useMyLiquidationStats(
     collateral?.collateral_token, 
     collateral?.symbol, 
-    collateral && "info" in collateral ? collateral.info.info.hubAddress as HumanAddr : undefined
+    collateral && "info" in collateral ? collateral.info : undefined
   );
 
   // ---------------------------------------------

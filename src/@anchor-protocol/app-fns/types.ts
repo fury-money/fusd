@@ -40,6 +40,7 @@ export interface AnchorTokenBalances {
   uLSDs: {
     [key in RegisteredLSDs]: u<LSD<RegisteredLSDs>>;
   };
+  otherBalances: Record<string, any>
 }
 
 export const DefaultAnchorTokenBalances = {

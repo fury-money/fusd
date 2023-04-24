@@ -12,7 +12,6 @@ interface PollsReturn {
   reload: () => void;
 }
 
-// TODO use react-query infinite sroll
 export function useGovPollsQuery(
   filter: anchorToken.gov.PollStatus | undefined
 ): PollsReturn {

@@ -22,7 +22,6 @@ const TerraBalancesProvider = ({ children }: UIElementProps) => {
 
   const fetchWalletBalance = useCallback(
     (collateral?: WhitelistCollateral) => {
-      // TODO: this isnt used anywhere yet
       if (collateral === undefined || terraWalletAddress === undefined) {
         return Promise.resolve(Big(0) as u<CollateralAmount<Big>>);
       }

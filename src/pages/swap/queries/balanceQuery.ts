@@ -1,4 +1,4 @@
-import { useAnchorWebapp } from "@anchor-protocol/app-provider";
+import { LSDContracts, useAnchorWebapp } from "@anchor-protocol/app-provider";
 import { useCW20Balance, useNativeBalanceQuery } from "@libs/app-provider";
 import { CW20Addr } from "@libs/types";
 import { useAccount } from "contexts/account";
@@ -20,4 +20,13 @@ export function useBalance(contract_addr: string | undefined) {
   } else {
     return cw20Balance;
   }
+}
+
+export function useLSDBalance(collateral: LSDContracts | undefined) {
+
+  return useBalance(
+    collateral?.info.cw20 ?
+       collateral?.info.cw20.tokenAddress : 
+       collateral?.info.coin?.denom
+  )
 }

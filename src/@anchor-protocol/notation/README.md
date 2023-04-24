@@ -1,7 +1,5 @@
 # `@anchor-protocol/notation`
 
-TODO
-
 ## Spec
 
 <!-- source __tests__/*.test.ts -->

@@ -6,7 +6,6 @@ module.exports = {
     reactDocgen: 'react-docgen',
   },
   addons: [
-    // TODO remove this block when fix the storybook error
     // @see https://github.com/storybookjs/storybook/tree/master/addons/storysource#displaying-full-source
     {
       name: '@storybook/addon-docs',

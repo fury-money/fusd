@@ -1,5 +1,6 @@
 import {
   useAnchorBank,
+  useAnchorWebapp,
   useBLunaClaimableRewards,
   useBLunaWithdrawableAmount,
 } from '@anchor-protocol/app-provider';
@@ -12,9 +13,13 @@ import React, { useMemo } from 'react';
 import { claimableRewards as _claimableRewards } from '../logics/claimableRewards';
 
 export function AssetCardContentLSD({
-  asset
+  asset,
+  underlyingName,
+  underlyingToken
 }: {
-  asset: string
+  asset: string,
+  underlyingName: string,
+  underlyingToken: string
 }) {
   const { tokenBalances } = useAnchorBank();
 
@@ -24,22 +29,25 @@ export function AssetCardContentLSD({
   const { data: { claimableReward, rewardState } = {} } =
     useBLunaClaimableRewards();
 
-  const claimableRewards = useMemo(
-    () => _claimableRewards(claimableReward, rewardState),
-    [claimableReward, rewardState],
-  );
 
-  const withdrawableLuna = useMemo(
-    () => big(_withdrawableAmount?.withdrawable ?? 0) as u<Luna<Big>>,
-    [_withdrawableAmount?.withdrawable],
-  );
+  const baseTokenBalance = useMemo(()=> {
+    if(underlyingToken.toLowerCase() == "uluna"){
+      return tokenBalances.uLuna
+    }else{
+      return tokenBalances.otherBalances[underlyingToken] ?? "0";
+    }
+  }, [tokenBalances.uLuna, tokenBalances.otherBalances])
+
+
+  console.log(tokenBalances.uLSDs)
+
 
   return (
     <table>
       <tbody>
         <tr>
-          <th>LUNA</th>
-          <td>{formatUToken(tokenBalances.uLuna)}</td>
+          <th>{underlyingName.toUpperCase()}</th>
+          <td>{formatUToken(baseTokenBalance)}</td>
         </tr>
         <tr>
           <th>{asset}</th>

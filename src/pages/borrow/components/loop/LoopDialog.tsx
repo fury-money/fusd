@@ -51,7 +51,7 @@ import { CavernSlider } from 'pages/liquidation/components/PlaceBidSection';
 import { SelectAndTextInputContainerLabel } from '@libs/neumorphism-ui/components/SelectAndTextInputContainer';
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { ArrowDropDown } from '@mui/icons-material';
-import { useBalance } from 'pages/swap/queries/balanceQuery';
+import { useBalance, useLSDBalance } from 'pages/swap/queries/balanceQuery';
 import { formatOutput } from '@anchor-protocol/formatter';
 import { useGenericTx } from '@anchor-protocol/app-provider/tx/genericTx';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
@@ -209,7 +209,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
 
   const [loopToken, setLoopToken] = useState<WhitelistWrappedCollateral | undefined>(allLSDCollaterals[0]);
 
-  const loopTokenBalance = useBalance(loopToken?.info.info.tokenAddress);
+  const loopTokenBalance = useLSDBalance(loopToken?.info);
 
   const [collateralAnchorEl, setCollaterallAnchorEl] = useState<null | HTMLElement>(null);
   const collateralDialogOpen = Boolean(collateralAnchorEl);

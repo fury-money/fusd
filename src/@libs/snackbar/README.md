@@ -1,7 +1,5 @@
 # `@libs/snackbar`
 
-TODO
-
 <https://anchor-storybook.vercel.app/?path=/story/core-snackbar--basic>
 
 ## API

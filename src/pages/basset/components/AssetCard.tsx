@@ -35,7 +35,7 @@ function Component({
               {originAssetIcon}
               {bAssetIcon}
             </i>
-            <p>{title}</p>
+            {title}
           </h3>
 
           <div>{children}</div>
@@ -47,7 +47,7 @@ function Component({
               {originAssetIcon}
               {bAssetIcon}
             </i>
-            <p>{title}</p>
+            {title}
           </h3>
 
           <div>{children}</div>
@@ -57,7 +57,7 @@ function Component({
 
       <div className="hover">
         <Icon />
-        <p>{hoverText}</p>
+        {hoverText}
       </div>
     </li>
   );

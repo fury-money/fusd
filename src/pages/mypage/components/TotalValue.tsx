@@ -26,7 +26,6 @@ import { useBalances } from 'contexts/balances';
 import { useTheme } from 'contexts/theme';
 import { fixHMR } from 'fix-hmr';
 import { computeHoldings } from 'pages/mypage/logics/computeHoldings';
-import { useRewards } from 'pages/mypage/logics/useRewards';
 // import { useSendDialog } from 'pages/send/useSendDialog';
 import { useAssetPriceInUstQuery } from 'queries';
 import React, { useMemo, useState } from 'react';
@@ -61,10 +60,6 @@ function TotalValueBase({ className }: TotalValueProps) {
 
   const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
 
-  // const [openSend, sendElement] = useSendDialog();
-
-  const { ancUstLp, ustBorrow } = useRewards();
-
   const { data: ancPrice } = useAssetPriceInUstQuery('anc');
 
   const { data: { userGovStakingInfo } = {} } =
@@ -95,10 +90,9 @@ function TotalValueBase({ className }: TotalValueProps) {
       moneyMarketEpochState,
     );
     const borrowing =
-      overseerCollaterals && oraclePrices && marketBorrowerInfo && ustBorrow
+      overseerCollaterals && oraclePrices && marketBorrowerInfo
         ? (computeCollateralsTotalUST(overseerCollaterals, oraclePrices)
-            .minus(marketBorrowerInfo.loan_amount)
-            .plus(ustBorrow.rewardValue) as u<UST<Big>>)
+            .minus(marketBorrowerInfo.loan_amount) as u<UST<Big>>)
         : ('0' as u<UST>);
     const holdings = computeHoldings(
       tokenBalances,
@@ -107,18 +101,7 @@ function TotalValueBase({ className }: TotalValueProps) {
       bAssetBalanceTotal,
     );
 
-    const pool =
-      ancUstLp && ancPrice
-        ? (big(big(ancUstLp.poolAssets.anc).mul(ancPrice)).plus(
-            ancUstLp.poolAssets.ust,
-          ) as u<UST<Big>>)
-        : ('0' as u<UST>);
 
-    const farming = ancUstLp
-      ? (big(ancUstLp.stakedValue).plus(ancUstLp.rewardsAmountInUst) as u<
-          UST<Big>
-        >)
-      : ('0' as u<UST>);
     const govern =
       userGovStakingInfo && ancPrice
         ? (big(userGovStakingInfo.balance).mul(ancPrice) as u<UST<Big>>)
@@ -129,8 +112,6 @@ function TotalValueBase({ className }: TotalValueProps) {
       deposit,
       borrowing,
       holdings,
-      pool,
-      farming,
       govern,
     ) as u<UST<Big>>;
 
@@ -157,7 +138,6 @@ function TotalValueBase({ className }: TotalValueProps) {
     };
   }, [
     ancPrice,
-    ancUstLp,
     bAssetBalanceTotal,
     connected,
     marketBorrowerInfo,
@@ -166,7 +146,6 @@ function TotalValueBase({ className }: TotalValueProps) {
     overseerCollaterals,
     tokenBalances,
     userGovStakingInfo,
-    ustBorrow,
   ]);
 
   const isSmallLayout = useMemo(() => {

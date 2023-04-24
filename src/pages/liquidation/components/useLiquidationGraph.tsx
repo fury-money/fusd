@@ -6,13 +6,12 @@ import {
     useMarketBAssetQuery,
     useNetwork
 } from '@anchor-protocol/app-provider';
-import { useExlicitWrappedTokenDetails, useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
+import { useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
 import { useTotalCollateralsQuery } from '@anchor-protocol/app-provider/queries/liquidate/totalLiquidations';
 import { formatBAsset, formatUST } from '@anchor-protocol/notation';
-import { bAsset, aLuna, CW20Addr, HumanAddr, liquidation, u, UST } from '@anchor-protocol/types/';
+import { bAsset, aLuna, CW20Addr, liquidation, u, UST } from '@anchor-protocol/types/';
 import { demicrofy } from '@libs/formatter';
 import { RegisteredLSDs } from 'env';
-import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
 import { useMemo } from 'react';
 import big, { Big } from "big.js";
 
@@ -56,9 +55,7 @@ export type LiquidationStats = {
     }[]
 }
 
-export const useMyLiquidationStats = (tokenAddress?: CW20Addr, symbol?:string, hubAddress?: HumanAddr): LiquidationStats => {
-  const network = useNetwork();
-
+export const useMyLiquidationStats = (tokenAddress?: CW20Addr, symbol?:string, lsd?: LSDContracts): LiquidationStats => {
 
   const { data: { bidPoolsByCollateral } = {} } = useBidPoolsByCollateralQuery(
     tokenAddress,
@@ -105,7 +102,7 @@ export const useMyLiquidationStats = (tokenAddress?: CW20Addr, symbol?:string, h
   [oraclePrices, tokenAddress]);
 
   // Echange rate for assets not 1-1
-  const {data: wrappedTokenDetails} = useExlicitWrappedTokenDetails(hubAddress);
+  const {data: wrappedTokenDetails} = useWrappedTokenDetails(lsd);
 
   return useMemo(() => {
     let lockedCollateralUSD =
@@ -162,8 +159,6 @@ export type LiquidationStatsResponse = {
 export const useAllLiquidationStats = () : LiquidationStatsResponse => {
 
   const {contractAddress} = useAnchorWebapp();
-
-  const {data: collaterals} = useWhitelistCollateralQuery();
 
   // First aLuna    
   let aLunaStats = useMyLiquidationStats(contractAddress.cw20.aLuna, "aLuna");

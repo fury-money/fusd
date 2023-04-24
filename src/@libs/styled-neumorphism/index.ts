@@ -81,8 +81,6 @@ export function concave({
 }: NeumorphismValues) {
   const blur: number = (10 + 2 * (distance - 5)) * blurWeight;
 
-  // TODO find the weight ratio by color luminance
-
   return `
     background: linear-gradient(
                   145deg,
@@ -109,8 +107,6 @@ export function convex({
   blurWeight = 1,
 }: NeumorphismValues) {
   const blur: number = (10 + 2 * (distance - 5)) * blurWeight;
-
-  // TODO find the weight ratio by color luminance
 
   return `
     background: linear-gradient(

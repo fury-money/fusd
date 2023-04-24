@@ -17,7 +17,7 @@ interface LcdBlocksLatest {
     data: {
       txs: string[];
     };
-    evidence: null; // TODO
+    evidence: null;
     header: {
       app_hash: string;
       chain_id: string;

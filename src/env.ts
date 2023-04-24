@@ -72,6 +72,8 @@ export function ANCHOR_CONSTANTS(network: NetworkInfo): AnchorConstants {
 export enum RegisteredLSDs {
   ampLuna = "ampLuna",
   bLuna = "bLuna",
+  stLuna = "stLuna",
+  ampWhale = "ampWhale"
 }
 
 const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
@@ -130,16 +132,19 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
   LSDs: {
     ampLuna: {
       info: {
+        cw20: {
         tokenAddress:
           "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
         hubAddress:
           "terra10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaqyd3enk",
+        },
         protocol: "Eris Protocol",
         symbol: "ampLuna",
         name: "Eris Amplified Luna",
         icon: "https://www.erisprotocol.com/assets/ampLuna100.png",
         link: "https://www.erisprotocol.com/terra/amplifier",
-        underlyingToken: "luna",
+        underlyingToken: "uluna",
+        underlyingName: "luna"
       },
       hub: "terra1neq7ds3cd2rx0ht0fycgqkf26fed2v73g7wrp5xav5dfas0fwcqqy47t5n",
       reward:
@@ -150,16 +155,19 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
     },
     bLuna: {
       info: {
-        tokenAddress:
-          "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
-        hubAddress:
-          "terra1l2nd99yze5fszmhl5svyh5fky9wm4nz4etlgnztfu4e8809gd52q04n3ea",
+        cw20:{
+          tokenAddress:
+            "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
+          hubAddress:
+            "terra1l2nd99yze5fszmhl5svyh5fky9wm4nz4etlgnztfu4e8809gd52q04n3ea",
+        },
         protocol: "Backbone Labs",
         symbol: "bLuna",
         name: "boneLuna",
         icon: "https://gravedigger.backbonelabs.io/boneluna.png",
         link: "https://gravedigger.backbonelabs.io/ ",
-        underlyingToken: "luna",
+        underlyingToken: "uluna",
+        underlyingName: "luna"
       },
       hub: "terra17gvtvnmyyqwas2nanek5u8cjl57e7z2zu4dkl3de45060725ly4sep7050",
       reward:
@@ -167,6 +175,42 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
       token: "terra1uq59f5lhzg6ut605ntevvf2a8kg9t2xk2873lgx6pweagkw76r4sdzj6ap",
       custody:
         "terra1sw7c9evzf44eq8k7j0kcquga0xy2ff76yhnvns4gphg37snvn26qgzjgz4",
+    },
+    stLuna: {
+      info: {
+        coin: {
+          denom: "ibc/08095CEDEA29977C9DD0CE9A48329FDA622C183359D5F90CF04CC4FF80CBE431",
+        },
+        protocol: "Stride Labs",
+        symbol: "stLuna",
+        name: "Stride Luna",
+        icon: "https://app.astroport.fi/tokens/stLuna.svg",
+        link: "https://app.stride.zone/",
+        underlyingToken: "uluna",
+        underlyingName: "luna"
+      },
+      "hub": "terra1hjk5lhezu5ppazknhpeclh4vmxnjt32e4hgzhjqk7ahcflf8v80s830q37",
+      "reward": "terra1sjw7nyp5r6cycwpvsfmnnlcdmmhkng06uvxlryrd40ahetfdl48qdzdvmg",
+      "token": "terra18mls96hhatg6k03zg29tz02a76q3w66z4qsa8pfww6hupszlhqns6fm9ad",
+      "custody": "terra1t8uy83ddg6g6vadgckm0nyn3qjqd8d0s3tlyu0tesrs7ykkn2szqcrdumt"
+    },
+    ampWhale: {
+      info: {
+        coin: {
+          denom: "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36",
+        },
+        protocol: "Eris Protocol",
+        symbol: "ampWhale",
+        name: "Eris Amplified Whale",
+        icon: "https://app.whitewhale.money/logos/ampWhale.svg",
+        link: "https://www.erisprotocol.com/migaloo/amplifier/",
+        underlyingToken: "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+        underlyingName: "whale"
+      },
+      "hub": "terra1k67g8hhml2nfrqqavwy9cvkcln4grp400f0klfjrk430el48x8pqaehfdg",
+      "reward": "terra1am3v78e75exr7gt8d3367jxfp7c0ar7xkj04q6h5zfc72clvyf8snuv9tm",
+      "token": "terra1kd85952285xfdlp5ck8nt62vuvur8cem9h3svm7yptpsvmr9tuusqpm2sw",
+      "custody": "terra1pggsjvjdjjr3ffm85m2kjr9ddjpnu99wts6hzxdz4cqf0kstg6gs7rnuac"
     },
   },
 };

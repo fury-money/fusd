@@ -23,7 +23,6 @@ function Component({ className }: BAssetMainProps) {
 
   const lsdCollaterals = useLSDCollateralQuery();
 
-
   return (
     <CenteredLayout className={className} maxWidth={1440}>
       <TitleContainer>
@@ -38,7 +37,7 @@ function Component({ className }: BAssetMainProps) {
           title={<p>LUNA/aLUNA<span style={{fontSize: "0.7em"}}> (mint here)</span></p>}
           bAssetIcon={<TokenIcon token="aluna" />}
           originAssetIcon={<TokenIcon token="luna" />}
-          hoverText="MINT & BURN"
+          hoverText={<Box>MINT & BURN</Box>}
         >
           <AssetCardContentBluna />
         </AssetCard>
@@ -49,10 +48,14 @@ function Component({ className }: BAssetMainProps) {
             to={collateral.info.info.link}
             title={<p>{collateral.info.info.symbol} ({collateral.info.info.protocol})</p>}
             bAssetIcon={<TokenIcon token={collateral.info.info.symbol} variant="@4x" />}
-            originAssetIcon={<TokenIcon token="luna" />}
+            originAssetIcon={<TokenIcon token={collateral.info.info.underlyingName} />}
             hoverText={<Box sx={{gap: "5px",display: "flex", alignItems: "center", fontSize: "1em !important"}}>MINT & BURN <OpenInNewIcon/> </Box>}
           >
-            <AssetCardContentLSD asset={collateral.info.info.symbol} />
+            <AssetCardContentLSD 
+              asset={collateral.info.info.symbol} 
+              underlyingName={collateral.info.info.underlyingName} 
+              underlyingToken={collateral.info.info.underlyingToken} 
+            />
           </AssetCard>
         ) 
 

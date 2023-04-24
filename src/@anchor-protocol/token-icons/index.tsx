@@ -21,6 +21,11 @@ import luna2x from './assets/luna@2x.png';
 import luna3x from './assets/luna@3x.png';
 import luna4x from './assets/luna@4x.png';
 
+import whale from './assets/whale.svg';
+import whale2x from './assets/whale@2x.png';
+import whale3x from './assets/whale@3x.png';
+import whale4x from './assets/whale@4x.png';
+
 import ust from './assets/ust.svg';
 import ust2x from './assets/ust@2x.png';
 import ust3x from './assets/ust@3x.png';
@@ -31,10 +36,25 @@ import ampLuna2x from './assets/ampLuna@2x.png';
 import ampLuna3x from './assets/ampLuna@3x.png';
 import ampLuna4x from './assets/ampLuna@4x.png';
 
-export const tokens = ['ust', 'aust', 'luna', 'aluna', 'aLuna', 'ampLuna', 'wampLuna', 'bLuna'] as const;
+import stLuna from './assets/stLuna.svg';
+import stLuna2x from './assets/stLuna@2x.png';
+import stLuna3x from './assets/stLuna@3x.png';
+import stLuna4x from './assets/stLuna@4x.png';
+
+import ampWhale from './assets/ampLuna.svg';
+import ampWhale2x from './assets/ampWhale@2x.png';
+import ampWhale3x from './assets/ampWhale@3x.png';
+import ampWhale4x from './assets/ampWhale@4x.png';
+
+import { RegisteredLSDs } from 'env';
+
+type RegisteredLSDsValues =`${RegisteredLSDs}`
+export const lsds = Object.values(RegisteredLSDs).map((v)=> RegisteredLSDs[v]);
+
+export const tokens = ['ust', 'aust', 'luna', "whale", 'aluna', 'aLuna', 'wampLuna'] as const;
 export const variants = ['svg', '@2x', '@3x', '@4x'] as const;
 
-export type Tokens = typeof tokens[number];
+export type Tokens = typeof tokens[number] | RegisteredLSDsValues;
 export type IconVariant = typeof variants[number];
 
 export type TokenImage = { src: string };
@@ -63,6 +83,12 @@ export const tokenImages: Record<Tokens, Record<IconVariant, TokenImage>> = {
     '@2x': convert(luna2x),
     '@3x': convert(luna3x),
     '@4x': convert(luna4x),
+  },
+  whale: {
+    'svg': convert(whale),
+    '@2x': convert(whale2x),
+    '@3x': convert(whale3x),
+    '@4x': convert(whale4x),
   },
   aluna: {
     'svg': convert(aluna),
@@ -94,6 +120,18 @@ export const tokenImages: Record<Tokens, Record<IconVariant, TokenImage>> = {
     '@3x': convert(bluna3x),
     '@4x': convert(bluna4x),
   },
+  stLuna: {
+    'svg': convert(stLuna),
+    '@2x': convert(stLuna2x),
+    '@3x': convert(stLuna3x),
+    '@4x': convert(stLuna4x),
+  },
+  ampWhale: {
+    'svg': convert(ampWhale),
+    '@2x': convert(ampWhale2x),
+    '@3x': convert(ampWhale3x),
+    '@4x': convert(ampWhale4x),
+  }
 };
 
 export interface IconProps
@@ -107,13 +145,16 @@ export interface IconProps
   variant?: IconVariant;
 }
 
-const displayTokenIconAsPredefined = (variant: IconVariant, symbol: string) =>
-  symbol.toLowerCase() in tokens
-    ? tokenImages[symbol.toLowerCase() as Tokens][variant].src
-    : undefined;
+const displayTokenIconAsPredefined = (variant: IconVariant, symbol: string) => {
+  if(symbol.toLowerCase() in tokens){
+    return tokenImages[symbol.toLowerCase() as Tokens][variant].src
+  }else{
+    return undefined
+  }
+}
 
 const displayPredefinedIcon = (token: Tokens, variant: IconVariant) =>{
-  return tokenImages[token][variant].src;
+  return tokenImages[token]?.[variant]?.src;
 }
 
 export function TokenIconBase({

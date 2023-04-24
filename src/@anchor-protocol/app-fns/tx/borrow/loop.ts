@@ -1,6 +1,6 @@
 import { AnchorContractAddress } from "@anchor-protocol/app-provider";
 import { bAsset, CollateralAmount } from "@anchor-protocol/types";
-import { CW20Addr, HumanAddr, Rate, Token, u, UST } from "@libs/types";
+import { HumanAddr, Rate, Token, u, UST } from "@libs/types";
 import { Coin, MsgExecuteContract } from "@terra-money/terra.js";
 import { WhitelistWrappedCollateral } from "queries";
 import big, { Big } from "big.js";
@@ -74,7 +74,7 @@ export function getLoopAmountsAndMessages(
       walletAddr,
       demicrofy(big(thisDepositAmount).round() as u<Token<Big>>).toString() as bAsset,
       big(thisDepositAmount).mul(collateralExchangeRate).round().minus(1).toString() as u<bAsset>,
-      collateral.info.info.tokenAddress as CW20Addr,
+      collateral.info,
       collateral.collateral_token,
       collateral.custody_contract,
       contracts.moneyMarket.overseer,

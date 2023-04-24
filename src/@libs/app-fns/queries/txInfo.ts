@@ -52,7 +52,7 @@ const TX_INFO_QUERY = `
 `;
 
 interface LcdTxs {
-  tx: any; // TODO CreateTxOptions + .toJSON()
+  tx: any;
   tx_response: {
     txhash: string;
     gas_used: Gas<string>;
@@ -72,7 +72,7 @@ interface LcdTxsFail {
   height: Num;
   raw_log: string;
   timestamp: ISODateFormat;
-  tx: any; // TODO CreateTxOptions + .toJSON()
+  tx: any;
   txhash: string;
 }
 

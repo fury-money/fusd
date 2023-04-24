@@ -6,7 +6,6 @@ interface AccountCommon {
   readonly: boolean;
   network: "terra" | "evm";
   status: "initialization" | "connected" | "disconnected";
-  // TODO
   // connect: (connectType: 'extension' | 'walletconnect' | 'readonly') => void;
   // disconnect: () => void;
 }
