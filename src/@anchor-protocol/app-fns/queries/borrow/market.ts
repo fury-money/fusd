@@ -123,7 +123,9 @@ export async function borrowMarketQuery(
       oraclePrices: {
         contractAddress: oracleContract,
         query: {
-          prices: {},
+          prices: {
+            limit: 30
+          },
         },
       },
       overseerWhitelist: {

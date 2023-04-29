@@ -35,6 +35,7 @@ export function useCollaterals(){
     return whitelist
       .filter((collateral) => collateral.bridgedAddress !== undefined)
       .map((collateral) => {
+        console.log(borrowMarket.oraclePrices)
         const oracle = borrowMarket.oraclePrices.prices.find(
           ({ asset }) => collateral.collateral_token === asset,
         );
@@ -56,7 +57,6 @@ export function useCollaterals(){
       if(additionalInfo?.info?.info?.name){
         collateral.name = additionalInfo?.info?.info?.name;
       }
-
         return {
           collateral,
           price: big(microfyPrice(oracle?.price, collateral.decimals)).mul(exchangeRate).toString() as UST,
