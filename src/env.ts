@@ -73,7 +73,8 @@ export enum RegisteredLSDs {
   ampLuna = "ampLuna",
   bLuna = "bLuna",
   stLuna = "stLuna",
-  ampWhale = "ampWhale"
+  ampWhale = "ampWhale",
+  bWhale = "bWhale"
 }
 
 const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
@@ -165,7 +166,7 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         symbol: "bLuna",
         name: "boneLuna",
         icon: "https://gravedigger.backbonelabs.io/boneluna.png",
-        link: "https://gravedigger.backbonelabs.io/ ",
+        link: "https://terra.gravedigger.zone/ ",
         underlyingToken: "uluna",
         underlyingName: "luna"
       },
@@ -212,6 +213,24 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
       "token": "terra1kd85952285xfdlp5ck8nt62vuvur8cem9h3svm7yptpsvmr9tuusqpm2sw",
       "custody": "terra1pggsjvjdjjr3ffm85m2kjr9ddjpnu99wts6hzxdz4cqf0kstg6gs7rnuac"
     },
+    bWhale: {
+      info:{
+        coin: {
+          denom: "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E",
+        },
+        protocol: "Backbone Labs",
+        symbol: "bWhale",
+        name: "boneWhale",
+        icon: "https://migaloo.gravedigger.zone/bwhale.png",
+        link: "https://migaloo.gravedigger.zone/",
+        underlyingToken: "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+        underlyingName: "whale"
+      },
+      "hub": "terra1zysm3sy6vepy2h9yw04ej408k990tugp7chx49vqfn6waucpcp0scjpnr4",
+      "reward": "terra1yt7ndfnran9lutcsh5p03evcazs8pgae86r70flwdne3lc4dmx8ssvtkuu",
+      "token": "terra1ze3c86la6wynenrqewhq4j9hw24yrvardudsl5mkq3mhgs6ag4cqrva0pg",
+      "custody": "terra1vmr33lncm0jhkm9gfj8824ahk50asysjgzt3ex7e94clecss8nzqftzzv2"
+    }
   },
 };
 

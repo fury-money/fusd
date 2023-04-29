@@ -16,6 +16,11 @@ import bluna2x from './assets/bluna@2x.png';
 import bluna3x from './assets/bluna@3x.png';
 import bluna4x from './assets/bluna@4x.png';
 
+import bWhale from './assets/bWHALE.svg';
+import bWhale2x from './assets/bWHALE@2x.png';
+import bWhale3x from './assets/bWHALE@3x.png';
+import bWhale4x from './assets/bWHALE@4x.png';
+
 import luna from './assets/luna.svg';
 import luna2x from './assets/luna@2x.png';
 import luna3x from './assets/luna@3x.png';
@@ -131,6 +136,12 @@ export const tokenImages: Record<Tokens, Record<IconVariant, TokenImage>> = {
     '@2x': convert(ampWhale2x),
     '@3x': convert(ampWhale3x),
     '@4x': convert(ampWhale4x),
+  },
+  bWhale: {
+    'svg': convert(bWhale),
+    '@2x': convert(bWhale2x),
+    '@3x': convert(bWhale3x),
+    '@4x': convert(bWhale4x),
   }
 };
 
