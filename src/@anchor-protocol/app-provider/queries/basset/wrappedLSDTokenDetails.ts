@@ -56,7 +56,6 @@ export async function underlyingHubStateQuery(
       },
     });
   }else if (lsd.info.coin){ // Else if the token is of CW20 type, we query the exchange rate from the oracle (that's denom vs underyling denom)
-    
     const oracleExchangeRate = await wasmFetch<OraclePriceQuery>({
       ...queryClient,
       id: `basset--claimable-rewards`,

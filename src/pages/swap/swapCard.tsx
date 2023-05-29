@@ -108,7 +108,6 @@ export function Component({
   const [swap, swapResult] = useTFMSwapTx();
 
   const [openAlert, alertElement] = useAlert();
-
   const {data: allAvailableTokens} = useTFMTokensQuery();
 
   const availableTokens = useMemo(()=> (allAvailableTokens ?? []).filter(({name}) => {
@@ -386,6 +385,7 @@ export function Component({
       />
     );
   }
+
 
   return (
     <>

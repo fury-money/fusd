@@ -8,6 +8,7 @@ import debounce from "lodash.debounce";
 import { useQuery, UseQueryResult } from "react-query";
 
 export async function simpleQuery<T>(queryUrl: string): Promise<T> {
+  console.log(queryUrl)
   return fetch(queryUrl).then((res) => res.json());
 }
 
@@ -16,7 +17,7 @@ export function useSimpleQuery<T>(queryUrl: string): UseQueryResult<T> {
 
   return useQuery(
     [ANCHOR_QUERY_KEY.TFM_AVAILABLE_TOKENS, queryUrl],
-    debounce(() => simpleQuery(queryUrl)),
+    () => simpleQuery(queryUrl),
     {
       refetchInterval: 1000 * 60 * 2,
       keepPreviousData: true,
