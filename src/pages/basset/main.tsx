@@ -23,26 +23,10 @@ function Component({ className }: BAssetMainProps) {
 
   const lsdCollaterals = useLSDCollateralQuery();
 
-  return (
-    <CenteredLayout className={className} maxWidth={1440}>
-      <TitleContainer>
-        <PageTitle title="MINT & BURN" docs={links.docs.bond} />
-      </TitleContainer>
-
-      <Claimable className="claimable-section" />
-
+  function printCollateralCard(type: string){
+    return (
       <ul className="asset-list">
-        <AssetCard
-          to="/aasset/aluna"
-          title={<p>LUNA/aLUNA<span style={{fontSize: "0.7em"}}> (mint here)</span></p>}
-          bAssetIcon={<TokenIcon token="aluna" />}
-          originAssetIcon={<TokenIcon token="luna" />}
-          hoverText={<Box>MINT & BURN</Box>}
-        >
-          <AssetCardContentBluna />
-        </AssetCard>
-
-        {lsdCollaterals.map((collateral) => 
+        {lsdCollaterals.filter((collateral) => collateral.info?.type == type).map((collateral) => 
           <AssetCard
             key={collateral.name}
             to={collateral.info.info.link}
@@ -57,9 +41,35 @@ function Component({ className }: BAssetMainProps) {
               underlyingToken={collateral.info.info.underlyingToken} 
             />
           </AssetCard>
-        ) 
+        )}
+      </ul>
+      )
+  }
 
-        }        
+
+  return (
+    <CenteredLayout className={className} maxWidth={1440}>
+      <TitleContainer>
+        <PageTitle title="MINT & BURN" docs={links.docs.bond} />
+      </TitleContainer>
+
+      <Claimable className="claimable-section" />
+
+        {printCollateralCard("whale")}
+         
+        {printCollateralCard("luna")}
+
+
+      <ul className="asset-list">
+        <AssetCard
+          to="/aasset/aluna"
+          title={<p>LUNA/aLUNA<span style={{fontSize: "0.7em"}}> (mint here)</span></p>}
+          bAssetIcon={<TokenIcon token="aluna" />}
+          originAssetIcon={<TokenIcon token="luna" />}
+          hoverText={<Box>MINT & BURN</Box>}
+        >
+          <AssetCardContentBluna />
+        </AssetCard>
       </ul>
     </CenteredLayout>
   );
@@ -78,6 +88,8 @@ const StyledComponent = styled(Component)`
   .asset-list {
     list-style: none;
     padding: 0;
+
+    margin-bottom: 30px;
 
     display: flex;
     gap: 40px;

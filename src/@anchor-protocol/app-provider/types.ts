@@ -93,6 +93,7 @@ export interface LSDContracts {
     underlyingToken: Tokens;
     underlyingName: Tokens;
   };
+  type: string;
   hub: string;
   reward: string;
   token: string;

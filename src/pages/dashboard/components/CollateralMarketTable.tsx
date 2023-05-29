@@ -46,6 +46,8 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
         collateral.name = additionalInfo?.info?.info?.name;
       }
 
+      const type = additionalInfo?.info?.type ?? "aLuna";
+
       const exchangeRate = parseFloat(additionalInfo?.additionalInfo?.hubState?.exchange_rate ?? "1");
 
       const price = (parseFloat(data?.price ?? "0") * exchangeRate) as UST<number>;
@@ -61,12 +63,64 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
         price,
         value,
         tvl,
+        type
       };
     });
     return array.sort((a, b) => {
       return Big(b.tvl).minus(Big(a.tvl)).toNumber();
     });
   }, [whitelistCollateral, marketData]);
+
+
+  function printCollaterals(type: string){
+    return collaterals.filter((collateral) => collateral.type == type).map((collateral) => {
+      return (
+        <tr key={collateral.symbol}>
+          <td>
+            <div>
+              <i>
+                <TokenIcon
+                  symbol={collateral.symbol}
+                  path={collateral.icon}
+                />
+              </i>
+              <div>
+                <div className="coin">{collateral.symbol}</div>
+                <p className="name">{collateral.name}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div className="value">
+              ${' '}
+              <AnimateNumber format={formatUST}>
+                {collateral.price}
+              </AnimateNumber>
+            </div>
+          </td>
+          <td>
+            <div className="value">
+              <AnimateNumber format={formatBAssetWithPostfixUnits}>
+                {collateral.value}
+              </AnimateNumber>
+            </div>
+          </td>
+          <td>
+            <div className="value">
+              ${' '}
+              <AnimateNumber
+                format={formatUSTWithPostfixUnits}
+                id="collateral-value"
+              >
+                {collateral.tvl}
+              </AnimateNumber>
+            </div>
+          </td>
+        </tr>
+      );
+    })
+  }
+
 
   return (
     <HorizontalScrollTable minWidth={800} className={className}>
@@ -98,52 +152,9 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
         </tr>
       </thead>
       <tbody>
-        {collaterals.map((collateral) => {
-          return (
-            <tr key={collateral.symbol}>
-              <td>
-                <div>
-                  <i>
-                    <TokenIcon
-                      symbol={collateral.symbol}
-                      path={collateral.icon}
-                    />
-                  </i>
-                  <div>
-                    <div className="coin">{collateral.symbol}</div>
-                    <p className="name">{collateral.name}</p>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div className="value">
-                  ${' '}
-                  <AnimateNumber format={formatUST}>
-                    {collateral.price}
-                  </AnimateNumber>
-                </div>
-              </td>
-              <td>
-                <div className="value">
-                  <AnimateNumber format={formatBAssetWithPostfixUnits}>
-                    {collateral.value}
-                  </AnimateNumber>
-                </div>
-              </td>
-              <td>
-                <div className="value">
-                  ${' '}
-                  <AnimateNumber
-                    format={formatUSTWithPostfixUnits}
-                    id="collateral-value"
-                  >
-                    {collateral.tvl}
-                  </AnimateNumber>
-                </div>
-              </td>
-            </tr>
-          );
-        })}
+        {printCollaterals("whale")}
+        {printCollaterals("luna")}
+        {printCollaterals("aLuna")}
       </tbody>
     </HorizontalScrollTable>
   );

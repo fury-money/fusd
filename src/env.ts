@@ -145,8 +145,9 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         icon: "https://www.erisprotocol.com/assets/ampLuna100.png",
         link: "https://www.erisprotocol.com/terra/amplifier",
         underlyingToken: "uluna",
-        underlyingName: "luna"
+        underlyingName: "luna",
       },
+      type: "luna",
       hub: "terra1neq7ds3cd2rx0ht0fycgqkf26fed2v73g7wrp5xav5dfas0fwcqqy47t5n",
       reward:
         "terra1zrgzj7luyw9mtqcwqdtn6p8gwy262upx3p7wa3v3cj07us7j9ztsa8r4n5",
@@ -168,8 +169,9 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         icon: "https://gravedigger.backbonelabs.io/boneluna.png",
         link: "https://terra.gravedigger.zone/ ",
         underlyingToken: "uluna",
-        underlyingName: "luna"
+        underlyingName: "luna",
       },
+      type: "luna",
       hub: "terra17gvtvnmyyqwas2nanek5u8cjl57e7z2zu4dkl3de45060725ly4sep7050",
       reward:
         "terra1m42u5zt3c4l7ekqy9pr4ltv2at9q78tn8fu9vhz04vt57x3z0ydq6qamvr",
@@ -188,8 +190,9 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         icon: "https://app.astroport.fi/tokens/stLuna.svg",
         link: "https://app.stride.zone/",
         underlyingToken: "uluna",
-        underlyingName: "luna"
+        underlyingName: "luna",
       },
+      type: "luna",
       "hub": "terra1hjk5lhezu5ppazknhpeclh4vmxnjt32e4hgzhjqk7ahcflf8v80s830q37",
       "reward": "terra1sjw7nyp5r6cycwpvsfmnnlcdmmhkng06uvxlryrd40ahetfdl48qdzdvmg",
       "token": "terra18mls96hhatg6k03zg29tz02a76q3w66z4qsa8pfww6hupszlhqns6fm9ad",
@@ -206,8 +209,9 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         icon: "https://app.whitewhale.money/logos/ampWhale.svg",
         link: "https://www.erisprotocol.com/migaloo/amplifier/",
         underlyingToken: "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
-        underlyingName: "whale"
+        underlyingName: "whale",
       },
+      type: "whale",
       "hub": "terra1k67g8hhml2nfrqqavwy9cvkcln4grp400f0klfjrk430el48x8pqaehfdg",
       "reward": "terra1am3v78e75exr7gt8d3367jxfp7c0ar7xkj04q6h5zfc72clvyf8snuv9tm",
       "token": "terra1kd85952285xfdlp5ck8nt62vuvur8cem9h3svm7yptpsvmr9tuusqpm2sw",
@@ -226,6 +230,7 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         underlyingToken: "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
         underlyingName: "whale"
       },
+      type: "whale",
       "hub": "terra1zysm3sy6vepy2h9yw04ej408k990tugp7chx49vqfn6waucpcp0scjpnr4",
       "reward": "terra1yt7ndfnran9lutcsh5p03evcazs8pgae86r70flwdne3lc4dmx8ssvtkuu",
       "token": "terra1ze3c86la6wynenrqewhq4j9hw24yrvardudsl5mkq3mhgs6ag4cqrva0pg",
@@ -383,6 +388,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
           return {
             [lsd]: {
               info: addressMap.LSDs[lsd as string].info,
+              type: addressMap.LSDs[lsd as string].type,
               hub: addressMap.LSDs[lsd as string].hub,
               reward: addressMap.LSDs[lsd as string].reward,
               token: addressMap.LSDs[lsd as string].token,
