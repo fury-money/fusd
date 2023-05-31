@@ -137,7 +137,7 @@ const StyledComponent = styled(Component)`
 
     .total-deposit-buttons {
       display: grid;
-      grid-template-columns: repeat(2, 142px);
+      grid-template-columns: repeat(3, 160px);
       justify-content: end;
       grid-gap: 20px;
     }
@@ -211,7 +211,7 @@ const StyledComponent = styled(Component)`
   }
 
   // mobile
-  @media (max-width: ${screen.mobile.max}px) {
+  @media (max-width: ${screen.tablet.max}px) {
     .decimal-point {
       display: none;
     }

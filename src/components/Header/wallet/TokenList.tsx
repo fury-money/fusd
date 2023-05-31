@@ -70,7 +70,6 @@ export function TokenListBase(props: TokenListProps) {
                 }}
               >
                 BUY
-                <Launch />
               </BuyButton>
             )}
           </span>

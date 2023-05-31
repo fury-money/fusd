@@ -1,6 +1,6 @@
-import { Modal } from '@mui/material';
-import { Launch } from '@mui/icons-material';
+import { DialogTitle, Modal } from '@mui/material';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
+import { Dialog as MaterialUIDialog } from '@mui/material';
 import { EmbossButton } from '@libs/neumorphism-ui/components/EmbossButton';
 import { DialogProps, OpenDialog, useDialog } from '@libs/use-dialog';
 import React, { ReactNode } from 'react';
@@ -27,33 +27,46 @@ function ComponentBase({
   className,
   closeDialog,
 }: DialogProps<FormParams, FormReturn>) {
+
+  const [openKado, setOpenKado] = React.useState(true);
+
+   const handleClickOpen = () => {
+    setOpenKado(true);
+  };
+
+  const handleClose = () => {
+    setOpenKado(false);
+    closeDialog()
+  };
+
   return (
     <Modal open onClose={() => closeDialog()}>
-      <Dialog className={className} onClose={() => closeDialog()}>
-        <h1>Buy axlUSDC</h1>
-
-        <section>
-          <h2>With Fiat</h2>
-
-          <EmbossButton
-            component="a"
-            href="https://ramp.kado.money"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span>
-              Kado Ramp{' '}
-              <sub>
-                <Launch />
-              </sub>
-            </span>
-            <i>
-              <img src={kado} alt="Kado Ramp" />
-            </i>
-          </EmbossButton>
-        </section>
-      </Dialog>
+          <KadoDialog
+            open={openKado}
+            onClose={handleClose}
+          />
     </Modal>
+  );
+}
+
+
+export interface KadoDialogProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+export function KadoDialog(props: KadoDialogProps) {
+  const { onClose, open } = props;
+
+  const handleClose = () => {
+    onClose();
+  };
+
+  return (
+    <MaterialUIDialog onClose={handleClose} open={open}>
+      <DialogTitle>Buy axlUSDC on Kado OnRamp</DialogTitle>
+      <iframe src="https://app.kado.money/?apiKey=API_KEY&network=TERRA" width="480" height="620" style={{border: "0px"}}></iframe>
+    </MaterialUIDialog>
   );
 }
 

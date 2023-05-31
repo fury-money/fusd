@@ -57,6 +57,21 @@ export async function borrowAPYQuery(
     },
   });
 
+  const { market: marketStateNewEpoch } = await wasmFetch<MarketStateWasmQuery>({
+    ...queryClient,
+    id: `borrow--market-state-current`,
+    wasmQuery: {
+      marketState: {
+        contractAddress: mmMarketContract,
+        query: {
+          state: {
+            blockHeight: lastSyncedHeight
+          },
+        },
+      },
+    },
+  });
+
   // State is updated around every 3 hrs
   let rewardsAPY = big(marketState.prev_borrower_incentives).mul(8*365).div(marketState.total_liabilities)
 

@@ -91,6 +91,13 @@ export const defaultDarkTheme = {
           },
         },
       },
+      MuiDialog: {
+        styleOverrides: {
+          paper: {
+            backgroundColor: DARK_BLUE_100,
+          }
+        }
+      }
     },
   }),
   MuiTouchRipple: {

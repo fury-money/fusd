@@ -22,6 +22,10 @@ import Big from 'big.js';
 import { useLenderValue } from '@anchor-protocol/app-provider/queries/earn/lenderValue';
 import { u, UST } from '@libs/types';
 import { Box, Grid } from '@mui/material';
+import { EmbossButton } from '@libs/neumorphism-ui/components/EmbossButton';
+
+import kado from './assets/kado.svg';
+import { useBuyUstDialog } from './useBuyUstDialog';
 
 export interface TotalDepositSectionProps {
   className?: string;
@@ -72,6 +76,8 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
   const openWithdraw = useCallback(async () => {
     await openWithdrawDialog();
   }, [openWithdrawDialog]);
+
+  const [openBuyUstDialog, buyUstDialogElement] = useBuyUstDialog();
 
   // ---------------------------------------------
   // presentation
@@ -135,6 +141,17 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
     </Grid>
 
       <aside className="total-deposit-buttons">
+       <EmbossButton
+            component="button"
+            onClick = {openBuyUstDialog}
+          >
+            <span>
+              Buy axlUSDC{' '}
+            </span>
+            <i>
+              <img src={kado} alt="Kado Ramp" style={{width: "32px", paddingLeft: "10px"}} />
+            </i>
+          </EmbossButton>
         <ActionButton
           disabled={
             !connected || !moneyMarketEpochState || Big(uUST).lte(0)
@@ -153,6 +170,7 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
 
       {depositDialogElement}
       {withdrawDialogElement}
+      {buyUstDialogElement}
     </Section>
   );
 }
