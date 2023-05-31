@@ -31,6 +31,7 @@ export interface LiquidationProps {
 
 export interface CollateralLiquidationInfo {
   collateral: WhitelistCollateral;
+  type: string;
   price: UST;
   bidNumber: number;
   bidAmountInUST: u<UST<BigSource>>;
@@ -75,6 +76,8 @@ function Component({ className }: EarnProps) {
           (c) => c.info?.token === collateral.collateral_token
         );
 
+        const type = additionalInfo?.info?.type ?? "aLuna";
+
         const liquidationStats = globalLiquidationStats?.find(
           (c) => c.info?.token === collateral.collateral_token
         );
@@ -92,6 +95,7 @@ function Component({ className }: EarnProps) {
       const totalBidAmountStat = liquidationStats?.liquidationStats?.otherStats.find((c) => c.id == "pool_value_stable");
       return {
         collateral,
+        type,
         price: big(microfyPrice(oracle?.price, collateral.decimals)).mul(exchangeRate).toString() as UST,
         bidNumber: bids?.filter((bid) => bid.amount !="0").length ?? 0,
         bidAmountInUST: big(bids?.reduce((partialSum, el) => partialSum.plus(el.amount), big(0)) ?? 0) as u<UST<BigSource>>,
@@ -105,7 +109,71 @@ function Component({ className }: EarnProps) {
   }, [liquidationBids, borrowMarket, whitelist, additionalLSDInfo, globalLiquidationStats]);
 
 
-
+  function collateralCells(type: string){
+    return (collaterals.filter((collateral) => collateral.type == type).map(
+                  ({
+                    collateral,
+                    price,
+                    bidNumber,
+                    bidAmountInUST,
+                    totalBidAmountInUST,
+                    poolToCollateralRatio
+                  }) => (
+                    <tr key={collateral.collateral_token}>
+                      <td>
+                        <i>
+                          <TokenIcon
+                            symbol={collateral.symbol}
+                            path={collateral.icon}
+                          />
+                        </i>
+                        <div>
+                          <div className="coin">
+                            {collateral.symbol}
+                          </div>
+                          <p className="name">{collateral.name}</p>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="value">{formatUSTOutput(price)} axlUSDC</div>
+                      </td>
+                      <td>
+                        <div className="value">
+                          {bidNumber} {bidNumber != 1 ? "bids" : "bid"}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="value">
+                          {formatOutput(
+                            demicrofy(bidAmountInUST, collateral.decimals),
+                            {
+                              decimals: 3,
+                            },
+                          )}{' '}
+                          axlUSDC
+                        </div>
+                        <p className="volatility">
+                          {totalBidAmountInUST} axlUSDC
+                        </p>
+                      </td>
+                      <td>
+                        <AlignedRightStatsDoughnutCard
+                          title=""
+                          value={poolToCollateralRatio}
+                          className={'stats-doughtnut-card'}
+                        />
+                      </td>
+                      <td>
+                          <Link to={`${collateral.symbol}`} style={{color:"inherit", textDecoration: "none"}}>
+                            <BorderButton>
+                              See Liquidation Queue
+                            </BorderButton>
+                          </Link>
+                      </td>
+                    </tr>
+                  ),
+                ))
+  }
 
   return (
     <CenteredLayout className={className} maxWidth={2000}>
@@ -168,69 +236,9 @@ function Component({ className }: EarnProps) {
                 </tr>
               </thead>
               <tbody>
-                {collaterals.map(
-                  ({
-                    collateral,
-                    price,
-                    bidNumber,
-                    bidAmountInUST,
-                    totalBidAmountInUST,
-                    poolToCollateralRatio
-                  }) => (
-                    <tr key={collateral.collateral_token}>
-                      <td>
-                        <i>
-                          <TokenIcon
-                            symbol={collateral.symbol}
-                            path={collateral.icon}
-                          />
-                        </i>
-                        <div>
-                          <div className="coin">
-                            {collateral.symbol}
-                          </div>
-                          <p className="name">{collateral.name}</p>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="value">{formatUSTOutput(price)} axlUSDC</div>
-                      </td>
-                      <td>
-                        <div className="value">
-                          {bidNumber} {bidNumber != 1 ? "bids" : "bid"}
-                        </div>
-                      </td>
-                      <td>
-                        <div className="value">
-                          {formatOutput(
-                            demicrofy(bidAmountInUST, collateral.decimals),
-                            {
-                              decimals: 3,
-                            },
-                          )}{' '}
-                          axlUSDC
-                        </div>
-                        <p className="volatility">
-                          {totalBidAmountInUST} axlUSDC
-                        </p>
-                      </td>
-                      <td>
-                        <AlignedRightStatsDoughnutCard
-                          title=""
-                          value={poolToCollateralRatio}
-                          className={'stats-doughtnut-card'}
-                        />
-                      </td>
-                      <td>
-                          <Link to={`${collateral.symbol}`} style={{color:"inherit", textDecoration: "none"}}>
-                            <BorderButton>
-                              See Liquidation Queue
-                            </BorderButton>
-                          </Link>
-                      </td>
-                    </tr>
-                  ),
-                )}
+                {collateralCells("whale")}
+                {collateralCells("luna")}
+                {collateralCells("aLuna")}
               </tbody>
             </HorizontalScrollTable>
         </PaddingSection>

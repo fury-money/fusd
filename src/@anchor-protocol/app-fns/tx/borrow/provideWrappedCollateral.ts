@@ -66,18 +66,21 @@ export function getWrappedCollateralMessages(
   overseerAddr: HumanAddr,
   decimals: number
 ) {
-
   let allowanceMessage = undefined;
   let mintMessage = undefined;
   // First in case of a cw20 like collateral LSD
-  if(collateral_info.info.cw20){
+  if (collateral_info.info.cw20) {
     // Raise allowance on the actual token in case of a cw20 token
-    allowanceMessage = new MsgExecuteContract(walletAddr, collateral_info.info.cw20?.tokenAddress, {
-      increase_allowance: {
-        spender: collateralToken,
-        amount: formatInput(microfy(depositAmount, decimals), decimals),
-      },
-    });
+    allowanceMessage = new MsgExecuteContract(
+      walletAddr,
+      collateral_info.info.cw20?.tokenAddress,
+      {
+        increase_allowance: {
+          spender: collateralToken,
+          amount: formatInput(microfy(depositAmount, decimals), decimals),
+        },
+      }
+    );
 
     mintMessage = // Wrap the tokens
       new MsgExecuteContract(walletAddr, collateralToken, {
@@ -86,16 +89,22 @@ export function getWrappedCollateralMessages(
           lsd_amount: formatInput(microfy(depositAmount, decimals), decimals),
         },
       });
-  }else{
+  } else {
     mintMessage = // Wrap the tokens
-      new MsgExecuteContract(walletAddr, collateralToken, {
-        mint_with: {
-          recipient: walletAddr,
-          lsd_amount: formatInput(microfy(depositAmount, decimals), decimals),
+      new MsgExecuteContract(
+        walletAddr,
+        collateralToken,
+        {
+          mint_with: {
+            recipient: walletAddr,
+            lsd_amount: formatInput(microfy(depositAmount, decimals), decimals),
+          },
         },
-      },`${formatInput(microfy(depositAmount, decimals), decimals)}${collateral_info.info.coin?.denom}`);
+        `${formatInput(microfy(depositAmount, decimals), decimals)}${
+          collateral_info.info.coin?.denom
+        }`
+      );
   }
-
 
   return _.compact([
     allowanceMessage,

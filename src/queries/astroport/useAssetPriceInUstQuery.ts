@@ -20,11 +20,9 @@ const assetPriceQuery = async (
   queryClient: QueryClient,
   assetUstPairAddress: HumanAddr
 ): Promise<UST> => {
-
-  if(!assetUstPairAddress){
+  if (!assetUstPairAddress) {
     return "0" as UST;
   }
-
 
   const {
     assetPrice: {

@@ -50,10 +50,7 @@ export const earnDepositForm =
 
     // actual receive Amount (we take a small fee for system operations)
     const receiveAmount = txFee
-      ? (microfy(
-          big(depositAmount)
-            .toString() as UST<string>
-        ) as u<UST<Big>>)
+      ? (microfy(big(depositAmount).toString() as UST<string>) as u<UST<Big>>)
       : undefined;
 
     // maxAmount

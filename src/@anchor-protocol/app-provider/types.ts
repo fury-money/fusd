@@ -78,13 +78,26 @@ export interface AnchorConstants extends AppConstants {
 
 export interface LSDContracts {
   info: {
-    cw20?:{
+    cw20?: {
       tokenAddress: string;
       hubAddress: string;
-    },
+    };
     coin?: {
       denom: string;
-    }
+    };
+    spectrum_lp?: {
+      // We need the toke, generator and undelyingToken to get the exchange rate
+      token: string;
+      generator: string;
+      underlyingToken: string;
+      // We also need more info for decompounding (optional in the frontend)
+      underlyingPair: string;
+    };
+    amp_lp?: {
+      // For getting the exchange rate
+      token: string;
+      hub: string;
+    };
     protocol: string;
     icon: string;
     symbol: Tokens;

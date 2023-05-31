@@ -8,33 +8,32 @@ import { RequestQueryBuilder } from "@rewiko/crud-request";
 
 export interface LenderValueData {
   lenderValue: {
-    "lender": string,
-    "stableAmount": string,
-    "aAmount": string,
-    "lastUpdated": Date
+    lender: string;
+    stableAmount: string;
+    aAmount: string;
+    lastUpdated: Date;
   };
 }
 
 export async function lenderValueQuery(
   lender: HumanAddr | undefined,
-  endpoint: string,
+  endpoint: string
 ): Promise<LenderValueData> {
-
   const emptyValue = {
-      lender: "",
-      stableAmount: "0",
-      aAmount: "0",
-      lastUpdated: new Date(Date.now())
-  }
+    lender: "",
+    stableAmount: "0",
+    aAmount: "0",
+    lastUpdated: new Date(Date.now()),
+  };
 
-  if(!lender){
-    return ({
-      lenderValue: emptyValue
-    })
+  if (!lender) {
+    return {
+      lenderValue: emptyValue,
+    };
   }
 
   const qb = RequestQueryBuilder.create();
-  qb.setFilter({field: "lender", operator: "$eq", value: lender})  
+  qb.setFilter({ field: "lender", operator: "$eq", value: lender });
 
   return fetch(`${endpoint}/v3/lenders?${qb.query()}`)
     .then((res) => res.json())
@@ -43,12 +42,9 @@ export async function lenderValueQuery(
     }));
 }
 
-
 const queryFn = createSimpleQueryFn(lenderValueQuery);
 
-export function useLenderValue(): UseQueryResult<
-  LenderValueData | undefined
-> {
+export function useLenderValue(): UseQueryResult<LenderValueData | undefined> {
   const { queryErrorReporter, indexerApiEndpoint } = useAnchorWebapp();
 
   const { terraWalletAddress } = useAccount();

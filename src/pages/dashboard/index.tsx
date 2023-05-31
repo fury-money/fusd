@@ -38,6 +38,7 @@ import { TotalValueLockedDoughnutChart } from './components/TotalValueLockedDoug
 import { CollateralMarket } from './components/CollateralMarket';
 import { useDepositApy } from 'hooks/useDepositApy';
 import { useBorrowOverviewData } from 'pages/borrow/logics/useBorrowOverviewData';
+import { useWrappedTokenDetails } from '@anchor-protocol/app-provider/queries/basset/wrappedLSDTokenDetails';
 
 export interface DashboardProps {
   className?: string;
@@ -46,6 +47,13 @@ export interface DashboardProps {
 const EMPTY_ARRAY: any[] = [];
 
 function DashboardBase({ className }: DashboardProps) {
+  // TODO tests
+  let {contractAddress} = useAnchorWebapp();
+  let specDetails = useWrappedTokenDetails(contractAddress.lsds.spectrum_roar_luna_lp);
+  console.log(specDetails.data)
+  let ampDetails = useWrappedTokenDetails(contractAddress.lsds.amp_roar_luna_lp);
+  console.log("amp", ampDetails)
+
   const theme = useTheme();
 
   const [isMobile, setIsMobile] = useState<boolean>(false);

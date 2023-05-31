@@ -1,5 +1,12 @@
-import { BorrowLoopFormAsyncStates, TFM_ESTIMATION_BUFFER, borrowLoopForm } from "@anchor-protocol/app-fns";
-import { SLIPPAGE, getLoopAmountsAndMessages } from "@anchor-protocol/app-fns/tx/borrow/loop";
+import {
+  BorrowLoopFormAsyncStates,
+  TFM_ESTIMATION_BUFFER,
+  borrowLoopForm,
+} from "@anchor-protocol/app-fns";
+import {
+  SLIPPAGE,
+  getLoopAmountsAndMessages,
+} from "@anchor-protocol/app-fns/tx/borrow/loop";
 import {
   useAnchorWebapp,
   useLSDCollateralQuery,
@@ -10,27 +17,26 @@ import { useForm } from "@libs/use-form";
 import { useAccount } from "contexts/account";
 import { WhitelistWrappedCollateral } from "queries";
 import { useBorrowMarketQuery } from "../../queries/borrow/market";
-import throttle from 'lodash.throttle';
+import throttle from "lodash.throttle";
 import { tfmEstimation } from "pages/swap/queries/tfmQueries";
 import { useMemo } from "react";
 import { microfy } from "@libs/formatter";
 import Big from "big.js";
 
-
 export interface LoopsAndMessageQueryArgs {
-  collateral: WhitelistWrappedCollateral | undefined
-  collateralAmount: CollateralAmount | undefined,
-  targetLeverage: Rate,
-  actualMaximumLTV: number,
-  numberOfLoops: number
+  collateral: WhitelistWrappedCollateral | undefined;
+  collateralAmount: CollateralAmount | undefined;
+  targetLeverage: Rate;
+  actualMaximumLTV: number;
+  numberOfLoops: number;
 }
 
 export function useBorrowLoopForm() {
-
   const { connected, terraWalletAddress } = useAccount();
 
   const {
-    constants: { blocksPerYear }, contractAddress
+    constants: { blocksPerYear },
+    contractAddress,
   } = useAnchorWebapp();
 
   const { data: { borrowRate, oraclePrices } = { data: undefined } } =
@@ -38,81 +44,109 @@ export function useBorrowLoopForm() {
 
   const lsdHubStates = useLSDCollateralQuery();
 
-
-   const emptyAsyncStates: Promise<Partial<BorrowLoopFormAsyncStates>> = useMemo(() => new Promise((resolve) => resolve({
-        swapSimulation:undefined,
-        allLoopData:undefined,
-        finalLoopData:undefined,
-        executeMsgs:undefined,
-      })), []);
+  const emptyAsyncStates: Promise<Partial<BorrowLoopFormAsyncStates>> = useMemo(
+    () =>
+      new Promise((resolve) =>
+        resolve({
+          swapSimulation: undefined,
+          allLoopData: undefined,
+          finalLoopData: undefined,
+          executeMsgs: undefined,
+        })
+      ),
+    []
+  );
 
   const getLoopsAndMessages = useMemo(() => {
-    console.log("creating debonce ?")
-    return throttle(async ({
-      collateral,
-      collateralAmount,
-      targetLeverage,
-      actualMaximumLTV,
-      numberOfLoops
-    }: LoopsAndMessageQueryArgs) => {
-      if(!collateralAmount || collateralAmount.length == 0){
-        return emptyAsyncStates;
-      }
+    console.log("creating debonce ?");
+    return throttle(
+      async ({
+        collateral,
+        collateralAmount,
+        targetLeverage,
+        actualMaximumLTV,
+        numberOfLoops,
+      }: LoopsAndMessageQueryArgs) => {
+        if (!collateralAmount || collateralAmount.length == 0) {
+          return emptyAsyncStates;
+        }
 
-      //TODO adapt for native tokens
-      if(!oraclePrices || !collateral?.info?.info.cw20 || ! lsdHubStates || !terraWalletAddress){
-        return emptyAsyncStates
-      }
-      const rawCollateralPrice = parseFloat(oraclePrices.prices.find((price) => price.asset == collateral.collateral_token)?.price ?? "1");
-      const collateralExchangeRate = parseFloat(lsdHubStates.find((state) => state.info.token == collateral.info.token)?.additionalInfo?.hubState.exchange_rate ?? "1");
+        //TODO adapt for native tokens
+        if (
+          !oraclePrices ||
+          !collateral?.info?.info.cw20 ||
+          !lsdHubStates ||
+          !terraWalletAddress
+        ) {
+          return emptyAsyncStates;
+        }
+        const rawCollateralPrice = parseFloat(
+          oraclePrices.prices.find(
+            (price) => price.asset == collateral.collateral_token
+          )?.price ?? "1"
+        );
+        const collateralExchangeRate = parseFloat(
+          lsdHubStates.find(
+            (state) => state.info.token == collateral.info.token
+          )?.additionalInfo?.hubState.exchange_rate ?? "1"
+        );
 
-      // In an async call we get an quote price approximation  
-      const totalBorrowAmount = microfy(Big(collateralAmount)
-        .mul(targetLeverage)
-        .mul(actualMaximumLTV)
-        .mul(rawCollateralPrice)
-        .mul(collateralExchangeRate)
-        .mul(TFM_ESTIMATION_BUFFER) as Token<Big>
-      ).round();
+        // In an async call we get an quote price approximation
+        const totalBorrowAmount = microfy(
+          Big(collateralAmount)
+            .mul(targetLeverage)
+            .mul(actualMaximumLTV)
+            .mul(rawCollateralPrice)
+            .mul(collateralExchangeRate)
+            .mul(TFM_ESTIMATION_BUFFER) as Token<Big>
+        ).round();
 
-      if(totalBorrowAmount.lte(0)){
-        return emptyAsyncStates;
-      }
-      //TODO adapt for native tokens
-      const estimation = await tfmEstimation({
+        if (totalBorrowAmount.lte(0)) {
+          return emptyAsyncStates;
+        }
+        //TODO adapt for native tokens
+        const estimation = await tfmEstimation({
           tokenIn: contractAddress.native.usd,
           tokenOut: collateral.info.info.cw20.tokenAddress,
           amount: totalBorrowAmount.toString() as u<Token>,
           slippage: SLIPPAGE,
-          useSplit: false
-      });
-      // We get the loop amounts and messages
-      const {
-          allLoopData, finalLoopData, executeMsgs, error
-      } = getLoopAmountsAndMessages(
-          terraWalletAddress,
-          contractAddress,
+          useSplit: false,
+        });
+        // We get the loop amounts and messages
+        const { allLoopData, finalLoopData, executeMsgs, error } =
+          getLoopAmountsAndMessages(
+            terraWalletAddress,
+            contractAddress,
 
-          collateral,
-          collateralAmount,
-          rawCollateralPrice,
-          collateralExchangeRate,
+            collateral,
+            collateralAmount,
+            rawCollateralPrice,
+            collateralExchangeRate,
 
-          actualMaximumLTV,
-          numberOfLoops,
-          targetLeverage,
+            actualMaximumLTV,
+            numberOfLoops,
+            targetLeverage,
 
-          estimation
-      );
-      return {
+            estimation
+          );
+        return {
           swapSimulation: estimation,
           allLoopData,
           finalLoopData,
           executeMsgs,
-          loopError: error
-      };
-    }, 1000);
-  }, [emptyAsyncStates, oraclePrices, lsdHubStates, terraWalletAddress, contractAddress, contractAddress.native.usd]);
+          loopError: error,
+        };
+      },
+      1000
+    );
+  }, [
+    emptyAsyncStates,
+    oraclePrices,
+    lsdHubStates,
+    terraWalletAddress,
+    contractAddress,
+    contractAddress.native.usd,
+  ]);
 
   return useForm(
     borrowLoopForm,
@@ -127,7 +161,7 @@ export function useBorrowLoopForm() {
       stableDenom: contractAddress.native.usd,
       blocksPerYear,
 
-      getLoopsAndMessages
+      getLoopsAndMessages,
     },
     () => ({
       collateral: undefined as WhitelistWrappedCollateral | undefined,

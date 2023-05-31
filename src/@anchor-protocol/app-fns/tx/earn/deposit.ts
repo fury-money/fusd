@@ -77,13 +77,10 @@ export function earnDepositTx($: {
           new Coins([
             new Coin(
               $.stableDenom,
-              formatTokenInput(
-                big($.depositAmount)
-                  .toString() as UST<string>
-              )
+              formatTokenInput(big($.depositAmount).toString() as UST<string>)
             ),
           ])
-        )
+        ),
       ],
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,

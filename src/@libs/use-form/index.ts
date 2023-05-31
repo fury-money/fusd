@@ -105,7 +105,6 @@ export function useForm<
     ) {
       return;
     } else {
-      
       depResolved.current = initialForm.current(
         dependency,
         lastDependency.current

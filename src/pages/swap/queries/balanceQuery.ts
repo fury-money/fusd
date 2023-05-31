@@ -23,10 +23,9 @@ export function useBalance(contract_addr: string | undefined) {
 }
 
 export function useLSDBalance(collateral: LSDContracts | undefined) {
-
   return useBalance(
-    collateral?.info.cw20 ?
-       collateral?.info.cw20.tokenAddress : 
-       collateral?.info.coin?.denom
-  )
+    collateral?.info.cw20
+      ? collateral?.info.cw20.tokenAddress
+      : collateral?.info.coin?.denom
+  );
 }
