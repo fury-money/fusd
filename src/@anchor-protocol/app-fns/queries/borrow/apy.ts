@@ -24,10 +24,10 @@ type LPReward = {
   apy: Rate<number>;
 };
 
-interface MarketBorrowIncentivesWasmQuery {
-  borrowIncentives: WasmQuery<
-    moneyMarket.market.BorrowerIncentives,
-    moneyMarket.market.BorrowRateResponse
+interface MarketStateWasmQuery {
+  marketState: WasmQuery<
+    moneyMarket.market.State,
+    moneyMarket.market.StateResponse
   >;
 }
 
@@ -44,27 +44,21 @@ export async function borrowAPYQuery(
   // Now we evolve from that and rather compute the future APY,
   // We can simply query the market contract, we added a function just for that.
 
-  let { borrowIncentives } = await wasmFetch<MarketBorrowIncentivesWasmQuery>({
+  const { marketState } = await wasmFetch<MarketStateWasmQuery>({
     ...queryClient,
-    id: `market--borrow-incentives`,
+    id: `borrow--market-state-current`,
     wasmQuery: {
-      borrowIncentives: {
+      marketState: {
         contractAddress: mmMarketContract,
         query: {
-          borrower_incentives: {},
+          state: {},
         },
       },
     },
-  })
-    // If the function is not defined on the contract(testnet)
-    .catch((error) => ({
-      borrowIncentives: {
-        rate: "0",
-      },
-    }));
+  });
 
-  // Now we convert to an APY (block to year)
-  const rewardsAPY = big(borrowIncentives.rate).mul(blocksPerYear);
+  // State is updated around every 3 hrs
+  let rewardsAPY = big(marketState.prev_borrower_incentives).mul(8*365).div(marketState.total_liabilities)
 
   const govRewards = {
     CurrentAPY: "0" as Rate<string>,
