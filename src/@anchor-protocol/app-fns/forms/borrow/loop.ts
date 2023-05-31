@@ -3,7 +3,10 @@ import {
   ANCHOR_SAFE_RATIO,
   computeBorrowAPR,
 } from "@anchor-protocol/app-fns";
-import { AnchorContractAddress, LSDCollateralResponse } from "@anchor-protocol/app-provider";
+import {
+  AnchorContractAddress,
+  LSDCollateralResponse,
+} from "@anchor-protocol/app-provider";
 import { LoopsAndMessageQueryArgs } from "@anchor-protocol/app-provider/forms/borrow/loop";
 import { CollateralAmount, moneyMarket, Rate } from "@anchor-protocol/types";
 import { formatRate, microfy } from "@libs/formatter";
@@ -33,15 +36,17 @@ export interface BorrowLoopFormDependency {
   oraclePrices: moneyMarket.oracle.PricesResponse | undefined;
   lsdHubStates: LSDCollateralResponse | undefined;
   connected: boolean;
-  terraWalletAddress: HumanAddr | undefined,
+  terraWalletAddress: HumanAddr | undefined;
 
-  contractAddress: AnchorContractAddress,
+  contractAddress: AnchorContractAddress;
 
   borrowRate: moneyMarket.interestModel.BorrowRateResponse | undefined;
   stableDenom: Denom;
   blocksPerYear: number;
 
-  getLoopsAndMessages: (l: LoopsAndMessageQueryArgs)=> (Promise<Partial<BorrowLoopFormAsyncStates>> | undefined)
+  getLoopsAndMessages: (
+    l: LoopsAndMessageQueryArgs
+  ) => Promise<Partial<BorrowLoopFormAsyncStates>> | undefined;
 }
 
 export interface BorrowLoopFormStates extends BorrowLoopFormInput {
@@ -62,14 +67,14 @@ export interface BorrowLoopFormStates extends BorrowLoopFormInput {
 }
 
 export interface BorrowLoopFormAsyncStates {
-  swapSimulation: SwapSimulationAndSwapResponse | undefined
+  swapSimulation: SwapSimulationAndSwapResponse | undefined;
   allLoopData: {
-    provideAmount: u<Token>,
-    stableAmount: u<UST>
-  }[],
-  finalLoopData: u<Token>,
-  executeMsgs: MsgExecuteContract[],
-  loopError: string | undefined
+    provideAmount: u<Token>;
+    stableAmount: u<UST>;
+  }[];
+  finalLoopData: u<Token>;
+  executeMsgs: MsgExecuteContract[];
+  loopError: string | undefined;
 }
 
 export const borrowLoopForm = ({
@@ -85,7 +90,7 @@ export const borrowLoopForm = ({
   stableDenom,
   blocksPerYear,
 
-  getLoopsAndMessages
+  getLoopsAndMessages,
 }: BorrowLoopFormDependency) => {
   const apr = computeBorrowAPR(borrowRate, blocksPerYear);
 
@@ -95,12 +100,11 @@ export const borrowLoopForm = ({
     maxCollateralAmount,
     targetLeverage,
     maximumLTV,
-    slippage, 
+    slippage,
   }: BorrowLoopFormInput): FormReturn<
     BorrowLoopFormStates,
     Partial<BorrowLoopFormAsyncStates>
   > => {
-
     // We suppose here that the user has no coins in Anchor Protocol and that they want to enter with
     // collateralAmount collateral and loop up to a leverage of targetLeverage
 
@@ -126,18 +130,16 @@ export const borrowLoopForm = ({
     }
 
     // We must also check that the last borrow amount is not < 1 in decimal units (assuming 6 decimals here)
-    const ratioToOne = MIN_SWAP_AMOUNT/
-      (
-        !collateralAmount ||
-          collateralAmount.length === 0 ||
-          big(collateralAmount).eq(0)
-          ? MIN_SWAP_AMOUNT
-          : parseFloat(collateralAmount)
-      );
-    const maxLeverageRelativeToAmount = 
-      (1 - actualMaximumLTV*ratioToOne)/(1 - actualMaximumLTV);
-    maximumLeverage = Math.min(maximumLeverage, maxLeverageRelativeToAmount)
-
+    const ratioToOne =
+      MIN_SWAP_AMOUNT /
+      (!collateralAmount ||
+      collateralAmount.length === 0 ||
+      big(collateralAmount).eq(0)
+        ? MIN_SWAP_AMOUNT
+        : parseFloat(collateralAmount));
+    const maxLeverageRelativeToAmount =
+      (1 - actualMaximumLTV * ratioToOne) / (1 - actualMaximumLTV);
+    maximumLeverage = Math.min(maximumLeverage, maxLeverageRelativeToAmount);
 
     // Then we check the target Leverage, it should be between 1 and maximumLeverage
     const parsedTargetLeverage = parseFloat(targetLeverage);
@@ -189,9 +191,7 @@ export const borrowLoopForm = ({
       !invalidLeverage &&
       !invalidCollateralAmount;
 
-
     // Computing the asyncStates (swaps simulation and swapAmounts)
-   
 
     const asyncStates = getLoopsAndMessages({
       collateral,
@@ -199,7 +199,7 @@ export const borrowLoopForm = ({
       targetLeverage,
       actualMaximumLTV,
       numberOfLoops,
-    })
+    });
 
     return [
       {
@@ -227,7 +227,7 @@ export const borrowLoopForm = ({
 
         availablePost,
       },
-      asyncStates
+      asyncStates,
     ];
   };
 };

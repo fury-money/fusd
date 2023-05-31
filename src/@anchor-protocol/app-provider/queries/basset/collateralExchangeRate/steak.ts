@@ -12,21 +12,21 @@ export interface UnderlyingHubStateWasmQuery {
 export async function getSteakExchangeRate(
   queryClient: QueryClient,
   lsd: LSDContracts,
-  oracle: HumanAddr,
-){
-	if(!lsd.info.cw20){
-		throw "Expected a cw20 like collateral token here"
-	}
-	return wasmFetch<UnderlyingHubStateWasmQuery>({
-      ...queryClient,
-      id: `basset--claimable-rewards`,
-      wasmQuery: {
-        hubState: {
-          contractAddress: lsd.info.cw20?.hubAddress,
-          query: {
-            state: {},
-          },
+  oracle: HumanAddr
+) {
+  if (!lsd.info.cw20) {
+    throw "Expected a cw20 like collateral token here";
+  }
+  return wasmFetch<UnderlyingHubStateWasmQuery>({
+    ...queryClient,
+    id: `basset--claimable-rewards`,
+    wasmQuery: {
+      hubState: {
+        contractAddress: lsd.info.cw20?.hubAddress,
+        query: {
+          state: {},
         },
       },
-    });
+    },
+  });
 }

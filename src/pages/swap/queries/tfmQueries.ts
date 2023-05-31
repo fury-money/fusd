@@ -8,7 +8,7 @@ import debounce from "lodash.debounce";
 import { useQuery, UseQueryResult } from "react-query";
 
 export async function simpleQuery<T>(queryUrl: string): Promise<T> {
-  console.log(queryUrl)
+  console.log(queryUrl);
   return fetch(queryUrl).then((res) => res.json());
 }
 
@@ -41,15 +41,18 @@ export function useTFMTokensQuery() {
   return useSimpleQuery<TFMToken[]>(`${TFM_API}/tokens`);
 }
 
-
 export function useTFMQuoteQuery({
-    tokenIn,
-    tokenOut,
-    amount,
-  }: SimulationParameters) {
-  return useSimpleQuery<TFMToken[]>(tfmSwapQuoteURL({
-    tokenIn, tokenOut, amount
-  }));
+  tokenIn,
+  tokenOut,
+  amount,
+}: SimulationParameters) {
+  return useSimpleQuery<TFMToken[]>(
+    tfmSwapQuoteURL({
+      tokenIn,
+      tokenOut,
+      amount,
+    })
+  );
 }
 
 export interface SimulationParameters {
@@ -70,9 +73,11 @@ export function tfmSwapQuoteURL({
   tokenIn,
   tokenOut,
   amount,
-  useSplit
+  useSplit,
 }: SimulationParameters) {
-  return `${TFM_API}/route?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${useSplit ?? true}`;
+  return `${TFM_API}/route?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${
+    useSplit ?? true
+  }`;
 }
 
 export interface SwapParameters {
@@ -80,7 +85,7 @@ export interface SwapParameters {
   tokenOut: string;
   amount: u<Token>;
   slippage: number;
-  useSplit?: boolean
+  useSplit?: boolean;
 }
 
 export interface SwapResponse {
@@ -100,7 +105,9 @@ export function tfmSwapURL({
   slippage,
   useSplit,
 }: SwapParameters) {
-  return `${TFM_API}/swap?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${useSplit ?? true}&slippage=${slippage}`;
+  return `${TFM_API}/swap?amount=${amount}&token0=${tokenIn}&token1=${tokenOut}&use_split=${
+    useSplit ?? true
+  }&slippage=${slippage}`;
 }
 
 export interface SwapSimulationAndSwapResponse {
@@ -113,7 +120,7 @@ export async function tfmEstimation({
   tokenOut,
   amount,
   slippage,
-  useSplit
+  useSplit,
 }: SwapParameters): Promise<SwapSimulationAndSwapResponse> {
   const [swapSimulation, swapOperation] = await Promise.all([
     simpleQuery<SwapSimulationResponse>(

@@ -75,8 +75,8 @@ export enum RegisteredLSDs {
   stLuna = "stLuna",
   ampWhale = "ampWhale",
   bWhale = "bWhale",
-  spectrum_roar_luna_lp = "spectrum_roar_luna_lp",
-  amp_roar_luna_lp = "amp_roar_luna_lp"
+  spectrum_usdc_luna_lp = "spectrum_usdc_luna_lp",
+  amp_usdc_luna_lp = "amp_usdc_luna_lp",
 }
 
 const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
@@ -136,10 +136,10 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
     ampLuna: {
       info: {
         cw20: {
-        tokenAddress:
-          "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
-        hubAddress:
-          "terra10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaqyd3enk",
+          tokenAddress:
+            "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
+          hubAddress:
+            "terra10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaqyd3enk",
         },
         protocol: "Eris Protocol",
         symbol: "ampLuna",
@@ -159,7 +159,7 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
     },
     bLuna: {
       info: {
-        cw20:{
+        cw20: {
           tokenAddress:
             "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
           hubAddress:
@@ -184,7 +184,8 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
     stLuna: {
       info: {
         coin: {
-          denom: "ibc/08095CEDEA29977C9DD0CE9A48329FDA622C183359D5F90CF04CC4FF80CBE431",
+          denom:
+            "ibc/08095CEDEA29977C9DD0CE9A48329FDA622C183359D5F90CF04CC4FF80CBE431",
         },
         protocol: "Stride Labs",
         symbol: "stLuna",
@@ -195,76 +196,95 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         underlyingName: "luna",
       },
       type: "luna",
-      "hub": "terra1hjk5lhezu5ppazknhpeclh4vmxnjt32e4hgzhjqk7ahcflf8v80s830q37",
-      "reward": "terra1sjw7nyp5r6cycwpvsfmnnlcdmmhkng06uvxlryrd40ahetfdl48qdzdvmg",
-      "token": "terra18mls96hhatg6k03zg29tz02a76q3w66z4qsa8pfww6hupszlhqns6fm9ad",
-      "custody": "terra1t8uy83ddg6g6vadgckm0nyn3qjqd8d0s3tlyu0tesrs7ykkn2szqcrdumt"
+      hub: "terra1hjk5lhezu5ppazknhpeclh4vmxnjt32e4hgzhjqk7ahcflf8v80s830q37",
+      reward:
+        "terra1sjw7nyp5r6cycwpvsfmnnlcdmmhkng06uvxlryrd40ahetfdl48qdzdvmg",
+      token: "terra18mls96hhatg6k03zg29tz02a76q3w66z4qsa8pfww6hupszlhqns6fm9ad",
+      custody:
+        "terra1t8uy83ddg6g6vadgckm0nyn3qjqd8d0s3tlyu0tesrs7ykkn2szqcrdumt",
     },
     ampWhale: {
       info: {
         coin: {
-          denom: "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36",
+          denom:
+            "ibc/B3F639855EE7478750CC8F82072307ED6E131A8EFF20345E1D136B50C4E5EC36",
         },
         protocol: "Eris Protocol",
         symbol: "ampWhale",
         name: "Eris Amplified Whale",
         icon: "https://app.whitewhale.money/logos/ampWhale.svg",
         link: "https://www.erisprotocol.com/migaloo/amplifier/",
-        underlyingToken: "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+        underlyingToken:
+          "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
         underlyingName: "whale",
       },
       type: "whale",
-      "hub": "terra1k67g8hhml2nfrqqavwy9cvkcln4grp400f0klfjrk430el48x8pqaehfdg",
-      "reward": "terra1am3v78e75exr7gt8d3367jxfp7c0ar7xkj04q6h5zfc72clvyf8snuv9tm",
-      "token": "terra1kd85952285xfdlp5ck8nt62vuvur8cem9h3svm7yptpsvmr9tuusqpm2sw",
-      "custody": "terra1pggsjvjdjjr3ffm85m2kjr9ddjpnu99wts6hzxdz4cqf0kstg6gs7rnuac"
+      hub: "terra1k67g8hhml2nfrqqavwy9cvkcln4grp400f0klfjrk430el48x8pqaehfdg",
+      reward:
+        "terra1am3v78e75exr7gt8d3367jxfp7c0ar7xkj04q6h5zfc72clvyf8snuv9tm",
+      token: "terra1kd85952285xfdlp5ck8nt62vuvur8cem9h3svm7yptpsvmr9tuusqpm2sw",
+      custody:
+        "terra1pggsjvjdjjr3ffm85m2kjr9ddjpnu99wts6hzxdz4cqf0kstg6gs7rnuac",
     },
     bWhale: {
-      info:{
+      info: {
         coin: {
-          denom: "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E",
+          denom:
+            "ibc/517E13F14A1245D4DE8CF467ADD4DA0058974CDCC880FA6AE536DBCA1D16D84E",
         },
         protocol: "Backbone Labs",
         symbol: "bWhale",
         name: "boneWhale",
         icon: "https://migaloo.gravedigger.zone/bwhale.png",
         link: "https://migaloo.gravedigger.zone/",
-        underlyingToken: "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
-        underlyingName: "whale"
+        underlyingToken:
+          "ibc/36A02FFC4E74DF4F64305130C3DFA1B06BEAC775648927AA44467C76A77AB8DB",
+        underlyingName: "whale",
       },
       type: "whale",
-      "hub": "terra1zysm3sy6vepy2h9yw04ej408k990tugp7chx49vqfn6waucpcp0scjpnr4",
-      "reward": "terra1yt7ndfnran9lutcsh5p03evcazs8pgae86r70flwdne3lc4dmx8ssvtkuu",
-      "token": "terra1ze3c86la6wynenrqewhq4j9hw24yrvardudsl5mkq3mhgs6ag4cqrva0pg",
-      "custody": "terra1vmr33lncm0jhkm9gfj8824ahk50asysjgzt3ex7e94clecss8nzqftzzv2"
+      hub: "terra1zysm3sy6vepy2h9yw04ej408k990tugp7chx49vqfn6waucpcp0scjpnr4",
+      reward:
+        "terra1yt7ndfnran9lutcsh5p03evcazs8pgae86r70flwdne3lc4dmx8ssvtkuu",
+      token: "terra1ze3c86la6wynenrqewhq4j9hw24yrvardudsl5mkq3mhgs6ag4cqrva0pg",
+      custody:
+        "terra1vmr33lncm0jhkm9gfj8824ahk50asysjgzt3ex7e94clecss8nzqftzzv2",
     },
-    "spectrum_roar_luna_lp": {
+    amp_usdc_luna_lp: {
       info: {
-        spectrum_lp:{
-          token: "terra1fz4x56u96fkgzvtdxaq2969qlmfk4wnwq0fqhlrklpqc629ah9qs4h8v50",
-          generator: "terra1vf9ceekuxx8kycm7yv6hs96hgwsmrzt4la6s84skrgvfu7t09huqqdg09d",
-          underlyingToken: "terra1qmr5wagmeej33hsnqdmqyvkq6rg3sfkvflmu6gd6drhtjfpx4y5sew88s4",
-          underlyingPair: "terra1c7g9pmz2xxe66g8ujpe5tlmj3pawjp290f57cl43j6vswkdtrvwqkgme9q",
-        }
-      },
-      type: "spectrum_lp",
-      "hub": "terra1c9neqqcx7j3rg6de4xelm0mq0kmwe2yd6snfzf97fqz5g6pfs9pqjsk8pf",
-      "reward": "terra1jf7a4nnc20krz26y93ssjjk80456ncz2d6cz7gqnf0c85hrnkhhq4q67jj",
-      "token": "terra1h53av4ne6uux3p00vlwc6fjtgrqsaxmduzc4a3rch2dm9r97p7kscw0tv7",
-      "custody": "terra1zmhn245uz0nmkx22950rnxx2azhkdemmgkaxe86glfxvw3e7724qzv2lte"
-    },
-    "amp_roar_luna_lp": {
-      info: {
-        amp_lp:{
-          token: "terra10yalv9g9q27hzwdqm9qlma2phjqrr4z46793ygyh0htjpw0dlzesr8f3m2",
-          hub: "terra1zsm7cgu3vg2kwwzzehl38ft7z2ffksql9d6twh3pugvf0yl0u5vs74xx55",
-        }
+        amp_lp: {
+          token:
+            "terra1as76h247wvey3aqmw22mlkq8g6vj8zj7qw4wywwn388s2mjt0rtqpp570z",
+          hub: "terra1xskgvsew6u6nmfwv2mc58m4hscr77xw884x65fuxup8ewvvvuyysr5k3lj",
+        },
       },
       type: "amp_lp",
-        "hub": "terra1gtd44fa57kkz5hdtxay4sag8dlj5jyfu4hyevxqz58mk6dx50j6shzuctq",
-        "reward": "terra1fhyy6u505ewjhxa58wc58zrg8nazr9kkt8hg0zx2tp6fd8vpst9q53s0c8",
-        "token": "terra1w65rh5339gl85n48fc85cw80hfl8mh5h2ye70jfj4lezevssj89q59eut4",
-        "custody": "terra1d5j8jmwg4u8z7y780l3es0ej4ev330llyn5hcuk5thvp2jtq7tsq430sky"
+      hub: "terra12w3e2wku288w3dz9w4h0m46g8qc27hfmawnea0v7ulncvramrvwq85fxr5",
+      reward:
+        "terra18y33hym5q8fe7m7ne2g6ndfejry7s6rj2tp98uzf07xsmr4cn9cqrkkfu2",
+      token: "terra1hl4tqxa99w9ee2qs3umu9udmaq30yzz5cscqcpe3l60lvtqf4qxsdswgdh",
+      custody:
+        "terra1cyj8eyuzwfjgdf77mp3ev5fhq8mqqxdq88u4qr8exszawp3t93usjsrm87",
+    },
+    spectrum_usdc_luna_lp: {
+      info: {
+        spectrum_lp: {
+          token:
+            "terra1erm54gtdtfqv2s4c7ple3kmret7eecuj02nk5w8h08jjnenjffzsynsp0u",
+          generator:
+            "terra1vf9ceekuxx8kycm7yv6hs96hgwsmrzt4la6s84skrgvfu7t09huqqdg09d",
+          underlyingToken:
+            "terra1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7qke04hl",
+          underlyingPair:
+            "terra1fd68ah02gr2y8ze7tm9te7m70zlmc7vjyyhs6xlhsdmqqcjud4dql4wpxr",
+        },
+      },
+      type: "spectrum_lp",
+      hub: "terra1vt0f0w39766djgmfzvecut6fwqm9swvmsym57rddyvcg5vxxz69qtd7fmn",
+      reward:
+        "terra1l9eh64tkfq826keu2fdaedgw5ajcj3zphn0c2w2gypfpp7n23t3sjzd6w9",
+      token: "terra1v697322n7fny777xke4zkq8stcct2rn9v2esfpfs9xl98upvs98s4k7y3l",
+      custody:
+        "terra17y0a88ek2z95c0wl45e8wwf7upteq7vyt44f8n8zw02hyn756arsjkd4x7",
     },
   },
 };

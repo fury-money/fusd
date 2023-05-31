@@ -1,8 +1,5 @@
 import { Gas, Rate, u, UST } from "@anchor-protocol/types";
-import {
-  TxResultRendering,
-  TxStreamPhase,
-} from "@libs/app-fns";
+import { TxResultRendering, TxStreamPhase } from "@libs/app-fns";
 import {
   _catchTxError,
   _createTxOptions,
@@ -22,8 +19,7 @@ import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
 import { Observable } from "rxjs";
 
 export function genericTx($: {
-
-  msgs: MsgExecuteContract[],
+  msgs: MsgExecuteContract[];
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -38,7 +34,7 @@ export function genericTx($: {
 
   return pipe(
     _createTxOptions({
-      msgs:$.msgs,
+      msgs: $.msgs,
       // FIXME borrow's txFee is fixed_gas
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
@@ -46,16 +42,12 @@ export function genericTx($: {
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),
     () => {
-
       try {
         return {
           value: null,
 
           phase: TxStreamPhase.SUCCEED,
-          receipts:[
-            helper.txHashReceipt(),
-            helper.txFeeReceipt(),
-          ],
+          receipts: [helper.txHashReceipt(), helper.txFeeReceipt()],
         } as TxResultRendering;
       } catch (error) {
         return helper.failedToParseTxResult();

@@ -13,8 +13,8 @@ import { MsgExecuteContract } from "@terra-money/terra.js";
 import { genericTx } from "@anchor-protocol/app-fns/tx/genericTx";
 
 export interface GenericTxParams {
-  msgs: MsgExecuteContract[]
-  txFee: EstimatedFee
+  msgs: MsgExecuteContract[];
+  txFee: EstimatedFee;
 }
 
 export function useGenericTx() {
@@ -22,8 +22,7 @@ export function useGenericTx() {
 
   const connectedWallet = useConnectedWallet();
 
-  const { txErrorReporter, constants, queryClient } =
-    useAnchorWebapp();
+  const { txErrorReporter, constants, queryClient } = useAnchorWebapp();
 
   const refetchQueries = useRefetchQueries();
 

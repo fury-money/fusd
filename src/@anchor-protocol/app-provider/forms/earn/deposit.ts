@@ -7,11 +7,7 @@ import { UST } from "@anchor-protocol/types";
 import { useFeeEstimationFor, useUstTax } from "@libs/app-provider";
 import { formatTokenInput } from "@libs/formatter";
 import { useForm } from "@libs/use-form";
-import {
-  Coin,
-  Coins,
-  MsgExecuteContract,
-} from "@terra-money/terra.js";
+import { Coin, Coins, MsgExecuteContract } from "@terra-money/terra.js";
 import { useAccount } from "contexts/account";
 import { useBalances } from "contexts/balances";
 import { useCallback } from "react";
@@ -64,13 +60,10 @@ export function useEarnDepositForm(): EarnDepositFormReturn {
             new Coins([
               new Coin(
                 contractAddress.native.usd,
-                formatTokenInput(
-                  big(depositAmount)
-                    .toString() as UST<string>
-                )
+                formatTokenInput(big(depositAmount).toString() as UST<string>)
               ),
             ])
-          )
+          ),
         ]);
       }
     },

@@ -124,7 +124,7 @@ export async function borrowMarketQuery(
         contractAddress: oracleContract,
         query: {
           prices: {
-            limit: 30
+            limit: 30,
           },
         },
       },

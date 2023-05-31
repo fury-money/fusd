@@ -31,40 +31,43 @@ export function getLoopAmountsAndMessages(
   swapQuote: SwapSimulationAndSwapResponse
 ): Partial<{
   allLoopData: {
-    provideAmount: u<Token>,
-    stableAmount: u<UST>
-  }[],
-  finalLoopData: u<Token>,
-  executeMsgs: MsgExecuteContract[],
-  error: string | undefined
+    provideAmount: u<Token>;
+    stableAmount: u<UST>;
+  }[];
+  finalLoopData: u<Token>;
+  executeMsgs: MsgExecuteContract[];
+  error: string | undefined;
 }> {
-
-    console.log('getting loop amounts and messages')
+  console.log("getting loop amounts and messages");
   let thisDepositAmount = microfy(collateralAmount); //The actual number of tokens the user wants to deposit
 
   const axlUSDCNeeded = [];
   const collateralTotal = [thisDepositAmount.toString()];
-  const collateralPrice = wrappedCollateralPrice * collateralExchangeRate
-  console.log("collateral price", collateralPrice)
+  const collateralPrice = wrappedCollateralPrice * collateralExchangeRate;
+  console.log("collateral price", collateralPrice);
 
-  const expectedAmount = swapQuote.swap.value.execute_msg.execute_swap_operations.expect_amount;
-  const offerAmount = swapQuote.swap.value.execute_msg.execute_swap_operations.offer_amount;
+  const expectedAmount =
+    swapQuote.swap.value.execute_msg.execute_swap_operations.expect_amount;
+  const offerAmount =
+    swapQuote.swap.value.execute_msg.execute_swap_operations.offer_amount;
   const priceImpact = swapQuote.quote.price_impact;
-  console.log(priceImpact)
+  console.log(priceImpact);
 
-  if(big(priceImpact).lte(0)){
+  if (big(priceImpact).lte(0)) {
     return {
-      error: "Initial collateral deposit is too low (TFM slippage is not positive)"
-    }
+      error:
+        "Initial collateral deposit is too low (TFM slippage is not positive)",
+    };
   }
 
-
-  let swapPoolY = big(expectedAmount).div(priceImpact)
+  let swapPoolY = big(expectedAmount).div(priceImpact);
   let swapPoolX = big(offerAmount).mul(
-      big(1).div(
-        big(priceImpact)  // Account for a negative price impact
-      ).minus(1)
-    );
+    big(1)
+      .div(
+        big(priceImpact) // Account for a negative price impact
+      )
+      .minus(1)
+  );
 
   let messages: MsgExecuteContract[] = [];
   // First we start by looping and getting a general quote for the total amount of axlUSDC needed
@@ -72,8 +75,14 @@ export function getLoopAmountsAndMessages(
     // 1. Provide the collaterals that we have in the wallet to Cavern
     const provideMsgs = getWrappedCollateralMessages(
       walletAddr,
-      demicrofy(big(thisDepositAmount).round() as u<Token<Big>>).toString() as bAsset,
-      big(thisDepositAmount).mul(collateralExchangeRate).round().minus(1).toString() as u<bAsset>,
+      demicrofy(
+        big(thisDepositAmount).round() as u<Token<Big>>
+      ).toString() as bAsset,
+      big(thisDepositAmount)
+        .mul(collateralExchangeRate)
+        .round()
+        .minus(1)
+        .toString() as u<bAsset>,
       collateral.info,
       collateral.collateral_token,
       collateral.custody_contract,
@@ -88,15 +97,23 @@ export function getLoopAmountsAndMessages(
       .mul(ltv) as Token<Big>;
 
     // We see how much we need to borrow
-      // If it's not the last loop, we borrow as much as possible
+    // If it's not the last loop, we borrow as much as possible
     let borrowRatio = big(1);
-      // If it's the last loop, we borrow only what we need to achieve the target leverage
-    if(i+1 == loopNumber){
-      const loopValue = (big(1).minus(big(ltv).pow(loopNumber))).div(big(1).minus(ltv))
-      borrowRatio = big(targetLeverage).minus(loopValue).div(big(ltv).pow(loopNumber));
+    // If it's the last loop, we borrow only what we need to achieve the target leverage
+    if (i + 1 == loopNumber) {
+      const loopValue = big(1)
+        .minus(big(ltv).pow(loopNumber))
+        .div(big(1).minus(ltv));
+      borrowRatio = big(targetLeverage)
+        .minus(loopValue)
+        .div(big(ltv).pow(loopNumber));
       // We have to make sure we swap at least MIN_SWAP_AMOUNT USDC
-      if(borrowAmount.mul(borrowRatio).lt(big(MIN_SWAP_AMOUNT).mul(decimalFactor))){
-        borrowRatio = big(MIN_SWAP_AMOUNT).mul(decimalFactor).div(borrowAmount)
+      if (
+        borrowAmount
+          .mul(borrowRatio)
+          .lt(big(MIN_SWAP_AMOUNT).mul(decimalFactor))
+      ) {
+        borrowRatio = big(MIN_SWAP_AMOUNT).mul(decimalFactor).div(borrowAmount);
       }
     }
     const axlUSDCBorrowed = borrowAmount.mul(borrowRatio);
@@ -115,7 +132,7 @@ export function getLoopAmountsAndMessages(
     // For that we use the swap quote result
     const toSwap = big(axlUSDCBorrowed);
     const expectedAmount = toSwap.mul(swapPoolY).div(swapPoolX.plus(toSwap));
-    const minimumAmount = expectedAmount.mul(1-SLIPPAGE);
+    const minimumAmount = expectedAmount.mul(1 - SLIPPAGE);
 
     swapPoolY = swapPoolY.minus(expectedAmount);
     swapPoolX = swapPoolX.plus(toSwap);
@@ -125,23 +142,30 @@ export function getLoopAmountsAndMessages(
     thisDepositAmount = minimumAmount as u<CollateralAmount<Big>>;
     // We modify the original swapQuote to fit the amounts
     const thisSwapMessage = _.cloneDeep(swapQuote.swap);
-    thisSwapMessage.value.coins[0] = new Coin(thisSwapMessage.value.coins[0].denom, axlUSDCBorrowed.round().toString());
-    thisSwapMessage.value.execute_msg.execute_swap_operations.expect_amount = expectedAmount.round().toString()
-    thisSwapMessage.value.execute_msg.execute_swap_operations.minimum_receive = minimumAmount.round().toString()
-    thisSwapMessage.value.execute_msg.execute_swap_operations.offer_amount = axlUSDCBorrowed.round().toString()
-    thisSwapMessage.value.execute_msg.execute_swap_operations.routes[0].offer_amount = thisSwapMessage.value.execute_msg.execute_swap_operations.offer_amount;
+    thisSwapMessage.value.coins[0] = new Coin(
+      thisSwapMessage.value.coins[0].denom,
+      axlUSDCBorrowed.round().toString()
+    );
+    thisSwapMessage.value.execute_msg.execute_swap_operations.expect_amount =
+      expectedAmount.round().toString();
+    thisSwapMessage.value.execute_msg.execute_swap_operations.minimum_receive =
+      minimumAmount.round().toString();
+    thisSwapMessage.value.execute_msg.execute_swap_operations.offer_amount =
+      axlUSDCBorrowed.round().toString();
+    thisSwapMessage.value.execute_msg.execute_swap_operations.routes[0].offer_amount =
+      thisSwapMessage.value.execute_msg.execute_swap_operations.offer_amount;
     const swapMsg = getTFMSwapMsg(thisSwapMessage, walletAddr);
 
-    messages = messages.concat([...provideMsgs, ...borrowMsg, swapMsg])
+    messages = messages.concat([...provideMsgs, ...borrowMsg, swapMsg]);
   }
 
   return {
     allLoopData: axlUSDCNeeded.map((usd, i) => ({
       provideAmount: collateralTotal[i] as u<Token>,
-      stableAmount: usd as u<UST>
+      stableAmount: usd as u<UST>,
     })),
     finalLoopData: collateralTotal[collateralTotal.length - 1] as u<Token>,
-    executeMsgs : messages,
-    error: undefined
-  }
+    executeMsgs: messages,
+    error: undefined,
+  };
 }
