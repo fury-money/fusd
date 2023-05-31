@@ -74,7 +74,9 @@ export enum RegisteredLSDs {
   bLuna = "bLuna",
   stLuna = "stLuna",
   ampWhale = "ampWhale",
-  bWhale = "bWhale"
+  bWhale = "bWhale",
+  spectrum_roar_luna_lp = "spectrum_roar_luna_lp",
+  amp_roar_luna_lp = "amp_roar_luna_lp"
 }
 
 const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
@@ -235,7 +237,35 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
       "reward": "terra1yt7ndfnran9lutcsh5p03evcazs8pgae86r70flwdne3lc4dmx8ssvtkuu",
       "token": "terra1ze3c86la6wynenrqewhq4j9hw24yrvardudsl5mkq3mhgs6ag4cqrva0pg",
       "custody": "terra1vmr33lncm0jhkm9gfj8824ahk50asysjgzt3ex7e94clecss8nzqftzzv2"
-    }
+    },
+    "spectrum_roar_luna_lp": {
+      info: {
+        spectrum_lp:{
+          token: "terra1fz4x56u96fkgzvtdxaq2969qlmfk4wnwq0fqhlrklpqc629ah9qs4h8v50",
+          generator: "terra1vf9ceekuxx8kycm7yv6hs96hgwsmrzt4la6s84skrgvfu7t09huqqdg09d",
+          underlyingToken: "terra1qmr5wagmeej33hsnqdmqyvkq6rg3sfkvflmu6gd6drhtjfpx4y5sew88s4",
+          underlyingPair: "terra1c7g9pmz2xxe66g8ujpe5tlmj3pawjp290f57cl43j6vswkdtrvwqkgme9q",
+        }
+      },
+      type: "spectrum_lp",
+      "hub": "terra1c9neqqcx7j3rg6de4xelm0mq0kmwe2yd6snfzf97fqz5g6pfs9pqjsk8pf",
+      "reward": "terra1jf7a4nnc20krz26y93ssjjk80456ncz2d6cz7gqnf0c85hrnkhhq4q67jj",
+      "token": "terra1h53av4ne6uux3p00vlwc6fjtgrqsaxmduzc4a3rch2dm9r97p7kscw0tv7",
+      "custody": "terra1zmhn245uz0nmkx22950rnxx2azhkdemmgkaxe86glfxvw3e7724qzv2lte"
+    },
+    "amp_roar_luna_lp": {
+      info: {
+        amp_lp:{
+          token: "terra10yalv9g9q27hzwdqm9qlma2phjqrr4z46793ygyh0htjpw0dlzesr8f3m2",
+          hub: "terra1zsm7cgu3vg2kwwzzehl38ft7z2ffksql9d6twh3pugvf0yl0u5vs74xx55",
+        }
+      },
+      type: "amp_lp",
+        "hub": "terra1gtd44fa57kkz5hdtxay4sag8dlj5jyfu4hyevxqz58mk6dx50j6shzuctq",
+        "reward": "terra1fhyy6u505ewjhxa58wc58zrg8nazr9kkt8hg0zx2tp6fd8vpst9q53s0c8",
+        "token": "terra1w65rh5339gl85n48fc85cw80hfl8mh5h2ye70jfj4lezevssj89q59eut4",
+        "custody": "terra1d5j8jmwg4u8z7y780l3es0ej4ev330llyn5hcuk5thvp2jtq7tsq430sky"
+    },
   },
 };
 
