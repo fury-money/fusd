@@ -143,7 +143,7 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
       <aside className="total-deposit-buttons">
        <EmbossButton
             component="button"
-            onClick = {openBuyUstDialog}
+            onClick = {() => openBuyUstDialog({})}
           >
             <span>
               Buy axlUSDC{' '}

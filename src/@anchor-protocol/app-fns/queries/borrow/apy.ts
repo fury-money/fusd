@@ -57,7 +57,7 @@ export async function borrowAPYQuery(
     },
   });
 
-  const { market: marketStateNewEpoch } = await wasmFetch<MarketStateWasmQuery>({
+  const { marketState: marketStateNewEpoch } = await wasmFetch<MarketStateWasmQuery>({
     ...queryClient,
     id: `borrow--market-state-current`,
     wasmQuery: {
@@ -65,7 +65,7 @@ export async function borrowAPYQuery(
         contractAddress: mmMarketContract,
         query: {
           state: {
-            blockHeight: lastSyncedHeight
+            blockHeight: lastSyncedHeight + 10*60*3
           },
         },
       },
