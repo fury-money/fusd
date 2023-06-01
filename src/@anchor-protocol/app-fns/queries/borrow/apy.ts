@@ -57,23 +57,26 @@ export async function borrowAPYQuery(
     },
   });
 
-  const { marketState: marketStateNewEpoch } = await wasmFetch<MarketStateWasmQuery>({
-    ...queryClient,
-    id: `borrow--market-state-current`,
-    wasmQuery: {
-      marketState: {
-        contractAddress: mmMarketContract,
-        query: {
-          state: {
-            blockHeight: lastSyncedHeight + 10*60*3
+  const { marketState: marketStateNewEpoch } =
+    await wasmFetch<MarketStateWasmQuery>({
+      ...queryClient,
+      id: `borrow--market-state-current`,
+      wasmQuery: {
+        marketState: {
+          contractAddress: mmMarketContract,
+          query: {
+            state: {
+              blockHeight: lastSyncedHeight + 10 * 60 * 3,
+            },
           },
         },
       },
-    },
-  });
+    });
 
   // State is updated around every 3 hrs
-  let rewardsAPY = big(marketState.prev_borrower_incentives).mul(8*365).div(marketState.total_liabilities)
+  let rewardsAPY = big(marketState.prev_borrower_incentives)
+    .mul(8 * 365)
+    .div(marketState.total_liabilities);
 
   const govRewards = {
     CurrentAPY: "0" as Rate<string>,

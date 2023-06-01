@@ -50,6 +50,10 @@ interface UserInfoWasmQuery {
   user_info: WasmQuery<UserInfo, UserInfoResponse>;
 }
 
+interface CW20BalanceWasmQuery {
+  tokenBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<Token>>;
+}
+
 export async function getSpectrumExchangeRate(
   queryClient: QueryClient,
   lsd: LSDContracts,
@@ -58,8 +62,8 @@ export async function getSpectrumExchangeRate(
   if (!lsd.info.spectrum_lp) {
     throw "Expected a spectrum like collateral token here";
   } // We need
-  const [wrapperInfoResponse, bondAmount, bondShare] = await Promise.all([
-    // 1. The token expected exchange rate
+  const [wrapperInfoResponse, wrapper_lsd_balance] = await Promise.all([
+    // 1. The wrapper total supply
     wasmFetch<CollateralWrapperTokenInfoWasmQuery>({
       ...queryClient,
       id: `cw20--token-info=${lsd.token}`,
@@ -72,49 +76,38 @@ export async function getSpectrumExchangeRate(
         },
       },
     }),
-    // 2. The actual exchange rate (bond_amount / bond_share)
-    // a. Bond amount
-    wasmFetch<UserInfoWasmQuery>({
+    // 2. The wrapper lsd balance
+    wasmFetch<CW20BalanceWasmQuery>({
       ...queryClient,
-      id: `cw20--token-info=${lsd.token}`,
+      id: `cw20--balance=${lsd.token}`,
       wasmQuery: {
-        user_info: {
-          contractAddress: lsd.info.spectrum_lp.generator,
-          query: {
-            user_info: {
-              user: lsd.info.spectrum_lp.token as HumanAddr,
-              lp_token: lsd.info.spectrum_lp.underlyingToken as HumanAddr,
-            },
-          },
-        },
-      },
-    }),
-    // b. Bond share
-    wasmFetch<CTokenStateWasmQuery>({
-      ...queryClient,
-      id: `compound--state=${lsd.info.spectrum_lp.token}`,
-      wasmQuery: {
-        state: {
+        tokenBalance: {
           contractAddress: lsd.info.spectrum_lp.token,
           query: {
-            state: {},
+            balance: {
+              address: lsd.token as HumanAddr,
+            },
           },
         },
       },
     }),
   ]);
 
-  console.log(
-    parseFloat(bondAmount.user_info.bond_amount) /
-      parseFloat(bondShare.state.total_bond_share)
-  );
+  let wrapperSupply = parseFloat(wrapperInfoResponse.tokenInfo.total_supply);
+  let wrapperBalance = parseFloat(wrapper_lsd_balance.tokenBalance.balance);
+
+  if (wrapperSupply == 0 || wrapperBalance == 0) {
+    return {
+      hubState: {
+        exchange_rate: "1" as Rate<string>,
+      },
+    };
+  }
 
   return {
     hubState: {
       exchange_rate: (
-        parseFloat(bondAmount.user_info.bond_amount) /
-        parseFloat(bondShare.state.total_bond_share) /
-        parseFloat(wrapperInfoResponse.tokenInfo.expected_exchange_rate)
+        wrapperSupply / wrapperBalance
       ).toString() as Rate<string>,
     },
   };

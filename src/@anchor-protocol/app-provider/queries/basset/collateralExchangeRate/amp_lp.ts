@@ -31,6 +31,9 @@ interface AmpLpStateResponse {
 interface AmpLpStateWasmQuery {
   state: WasmQuery<AmpLpState, AmpLpStateResponse>;
 }
+interface CW20BalanceWasmQuery {
+  tokenBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<Token>>;
+}
 
 export async function getAmpLPExchangeRate(
   queryClient: QueryClient,
@@ -40,8 +43,8 @@ export async function getAmpLPExchangeRate(
   if (!lsd.info.amp_lp) {
     throw "Expected a amp_lp like collateral token here";
   } // We need
-  const [wrapperInfoResponse, ampLpState] = await Promise.all([
-    // 1. The token expected exchange rate
+  const [wrapperInfoResponse, wrapper_lsd_balance] = await Promise.all([
+    // 1. The wrapper total supply
     wasmFetch<CollateralWrapperTokenInfoWasmQuery>({
       ...queryClient,
       id: `cw20--token-info=${lsd.token}`,
@@ -54,26 +57,38 @@ export async function getAmpLPExchangeRate(
         },
       },
     }),
-    // 2. The actual exchange rate (bond_amount / bond_share)
-
-    wasmFetch<AmpLpStateWasmQuery>({
+    // 2. The wrapper lsd balance
+    wasmFetch<CW20BalanceWasmQuery>({
       ...queryClient,
-      id: `amp-lp--state=${lsd.token}`,
+      id: `cw20--balance=${lsd.token}`,
       wasmQuery: {
-        state: {
-          contractAddress: lsd.info.amp_lp.hub,
+        tokenBalance: {
+          contractAddress: lsd.info.amp_lp.token,
           query: {
-            state: {},
+            balance: {
+              address: lsd.token as HumanAddr,
+            },
           },
         },
       },
     }),
   ]);
+
+  let wrapperSupply = parseFloat(wrapperInfoResponse.tokenInfo.total_supply);
+  let wrapperBalance = parseFloat(wrapper_lsd_balance.tokenBalance.balance);
+
+  if (wrapperSupply == 0 || wrapperBalance == 0) {
+    return {
+      hubState: {
+        exchange_rate: "1" as Rate<string>,
+      },
+    };
+  }
+
   return {
     hubState: {
       exchange_rate: (
-        parseFloat(ampLpState.state.exchange_rate) /
-        parseFloat(wrapperInfoResponse.tokenInfo.expected_exchange_rate)
+        wrapperSupply / wrapperBalance
       ).toString() as Rate<string>,
     },
   };

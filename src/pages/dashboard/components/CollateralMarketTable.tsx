@@ -18,6 +18,7 @@ import { UIElementProps } from 'components/layouts/UIElementProps';
 import { WhitelistCollateral } from 'queries';
 import React, { useMemo } from 'react';
 import big from "big.js";
+import { useCollaterals } from 'pages/borrow/components/useCollaterals';
 
 interface CollateralMarketTableProps extends UIElementProps {
   whitelistCollateral: WhitelistCollateral[];
@@ -26,38 +27,34 @@ interface CollateralMarketTableProps extends UIElementProps {
 }
 
 export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
-  const { className, whitelistCollateral, marketData, additionalLSDInfo } = props;
+  const { className, additionalLSDInfo } = props;
+
+  const queriedCollaterals = useCollaterals();
 
   const collaterals = useMemo(() => {
-    const array = whitelistCollateral.map((collateral) => {
-      const data = marketData?.collaterals.find(
-        (c) => c.token === collateral.collateral_token,
-      );
-
+    const array = queriedCollaterals.map((collateral) => {
+      
       const additionalInfo = additionalLSDInfo?.find(
-        (c) => c.info?.token === collateral.collateral_token
+        (c) => c.info?.token === collateral.collateral.collateral_token
       );
 
       // We exchange the token values with the one in memory for LSD
       if(additionalInfo?.info?.info?.symbol){
-        collateral.symbol = additionalInfo?.info?.info?.symbol;
+        collateral.collateral.symbol = additionalInfo?.info?.info?.symbol;
       }
       if(additionalInfo?.info?.info?.name){
-        collateral.name = additionalInfo?.info?.info?.name;
+        collateral.collateral.name = additionalInfo?.info?.info?.name;
       }
-
       const type = additionalInfo?.info?.type ?? "aLuna";
 
       const exchangeRate = parseFloat(additionalInfo?.additionalInfo?.hubState?.exchange_rate ?? "1");
 
-      const price = (parseFloat(data?.price ?? "0") * exchangeRate) as UST<number>;
+      const price = parseFloat(collateral.price) as UST<number>;
 
-      const value = (data ? demicrofy(data.collateral) : big(0 as bAsset<number>)).div(exchangeRate) as bAsset<Big>;
+      const value = demicrofy(collateral.lockedAmount).div(exchangeRate) as bAsset<Big>;
 
-      const tvl = data
-        ? demicrofy(Big(data.collateral).mul(data.price).toString() as u<UST>)
-        : (0 as UST<number>);
-
+      const tvl = demicrofy(Big(collateral.lockedAmount).mul(price) as u<UST<Big>>);
+      console.log(tvl)
       return {
         ...collateral,
         price,
@@ -69,23 +66,23 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
     return array.sort((a, b) => {
       return Big(b.tvl).minus(Big(a.tvl)).toNumber();
     });
-  }, [whitelistCollateral, marketData]);
+  }, [queriedCollaterals]);
 
-
+  console.log(collaterals)
   function printCollaterals(type: string){
     return collaterals.filter((collateral) => collateral.type == type).map((collateral) => {
       return (
-        <tr key={collateral.symbol}>
+        <tr key={collateral.collateral.symbol}>
           <td>
             <div>
               <i>
                 <PossibleLpIcon
-                  icon={collateral.icon}
+                  icon={collateral.collateral.icon}
                 />
               </i>
               <div>
-                <div className="coin">{collateral.symbol}</div>
-                <p className="name">{collateral.name}</p>
+                <div className="coin">{collateral.collateral.symbol}</div>
+                <p className="name">{collateral.collateral.name}</p>
               </div>
             </div>
           </td>

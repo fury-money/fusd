@@ -35,7 +35,6 @@ export function useCollaterals(){
     return whitelist
       .filter((collateral) => collateral.bridgedAddress !== undefined)
       .map((collateral) => {
-        console.log(borrowMarket.oraclePrices)
         const oracle = borrowMarket.oraclePrices.prices.find(
           ({ asset }) => collateral.collateral_token === asset,
         );
@@ -49,6 +48,7 @@ export function useCollaterals(){
           (c) => c.info?.token === collateral.collateral_token
         );
       const exchangeRate = parseFloat(additionalInfo?.additionalInfo?.hubState?.exchange_rate ?? "1");
+        console.log(collateral.symbol, exchangeRate)
 
       // We exchange the token values with the one in memory for LSD
       if(additionalInfo?.info?.info?.symbol){

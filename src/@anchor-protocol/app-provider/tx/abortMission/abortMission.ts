@@ -15,14 +15,14 @@ export interface AbortMissionTxParams {
   txFee: EstimatedFee;
   totalAUST: u<aUST>;
   allLiquidationBids: LSDLiquidationBidsResponse;
-  allWithdrawableDefaultedCollaterals:{
-    collateral: CollateralInfo,
-    withdrawable_number: u<Luna<Big>>
-  }[],
+  allWithdrawableDefaultedCollaterals: {
+    collateral: CollateralInfo;
+    withdrawable_number: u<Luna<Big>>;
+  }[];
   collateralsWithdrawAmount: {
-    collateral: CollateralInfo,
-    amount: u<Token<Big>>
-  }[],
+    collateral: CollateralInfo;
+    amount: u<Token<Big>>;
+  }[];
   borrowedValue: u<UST<Big>>;
   uaUST: u<aUST<string>>;
 

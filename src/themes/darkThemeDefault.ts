@@ -95,9 +95,9 @@ export const defaultDarkTheme = {
         styleOverrides: {
           paper: {
             backgroundColor: DARK_BLUE_100,
-          }
-        }
-      }
+          },
+        },
+      },
     },
   }),
   MuiTouchRipple: {

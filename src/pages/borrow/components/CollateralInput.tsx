@@ -1,5 +1,5 @@
 import { microfy } from '@anchor-protocol/formatter';
-import { TokenIcon } from '@anchor-protocol/token-icons';
+import { PossibleLpIcon, TokenIcon } from '@anchor-protocol/token-icons';
 import { CollateralAmount, u } from '@anchor-protocol/types';
 import { demicrofy } from '@libs/formatter';
 import { NumberInput } from '@libs/neumorphism-ui/components/NumberInput';
@@ -23,8 +23,8 @@ const MenuItemContentComponent = (props: OptionProps) => {
   const { className, collateral } = props;
   return (
     <SelectAndTextInputContainerLabel className={className}>
-      <TokenIcon symbol={collateral.symbol} path={collateral.icon} />
-      {collateral.symbol}
+      <PossibleLpIcon icon={collateral.icon} />
+      {collateral.symbol}y
     </SelectAndTextInputContainerLabel>
   );
 };

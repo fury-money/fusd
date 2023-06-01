@@ -22,10 +22,33 @@ export function useBalance(contract_addr: string | undefined) {
   }
 }
 
+export function getUnderlyingToken(collateral: LSDContracts | undefined) {
+  let asset_denom;
+  if (collateral?.info.cw20) {
+    asset_denom = {
+      name: collateral?.info.cw20.tokenAddress,
+      type: "cw20",
+    };
+  } else if (collateral?.info.coin) {
+    asset_denom = {
+      name: collateral?.info.coin?.denom,
+      type: "coin",
+    };
+  } else if (collateral?.info.spectrum_lp) {
+    asset_denom = {
+      name: collateral?.info.spectrum_lp.token,
+      type: "cw20",
+    };
+  } else if (collateral?.info.amp_lp) {
+    asset_denom = {
+      name: collateral?.info.amp_lp.token,
+      type: "cw20",
+    };
+  }
+  return asset_denom;
+}
+
 export function useLSDBalance(collateral: LSDContracts | undefined) {
-  return useBalance(
-    collateral?.info.cw20
-      ? collateral?.info.cw20.tokenAddress
-      : collateral?.info.coin?.denom
-  );
+  let asset_denom = getUnderlyingToken(collateral);
+  return useBalance(asset_denom?.name);
 }

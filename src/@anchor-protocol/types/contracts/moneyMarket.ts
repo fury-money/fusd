@@ -251,7 +251,7 @@ export namespace moneyMarket {
      */
     export interface State {
       state: {
-        blockHeight?: number
+        blockHeight?: number;
       };
     }
 

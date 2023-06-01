@@ -55,6 +55,7 @@ import { _fetchBorrowData } from "./_fetchBorrowData";
 import big from "big.js";
 import { LSDContracts } from "@anchor-protocol/app-provider";
 import _ from "lodash";
+import { getUnderlyingToken } from "pages/swap/queries/balanceQuery";
 
 export function getWrappedCollateralMessages(
   walletAddr: HumanAddr,
@@ -68,19 +69,18 @@ export function getWrappedCollateralMessages(
 ) {
   let allowanceMessage = undefined;
   let mintMessage = undefined;
+
+  const asset = getUnderlyingToken(collateral_info);
+
   // First in case of a cw20 like collateral LSD
-  if (collateral_info.info.cw20) {
+  if (asset?.type == "cw20") {
     // Raise allowance on the actual token in case of a cw20 token
-    allowanceMessage = new MsgExecuteContract(
-      walletAddr,
-      collateral_info.info.cw20?.tokenAddress,
-      {
-        increase_allowance: {
-          spender: collateralToken,
-          amount: formatInput(microfy(depositAmount, decimals), decimals),
-        },
-      }
-    );
+    allowanceMessage = new MsgExecuteContract(walletAddr, asset.name, {
+      increase_allowance: {
+        spender: collateralToken,
+        amount: formatInput(microfy(depositAmount, decimals), decimals),
+      },
+    });
 
     mintMessage = // Wrap the tokens
       new MsgExecuteContract(walletAddr, collateralToken, {
@@ -89,7 +89,7 @@ export function getWrappedCollateralMessages(
           lsd_amount: formatInput(microfy(depositAmount, decimals), decimals),
         },
       });
-  } else {
+  } else if (asset?.type == "coin") {
     mintMessage = // Wrap the tokens
       new MsgExecuteContract(
         walletAddr,
@@ -101,9 +101,10 @@ export function getWrappedCollateralMessages(
           },
         },
         `${formatInput(microfy(depositAmount, decimals), decimals)}${
-          collateral_info.info.coin?.denom
+          asset.name
         }`
       );
+  } else {
   }
 
   return _.compact([

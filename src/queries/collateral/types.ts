@@ -15,7 +15,9 @@ export function isWrappedCollateral(
   return "info" in collateral;
 }
 
-export type IconObject = string | {asset1: string, asset2: string, protocol_icon: string};
+export type IconObject =
+  | string
+  | { asset1: string; asset2: string; protocol_icon: string };
 
 export type WhitelistWrappedCollateral =
   moneyMarket.overseer.WhitelistResponse["elems"][0] & {
@@ -24,6 +26,7 @@ export type WhitelistWrappedCollateral =
     bridgedAddress?: CW20Addr | ERC20Addr;
     protocol?: string | undefined;
     info: LSDContracts;
+    type?: string;
   };
 
 export type WhitelistNormalCollateral =
@@ -31,6 +34,7 @@ export type WhitelistNormalCollateral =
     icon?: IconObject;
     decimals: number;
     bridgedAddress?: CW20Addr | ERC20Addr;
+    type?: string;
   };
 
 export type WhitelistCollateral =

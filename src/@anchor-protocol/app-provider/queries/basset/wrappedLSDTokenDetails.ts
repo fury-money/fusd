@@ -36,8 +36,7 @@ export async function underlyingHubStateQuery(
   lsd: LSDContracts,
   oracle: HumanAddr
 ): Promise<UnderlyingHubState> {
-  console.log(lsd.info);
-  // If the token is of cw20 type, we query the hubstate
+  // If the tokens of cw20 type, we query the hubstate
   if (lsd.info.cw20?.hubAddress) {
     return getSteakExchangeRate(queryClient, lsd, oracle);
   } else if (lsd.info.coin) {

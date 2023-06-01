@@ -261,8 +261,9 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         name: "LUNA-axlUSDC AmpLP",
         icon: {
           protocol_icon: "https://www.erisprotocol.com/assets/logo_eris_48.svg",
-          "asset1":"https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/Luna.svg",
-          "asset2":"https://www.erisprotocol.com/assets/tokens/usdc.svg"
+          asset1:
+            "https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/Luna.svg",
+          asset2: "https://www.erisprotocol.com/assets/tokens/usdc.svg",
         },
         link: "https://www.erisprotocol.com/terra/amp-compounder",
         underlyingToken:
@@ -294,8 +295,9 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         name: "Spectrum axlUSDC-LUNA Farm",
         icon: {
           protocol_icon: "https://terra.spec.finance//assets/spec_logo.svg",
-          "asset1":"https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/Luna.svg",
-          "asset2":"https://www.erisprotocol.com/assets/tokens/usdc.svg"
+          asset1:
+            "https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/Luna.svg",
+          asset2: "https://www.erisprotocol.com/assets/tokens/usdc.svg",
         },
         link: "https://terra.spec.finance/vaults",
         underlyingToken:

@@ -108,6 +108,7 @@ function useLocalTokenInformation() {
       token: contractAddress.cw20.aLuna,
       icon: "assets/tokens/aluna.svg",
       name: "Cavern Bonded Luna",
+      type: "aLuna",
     },
   };
 
@@ -120,6 +121,7 @@ function useLocalTokenInformation() {
           token: contracts.token,
           icon: contracts.info.icon,
           info: contracts,
+          type: contracts.type,
         },
       };
     })
