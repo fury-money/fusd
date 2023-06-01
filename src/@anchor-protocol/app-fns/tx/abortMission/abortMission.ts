@@ -1,4 +1,4 @@
-import { AnchorContractAddress } from "@anchor-protocol/app-provider";
+import { AnchorContractAddress, LSDContracts } from "@anchor-protocol/app-provider";
 import { LSDLiquidationBidsResponse } from "@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser";
 import {
   formatAUSTWithPostfixUnits,
@@ -12,6 +12,9 @@ import {
   Rate,
   u,
   NativeDenom,
+  Luna,
+  Token,
+  CW20Addr,
 } from "@anchor-protocol/types";
 import {
   pickAttributeValue,
@@ -46,13 +49,21 @@ import { Observable } from "rxjs";
 import { getLiquidationWithdrawCollateralMsg } from "../liquidate/collateral";
 import _ from "lodash";
 import { Big } from "big.js";
+import { DeepPartial } from "chart.js/types/utils";
 
 export interface AbortMissionMessagesParams {
   walletAddr: HumanAddr;
   totalAUST: u<aUST>;
   contractAddress: AnchorContractAddress;
   allLiquidationBids: LSDLiquidationBidsResponse;
-  collaterals: CollateralInfo[];
+  allWithdrawableDefaultedCollaterals:{
+    collateral: CollateralInfo,
+    withdrawable_number: u<Luna<Big>>
+  }[],
+  collateralsWithdrawAmount: {
+    collateral: CollateralInfo,
+    amount: u<Token<Big>>
+  }[],
   borrowedValue: u<UST<Big>>;
   uaUST: u<aUST<string>>;
 }
@@ -62,7 +73,8 @@ export function getAbortMissionMessages({
   totalAUST,
   contractAddress,
   allLiquidationBids,
-  collaterals,
+  allWithdrawableDefaultedCollaterals,
+  collateralsWithdrawAmount,
   borrowedValue,
   uaUST,
 }: AbortMissionMessagesParams) {
@@ -99,13 +111,16 @@ export function getAbortMissionMessages({
     })
     .flat();
 
-  const collateralLiquidationMsgs = collaterals
-    .map((collateral) =>
+  const collateralLiquidationMsgs = allWithdrawableDefaultedCollaterals
+    .map(({collateral, withdrawable_number}) =>
       getLiquidationWithdrawCollateralMsg({
         walletAddr,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
-        collateralToken: collateral.collateral.collateral_token,
+        collateralToken: 
+          collateral && "info" in collateral.collateral
+            ? collateral.collateral.info.token as CW20Addr
+            : collateral.collateral.collateral_token,
         tokenWrapperAddr:
           collateral && "info" in collateral.collateral
             ? collateral.collateral.collateral_token
@@ -130,29 +145,29 @@ export function getAbortMissionMessages({
         ]
       : [];
 
-  const withdrawCollateralMsgs = collaterals
-    .map((collateral) => {
-      if (!collateral.rawLockedAmount || collateral.rawLockedAmount == "0") {
-        return [];
-      }
-      return _.compact([
-        // unlock collateral
-        new MsgExecuteContract(
+
+    const unlockCollateralMsgs = new MsgExecuteContract(
           walletAddr,
           contractAddress.moneyMarket.overseer,
           {
             // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L78
             unlock_collateral: {
-              collaterals: [
+              collaterals:collateralsWithdrawAmount.map(({collateral}) => 
                 [
                   collateral.collateral.collateral_token,
                   collateral.rawLockedAmount,
-                ],
-              ],
+                ]
+              ),
             },
           }
-        ),
+        );
 
+  const withdrawCollateralMsgs = collateralsWithdrawAmount
+    .map(({collateral}) => {
+      if (!collateral.rawLockedAmount || collateral.rawLockedAmount == "0") {
+        return [];
+      }
+      return _.compact([
         // withdraw from custody
         new MsgExecuteContract(
           walletAddr,
@@ -179,6 +194,21 @@ export function getAbortMissionMessages({
     })
     .flat();
 
+console.log(_.compact(
+    // 1. We start by withdrawing all funds in earn
+    redeemMsg
+      // 2. We then withdraw all deposits in the liquidation queue
+      .concat(liquidationMsgs)
+      // 3. Withdraw all collaterals in the liquidation queue
+      .concat(collateralLiquidationMsgs)
+      // 4. Repay all the debts you incurred in the borrow Tab (using the funds you have just withdrawn + your wallet content)
+      .concat(repayMsg)
+      // 5. Unlock all collaterals
+       .concat(unlockCollateralMsgs)
+      // 6. Withdraw all collaterals you deposited on the borrow Tab (this will not unwrap aLuna collaterals)
+      .concat(withdrawCollateralMsgs)
+  ))
+
   return _.compact(
     // 1. We start by withdrawing all funds in earn
     redeemMsg
@@ -188,7 +218,9 @@ export function getAbortMissionMessages({
       .concat(collateralLiquidationMsgs)
       // 4. Repay all the debts you incurred in the borrow Tab (using the funds you have just withdrawn + your wallet content)
       .concat(repayMsg)
-      // 5. Withdraw all collaterals you deposited on the borrow Tab (this will not unwrap aLuna collaterals)
+      // 5. Unlock all collaterals
+       .concat(unlockCollateralMsgs)
+      // 6. Withdraw all collaterals you deposited on the borrow Tab (this will not unwrap aLuna collaterals)
       .concat(withdrawCollateralMsgs)
   );
 }
@@ -198,7 +230,14 @@ export function abortMissionTx($: {
   totalAUST: u<aUST>;
   contractAddress: AnchorContractAddress;
   allLiquidationBids: LSDLiquidationBidsResponse;
-  collaterals: CollateralInfo[];
+  allWithdrawableDefaultedCollaterals:{
+    collateral: CollateralInfo,
+    withdrawable_number: u<Luna<Big>>
+  }[],
+  collateralsWithdrawAmount: {
+    collateral: CollateralInfo,
+    amount: u<Token<Big>>
+  }[],
   borrowedValue: u<UST<Big>>;
   uaUST: u<aUST<string>>;
 
@@ -220,7 +259,8 @@ export function abortMissionTx($: {
         totalAUST: $.totalAUST,
         contractAddress: $.contractAddress,
         allLiquidationBids: $.allLiquidationBids,
-        collaterals: $.collaterals,
+        allWithdrawableDefaultedCollaterals: $.allWithdrawableDefaultedCollaterals,
+        collateralsWithdrawAmount: $.collateralsWithdrawAmount,
         borrowedValue: $.borrowedValue,
         uaUST: $.uaUST,
       }),

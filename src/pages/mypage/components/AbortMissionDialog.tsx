@@ -1,5 +1,5 @@
-import { aUST, Token, u, UST } from '@anchor-protocol/types';
-import { useAnchorWebapp, useEarnDepositForm } from '@anchor-protocol/app-provider';
+import { aUST, Luna, Token, u, UST } from '@anchor-protocol/types';
+import { LSDContracts, useAnchorWebapp, useEarnDepositForm } from '@anchor-protocol/app-provider';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { useConfirm } from '@libs/neumorphism-ui/components/useConfirm';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
@@ -31,6 +31,7 @@ import { useAbortMissionTx } from '@anchor-protocol/app-provider/tx/abortMission
 import { CollateralInfo } from "pages/borrow/components/useCollaterals";
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { getAbortMissionMessages } from '@anchor-protocol/app-fns';
+import { DeepPartial } from '@terra-money/terra.proto/cosmwasm/wasm/v1/types';
 
 
 export type BroadcastTxStreamResult<T = unknown> =
@@ -43,8 +44,14 @@ export interface AbortMissionParams {
   allLiquidationBids: LSDLiquidationBidsResponse,
   liquidationQueueValue: u<UST<Big>>,
   borrowedValue: u<UST<Big>>,
-  collaterals: CollateralInfo[],
-  collateralsWithdrawAmount: u<Token<Big>>[]
+  allWithdrawableDefaultedCollaterals:{
+    collateral: CollateralInfo,
+    withdrawable_number: u<Luna<Big>>
+  }[],
+  collateralsWithdrawAmount: {
+    collateral: CollateralInfo,
+    amount: u<Token<Big>>
+  }[]
 }
 
 interface DepositDialogParams extends UIElementProps, AbortMissionParams {}
@@ -67,7 +74,7 @@ function DepositDialogBase(props: DepositDialogProps) {
     allLiquidationBids,
     liquidationQueueValue,
     borrowedValue,
-    collaterals,
+    allWithdrawableDefaultedCollaterals,
     collateralsWithdrawAmount,
     renderBroadcastTxResult,
   } = props;
@@ -112,7 +119,8 @@ function DepositDialogBase(props: DepositDialogProps) {
       abortMission({
         totalAUST: totalAUST,
         allLiquidationBids: allLiquidationBids,
-        collaterals: collaterals,
+        allWithdrawableDefaultedCollaterals,
+        collateralsWithdrawAmount,
         borrowedValue: borrowedValue,
         uaUST: uaUST,
         txFee,
@@ -150,7 +158,8 @@ function DepositDialogBase(props: DepositDialogProps) {
       totalAUST: totalAUST,
       contractAddress: contractAddress,
       allLiquidationBids: allLiquidationBids,
-      collaterals: collaterals,
+      allWithdrawableDefaultedCollaterals,
+      collateralsWithdrawAmount,
       borrowedValue: borrowedValue,
       uaUST: uaUST
     })
@@ -215,9 +224,9 @@ function DepositDialogBase(props: DepositDialogProps) {
             <TxFeeListItem label="Collateral to withdraw">
               <Box sx={{display: "flex", flexDirection:"column", alignItems: "end"}} >
               {
-                collaterals.map((el, i) => 
+                collateralsWithdrawAmount.map((el, i) => 
                   <Box key={i}>
-                    <TokenIcon token={el.collateral?.symbol} /> {`${formatOutput(demicrofy(collateralsWithdrawAmount[i]))} ${el.collateral.symbol}`}
+                    <TokenIcon token={el.collateral.collateral?.symbol} /> {`${formatOutput(demicrofy(el.amount))} ${el.collateral.collateral.symbol}`}
                   </Box>
                 )
               }

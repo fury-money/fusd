@@ -58,6 +58,10 @@ function Component({ className }: BAssetMainProps) {
         {printCollateralCard("whale")}
          
         {printCollateralCard("luna")}
+         
+        {printCollateralCard("spectrum_lp")}
+         
+        {printCollateralCard("amp_lp")}
 
 
       <ul className="asset-list">
@@ -96,7 +100,7 @@ const StyledComponent = styled(Component)`
 
     > li {
       width: 330px;
-      height: 436px;
+      height: 358px;
     }
   }
 

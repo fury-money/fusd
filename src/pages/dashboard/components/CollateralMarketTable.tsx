@@ -5,7 +5,7 @@ import {
   formatUSTWithPostfixUnits,
   formatBAssetWithPostfixUnits,
 } from '@anchor-protocol/notation';
-import { TokenIcon } from '@anchor-protocol/token-icons';
+import { PossibleLpIcon, TokenIcon } from '@anchor-protocol/token-icons';
 import { bAsset } from '@anchor-protocol/types';
 import { demicrofy } from '@libs/formatter';
 import { HorizontalScrollTable } from '@libs/neumorphism-ui/components/HorizontalScrollTable';
@@ -79,9 +79,8 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
           <td>
             <div>
               <i>
-                <TokenIcon
-                  symbol={collateral.symbol}
-                  path={collateral.icon}
+                <PossibleLpIcon
+                  icon={collateral.icon}
                 />
               </i>
               <div>
@@ -154,6 +153,8 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
       <tbody>
         {printCollaterals("whale")}
         {printCollaterals("luna")}
+        {printCollaterals("spectrum_lp")}
+        {printCollaterals("amp_lp")}
         {printCollaterals("aLuna")}
       </tbody>
     </HorizontalScrollTable>

@@ -47,12 +47,6 @@ export interface DashboardProps {
 const EMPTY_ARRAY: any[] = [];
 
 function DashboardBase({ className }: DashboardProps) {
-  // TODO tests
-  let {contractAddress} = useAnchorWebapp();
-  let specDetails = useWrappedTokenDetails(contractAddress.lsds.spectrum_roar_luna_lp);
-  console.log(specDetails.data)
-  let ampDetails = useWrappedTokenDetails(contractAddress.lsds.amp_roar_luna_lp);
-  console.log("amp", ampDetails)
 
   const theme = useTheme();
 
@@ -734,12 +728,20 @@ const StyledDashboard = styled(DashboardBase)`
               height: 60px;
 
               margin-right: 15px;
-
+              display: flex;
+              align-items: center;
               svg,
               img {
                 display: block;
                 width: 60px;
                 height: 60px;
+              }
+            }
+
+            .lp_token{
+              svg, img {
+                width: 40px;
+                height: 40px;
               }
             }
 

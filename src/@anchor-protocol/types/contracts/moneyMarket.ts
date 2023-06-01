@@ -250,7 +250,7 @@ export namespace moneyMarket {
      * @see https://anchor-protocol.gitbook.io/anchor-2/smart-contracts/money-market/market#state
      */
     export interface State {
-      state: Record<string, never> & {
+      state: {
         blockHeight?: number
       };
     }

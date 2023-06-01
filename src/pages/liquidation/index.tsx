@@ -17,7 +17,7 @@ import big, { Big, BigSource } from 'big.js';
 import { microfyPrice } from 'utils/microfyPrice';
 import { useAllBidByUserByCollateralQuery } from '@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser';
 import { u, UST } from '@libs/types';
-import { TokenIcon } from '@anchor-protocol/token-icons';
+import { PossibleLpIcon, TokenIcon } from '@anchor-protocol/token-icons';
 import { demicrofy, formatOutput, useFormatters } from '@anchor-protocol/formatter';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { useAllLiquidationStats } from './components/useLiquidationGraph';
@@ -122,9 +122,8 @@ function Component({ className }: EarnProps) {
                     <tr key={collateral.collateral_token}>
                       <td>
                         <i>
-                          <TokenIcon
-                            symbol={collateral.symbol}
-                            path={collateral.icon}
+                          <PossibleLpIcon
+                            icon={collateral.icon}
                           />
                         </i>
                         <div>
@@ -239,6 +238,8 @@ function Component({ className }: EarnProps) {
                 {collateralCells("whale")}
                 {collateralCells("luna")}
                 {collateralCells("aLuna")}
+                {collateralCells("spectrum_lp")}
+                {collateralCells("amp_lp")}
               </tbody>
             </HorizontalScrollTable>
         </PaddingSection>
@@ -365,7 +366,8 @@ const StyledComponent = styled(Component)`
             i {
               width: 60px;
               height: 60px;
-
+              display: flex;
+              align-items: center;
               margin-right: 15px;
 
               svg,
@@ -373,6 +375,13 @@ const StyledComponent = styled(Component)`
                 display: block;
                 width: 60px;
                 height: 60px;
+              }
+            }
+
+            .lp_token{
+              svg, img {
+                width: 40px;
+                height: 40px;
               }
             }
 

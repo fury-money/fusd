@@ -30,6 +30,8 @@ import { useFeeEstimationFor } from '@libs/app-provider';
 import { useCollaterals } from 'pages/borrow/components/useCollaterals';
 import { useAllWithdrawDefaultedCollateral, useWithdrawDefaultedCollateral } from 'pages/liquidation/components/useWithdrawDefaultedCollateral';
 
+
+const MIN_FOR_ABORT = 1_000;
 export interface AbortMissionProps {
   className?: string;
 }
@@ -84,7 +86,6 @@ function AbortMissionBase({ className }: AbortMissionProps) {
     [allLiquidationBids],
   );
 
-
   const allWithdrawableDefaultedCollaterals = useAllWithdrawDefaultedCollateral();
   // ---------------------------------------------
   // dialogs
@@ -95,20 +96,35 @@ function AbortMissionBase({ className }: AbortMissionProps) {
     if(!allLiquidationBids || !overseerCollaterals?.collaterals){
       return;
     }
+
+    const collateralsWithdrawAmount = collaterals.map((collateral) => {
+      const liquidatedCollaterals = allWithdrawableDefaultedCollaterals
+      .find((other) => collateral.collateral.collateral_token == other.collateral.token)
+      ?.withdrawable_number ?? big(0) as u<Token<Big>>;
+      const providedCollaterals = collateral.lockedAmount;
+      return {
+        collateral,
+        amount: liquidatedCollaterals.add(providedCollaterals) as u<Token<Big>>
+      }
+    });
+
+    const withdrawableFromLiquidations = allWithdrawableDefaultedCollaterals.map(({collateral, withdrawable_number}) => {
+      const collateralInfo = collateralsWithdrawAmount.find((other) => other.collateral.collateral.collateral_token == collateral.token);
+      return ({
+        collateral: collateralInfo,
+        withdrawable_number
+      })
+    })
+
+
     await openAbortMissionDialog({
       totalDeposit,
       totalAUST: uaUST,
       allLiquidationBids,
       liquidationQueueValue: liquidationQueueValue as u<UST<Big>>,
       borrowedValue,
-      collaterals: collaterals,
-      collateralsWithdrawAmount: collaterals.map((collateral) => {
-        const liquidatedCollaterals = allWithdrawableDefaultedCollaterals
-        .find((other) => collateral.collateral.collateral_token == other.collateral.token)
-        ?.withdrawable_number ?? big(0) as u<Token<Big>>;
-        const providedCollaterals = collateral.lockedAmount;
-        return liquidatedCollaterals.add(providedCollaterals) as u<Token<Big>>
-      })
+      allWithdrawableDefaultedCollaterals:withdrawableFromLiquidations.filter(({withdrawable_number})=>withdrawable_number.gt(MIN_FOR_ABORT)),
+      collateralsWithdrawAmount: collateralsWithdrawAmount.filter(({amount}) => amount && amount.gt(MIN_FOR_ABORT))
     }
     );
   }, [openAbortMissionDialog, overseerCollaterals, allLiquidationBids, borrowedValue, uaUST, totalDeposit]);
@@ -144,7 +160,7 @@ function AbortMissionBase({ className }: AbortMissionProps) {
             </td>
             <td>
               <Grid container spacing={2}>
-              {allWithdrawableDefaultedCollaterals.map(({ collateral, withdrawable_number }, i) => (
+              {allWithdrawableDefaultedCollaterals.filter(({withdrawable_number})=>withdrawable_number.gt(MIN_FOR_ABORT)).map(({ collateral, withdrawable_number }, i) => (
                 <Grid item xs={6}
                   key={collateral?.info?.symbol}
                   style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}
@@ -161,7 +177,7 @@ function AbortMissionBase({ className }: AbortMissionProps) {
               {formatUSTWithPostfixUnits(demicrofy(totalCollateralValue))} axlUSDC              
               <Divider style={{borderColor: theme.textColor, margin: 10}} />
               <Grid container spacing={2}>
-              {collaterals.map(({ collateral, lockedAmount }, i) => (
+              {collaterals.filter(({lockedAmount})=>big(lockedAmount).gt(MIN_FOR_ABORT)).map(({ collateral, lockedAmount }, i) => (
                 <Grid item xs={6}
                   key={collateral.symbol}
                   style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}

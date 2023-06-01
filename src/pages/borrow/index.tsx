@@ -113,7 +113,8 @@ export const Borrow = styled(BorrowBase)`
             i {
               width: 60px;
               height: 60px;
-
+              display: flex;
+              align-items: center;
               margin-right: 15px;
 
               svg,
@@ -121,6 +122,13 @@ export const Borrow = styled(BorrowBase)`
                 display: block;
                 width: 60px;
                 height: 60px;
+              }
+            }
+
+            .lp_token{
+              svg, img {
+                width: 40px;
+                height: 40px;
               }
             }
 

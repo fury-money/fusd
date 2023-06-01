@@ -7,7 +7,7 @@ import {
   formatOutput,
   demicrofy,
 } from '@anchor-protocol/formatter';
-import { TokenIcon } from '@anchor-protocol/token-icons';
+import { PossibleLpIcon, TokenIcon } from '@anchor-protocol/token-icons';
 import { bAsset, u, UST } from '@anchor-protocol/types';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { HorizontalScrollTable } from '@libs/neumorphism-ui/components/HorizontalScrollTable';
@@ -138,10 +138,7 @@ export function CollateralList(props: UIElementProps) {
               <tr key={collateral.collateral_token}>
                 <td>
                   <i>
-                    <TokenIcon
-                      symbol={collateral.symbol}
-                      path={collateral.icon}
-                    />
+                  <PossibleLpIcon icon={collateral.icon} />
                   </i>
                   <div>
                     <div className="coin">

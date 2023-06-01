@@ -75,8 +75,8 @@ export enum RegisteredLSDs {
   stLuna = "stLuna",
   ampWhale = "ampWhale",
   bWhale = "bWhale",
-  spectrum_usdc_luna_lp = "spectrum_usdc_luna_lp",
-  amp_usdc_luna_lp = "amp_usdc_luna_lp",
+  "Spec Usdc Luna Lp" = "Spec Usdc Luna Lp",
+  "Eris Usdc Luna Lp" = "Eris Usdc Luna Lp",
 }
 
 const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
@@ -249,13 +249,25 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
       custody:
         "terra1vmr33lncm0jhkm9gfj8824ahk50asysjgzt3ex7e94clecss8nzqftzzv2",
     },
-    amp_usdc_luna_lp: {
+    "Eris Usdc Luna Lp": {
       info: {
         amp_lp: {
           token:
             "terra1as76h247wvey3aqmw22mlkq8g6vj8zj7qw4wywwn388s2mjt0rtqpp570z",
           hub: "terra1xskgvsew6u6nmfwv2mc58m4hscr77xw884x65fuxup8ewvvvuyysr5k3lj",
         },
+        protocol: "Eris Protocol",
+        symbol: "Eris Usdc Luna Lp",
+        name: "LUNA-axlUSDC AmpLP",
+        icon: {
+          protocol_icon: "https://www.erisprotocol.com/assets/logo_eris_48.svg",
+          "asset1":"https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/Luna.svg",
+          "asset2":"https://www.erisprotocol.com/assets/tokens/usdc.svg"
+        },
+        link: "https://www.erisprotocol.com/terra/amp-compounder",
+        underlyingToken:
+          "terra1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7qke04hl",
+        underlyingName: "astroport-luna-axlUSDC",
       },
       type: "amp_lp",
       hub: "terra12w3e2wku288w3dz9w4h0m46g8qc27hfmawnea0v7ulncvramrvwq85fxr5",
@@ -265,7 +277,7 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
       custody:
         "terra1cyj8eyuzwfjgdf77mp3ev5fhq8mqqxdq88u4qr8exszawp3t93usjsrm87",
     },
-    spectrum_usdc_luna_lp: {
+    "Spec Usdc Luna Lp": {
       info: {
         spectrum_lp: {
           token:
@@ -277,6 +289,18 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
           underlyingPair:
             "terra1fd68ah02gr2y8ze7tm9te7m70zlmc7vjyyhs6xlhsdmqqcjud4dql4wpxr",
         },
+        protocol: "Spectrum Protocol",
+        symbol: "Spec Usdc Luna Lp",
+        name: "Spectrum axlUSDC-LUNA Farm",
+        icon: {
+          protocol_icon: "https://terra.spec.finance//assets/spec_logo.svg",
+          "asset1":"https://raw.githubusercontent.com/terra-money/assets/master/icon/svg/Luna.svg",
+          "asset2":"https://www.erisprotocol.com/assets/tokens/usdc.svg"
+        },
+        link: "https://terra.spec.finance/vaults",
+        underlyingToken:
+          "terra1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7qke04hl",
+        underlyingName: "astroport-luna-axlUSDC",
       },
       type: "spectrum_lp",
       hub: "terra1vt0f0w39766djgmfzvecut6fwqm9swvmsym57rddyvcg5vxxz69qtd7fmn",

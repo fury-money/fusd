@@ -51,12 +51,18 @@ import ampWhale2x from './assets/ampWhale@2x.png';
 import ampWhale3x from './assets/ampWhale@3x.png';
 import ampWhale4x from './assets/ampWhale@4x.png';
 
+
+import astroportLunaUSDC from "./assets/axlUSDC-LUNA.svg";
+import spec from "./assets/spec.svg"
+import amp from "./assets/eris.svg"
+
 import { RegisteredLSDs } from 'env';
+import { IconObject } from 'queries';
 
 type RegisteredLSDsValues =`${RegisteredLSDs}`
-export const lsds = Object.values(RegisteredLSDs).map((v)=> RegisteredLSDs[v]);
+export const lsds = Object.values(RegisteredLSDs);  
 
-export const tokens = ['ust', 'aust', 'luna', "whale", 'aluna', 'aLuna', 'wampLuna'] as const;
+export const tokens = ['ust', 'aust', 'luna', "whale", 'aluna', 'aLuna', 'wampLuna',"Spec Usdc Luna Lp", "Eris Usdc Luna Lp", "astroport-luna-axlUSDC"] as const;
 export const variants = ['svg', '@2x', '@3x', '@4x'] as const;
 
 export type Tokens = typeof tokens[number] | RegisteredLSDsValues;
@@ -142,6 +148,24 @@ export const tokenImages: Record<Tokens, Record<IconVariant, TokenImage>> = {
     '@2x': convert(bWhale2x),
     '@3x': convert(bWhale3x),
     '@4x': convert(bWhale4x),
+  },
+  "Spec Usdc Luna Lp":{
+    'svg': convert(spec),
+    '@2x': convert(spec),
+    '@3x': convert(spec),
+    '@4x': convert(spec),
+  },
+  "Eris Usdc Luna Lp":{
+    'svg': convert(amp),
+    '@2x': convert(amp),
+    '@3x': convert(amp),
+    '@4x': convert(amp),
+  },
+  "astroport-luna-axlUSDC":{
+    'svg': convert(astroportLunaUSDC),
+    '@2x': convert(astroportLunaUSDC),
+    '@3x': convert(astroportLunaUSDC),
+    '@4x': convert(astroportLunaUSDC),
   }
 };
 
@@ -193,3 +217,42 @@ export const GifIcon = styled.img`
   width: 1em;
   height: 1em;
 `;
+
+
+export interface PossibleLPIconProps
+  extends Omit<Omit<
+    DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
+    'src'>, "ref"
+  > {
+  icon: IconObject |undefined;
+}
+
+export function PossibleLpIcon({icon, ...elProps}: PossibleLPIconProps){
+  return <>{
+      icon && (typeof(icon) == "string") &&
+      <TokenIcon
+        path={icon}
+        {...elProps}
+      />
+    }
+    {
+      icon && (typeof(icon) != "string") &&
+      <span className="lp_token" {...elProps} style={{display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <TokenIcon
+            path={icon.protocol_icon}
+          />
+      <span>
+      </span>
+      <span style={{display: "flex", flexDirection: "row", gap: "-10px"}} >
+        <TokenIcon
+        style={{marginRight: "-13px"}}
+          path={icon.asset1}
+        />
+        <TokenIcon
+          path={icon.asset2}
+        />
+      </span>
+    </span>
+  }
+    </>
+}
