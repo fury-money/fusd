@@ -1,7 +1,4 @@
-import {
-  AnchorContractAddress,
-  LSDContracts,
-} from "@anchor-protocol/app-provider";
+import { AnchorContractAddress } from "@anchor-protocol/app-provider";
 import { LSDLiquidationBidsResponse } from "@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser";
 import {
   formatAUSTWithPostfixUnits,
@@ -14,10 +11,7 @@ import {
   HumanAddr,
   Rate,
   u,
-  NativeDenom,
-  Luna,
   Token,
-  CW20Addr,
 } from "@anchor-protocol/types";
 import {
   pickAttributeValue,
@@ -52,24 +46,27 @@ import { Observable } from "rxjs";
 import { getLiquidationWithdrawCollateralMsg } from "../liquidate/collateral";
 import _ from "lodash";
 import { Big } from "big.js";
-import { DeepPartial } from "chart.js/types/utils";
+import { WithdrawableBids } from "pages/liquidation/components/useWithdrawDefaultedCollateral";
 
-export interface AbortMissionMessagesParams {
+export interface AbortMissionCollaterals {
+  allWithdrawableDefaultedCollaterals: ({
+    collateral: CollateralInfo | undefined;
+  } & WithdrawableBids)[];
+  collateralsWithdrawAmount: {
+    collateral: CollateralInfo | undefined;
+    amount: u<Token<Big>>;
+  }[];
+}
+
+export type AbortMissionMessagesParams = {
   walletAddr: HumanAddr;
   totalAUST: u<aUST>;
   contractAddress: AnchorContractAddress;
   allLiquidationBids: LSDLiquidationBidsResponse;
-  allWithdrawableDefaultedCollaterals: {
-    collateral: CollateralInfo;
-    withdrawable_number: u<Luna<Big>>;
-  }[];
-  collateralsWithdrawAmount: {
-    collateral: CollateralInfo;
-    amount: u<Token<Big>>;
-  }[];
+
   borrowedValue: u<UST<Big>>;
   uaUST: u<aUST<string>>;
-}
+} & AbortMissionCollaterals;
 
 export function getAbortMissionMessages({
   walletAddr,
@@ -115,19 +112,15 @@ export function getAbortMissionMessages({
     .flat();
 
   const collateralLiquidationMsgs = allWithdrawableDefaultedCollaterals
-    .map(({ collateral, withdrawable_number }) =>
+    .map(({ collateral, withdrawableLSD, withdrawableUnderlying }) =>
       getLiquidationWithdrawCollateralMsg({
         walletAddr,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
-        collateralToken:
-          collateral && "info" in collateral.collateral
-            ? (collateral.collateral.info.token as CW20Addr)
-            : collateral.collateral.collateral_token,
-        tokenWrapperAddr:
-          collateral && "info" in collateral.collateral
-            ? collateral.collateral.collateral_token
-            : undefined,
+        collateral,
+        withdrawLpAssets: true,
+        withdrawableLSD,
+        withdrawableUnderlying,
       })
     )
     .flat();
@@ -155,8 +148,8 @@ export function getAbortMissionMessages({
       // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/overseer/src/msg.rs#L78
       unlock_collateral: {
         collaterals: collateralsWithdrawAmount.map(({ collateral }) => [
-          collateral.collateral.collateral_token,
-          collateral.rawLockedAmount,
+          collateral?.collateral.collateral_token,
+          collateral?.rawLockedAmount,
         ]),
       },
     }
@@ -164,7 +157,7 @@ export function getAbortMissionMessages({
 
   const withdrawCollateralMsgs = collateralsWithdrawAmount
     .map(({ collateral }) => {
-      if (!collateral.rawLockedAmount || collateral.rawLockedAmount == "0") {
+      if (!collateral?.rawLockedAmount || collateral?.rawLockedAmount == "0") {
         return [];
       }
       return _.compact([
@@ -210,31 +203,25 @@ export function getAbortMissionMessages({
   );
 }
 
-export function abortMissionTx($: {
-  walletAddr: HumanAddr;
-  totalAUST: u<aUST>;
-  contractAddress: AnchorContractAddress;
-  allLiquidationBids: LSDLiquidationBidsResponse;
-  allWithdrawableDefaultedCollaterals: {
-    collateral: CollateralInfo;
-    withdrawable_number: u<Luna<Big>>;
-  }[];
-  collateralsWithdrawAmount: {
-    collateral: CollateralInfo;
-    amount: u<Token<Big>>;
-  }[];
-  borrowedValue: u<UST<Big>>;
-  uaUST: u<aUST<string>>;
+export function abortMissionTx(
+  $: {
+    walletAddr: HumanAddr;
+    totalAUST: u<aUST>;
+    contractAddress: AnchorContractAddress;
+    allLiquidationBids: LSDLiquidationBidsResponse;
+    borrowedValue: u<UST<Big>>;
+    uaUST: u<aUST<string>>;
 
-  gasFee: Gas;
-  gasAdjustment: Rate<number>;
-  txFee: u<UST>;
-  network: NetworkInfo;
-  queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
-  txErrorReporter?: (error: unknown) => string;
-  onTxSucceed?: () => void;
-}): Observable<TxResultRendering> {
+    gasFee: Gas;
+    gasAdjustment: Rate<number>;
+    txFee: u<UST>;
+    network: NetworkInfo;
+    queryClient: QueryClient;
+    post: (tx: CreateTxOptions) => Promise<TxResult>;
+    txErrorReporter?: (error: unknown) => string;
+    onTxSucceed?: () => void;
+  } & AbortMissionCollaterals
+): Observable<TxResultRendering> {
   const helper = new TxHelper($);
 
   return pipe(

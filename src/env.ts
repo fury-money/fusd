@@ -255,6 +255,10 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
           token:
             "terra1as76h247wvey3aqmw22mlkq8g6vj8zj7qw4wywwn388s2mjt0rtqpp570z",
           hub: "terra1xskgvsew6u6nmfwv2mc58m4hscr77xw884x65fuxup8ewvvvuyysr5k3lj",
+          underlyingToken:
+            "terra1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7qke04hl",
+          underlyingPair:
+            "terra1fd68ah02gr2y8ze7tm9te7m70zlmc7vjyyhs6xlhsdmqqcjud4dql4wpxr",
         },
         protocol: "Eris Protocol",
         symbol: "Eris Usdc Luna Lp",

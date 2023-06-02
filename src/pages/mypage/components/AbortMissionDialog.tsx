@@ -30,29 +30,24 @@ import { LSDLiquidationBidsResponse } from '@anchor-protocol/app-provider/querie
 import { useAbortMissionTx } from '@anchor-protocol/app-provider/tx/abortMission/abortMission';
 import { CollateralInfo } from "pages/borrow/components/useCollaterals";
 import { TokenIcon } from '@anchor-protocol/token-icons';
-import { getAbortMissionMessages } from '@anchor-protocol/app-fns';
+import { AbortMissionCollaterals, getAbortMissionMessages } from '@anchor-protocol/app-fns';
 import { DeepPartial } from '@terra-money/terra.proto/cosmwasm/wasm/v1/types';
+import { WithdrawableBids } from 'pages/liquidation/components/useWithdrawDefaultedCollateral';
 
 
 export type BroadcastTxStreamResult<T = unknown> =
   | StreamInProgress<TxResultRendering<T>>
   | StreamDone<TxResultRendering<T>>;
 
-export interface AbortMissionParams {
+
+
+export type AbortMissionParams = {
   totalDeposit: u<UST<Big>>,
   totalAUST: u<aUST>, 
   allLiquidationBids: LSDLiquidationBidsResponse,
   liquidationQueueValue: u<UST<Big>>,
   borrowedValue: u<UST<Big>>,
-  allWithdrawableDefaultedCollaterals:{
-    collateral: CollateralInfo,
-    withdrawable_number: u<Luna<Big>>
-  }[],
-  collateralsWithdrawAmount: {
-    collateral: CollateralInfo,
-    amount: u<Token<Big>>
-  }[]
-}
+} & AbortMissionCollaterals;
 
 interface DepositDialogParams extends UIElementProps, AbortMissionParams {}
 
@@ -226,7 +221,7 @@ function DepositDialogBase(props: DepositDialogProps) {
               {
                 collateralsWithdrawAmount.map((el, i) => 
                   <Box key={i}>
-                    <TokenIcon token={el.collateral.collateral?.symbol} /> {`${formatOutput(demicrofy(el.amount))} ${el.collateral.collateral.symbol}`}
+                    <TokenIcon token={el.collateral?.collateral?.symbol} /> {`${formatOutput(demicrofy(el.amount))} ${el.collateral?.collateral.symbol}`}
                   </Box>
                 )
               }

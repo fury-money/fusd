@@ -17,7 +17,6 @@ import Big from 'big.js';
 import { UIElementProps } from 'components/layouts/UIElementProps';
 import { WhitelistCollateral } from 'queries';
 import React, { useMemo } from 'react';
-import big from "big.js";
 import { useCollaterals } from 'pages/borrow/components/useCollaterals';
 
 interface CollateralMarketTableProps extends UIElementProps {
@@ -47,7 +46,7 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
       }
       const type = additionalInfo?.info?.type ?? "aLuna";
 
-      const exchangeRate = parseFloat(additionalInfo?.additionalInfo?.hubState?.exchange_rate ?? "1");
+      const exchangeRate = parseFloat(additionalInfo?.priceInfo?.hubState?.exchange_rate ?? "1");
 
       const price = parseFloat(collateral.price) as UST<number>;
 

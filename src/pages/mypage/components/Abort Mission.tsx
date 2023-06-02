@@ -1,34 +1,26 @@
 import { formatBAssetWithPostfixUnits, formatUSTWithPostfixUnits } from '@anchor-protocol/notation';
 import { TokenIcon } from '@anchor-protocol/token-icons';
-import { computeTotalDeposit, vectorizeOraclePrices, vectorizeOverseerCollaterals } from '@anchor-protocol/app-fns';
-import { useBidByUserByCollateralQuery, useBorrowBorrowerQuery, useBorrowMarketQuery, useEarnEpochStatesQuery } from '@anchor-protocol/app-provider';
-import { demicrofy, formatRate } from '@libs/formatter';
+import { computeTotalDeposit } from '@anchor-protocol/app-fns';
+import { useBorrowBorrowerQuery, useEarnEpochStatesQuery } from '@anchor-protocol/app-provider';
+import { demicrofy } from '@libs/formatter';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
-import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { HorizontalScrollTable } from '@libs/neumorphism-ui/components/HorizontalScrollTable';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { fixHMR } from 'fix-hmr';
 import { useAccount } from 'contexts/account';
-import { useDepositDialog } from 'pages/earn/components/useDepositDialog';
-import { useWithdrawDialog } from 'pages/earn/components/useWithdrawDialog';
-import { EmptySection } from 'pages/mypage/components/EmptySection';
 import React, { useCallback, useMemo } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useBalances } from 'contexts/balances';
 import big, { Big, BigSource } from 'big.js';
-import { useDepositApy } from 'hooks/useDepositApy';
 import { useBorrowOverviewData } from 'pages/borrow/logics/useBorrowOverviewData';
-import { sum, vectorMultiply } from '@libs/big-math';
-import { Luna, Rate, Token, u, UST } from '@libs/types';
+import { sum, } from '@libs/big-math';
+import { Token, u, UST } from '@libs/types';
 import { bAsset } from '@anchor-protocol/types';
-import { CollateralItem } from './TotalCollateralValue';
-import { useLSDCollateralQuery } from '@anchor-protocol/app-provider/queries/borrow/useLSDCollateralQuery';
 import { Divider, Grid } from '@mui/material';
 import { useAllBidByUserByCollateralQuery } from '@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser';
 import { useAbortMissionDialog } from './AbortMissionDialog';
-import { useFeeEstimationFor } from '@libs/app-provider';
 import { useCollaterals } from 'pages/borrow/components/useCollaterals';
-import { useAllWithdrawDefaultedCollateral, useWithdrawDefaultedCollateral } from 'pages/liquidation/components/useWithdrawDefaultedCollateral';
+import { useAllWithdrawDefaultedCollateral } from 'pages/liquidation/components/useWithdrawDefaultedCollateral';
 
 
 const MIN_FOR_ABORT = 1_000;
@@ -40,17 +32,14 @@ function AbortMissionBase({ className }: AbortMissionProps) {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
-  const { connected, terraWalletAddress } = useAccount();
+  const { connected } = useAccount();
 
-  const { data: { oraclePrices, overseerWhitelist } = {} } =
-    useBorrowMarketQuery();
 
   const { data: {overseerCollaterals} = {} } = useBorrowBorrowerQuery();
 
   const { borrowedValue } =
     useBorrowOverviewData();
 
-  const additionalLSDInfo = useLSDCollateralQuery(); 
   // ---------------------------------------------
   // queries
   // ---------------------------------------------
@@ -99,22 +88,14 @@ function AbortMissionBase({ className }: AbortMissionProps) {
 
     const collateralsWithdrawAmount = collaterals.map((collateral) => {
       const liquidatedCollaterals = allWithdrawableDefaultedCollaterals
-      .find((other) => collateral.collateral.collateral_token == other.collateral.token)
-      ?.withdrawable_number ?? big(0) as u<Token<Big>>;
+      .find(({collateral: other}) => collateral.collateral.collateral_token == other?.collateral.collateral_token)
+      ?.withdrawableWrapper ?? big(0) as u<Token<Big>>;
       const providedCollaterals = collateral.lockedAmount;
       return {
         collateral,
         amount: liquidatedCollaterals.add(providedCollaterals) as u<Token<Big>>
       }
     });
-
-    const withdrawableFromLiquidations = allWithdrawableDefaultedCollaterals.map(({collateral, withdrawable_number}) => {
-      const collateralInfo = collateralsWithdrawAmount.find((other) => other.collateral.collateral.collateral_token == collateral.token);
-      return ({
-        collateral: collateralInfo,
-        withdrawable_number
-      })
-    })
 
 
     await openAbortMissionDialog({
@@ -123,7 +104,7 @@ function AbortMissionBase({ className }: AbortMissionProps) {
       allLiquidationBids,
       liquidationQueueValue: liquidationQueueValue as u<UST<Big>>,
       borrowedValue,
-      allWithdrawableDefaultedCollaterals:withdrawableFromLiquidations.filter(({withdrawable_number})=>withdrawable_number.gt(MIN_FOR_ABORT)),
+      allWithdrawableDefaultedCollaterals:allWithdrawableDefaultedCollaterals.filter(({withdrawableWrapper})=>withdrawableWrapper.gt(MIN_FOR_ABORT)),
       collateralsWithdrawAmount: collateralsWithdrawAmount.filter(({amount}) => amount && amount.gt(MIN_FOR_ABORT))
     }
     );
@@ -160,12 +141,12 @@ function AbortMissionBase({ className }: AbortMissionProps) {
             </td>
             <td>
               <Grid container spacing={2}>
-              {allWithdrawableDefaultedCollaterals.filter(({withdrawable_number})=>withdrawable_number.gt(MIN_FOR_ABORT)).map(({ collateral, withdrawable_number }, i) => (
+              {allWithdrawableDefaultedCollaterals.filter(({withdrawableLSD})=>withdrawableLSD.gt(MIN_FOR_ABORT)).map(({ collateral, withdrawableLSD }, i) => (
                 <Grid item xs={6}
-                  key={collateral?.info?.symbol}
+                  key={collateral?.collateral.symbol}
                   style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}
                 >
-                   <TokenIcon token={collateral?.info?.symbol} variant="@4x"/> {formatBAssetWithPostfixUnits(demicrofy(withdrawable_number))} 
+                   <TokenIcon token={collateral?.collateral.symbol} variant="@4x"/> {formatBAssetWithPostfixUnits(demicrofy(withdrawableLSD) as bAsset<Big>)} 
                 </Grid>
               ))}
               </Grid>            

@@ -11,8 +11,8 @@ import { EarnProps } from 'pages/earn';
 import { PlaceBidSection } from './components/PlaceBidSection';
 import { MyBidsSection } from './components/MyBidsSection';
 import { useParams } from 'react-router-dom';
-import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
 import { LiquidationQueueHistory } from './components/LiquidationQueueHistory';
+import { CollateralInfo, useCollaterals } from 'pages/borrow/components/useCollaterals';
 
 export interface LiquidationProps {
   className?: string;
@@ -23,25 +23,25 @@ function Component({ className }: EarnProps) {
 
   let {tokenSymbol} = useParams();
 
-  const { data: whitelist } = useWhitelistCollateralQuery();
+  const collaterals = useCollaterals();
 
   const collateral= useMemo(()=>{
 
-    let foundWhitelist: WhitelistCollateral | undefined = whitelist
-      ?.find((collateral) => collateral.symbol === tokenSymbol || ("info" in collateral && collateral.info.info.symbol == tokenSymbol))
+    let foundWhitelist: CollateralInfo | undefined = collaterals
+      ?.find(({collateral}) => collateral.symbol === tokenSymbol || ("info" in collateral && collateral.info.info.symbol == tokenSymbol))
 
     if(!foundWhitelist){
-      foundWhitelist = whitelist
-      ?.find((collateral) => collateral.symbol == "aLuna");
+      foundWhitelist = collaterals
+      ?.find(({collateral}) => collateral.symbol == "aLuna");
     }
 
     if(foundWhitelist){
-       foundWhitelist.symbol = ("info" in foundWhitelist) ? foundWhitelist.info.info.symbol : foundWhitelist?.symbol
+       foundWhitelist.collateral.symbol = ("info" in foundWhitelist.collateral) ? foundWhitelist.collateral.info.info.symbol : foundWhitelist.collateral.symbol
     }    
 
     return foundWhitelist 
 
-  }, [whitelist, tokenSymbol])
+  }, [collaterals, tokenSymbol])
 
   return (
     <CenteredLayout className={className} maxWidth={2000}>
@@ -57,16 +57,16 @@ function Component({ className }: EarnProps) {
         <LiquidationQueueSection
           className="liquidation-graph"
           setClickedBar={setClickedBar}
-          collateral={collateral}
+          collateral={collateral?.collateral}
         />
         <LiquidationStatsSection className="liquidation-stats" 
-          collateral={collateral}
+          collateral={collateral?.collateral}
           />
         <MyBidsSection className="my-bids"
-          collateral={collateral}
+          collateral={collateral?.collateral}
           />
         <LiquidationQueueHistory className="liquidation-queue-chart"
-          collateral={collateral}
+          collateral={collateral?.collateral}
           />
       </section>
     </CenteredLayout>

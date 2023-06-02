@@ -7,6 +7,7 @@ import {
   u,
   CW20Addr,
   Luna,
+  Token,
 } from "@anchor-protocol/types";
 import {
   pickAttributeValue,
@@ -21,6 +22,7 @@ import {
   _pollTxInfo,
   _postTx,
   TxHelper,
+  createHookMsg,
 } from "@libs/app-fns/tx/internal";
 import { floor } from "@libs/big-math";
 import { demicrofy } from "@libs/formatter";
@@ -34,44 +36,130 @@ import {
 import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
 import { Observable } from "rxjs";
 import _ from "lodash";
+import { CollateralInfo } from "pages/borrow/components/useCollaterals";
+import Big from "big.js";
 
 export interface LiquidationWithdrawCollateralMsgArgs {
   walletAddr: HumanAddr;
   liquidationQueueAddr: HumanAddr;
-  collateralToken: CW20Addr;
-  tokenWrapperAddr: CW20Addr | undefined;
+  collateral: CollateralInfo | undefined;
+  withdrawLpAssets: boolean;
+  withdrawableLSD: u<Token<Big>>;
+  withdrawableUnderlying: u<Token<Big>>;
 }
 
 export function getLiquidationWithdrawCollateralMsg({
   walletAddr,
   liquidationQueueAddr,
-  collateralToken,
-  tokenWrapperAddr,
+  collateral,
+  withdrawLpAssets,
+  withdrawableLSD,
+  withdrawableUnderlying,
 }: LiquidationWithdrawCollateralMsgArgs) {
-  return _.compact([
-    // First message to withdraw the token from the liquidation queue
-    new MsgExecuteContract(walletAddr, liquidationQueueAddr, {
-      // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L65
-      claim_liquidations: {
-        collateral_token: collateralToken,
-      },
-    }),
-    // Second message to swap back to the LSD token
-    tokenWrapperAddr
-      ? new MsgExecuteContract(walletAddr, tokenWrapperAddr, {
-          burn_all: {},
-        })
-      : undefined,
-  ]);
+  const tokenWrapperAddr =
+    collateral && "info" in collateral.collateral
+      ? collateral.collateral.collateral_token
+      : undefined;
+  const collateralToken = collateral?.collateral.collateral_token;
+
+  /// In case we want to withdraw LP assets, we need to add the following message :
+  let withdrawLpMsgs;
+  if (
+    withdrawLpAssets &&
+    collateral &&
+    "info" in collateral.collateral &&
+    collateral.collateral.info.info.spectrum_lp
+  ) {
+    // In the case of a spectrum LP
+    withdrawLpMsgs = [
+      new MsgExecuteContract(
+        walletAddr,
+        collateral.collateral.info.info.spectrum_lp.token,
+        {
+          unbond: {
+            amount: withdrawableUnderlying.toString(),
+          },
+        }
+      ),
+      new MsgExecuteContract(
+        walletAddr,
+        collateral.collateral.info.info.spectrum_lp.underlyingToken,
+        {
+          send: {
+            contract:
+              collateral.collateral.info.info.spectrum_lp.underlyingPair,
+            amount: withdrawableUnderlying.toString(),
+            msg: createHookMsg({
+              withdraw_liquidity: { assets: [] },
+            }),
+          },
+        }
+      ),
+    ];
+  } else if (
+    withdrawLpAssets &&
+    collateral &&
+    "info" in collateral.collateral &&
+    collateral.collateral.info.info.amp_lp
+  ) {
+    // In the case of a spectrum LP
+    withdrawLpMsgs = [
+      new MsgExecuteContract(
+        walletAddr,
+        collateral.collateral.info.info.amp_lp.token,
+        {
+          send: {
+            contract: collateral.collateral.info.info.amp_lp.hub,
+            amount: withdrawableLSD.toString(),
+            msg: createHookMsg({
+              unbond: {},
+            }),
+          },
+        }
+      ),
+      new MsgExecuteContract(
+        walletAddr,
+        collateral.collateral.info.info.amp_lp.underlyingToken,
+        {
+          send: {
+            contract: collateral.collateral.info.info.amp_lp.underlyingPair,
+            amount: withdrawableUnderlying.toString(),
+            msg: createHookMsg({
+              withdraw_liquidity: { assets: [] },
+            }),
+          },
+        }
+      ),
+    ];
+  }
+  return _.compact(
+    [
+      // First message to withdraw the token from the liquidation queue
+      new MsgExecuteContract(walletAddr, liquidationQueueAddr, {
+        // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/market/src/msg.rs#L65
+        claim_liquidations: {
+          collateral_token: collateralToken,
+        },
+      }),
+      // Second message to swap back to the LSD token
+      tokenWrapperAddr
+        ? new MsgExecuteContract(walletAddr, tokenWrapperAddr, {
+            burn_all: {},
+          })
+        : undefined,
+    ].concat(withdrawLpMsgs)
+  );
 }
 
 export function liquidationWithdrawCollateralTx($: {
   walletAddr: HumanAddr;
   liquidationQueueAddr: HumanAddr;
 
-  collateralAddr: CW20Addr;
+  collateral: CollateralInfo | undefined;
+  withdrawableLSD: u<Token<Big>>;
+  withdrawableUnderlying: u<Token<Big>>;
 
-  tokenWrapperAddr: CW20Addr | undefined;
+  withdrawLpAssets: boolean;
 
   gasFee: Gas;
   gasAdjustment: Rate<number>;
@@ -88,8 +176,10 @@ export function liquidationWithdrawCollateralTx($: {
       msgs: getLiquidationWithdrawCollateralMsg({
         walletAddr: $.walletAddr,
         liquidationQueueAddr: $.liquidationQueueAddr,
-        collateralToken: $.collateralAddr,
-        tokenWrapperAddr: $.tokenWrapperAddr,
+        withdrawLpAssets: $.withdrawLpAssets,
+        collateral: $.collateral,
+        withdrawableLSD: $.withdrawableLSD,
+        withdrawableUnderlying: $.withdrawableUnderlying,
       }),
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,

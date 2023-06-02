@@ -14,23 +14,6 @@ interface CollateralWrapperTokenInfoWasmQuery {
   tokenInfo: WasmQuery<cw20.TokenInfo, WrapperTokenInfoResponse>;
 }
 
-interface AmpLpState {
-  state: {
-    addr?: string;
-  };
-}
-interface AmpLpStateResponse {
-  total_lp: string;
-  total_amp_lp: string;
-  exchange_rate: Rate;
-
-  pair_contract: String;
-  locked_assets: any[];
-  user_info: any;
-}
-interface AmpLpStateWasmQuery {
-  state: WasmQuery<AmpLpState, AmpLpStateResponse>;
-}
 interface CW20BalanceWasmQuery {
   tokenBalance: WasmQuery<cw20.Balance, cw20.BalanceResponse<Token>>;
 }
@@ -92,4 +75,46 @@ export async function getAmpLPExchangeRate(
       ).toString() as Rate<string>,
     },
   };
+}
+
+interface AmpLpState {
+  state: {
+    addr?: string;
+  };
+}
+interface AmpLpStateResponse {
+  total_lp: string;
+  total_amp_lp: string;
+  exchange_rate: Rate;
+
+  pair_contract: String;
+  locked_assets: any[];
+  user_info: any;
+}
+interface AmpLpStateWasmQuery {
+  state: WasmQuery<AmpLpState, AmpLpStateResponse>;
+}
+
+export async function getAmpLPLSDExchangeRate(
+  queryClient: QueryClient,
+  lsd: LSDContracts,
+  oracle: HumanAddr
+) {
+  if (!lsd.info.amp_lp) {
+    throw "Expected a amp_lp like collateral token here";
+  } // We need
+  const ampLPStateResponse = await wasmFetch<AmpLpStateWasmQuery>({
+    ...queryClient,
+    id: `cw20--amp-state-info=${lsd.token}`,
+    wasmQuery: {
+      state: {
+        contractAddress: lsd.info.amp_lp.hub,
+        query: {
+          state: {},
+        },
+      },
+    },
+  });
+
+  return ampLPStateResponse.state.exchange_rate;
 }

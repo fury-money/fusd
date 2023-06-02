@@ -69,7 +69,7 @@ export function borrowBorrowTx($: {
         }),
       ],
       // FIXME borrow's txFee is fixed_gas
-      fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
+      fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
     }),
     _postTx({ helper, ...$ }),

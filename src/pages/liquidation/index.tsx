@@ -81,7 +81,7 @@ function Component({ className }: EarnProps) {
         const liquidationStats = globalLiquidationStats?.find(
           (c) => c.info?.token === collateral.collateral_token
         );
-      const exchangeRate = parseFloat(additionalInfo?.additionalInfo?.hubState?.exchange_rate ?? "1");
+      const exchangeRate = parseFloat(additionalInfo?.priceInfo?.hubState?.exchange_rate ?? "1");
 
       // We exchange the token values with the one in memory for LSD
       if(additionalInfo?.info?.info?.symbol){

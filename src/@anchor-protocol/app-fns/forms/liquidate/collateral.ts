@@ -3,11 +3,13 @@ import { EstimatedFee } from "@libs/app-provider";
 import { FormReturn } from "@libs/use-form";
 import big from "big.js";
 
-export interface LiquidationWithdrawCollateralFormInput {}
+export interface LiquidationWithdrawCollateralFormInput {
+  estimatedFee: EstimatedFee | undefined;
+  withdrawLpAssets: boolean;
+}
 
 export interface LiquidationWithdrawCollateralFormDependency {
   userULunaBalance: u<UST>;
-  fixedGas: EstimatedFee | undefined;
   isConnected: boolean;
 }
 
@@ -23,16 +25,18 @@ export interface LiquidationWithdrawCollateralFormAsyncStates {}
 
 export const liquidationWithdrawCollateralForm =
   ({
-    fixedGas,
     userULunaBalance,
     isConnected,
   }: LiquidationWithdrawCollateralFormDependency) =>
-  (): FormReturn<
+  ({
+    estimatedFee,
+    withdrawLpAssets,
+  }: LiquidationWithdrawCollateralFormInput): FormReturn<
     LiquidationWithdrawCollateralFormStates,
     LiquidationWithdrawCollateralFormAsyncStates
   > => {
     // txFee
-    const txFee = fixedGas?.txFee;
+    const txFee = estimatedFee?.txFee;
 
     // invalidTxFee
     const invalidTxFee = (() => {
@@ -58,17 +62,19 @@ export const liquidationWithdrawCollateralForm =
       if (!isConnected || !!invalidDepositAmount) {
         return undefined;
       }
-      return big(userULunaBalance).lt(big(fixedGas?.txFee ?? 0).mul(2))
+      return big(userULunaBalance).lt(big(estimatedFee?.txFee ?? 0).mul(2))
         ? `You don't have enough gas to pay for the transaction`
         : undefined;
     })();
 
     return [
       {
-        txFee: fixedGas,
+        txFee: estimatedFee,
+        estimatedFee,
         invalidTxFee,
         invalidNextTxFee,
         availablePost: isConnected && !invalidTxFee && !invalidDepositAmount,
+        withdrawLpAssets,
       },
       undefined,
     ];

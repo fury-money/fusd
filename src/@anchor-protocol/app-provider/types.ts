@@ -90,13 +90,14 @@ export interface LSDContracts {
       token: string;
       generator: string;
       underlyingToken: string;
-      // We also need more info for decompounding (optional in the frontend)
       underlyingPair: string;
     };
     amp_lp?: {
       // For getting the exchange rate
       token: string;
       hub: string;
+      underlyingToken: string;
+      underlyingPair: string;
     };
     protocol: string;
     icon: string;

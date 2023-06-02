@@ -1,33 +1,26 @@
-import { abortMissionTx } from "@anchor-protocol/app-fns";
+import {
+  AbortMissionCollaterals,
+  abortMissionTx,
+} from "@anchor-protocol/app-fns";
 import { LSDLiquidationBidsResponse } from "@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser";
-import { aUST, Luna, Token, u, UST } from "@anchor-protocol/types";
+import { aUST, u, UST } from "@anchor-protocol/types";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
 import { useConnectedWallet } from "@terra-money/wallet-provider";
-import { CollateralInfo } from "pages/borrow/components/useCollaterals";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
 import { Big } from "big.js";
-import { LSDContracts } from "@anchor-protocol/app-provider";
-import { DeepPartial } from "chart.js/types/utils";
-export interface AbortMissionTxParams {
+
+export type AbortMissionTxParams = {
   txFee: EstimatedFee;
   totalAUST: u<aUST>;
   allLiquidationBids: LSDLiquidationBidsResponse;
-  allWithdrawableDefaultedCollaterals: {
-    collateral: CollateralInfo;
-    withdrawable_number: u<Luna<Big>>;
-  }[];
-  collateralsWithdrawAmount: {
-    collateral: CollateralInfo;
-    amount: u<Token<Big>>;
-  }[];
   borrowedValue: u<UST<Big>>;
   uaUST: u<aUST<string>>;
 
   onTxSucceed?: () => void;
-}
+} & AbortMissionCollaterals;
 
 export function useAbortMissionTx() {
   const connectedWallet = useConnectedWallet();

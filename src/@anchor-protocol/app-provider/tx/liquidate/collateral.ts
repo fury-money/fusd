@@ -2,18 +2,20 @@ import { liquidationWithdrawCollateralTx } from "@anchor-protocol/app-fns/tx/liq
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
 import { useConnectedWallet } from "@terra-money/wallet-provider";
-import { WhitelistCollateral } from "queries";
+import { CollateralInfo } from "pages/borrow/components/useCollaterals";
+import { useWithdrawDefaultedCollateral } from "pages/liquidation/components/useWithdrawDefaultedCollateral";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
 
 export interface LiquidationWithdrawCollateralTxParams {
   txFee: EstimatedFee;
+  withdrawLpAssets: boolean; // Wether the user wants to also withdraw the tokens from the LP
   onTxSucceed?: () => void;
 }
 
 export function useLiquidationWithdrawCollateralTx(
-  collateral: WhitelistCollateral | undefined
+  collateral: CollateralInfo | undefined
 ) {
   const connectedWallet = useConnectedWallet();
 
@@ -22,13 +24,21 @@ export function useLiquidationWithdrawCollateralTx(
 
   const refetchQueries = useRefetchQueries();
 
+  const { withdrawableLSD, withdrawableUnderlying } =
+    useWithdrawDefaultedCollateral(collateral);
+
   const stream = useCallback(
-    ({ txFee, onTxSucceed }: LiquidationWithdrawCollateralTxParams) => {
+    ({
+      txFee,
+      withdrawLpAssets,
+      onTxSucceed,
+    }: LiquidationWithdrawCollateralTxParams) => {
       if (
         !connectedWallet ||
         !connectedWallet.availablePost ||
         !collateral ||
-        !queryClient
+        !queryClient ||
+        !collateral.collateral.type
       ) {
         throw new Error("Can not post!");
       }
@@ -38,13 +48,11 @@ export function useLiquidationWithdrawCollateralTx(
         walletAddr: connectedWallet.walletAddress,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
-        collateralAddr: collateral.collateral_token,
-        // If the collateral is a lsd, we need to burn tokens
-        tokenWrapperAddr:
-          collateral && "info" in collateral
-            ? collateral.collateral_token
-            : undefined,
+        collateral: collateral,
+        withdrawableLSD,
+        withdrawableUnderlying,
 
+        withdrawLpAssets,
         // post
         network: connectedWallet.network,
         post: connectedWallet.post,
@@ -70,6 +78,8 @@ export function useLiquidationWithdrawCollateralTx(
       queryClient,
       txErrorReporter,
       refetchQueries,
+      withdrawableLSD,
+      withdrawableUnderlying,
     ]
   );
 

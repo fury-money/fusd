@@ -1,12 +1,14 @@
 import { computeLiquidationPrice } from "@anchor-protocol/app-fns";
 import { useBorrowBorrowerQuery, useBorrowMarketQuery } from "@anchor-protocol/app-provider";
-import { useLSDCollateralQuery } from "@anchor-protocol/app-provider/queries/borrow/useLSDCollateralQuery";
+import { PriceInfo, useLSDCollateralQuery } from "@anchor-protocol/app-provider/queries/borrow/useLSDCollateralQuery";
 import { bAsset } from "@anchor-protocol/types";
 import { u, UST } from "@libs/types";
 import big, {Big, BigSource} from "big.js";
 import { useWhitelistCollateralQuery, WhitelistCollateral } from "queries";
 import { useMemo } from "react";
 import { microfyPrice } from "utils/microfyPrice";
+
+
 
 export interface CollateralInfo {
   collateral: WhitelistCollateral;
@@ -15,6 +17,7 @@ export interface CollateralInfo {
   rawLockedAmount:  u<bAsset>;
   lockedAmount: u<bAsset>;
   lockedAmountInUST: u<UST<BigSource>>;
+  priceInfo: PriceInfo | undefined
 }
 
 export function useCollaterals(){
@@ -47,8 +50,7 @@ export function useCollaterals(){
         const additionalInfo = additionalLSDInfo?.find(
           (c) => c.info?.token === collateral.collateral_token
         );
-      const exchangeRate = parseFloat(additionalInfo?.additionalInfo?.hubState?.exchange_rate ?? "1");
-        console.log(collateral.symbol, exchangeRate)
+      const exchangeRate = parseFloat(additionalInfo?.priceInfo?.hubState?.exchange_rate ?? "1");
 
       // We exchange the token values with the one in memory for LSD
       if(additionalInfo?.info?.info?.symbol){
@@ -59,6 +61,7 @@ export function useCollaterals(){
       }
         return {
           collateral,
+          priceInfo: additionalInfo?.priceInfo,
           price: big(microfyPrice(oracle?.price, collateral.decimals)).mul(exchangeRate).toString() as UST,
           liquidationPrice:
             borrowBorrower &&
@@ -87,5 +90,5 @@ export function useCollaterals(){
         big(a.lockedAmountInUST).gte(big(b.lockedAmountInUST)) ? -1 : 1,
       )
       .filter((collateral) => Number(collateral.price) !== 0);
-  }, [borrowBorrower, borrowMarket, whitelist]);
+  }, [borrowBorrower, borrowMarket, whitelist, additionalLSDInfo]);
 }

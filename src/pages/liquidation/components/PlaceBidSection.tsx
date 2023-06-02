@@ -20,6 +20,7 @@ import {
   OutlinedInput,
   Button,
   Modal,
+  Checkbox,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
@@ -27,7 +28,7 @@ import { useAccount } from 'contexts/account';
 import { PaddingSection } from './PaddingSection';
 import { useLiquidationDepositForm } from '@anchor-protocol/app-provider/forms/liquidate/deposit';
 import { useFormatters } from '@anchor-protocol/formatter';
-import { Luna, Token, u, UST } from '@libs/types';
+import { HumanAddr, Luna, Token, u, UST } from '@libs/types';
 import { AmountSlider } from './AmountSlider';
 import big, { Big, BigSource } from 'big.js';
 import {
@@ -45,9 +46,7 @@ import { BroadcastTxStreamResult } from './types';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import {
   useAnchorWebapp,
-  useBidByUserByCollateralQuery,
 } from '@anchor-protocol/app-provider';
-import { aLuna } from '@anchor-protocol/types';
 import { useLiquidationWithdrawCollateralForm } from '@anchor-protocol/app-provider/forms/liquidate/collateral';
 import { useLiquidationWithdrawCollateralTx } from '@anchor-protocol/app-provider/tx/liquidate/collateral';
 import {
@@ -60,13 +59,14 @@ import { TextInput } from '@libs/neumorphism-ui/components/TextInput';
 import { Coin, Coins, MsgExecuteContract } from '@terra-money/terra.js';
 import { formatTokenInput } from '@libs/formatter';
 import { CircleSpinner } from 'react-spinners-kit';
-import { useWhitelistCollateralQuery, WhitelistCollateral } from 'queries';
 import { useMediaQuery } from 'react-responsive';
 import { useWithdrawDefaultedCollateral } from './useWithdrawDefaultedCollateral';
+import { getLiquidationWithdrawCollateralMsg } from '@anchor-protocol/app-fns/tx/liquidate/collateral';
+import { CollateralInfo } from 'pages/borrow/components/useCollaterals';
 
 export interface PlaceBidSectionProps {
   className?: string;
-  collateral: WhitelistCollateral | undefined
+  collateral: CollateralInfo | undefined
   clickedBarState: [
     number | undefined,
     Dispatch<SetStateAction<number | undefined>>,
@@ -78,7 +78,7 @@ export function PlaceBidSectionBase({
   clickedBarState: [clickedBar, setClickedBar],
   collateral
 }: PlaceBidSectionProps) {
-  const { connected, terraWalletAddress } = useAccount();
+  const { connected, terraWalletAddress, availablePost} = useAccount();
   const { contractAddress } = useAnchorWebapp();
 
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -89,8 +89,8 @@ export function PlaceBidSectionBase({
     luna,
   } = useFormatters();
 
-  const {withdrawable_number, withdrawable_balance} = useWithdrawDefaultedCollateral(collateral);
-
+  const {withdrawableWrapper, withdrawableLSD, withdrawableUnderlying, withdrawableText} = useWithdrawDefaultedCollateral(collateral);
+  console.log(withdrawableLSD.toString(), withdrawableUnderlying.toString())
   /*******************************
    *
    * Place Bid Submit Section
@@ -99,7 +99,7 @@ export function PlaceBidSectionBase({
 
   const state = useLiquidationDepositForm();
   const [openConfirm, confirmElement] = useConfirm();
-  const [placeBid, placeBidTxResult] = usePlaceLiquidationBidTx(collateral);
+  const [placeBid, placeBidTxResult] = usePlaceLiquidationBidTx(collateral?.collateral);
   const [estimatedFee, estimatedFeeError, estimateFee] =
     useFeeEstimationFor(terraWalletAddress);
   const [isSubmittingBidTx, setIsSubmittingBidTx] = useState(false);
@@ -155,7 +155,7 @@ export function PlaceBidSectionBase({
         contractAddress.liquidation.liquidationQueueContract,
         {
           submit_bid: {
-            collateral_token: collateral?.collateral_token,
+            collateral_token: collateral?.collateral.collateral_token,
             premium_slot: state.premium,
           },
         },
@@ -192,8 +192,33 @@ export function PlaceBidSectionBase({
    * Withdraw liquidated Collateral Submit Section
    *
    * *****************************/
+  const collateralState = useLiquidationWithdrawCollateralForm();
+  const [estimatedWithdrawalFee, estimatedWithdrawalFeeError, estimateWithdrawalFee] =
+    useFeeEstimationFor(terraWalletAddress);
+  useEffect(() => {
+    if (!collateral || !withdrawableLSD || withdrawableLSD.eq(0)|| !withdrawableUnderlying || withdrawableUnderlying.eq(0)) {
+      return;
+    }
+    estimateWithdrawalFee(
+      getLiquidationWithdrawCollateralMsg({
+        walletAddr: terraWalletAddress as HumanAddr,
+        liquidationQueueAddr:
+          contractAddress.liquidation.liquidationQueueContract,
+        collateral,
+        withdrawLpAssets: collateralState.withdrawLpAssets,
+        withdrawableLSD,
+        withdrawableUnderlying,
+      })
+    );
+  }, [
+    terraWalletAddress,
+    contractAddress.liquidation.liquidationQueueContract,
+    collateral,
+    collateralState.withdrawLpAssets,
+    withdrawableLSD,
+    withdrawableUnderlying
+  ]);
 
-  const collateralState = useLiquidationWithdrawCollateralForm(collateral);
   const [withdrawCollateralTx, withdrawCollateralTxResult] =
     useLiquidationWithdrawCollateralTx(collateral);
   const [isSubmittingCollateralTx, setIsSubmittingCollateralTx] =
@@ -202,6 +227,7 @@ export function PlaceBidSectionBase({
   const proceedWithdrawCollateral = useCallback(
     async (txFee: EstimatedFee | undefined, confirm: ReactNode) => {
       setIsSubmittingCollateralTx(true);
+
       if (!connected || !withdrawCollateralTx) {
         return;
       }
@@ -220,9 +246,10 @@ export function PlaceBidSectionBase({
 
       withdrawCollateralTx({
         txFee: txFee ?? defaultFee(),
+        withdrawLpAssets: collateralState?.withdrawLpAssets,
       });
     },
-    [connected, withdrawCollateralTx, openConfirm],
+    [connected, withdrawCollateralTx, openConfirm, collateralState?.withdrawLpAssets, setIsSubmittingCollateralTx],
   );
 
 
@@ -319,7 +346,7 @@ export function PlaceBidSectionBase({
         <Grid container spacing={3}>
           <Grid xs={12}>
             <Typography id="input-slider" gutterBottom>
-              Premium ({collateral?.symbol} discount)
+              Premium ({collateral?.collateral.symbol} discount)
             </Typography>
             <Grid container spacing={2} alignItems="center">
               <Grid xs={12} sm={8}>
@@ -504,7 +531,7 @@ export function PlaceBidSectionBase({
           <Grid xs={12} style={{ padding: '12px 0px', marginTop: 20 }}>
             <h2>
               <IconSpan>
-                Withdraw defaulted Collateral{' '}
+                Withdraw defaulted collateral{' '}
                 <InfoTooltip>
                   Use the following form to withdraw collateral that was
                   defaulted thanks to your deposit in the pool
@@ -515,28 +542,37 @@ export function PlaceBidSectionBase({
               <Grid xs={12}>
                 <OutlinedInput
                   fullWidth
-                  value={withdrawable_balance}
+                  value={withdrawableText}
                   sx={{
                     fontSize: isVeryLarge ? "30px" : "3em",
                     caretColor: 'transparent' }}
                 />
               </Grid>
+              {(collateral?.collateral.type == "spectrum_lp" || collateral?.collateral.type == "amp_lp") && 
+                <FormControlLabel 
+                  control={
+                    <Checkbox 
+                      checked={collateralState.withdrawLpAssets}
+                      onChange = {(event) => collateralState.updateWithdrawLpAssets(event.target.checked)}/>
+                  } 
+                  label="Withdraw assets from LP"  />
+              }
               <TxFeeList className="receipt">
                 <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-                  {(!collateralState.txFee ||
-                    (!big(collateralState.txFee?.txFee ?? ('0' as u<Luna>)).gt(
+                {estimatedWithdrawalFeeError}
+                  {(!estimatedWithdrawalFeeError && (!estimatedWithdrawalFee ||
+                    (!big(estimatedWithdrawalFee?.txFee ?? ('0' as u<Luna>)).gt(
                       0,
-                    ))) && (
+                    )))) && (
                       <CircleSpinner size={14} color={theme.colors.positive} />
                     )}
-                  {!!collateralState.txFee?.txFee &&
-                    big(collateralState.txFee?.txFee).gt(0) &&
+                  {!estimatedWithdrawalFeeError && !!estimatedWithdrawalFee?.txFee &&
+                    big(estimatedWithdrawalFee?.txFee).gt(0) &&
                     `${luna.formatOutput(
-                      luna.demicrofy(collateralState.txFee?.txFee),
+                      luna.demicrofy(estimatedWithdrawalFee?.txFee),
                     )} ${luna.symbol}`}
                 </TxFeeListItem>
               </TxFeeList>
-
               <Grid xs={12}>
                 <Button
                   variant="contained"
@@ -544,14 +580,15 @@ export function PlaceBidSectionBase({
                   color="primary"
                   disabled={
                     !connected ||
-                    !withdrawable_number ||
-                    !collateralState.txFee ||
-                    withdrawable_number.eq(big(0)) ||
-                    !proceedWithdrawCollateral
+                    !withdrawableLSD ||
+                    !estimatedWithdrawalFee ||
+                    withdrawableLSD.eq(big(0)) ||
+                    !proceedWithdrawCollateral ||
+                    !availablePost
                   }
                   onClick={() =>
                     proceedWithdrawCollateral(
-                      collateralState.txFee,
+                      estimatedWithdrawalFee,
                       collateralState.invalidNextTxFee,
                     )
                   }

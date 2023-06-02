@@ -88,7 +88,7 @@ export function useBorrowLoopForm() {
         const collateralExchangeRate = parseFloat(
           lsdHubStates.find(
             (state) => state.info.token == collateral.info.token
-          )?.additionalInfo?.hubState.exchange_rate ?? "1"
+          )?.priceInfo?.hubState?.exchange_rate ?? "1"
         );
 
         // In an async call we get an quote price approximation

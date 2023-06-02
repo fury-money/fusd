@@ -3,73 +3,55 @@ import { useQuery, UseQueryResult } from "react-query";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_QUERY_KEY } from "../../env";
 
-import {
-  cw20,
-  CW20Addr,
-  HumanAddr,
-  NativeDenom,
-  Rate,
-  Token,
-  u,
-  UST,
-} from "@libs/types";
-import {
-  QueryClient,
-  wasmFetch,
-  WasmQuery,
-  WasmQueryData,
-} from "@libs/query-client";
+import { HumanAddr, Rate } from "@libs/types";
+import { QueryClient, WasmQueryData } from "@libs/query-client";
 import { LSDContracts } from "@anchor-protocol/app-provider";
-import { moneyMarket } from "@anchor-protocol/types";
 import {
   getSteakExchangeRate,
   UnderlyingHubStateWasmQuery,
 } from "./collateralExchangeRate/steak";
 import { getCoinExchangeRate } from "./collateralExchangeRate/coin";
-import { getSpectrumExchangeRate } from "./collateralExchangeRate/spectrum_lp";
-import { getAmpLPExchangeRate } from "./collateralExchangeRate/amp_lp";
+import { getSpectrumLSDExchangeRate } from "./collateralExchangeRate/spectrum_lp";
+import { getAmpLPLSDExchangeRate } from "./collateralExchangeRate/amp_lp";
 
 export type UnderlyingHubState = WasmQueryData<UnderlyingHubStateWasmQuery>;
 
-/// Queries the exchange rate from the wrapper to the actual LSD
-export async function underlyingHubStateQuery(
+/// Queries the exchange rate from the underlying Token to the LSD directly
+export async function lSDToUnderlyingExchangeRateQuery(
   queryClient: QueryClient,
   lsd: LSDContracts,
   oracle: HumanAddr
-): Promise<UnderlyingHubState> {
+): Promise<Rate> {
   // If the tokens of cw20 type, we query the hubstate
   if (lsd.info.cw20?.hubAddress) {
-    return getSteakExchangeRate(queryClient, lsd, oracle);
+    const state = await getSteakExchangeRate(queryClient, lsd, oracle);
+    return state.hubState.exchange_rate;
   } else if (lsd.info.coin) {
-    // Else if the token is of CW20 type, we query the exchange rate from the oracle (that's denom vs underyling denom)
-    return getCoinExchangeRate(queryClient, lsd, oracle);
+    const state = await getCoinExchangeRate(queryClient, lsd, oracle);
+    return state.hubState.exchange_rate;
   } else if (lsd.info.spectrum_lp) {
-    return getSpectrumExchangeRate(queryClient, lsd, oracle);
+    return getSpectrumLSDExchangeRate(queryClient, lsd, oracle);
   } else if (lsd.info.amp_lp) {
-    return getAmpLPExchangeRate(queryClient, lsd, oracle);
+    return getAmpLPLSDExchangeRate(queryClient, lsd, oracle);
   } else {
-    return {
-      hubState: {
-        exchange_rate: "1" as Rate<string>,
-      },
-    };
+    return "1" as Rate<string>;
   }
 }
 
-export function useWrappedTokenDetails(
+export function useLSDToUnderlyingExchangeRate(
   collateral: LSDContracts | undefined
-): UseQueryResult<UnderlyingHubState> {
+): UseQueryResult<Rate> {
   const { queryClient, queryErrorReporter } = useAnchorWebapp();
 
   const { contractAddress } = useAnchorWebapp();
 
   return useQuery(
     [
-      ANCHOR_QUERY_KEY.WRAPPED_TOKEN_HUB,
+      ANCHOR_QUERY_KEY.LSD_TO_UNDERLYING_EXCHANGE_RATE,
       collateral!,
       contractAddress.moneyMarket.oracle,
     ],
-    createQueryFn(underlyingHubStateQuery, queryClient!),
+    createQueryFn(lSDToUnderlyingExchangeRateQuery, queryClient!),
     {
       refetchInterval: 1000 * 60 * 5,
       keepPreviousData: false,
