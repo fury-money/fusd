@@ -32,7 +32,6 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
 
   const collaterals = useMemo(() => {
     const array = queriedCollaterals.map((collateral) => {
-      
       const additionalInfo = additionalLSDInfo?.find(
         (c) => c.info?.token === collateral.collateral.collateral_token
       );
@@ -50,10 +49,9 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
 
       const price = parseFloat(collateral.price) as UST<number>;
 
-      const value = demicrofy(collateral.lockedAmount).div(exchangeRate) as bAsset<Big>;
+      const value = demicrofy(collateral.tvl).div(exchangeRate) as bAsset<Big>;
 
-      const tvl = demicrofy(Big(collateral.lockedAmount).mul(price) as u<UST<Big>>);
-      console.log(tvl)
+      const tvl = demicrofy(Big(collateral.tvl).mul(price) as u<UST<Big>>);
       return {
         ...collateral,
         price,
@@ -67,7 +65,6 @@ export const CollateralMarketTable = (props: CollateralMarketTableProps) => {
     });
   }, [queriedCollaterals]);
 
-  console.log(collaterals)
   function printCollaterals(type: string){
     return collaterals.filter((collateral) => collateral.type == type).map((collateral) => {
       return (

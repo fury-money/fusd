@@ -43,7 +43,7 @@ export async function getSpectrumExchangeRate(
     // 2. The wrapper lsd balance
     wasmFetch<CW20BalanceWasmQuery>({
       ...queryClient,
-      id: `cw20--balance=${lsd.token}`,
+      id: `cw20--lsd-balance=${lsd.token}`,
       wasmQuery: {
         tokenBalance: {
           contractAddress: lsd.info.spectrum_lp.token,

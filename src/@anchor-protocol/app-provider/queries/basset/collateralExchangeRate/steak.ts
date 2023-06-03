@@ -19,7 +19,7 @@ export async function getSteakExchangeRate(
   }
   return wasmFetch<UnderlyingHubStateWasmQuery>({
     ...queryClient,
-    id: `basset--claimable-rewards`,
+    id: `steak--exchange-rate -- ${lsd.token}`,
     wasmQuery: {
       hubState: {
         contractAddress: lsd.info.cw20?.hubAddress,

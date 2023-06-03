@@ -1,5 +1,5 @@
 import { computeLiquidationPrice } from "@anchor-protocol/app-fns";
-import { useBorrowBorrowerQuery, useBorrowMarketQuery } from "@anchor-protocol/app-provider";
+import { useBorrowBorrowerQuery, useBorrowMarketQuery, useMarketCollateralsQuery } from "@anchor-protocol/app-provider";
 import { PriceInfo, useLSDCollateralQuery } from "@anchor-protocol/app-provider/queries/borrow/useLSDCollateralQuery";
 import { bAsset } from "@anchor-protocol/types";
 import { u, UST } from "@libs/types";
@@ -18,6 +18,7 @@ export interface CollateralInfo {
   lockedAmount: u<bAsset>;
   lockedAmountInUST: u<UST<BigSource>>;
   priceInfo: PriceInfo | undefined
+  tvl: u<bAsset>
 }
 
 export function useCollaterals(){
@@ -29,6 +30,7 @@ export function useCollaterals(){
 
   const additionalLSDInfo = useLSDCollateralQuery(); 
 
+  const { data: marketCollaterals } = useMarketCollateralsQuery();
 
   return useMemo<CollateralInfo[]>(() => {
     if (!borrowMarket || !whitelist) {
@@ -50,6 +52,9 @@ export function useCollaterals(){
         const additionalInfo = additionalLSDInfo?.find(
           (c) => c.info?.token === collateral.collateral_token
         );
+
+        const tvl = marketCollaterals?.now.collaterals.find((c) => c.token == collateral.collateral_token)?.collateral;
+
       const exchangeRate = parseFloat(additionalInfo?.priceInfo?.hubState?.exchange_rate ?? "1");
 
       // We exchange the token values with the one in memory for LSD
@@ -84,6 +89,7 @@ export function useCollaterals(){
           lockedAmountInUST: big(collateralAmount?.[1] ?? 0).mul(
             oracle?.price ?? 1,
           ) as u<UST<Big>>,
+          tvl: tvl ?? "0" as u<bAsset>,
         };
       })
       .sort((a, b) =>
