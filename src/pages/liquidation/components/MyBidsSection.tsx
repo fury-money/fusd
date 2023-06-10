@@ -355,7 +355,7 @@ export function MyBidsSection({ className, collateral }: MyBidsSectionProps) {
                 <HeaderCell>Premium</HeaderCell>
                 <HeaderCell align="right">Bid Remaining (axlUSDC)</HeaderCell>
                 <HeaderCell align="right">Bid Status</HeaderCell>
-                <HeaderCell align="right">Amount filled (aLuna)</HeaderCell>
+                <HeaderCell align="right">Amount filled ({collateral?.symbol})</HeaderCell>
                 <HeaderCell align="right"></HeaderCell>
               </TableRow>
             </TableHead>
@@ -420,7 +420,7 @@ export function MyBidsSection({ className, collateral }: MyBidsSectionProps) {
                   {bid.status}
                 </Grid> 
                 <Grid item xs={6}>
-                  Amount filled (aLuna)
+                  Amount filled ({collateral?.symbol})
                 </Grid>
                 <Grid item xs={6}>
                   {bid.filled}
