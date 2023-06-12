@@ -1,5 +1,4 @@
 import { Slider, Switch } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { NotificationsNone } from '@mui/icons-material';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
@@ -28,8 +27,6 @@ const sliderMarks = [createMark(75.0), createMark(87.0), createMark(99.0)];
 function NotificationContentBase({ className }: NotificationContentProps) {
   const { liquidationAlert, updateLiquidationAlert } = useJobs();
 
-  const { focusVisible, ...switchClasses } = useSwitchStyle();
-  const sliderClasses = useSliderStyle();
 
   const testNotifications = useCallback(() => {
     new Notification('Cavern Borrow Usage Notification', {
@@ -53,8 +50,6 @@ function NotificationContentBase({ className }: NotificationContentProps) {
       <div className="switch">
         <p>Cavern Borrow Usage</p>
         <Switch
-          focusVisibleClassName={focusVisible}
-          classes={switchClasses}
           checked={liquidationAlert.enabled}
           onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
             updateLiquidationAlert({
@@ -66,8 +61,9 @@ function NotificationContentBase({ className }: NotificationContentProps) {
       </div>
 
       {liquidationAlert.enabled && (
+        // @ts-ignore, we ignore that because of the notification attribute
         <Slider
-          classes={sliderClasses}
+          notification={true}
           valueLabelDisplay="on"
           valueLabelFormat={valueLabelFormat}
           marks={sliderMarks}
@@ -101,7 +97,7 @@ function NotificationContentBase({ className }: NotificationContentProps) {
     </div>
   );
 }
-
+/*
 const useSwitchStyle = makeStyles((theme: DefaultTheme) => ({
   root: {
     width: 40,
@@ -139,7 +135,9 @@ const useSwitchStyle = makeStyles((theme: DefaultTheme) => ({
   checked: {},
   focusVisible: {},
 }));
+*/
 
+  /*
 const useSliderStyle = makeStyles((theme: DefaultTheme) => ({
   root: {
     color: theme.textColor,
@@ -197,6 +195,7 @@ const useSliderStyle = makeStyles((theme: DefaultTheme) => ({
     opacity: 1,
   },
 }));
+*/
 
 export const NotificationContent = styled(NotificationContentBase)`
   width: 100%;
