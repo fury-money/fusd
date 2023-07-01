@@ -29,7 +29,7 @@ function LiquidationStatsSectionBase({
   className,
   collateral,
 }: LiquidationStatsSectionProps) {
-  const { data: liquidationHistory } = useLiquidationHistoryQuery();
+  const { data: liquidationHistory } = useLiquidationHistoryQuery(collateral);
 
   const { aLuna: aluna, ust } = useFormatters();
 
@@ -77,7 +77,7 @@ function LiquidationStatsSectionBase({
             <TableRow>
               <LowPaddingTableCell className="table-header">Time</LowPaddingTableCell>
               <LowPaddingTableCell align="right" className="table-header">
-                aLuna Liquidated
+                {collateral?.symbol} Liquidated
               </LowPaddingTableCell>
               <LowPaddingTableCell align="right" className="table-header">
                 axlUSDC Paid
