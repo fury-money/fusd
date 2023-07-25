@@ -33,7 +33,6 @@ export async function getCoinExchangeRate(
       },
     },
   });
-  console.log("Oracle price", oracleExchangeRate);
 
   return {
     hubState: {

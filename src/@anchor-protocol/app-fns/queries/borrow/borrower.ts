@@ -95,7 +95,6 @@ export async function borrowBorrowerQuery(
       },
     });
 
-  console.log(overseerCollaterals);
   return {
     marketBorrowerInfo,
     overseerCollaterals,

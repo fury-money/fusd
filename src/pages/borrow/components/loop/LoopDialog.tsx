@@ -265,8 +265,6 @@ function BorrowDialogBase(props: BorrowDialogProps) {
   // presentation
   // ---------------------------------------------
 
-  console.log(states.executeMsgs);
-
   const theme = useTheme();
 
   if (

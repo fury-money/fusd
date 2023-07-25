@@ -73,7 +73,6 @@ function DashboardBase({ className }: DashboardProps) {
 
   const { netAPR } = useBorrowOverviewData();
 
-
   const depositApy = useDepositApy();
 
   const stableCoinLegacy = useMemo(() => {
@@ -85,7 +84,7 @@ function DashboardBase({ className }: DashboardProps) {
       depositRate: depositApy,
       borrowRate: netAPR,
     };
-  }, [blocksPerYear, borrowRate, epochState, depositApy]);
+  }, [blocksPerYear, borrowRate, epochState, depositApy, netAPR]);
 
   const { data: { moneyMarketEpochState } = {} } = useEarnEpochStatesQuery();
   const { data: marketUST } = useMarketUstQuery();
