@@ -102,121 +102,143 @@ export const defaultDarkTheme = {
       MuiSlider: {
         styleOverrides: {
           root: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ? {
-              backgroundColor: 'transparent',
-              color: theme.palette.grey[500],
-            }: {}),
+            ...(ownerState.notification
+              ? {
+                  backgroundColor: "transparent",
+                  color: theme.palette.grey[500],
+                }
+              : {}),
           }),
           thumb: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ? {
-              'height': 16,
-              'width': 16,
-              'backgroundColor': GREEN_100,
-              'border': '3px solid currentColor',
-              'marginTop': -6,
-              'marginLeft': -8,
-              '&:focus, &:hover, &$active': {
-                boxShadow: 'inherit',
-              }
-            }: {}),
+            ...(ownerState.notification
+              ? {
+                  height: 16,
+                  width: 16,
+                  backgroundColor: GREEN_100,
+                  border: "3px solid currentColor",
+                  marginTop: -6,
+                  marginLeft: -8,
+                  "&:focus, &:hover, &$active": {
+                    boxShadow: "inherit",
+                  },
+                }
+              : {}),
           }),
           active: {},
           mark: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ? {
-              visibility: 'hidden',
-            }: {}),
+            ...(ownerState.notification
+              ? {
+                  visibility: "hidden",
+                }
+              : {}),
           }),
           markLabel: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ? {
-              'fontSize': 12,
+            ...(ownerState.notification
+              ? {
+                  fontSize: 12,
 
-              '&[data-index="0"]': {
-                transform: 'translateX(0)',
-              },
+                  '&[data-index="0"]': {
+                    transform: "translateX(0)",
+                  },
 
-              '&[data-index="3"]': {
-                transform: 'translateX(-100%)',
-              },
-            }: {}),
+                  '&[data-index="3"]': {
+                    transform: "translateX(-100%)",
+                  },
+                }
+              : {}),
           }),
           valueLabel: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ? {
-              'left': 'calc(-100% - 10px)',
-              '&> span': {
-                'transform': 'translateY(7px)',
-                'backgroundColor': GREEN_100,
-                'borderRadius': 22,
-                'width': 48,
-                'height': 23,
+            ...(ownerState.notification
+              ? {
+                  left: "calc(-100% - 10px)",
+                  "&> span": {
+                    transform: "translateY(7px)",
+                    backgroundColor: GREEN_100,
+                    borderRadius: 22,
+                    width: 48,
+                    height: 23,
 
-                '&> span': {
-                  transform: 'none',
-                  color: WHITE,
-                },
-              },
-            }: {}),
+                    "&> span": {
+                      transform: "none",
+                      color: WHITE,
+                    },
+                  },
+                }
+              : {}),
           }),
           track: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ? {
-              height: 3,
-              borderRadius: 2,
-              backgroundColor: WHITE,
-            }: {}),
+            ...(ownerState.notification
+              ? {
+                  height: 3,
+                  borderRadius: 2,
+                  backgroundColor: WHITE,
+                }
+              : {}),
           }),
           rail: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ? {
-              height: 3,
-              borderRadius: 2,
-              opacity: 1,
-              }: {}),
+            ...(ownerState.notification
+              ? {
+                  height: 3,
+                  borderRadius: 2,
+                  opacity: 1,
+                }
+              : {}),
           }),
         },
       },
       MuiSwitch: {
         styleOverrides: {
           root: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ?  {
-              width: 40,
-              height: 22,
-              padding: 0,
-              margin: 0,
-            }: {}),
+            ...(ownerState.notification
+              ? {
+                  width: 40,
+                  height: 22,
+                  padding: 0,
+                  margin: 0,
+                }
+              : {}),
           }),
           switchBase: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ?  {
-              'padding': 1,
-              '&$checked': {
-                'transform': 'translateX(18px)',
-                'color': theme.palette.common.white,
-                '& + $track': {
-                  backgroundColor: GREEN_100,
-                  opacity: 1,
-                  border: 'none',
-                },
-              },
-              '&$focusVisible $thumb': {
-                color: GREEN_100,
-                border: '6px solid #fff',
-              },
-            }: {}),
+            ...(ownerState.notification
+              ? {
+                  padding: 1,
+                  "&$checked": {
+                    transform: "translateX(18px)",
+                    color: theme.palette.common.white,
+                    "& + $track": {
+                      backgroundColor: GREEN_100,
+                      opacity: 1,
+                      border: "none",
+                    },
+                  },
+                  "&$focusVisible $thumb": {
+                    color: GREEN_100,
+                    border: "6px solid #fff",
+                  },
+                }
+              : {}),
           }),
           thumb: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ?  {
-              width: 20,
-              height: 20,
-              color: theme.palette.common.white,
-            }: {}),
+            ...(ownerState.notification
+              ? {
+                  width: 20,
+                  height: 20,
+                  color: theme.palette.common.white,
+                }
+              : {}),
           }),
           track: ({ ownerState, theme }) => ({
-            ...(ownerState.notification ?  {
-              borderRadius: 26 / 2,
-              backgroundColor: DARK_GRAY_100,
-              opacity: 1,
-              transition: theme.transitions.create(['background-color']),
-            }: {}),
+            ...(ownerState.notification
+              ? {
+                  borderRadius: 26 / 2,
+                  backgroundColor: DARK_GRAY_100,
+                  opacity: 1,
+                  transition: theme.transitions.create(["background-color"]),
+                }
+              : {}),
           }),
-        }
-      }
+        },
+      },
     },
   }),
   MuiTouchRipple: {

@@ -2,7 +2,7 @@ import { WhitelistCollateral } from "queries";
 
 export interface LiquidationQueryParams {
   endpoint: string;
-  collateral: WhitelistCollateral | undefined
+  collateral: WhitelistCollateral | undefined;
 }
 
 export interface LiquidationData {
@@ -14,7 +14,7 @@ export interface LiquidationData {
 
 export async function liquidationHistoryQuery({
   endpoint,
-  collateral
+  collateral,
 }: LiquidationQueryParams): Promise<LiquidationData[]> {
   const liquidations: LiquidationData[] = await fetch(
     `${endpoint}/v3/liquidations?limit=200&sort=date,DESC&filter=currency||$eq||${collateral?.collateral_token}`

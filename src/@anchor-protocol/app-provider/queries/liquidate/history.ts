@@ -8,13 +8,15 @@ import { useQuery, UseQueryResult } from "react-query";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_QUERY_KEY } from "../../env";
 
-const queryFn = createSimpleQueryFn((endpoint: string, collateral: WhitelistCollateral | undefined) => {
-  return liquidationHistoryQuery({ endpoint, collateral });
-});
+const queryFn = createSimpleQueryFn(
+  (endpoint: string, collateral: WhitelistCollateral | undefined) => {
+    return liquidationHistoryQuery({ endpoint, collateral });
+  }
+);
 
-export function useLiquidationHistoryQuery( collateral: WhitelistCollateral | undefined): UseQueryResult<
-  LiquidationData[] | undefined
-> {
+export function useLiquidationHistoryQuery(
+  collateral: WhitelistCollateral | undefined
+): UseQueryResult<LiquidationData[] | undefined> {
   const { queryErrorReporter, indexerApiEndpoint } = useAnchorWebapp();
 
   return useQuery(
@@ -24,7 +26,7 @@ export function useLiquidationHistoryQuery( collateral: WhitelistCollateral | un
       refetchInterval: 1000 * 60 * 60,
       keepPreviousData: true,
       onError: queryErrorReporter,
-      enabled: !!collateral
+      enabled: !!collateral,
     }
   );
 }
