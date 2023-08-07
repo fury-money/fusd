@@ -294,7 +294,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           Borrow with Leverage{' '}
           <p>
             <IconSpan>
-              Borrow APR : {formatRate(netAPR)}%{' '}
+              Borrow APY : {formatRate(netAPR)}%{' '}
               <InfoTooltip>
                 Current rate of annualized borrowing interest applied for this
                 stablecoin

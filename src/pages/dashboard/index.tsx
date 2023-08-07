@@ -347,7 +347,7 @@ function DashboardBase({ className }: DashboardProps) {
                   </th>
                   <th>
                     <IconSpan>
-                      Borrow APR{' '}
+                      Borrow APY{' '}
                       <InfoTooltip>Annualized borrow interest</InfoTooltip>
                     </IconSpan>
                   </th>
@@ -377,7 +377,7 @@ function DashboardBase({ className }: DashboardProps) {
                     </div>
                   </td>
                   <td>
-                    <div className="value">
+                    <div className="value positive">
                       <AnimateNumber format={formatRate}>
                         {stableCoinLegacy
                           ? stableCoinLegacy.depositRate
@@ -397,7 +397,7 @@ function DashboardBase({ className }: DashboardProps) {
                     </div>
                   </td>
                   <td>
-                    <div className="value">
+                    <div className="value negative">
                       <AnimateNumber format={formatRate}>
                         {stableCoinLegacy
                           ? stableCoinLegacy.borrowRate
@@ -704,6 +704,14 @@ const StyledDashboard = styled(DashboardBase)`
           .value,
           .coin {
             font-size: 16px;
+          }
+
+          .positive{
+            color: ${({theme}) => theme.colors.primary}
+          }
+
+          .negative{
+            color: ${({theme}) => theme.colors.warning}
           }
 
           .volatility,

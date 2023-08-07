@@ -157,7 +157,7 @@ function RepayDialogBase(props: RepayDialogProps) {
           Repay{' '}
           <p>
             <IconSpan>
-              Borrow APR : {formatRate(states.apr)}%{' '}
+              Borrow APY : {formatRate(states.apr)}%{' '}
               <InfoTooltip>
                 Current rate of annualized borrowing interest applied for this
                 stablecoin

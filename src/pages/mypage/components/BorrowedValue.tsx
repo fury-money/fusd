@@ -65,10 +65,10 @@ function BorrowedValueBase({
       <div className="net-apr">
         <h5>
           <IconSpan>
-            Net APR{' '}
+            Net Borrow APY{' '}
             <InfoTooltip>
-              Borrow APR - Distribution APR. When the net APR is a positive
-              number, the interest to be paid for the loan is greater than borrower incentives distributed.
+              Distribution APR - Borrow APY. When the net APY is a negative
+              number, the interest due for the loan is greater than borrower incentives distributed.
             </InfoTooltip>
           </IconSpan>
         </h5>

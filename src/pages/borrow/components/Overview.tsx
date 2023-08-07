@@ -133,11 +133,11 @@ function Component({ className }: OverviewProps) {
         <div className="apy">
           <h3>
             <IconSpan>
-              NET APR{' '}
+              NET BORROW APY{' '}
               <InfoTooltip>
-                Borrow APR - Distribution APR. The stablecoin reserves are
+                Distribution APR - Borrow APY. The stablecoin reserves are
                 partially used to incentivize borrowers when the borrowing rate
-                is above 10%. This APR is thus always positive, you pay for borrowing assets on Cavern.
+                is above 10%. This APR is thus always negative, you pay for borrowing assets on Cavern.
               </InfoTooltip>
             </IconSpan>
           </h3>
@@ -155,7 +155,7 @@ function Component({ className }: OverviewProps) {
                   <BorrowAPR />
                 </TooltipIconCircle>
                 <p>
-                  Borrow APR
+                  Borrow APY
                   <b>{formatRate(borrowAPR)}%</b>
                 </p>
               </div>
@@ -321,7 +321,7 @@ const StyledComponent = styled(Component)`
     }
 
     &.apy {
-      color: ${({ theme }) => theme.colors.primary};
+      color: ${({ theme }) => theme.colors.warning};
 
       .value {
         font-weight: 500;

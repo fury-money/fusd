@@ -252,7 +252,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           Borrow{' '}
           <p>
             <IconSpan>
-              Borrow APR : {formatRate(states.apr)}%{' '}
+              Borrow APY : {formatRate(states.apr)}%{' '}
               <InfoTooltip>
                 Current rate of annualized borrowing interest applied for this
                 stablecoin
