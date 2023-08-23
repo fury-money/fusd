@@ -24,7 +24,7 @@ export async function cw20TokenDisplayInfosQuery(
 ): Promise<CW20TokenDisplayInfos> {
   // mainnet -> protocol === Wormhole (starts with wa)
   let data: CW20TokenDisplayInfos = await fetch(
-    "https://assets.terra.money/cw20/tokens.json"
+    "https://assets.terra.dev/cw20/tokens.json"
   ).then((res) => res.json());
 
   if (chain !== Chain.Terra) {
