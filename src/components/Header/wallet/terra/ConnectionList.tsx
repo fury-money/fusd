@@ -78,8 +78,8 @@ const ConnectionList = (props: ConnectionListProps) => {
               <img
                 src={
                   icon ===
-                  'https://assets.terra.money/icon/station-extension/icon.png'
-                    ? 'https://assets.terra.money/icon/wallet-provider/station.svg'
+                  'https://assets.terra.dev/icon/station-extension/icon.png'
+                    ? 'https://assets.terra.dev/icon/wallet-provider/station.svg'
                     : icon
                 }
                 alt={name}
