@@ -32,13 +32,10 @@ export async function lenderValueQuery(
     };
   }
 
-  const qb = RequestQueryBuilder.create();
-  qb.setFilter({ field: "lender", operator: "$eq", value: lender });
-
-  return fetch(`${endpoint}/v3/lenders?${qb.query()}`)
+  return fetch(`${endpoint}/v3/lenders/${lender}`)
     .then((res) => res.json())
     .then((lenderValue) => ({
-      lenderValue: lenderValue[0] ?? emptyValue,
+      lenderValue: lenderValue ?? emptyValue,
     }));
 }
 
