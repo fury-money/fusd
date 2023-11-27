@@ -3,7 +3,6 @@ import {
   ANCHOR_TX_KEY,
   AnchorConstants,
   AnchorContractAddress,
-  LSDContracts,
 } from "@anchor-protocol/app-provider";
 import { CW20Addr, HumanAddr } from "@anchor-protocol/types";
 import { TERRA_QUERY_KEY, TxRefetchMap } from "@libs/app-provider";
@@ -461,7 +460,7 @@ export const ANCHOR_CONTRACT_ADDRESS = (
       ...Object.values(RegisteredLSDs).map(
         (
           lsd: RegisteredLSDs
-        ): { [lsd in RegisteredLSDs]: LSDContracts } | {} => {
+        ) => {
           if (!addressMap.LSDs[lsd as string]) {
             return {};
           }

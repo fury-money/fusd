@@ -1,0 +1,1 @@
+export type EMPTY = Record<string, never>;

@@ -11,7 +11,7 @@ import { DepositDialog } from '../DepositDialog';
 import { DialogProps } from '@libs/use-dialog';
 import { EstimatedFee } from '@libs/app-provider';
 
-export function TerraDepositDialog(props: DialogProps<{}, void>) {
+export function TerraDepositDialog(props: DialogProps<unknown>): React.JSX.Element {
   const account = useAccount();
 
   const [openConfirm, confirmElement] = useConfirm();
@@ -62,8 +62,8 @@ export function TerraDepositDialog(props: DialogProps<{}, void>) {
             style={
               invalidNextTxFee
                 ? {
-                    backgroundColor: '#c12535',
-                  }
+                  backgroundColor: '#c12535',
+                }
                 : undefined
             }
             disabled={

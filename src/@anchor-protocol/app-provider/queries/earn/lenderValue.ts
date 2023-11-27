@@ -4,7 +4,6 @@ import { useAccount } from "contexts/account";
 import { useQuery, UseQueryResult } from "react-query";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_QUERY_KEY } from "../../env";
-import { RequestQueryBuilder } from "@rewiko/crud-request";
 
 export interface LenderValueData {
   lenderValue: {

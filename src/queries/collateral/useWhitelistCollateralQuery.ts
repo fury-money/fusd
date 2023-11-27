@@ -2,9 +2,8 @@ import { useNetwork } from "@anchor-protocol/app-provider/contexts/network";
 import { CW20TokenDisplayInfo } from "@libs/app-fns";
 import { useCW20TokenDisplayInfosQuery } from "@libs/app-provider";
 import { createQueryFn } from "@libs/react-query-utils";
-import { CW20Addr, HumanAddr } from "@anchor-protocol/types";
+import { HumanAddr } from "@anchor-protocol/types";
 import {
-  bridgeAssetsQuery,
   useAnchorQuery,
   WhitelistCollateral,
 } from "queries";
@@ -62,21 +61,6 @@ const mapTokenInformation = (
   });
 };
 
-const mapBridgedAssets = async (
-  whitelist: WhitelistCollateral[],
-  target: DeploymentTarget,
-  network: NetworkInfo
-): Promise<WhitelistCollateral[]> => {
-  const map = await bridgeAssetsQuery(whitelist, target, network);
-
-  return whitelist.map((collateral) => {
-    return {
-      ...collateral,
-      bridgedAddress: map?.get(collateral.collateral_token),
-    };
-  });
-};
-
 async function whitelistCollateralQuery(
   queryClient: QueryClient,
   overseerContract: HumanAddr,
@@ -89,11 +73,7 @@ async function whitelistCollateralQuery(
     queryClient
   );
 
-  return await mapBridgedAssets(
-    mapTokenInformation(whitelist, tokenInformation ?? {}),
-    target,
-    network
-  );
+  return mapTokenInformation(whitelist, tokenInformation ?? {})
 }
 
 function useLocalTokenInformation() {
@@ -101,7 +81,7 @@ function useLocalTokenInformation() {
 
   // We return the aLuna token information
 
-  let aLunaInfo = {
+  const aLunaInfo = {
     [contractAddress.cw20.aLuna]: {
       protocol: "Cavern",
       symbol: "aLuna",

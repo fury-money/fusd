@@ -21,7 +21,7 @@ import { useWithdrawDialog } from './useWithdrawDialog';
 import Big from 'big.js';
 import { useLenderValue } from '@anchor-protocol/app-provider/queries/earn/lenderValue';
 import { u, UST } from '@libs/types';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { EmbossButton } from '@libs/neumorphism-ui/components/EmbossButton';
 
 import kado from './assets/kado.svg';
@@ -31,7 +31,7 @@ export interface TotalDepositSectionProps {
   className?: string;
 }
 
-export function TotalDepositSection({ className }: TotalDepositSectionProps) {
+export function TotalDepositSection({ className }: TotalDepositSectionProps): React.JSX.Element {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
@@ -56,11 +56,11 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
   }, [moneyMarketEpochState, uaUST]);
 
   const totalProfit = useMemo(() => {
-    if(lenderValue?.lenderValue.stableAmount == "0"){
+    if (lenderValue?.lenderValue.stableAmount == "0") {
       return Big(0) as u<UST<Big>>
     }
     return totalDeposit.minus(lenderValue?.lenderValue.stableAmount ?? 0) as u<UST<Big>>
-  },[lenderValue, totalDeposit])
+  }, [lenderValue, totalDeposit])
 
   // ---------------------------------------------
   // dialogs
@@ -85,73 +85,73 @@ export function TotalDepositSection({ className }: TotalDepositSectionProps) {
   return (
     <Section className={className}>
 
-    <Grid container spacing={2}>
-      <Grid item xs={12} md={6}>
-        <h2>
-          <IconSpan>
-            TOTAL DEPOSIT{' '}
-            <InfoTooltip>
-              Total amount of axlUSDC deposited and interest earned by the user
-            </InfoTooltip>
-          </IconSpan>
-        </h2>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <h2>
+            <IconSpan>
+              TOTAL DEPOSIT{' '}
+              <InfoTooltip>
+                Total amount of axlUSDC deposited and interest earned by the user
+              </InfoTooltip>
+            </IconSpan>
+          </h2>
 
-        <div className="amount">
-          <AnimateNumber format={formatUSTWithPostfixUnits}>
-            {demicrofy(totalDeposit)}
-          </AnimateNumber>{' '}
-          <span className="denom">axlUSDC</span>
-          {totalDeposit.gt(MILLION * MICRO) && (
-            <SubAmount style={{ fontSize: '16px' }}>
-              <AnimateNumber format={formatUST}>
-                {demicrofy(totalDeposit)}
-              </AnimateNumber>{' '}
-              axlUSDC
-            </SubAmount>
-          )}
-        </div>
-      </Grid>
+          <div className="amount">
+            <AnimateNumber format={formatUSTWithPostfixUnits}>
+              {demicrofy(totalDeposit)}
+            </AnimateNumber>{' '}
+            <span className="denom">axlUSDC</span>
+            {totalDeposit.gt(MILLION * MICRO) && (
+              <SubAmount style={{ fontSize: '16px' }}>
+                <AnimateNumber format={formatUST}>
+                  {demicrofy(totalDeposit)}
+                </AnimateNumber>{' '}
+                axlUSDC
+              </SubAmount>
+            )}
+          </div>
+        </Grid>
 
-      <Grid item xs={12} md={6}>
-        <h2>
-          <IconSpan>
-            TOTAL PROFIT{' '}
-            <InfoTooltip>
-              Total amount of axlUSDC earned while depositing on Cavern 
+        <Grid item xs={12} md={6}>
+          <h2>
+            <IconSpan>
+              TOTAL PROFIT{' '}
+              <InfoTooltip>
+                Total amount of axlUSDC earned while depositing on Cavern
                 (This doesn't account for token transfers outside the platform)
-            </InfoTooltip>
-          </IconSpan>
-        </h2>
+              </InfoTooltip>
+            </IconSpan>
+          </h2>
 
-        <div className="amount profit-amount">
-          <AnimateNumber format={formatUSTWithPostfixUnits}>
-            {demicrofy(totalProfit)}
-          </AnimateNumber>{' '}
-          <span className="denom">axlUSDC</span>
-          {totalProfit.gt(MILLION * MICRO) && (
-            <SubAmount style={{ fontSize: '16px' }}>
-              <AnimateNumber format={formatUST}>
-                {demicrofy(totalProfit)}
-              </AnimateNumber>{' '}
-              axlUSDC
-            </SubAmount>
-          )}
-        </div>
+          <div className="amount profit-amount">
+            <AnimateNumber format={formatUSTWithPostfixUnits}>
+              {demicrofy(totalProfit)}
+            </AnimateNumber>{' '}
+            <span className="denom">axlUSDC</span>
+            {totalProfit.gt(MILLION * MICRO) && (
+              <SubAmount style={{ fontSize: '16px' }}>
+                <AnimateNumber format={formatUST}>
+                  {demicrofy(totalProfit)}
+                </AnimateNumber>{' '}
+                axlUSDC
+              </SubAmount>
+            )}
+          </div>
+        </Grid>
       </Grid>
-    </Grid>
 
       <aside className="total-deposit-buttons">
-       <EmbossButton
-            component="button"
-            onClick = {() => openBuyUstDialog({})}
-          >
-            <span>
-              Buy axlUSDC{' '}
-            </span>
-            <i>
-              <img src={kado} alt="Kado Ramp" style={{width: "32px", paddingLeft: "10px"}} />
-            </i>
-          </EmbossButton>
+        <EmbossButton
+          component="button"
+          onClick={() => openBuyUstDialog({})}
+        >
+          <span>
+            Buy axlUSDC{' '}
+          </span>
+          <i>
+            <img src={kado} alt="Kado Ramp" style={{ width: "32px", paddingLeft: "10px" }} />
+          </i>
+        </EmbossButton>
         <ActionButton
           disabled={
             !connected || !moneyMarketEpochState || Big(uUST).lte(0)

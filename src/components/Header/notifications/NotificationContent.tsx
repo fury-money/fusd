@@ -1,4 +1,3 @@
-import { makeStyles } from '@mui/styles';
 import { Slider, Switch } from '@mui/material';
 import { NotificationsNone } from '@mui/icons-material';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
@@ -6,7 +5,7 @@ import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { useJobs } from 'jobs/Jobs';
 import React, { ChangeEvent, useCallback } from 'react';
-import styled, { DefaultTheme } from 'styled-components';
+import styled from 'styled-components';
 
 export interface NotificationContentProps {
   className?: string;
@@ -27,8 +26,6 @@ const sliderMarks = [createMark(75.0), createMark(87.0), createMark(99.0)];
 
 function NotificationContentBase({ className }: NotificationContentProps) {
   const { liquidationAlert, updateLiquidationAlert } = useJobs();
-  const { focusVisible, ...switchClasses } = useSwitchStyle();
-  const sliderClasses = useSliderStyle();
 
   const testNotifications = useCallback(() => {
     new Notification('Cavern Borrow Usage Notification', {
@@ -51,9 +48,7 @@ function NotificationContentBase({ className }: NotificationContentProps) {
 
       <div className="switch">
         <p>Cavern Borrow Usage</p>
-        <Switch
-          focusVisibleClassName={focusVisible}
-          classes={switchClasses}
+        <StyledSwitch
           checked={liquidationAlert.enabled}
           onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
             updateLiquidationAlert({
@@ -65,9 +60,7 @@ function NotificationContentBase({ className }: NotificationContentProps) {
       </div>
 
       {liquidationAlert.enabled && (
-        // @ts-ignore, we ignore that because of the notification attribute
-        <Slider
-          classes={sliderClasses}
+        <StyledSlider
           valueLabelDisplay="on"
           valueLabelFormat={valueLabelFormat}
           marks={sliderMarks}
@@ -102,7 +95,7 @@ function NotificationContentBase({ className }: NotificationContentProps) {
   );
 }
 
-const useSwitchStyle = makeStyles((theme: DefaultTheme) => ({
+const StyledSwitch = styled(Switch)(({ theme }) => ({
   root: {
     width: 40,
     height: 22,
@@ -138,9 +131,9 @@ const useSwitchStyle = makeStyles((theme: DefaultTheme) => ({
   },
   checked: {},
   focusVisible: {},
-}));
+}))
 
-const useSliderStyle = makeStyles((theme: DefaultTheme) => ({
+const StyledSlider = styled(Slider)(({ theme }) => ({
   root: {
     color: theme.textColor,
     height: 8,
@@ -197,7 +190,6 @@ const useSliderStyle = makeStyles((theme: DefaultTheme) => ({
     opacity: 1,
   },
 }));
-
 
 export const NotificationContent = styled(NotificationContentBase)`
   width: 100%;

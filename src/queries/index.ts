@@ -1,5 +1,3 @@
-export * from "./bridge/bridgeAssetsQuery";
-export * from "./bridge/useBridgeAssetsQuery";
 export * from "./collateral/types";
 export * from "./collateral/useWhitelistCollateralQuery";
 export * from "./collateral/useWhitelistCollateralByTokenAddrQuery";

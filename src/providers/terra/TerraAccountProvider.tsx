@@ -9,7 +9,7 @@ import { AccountContext, Account } from 'contexts/account';
 import { WalletStatus } from '@terra-money/wallet-provider';
 import { HumanAddr } from '../../@libs/types';
 
-const TerraAccountProvider = ({ children }: UIElementProps) => {
+const TerraAccountProvider = ({ children }: UIElementProps): React.JSX.Element => {
   const wallet = useWallet();
   const connectedWallet = useConnectedWallet();
   let walletStatus: Account['status'];
@@ -26,6 +26,7 @@ const TerraAccountProvider = ({ children }: UIElementProps) => {
       walletStatus = 'disconnected';
       break;
   }
+
 
   const account = useMemo<Account>(() => {
     return {

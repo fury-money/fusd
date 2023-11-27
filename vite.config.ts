@@ -9,11 +9,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   resolve: {
     alias: {
-      //'@terra-money/terra.js': '@terra-money/terra.js/dist/bundle.js',
       'styled-components':
         'styled-components/dist/styled-components.browser.esm.js',
       'process': path.resolve(__dirname, 'src/polyfills/process-es6.js'),
-      //'react-csv': 'react-csv/lib/index.js',
       'readable-stream': 'vite-compatible-readable-stream/readable-browser.js',
     },
   },

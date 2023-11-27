@@ -19,7 +19,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "watch": false,
     "jsx": "react",
     "baseUrl": "src"
   },
