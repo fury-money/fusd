@@ -3,9 +3,11 @@ import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { FlatButton } from '@libs/neumorphism-ui/components/FlatButton';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
-import { ConnectType, useWallet } from '@terra-money/wallet-provider';
+import { useWallet } from '@terra-money/wallet-kit';
 import { ConnectionTypeList } from '../../desktop/ConnectionTypeList';
 import { TermsMessage } from '../../desktop/TermsMessage';
+import { ConnectType } from 'utils/consts';
+
 
 interface FooterProps {
   includesReadonly: boolean;
@@ -42,13 +44,11 @@ interface ConnectionListProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const ConnectionList = (props: ConnectionListProps) => {
+const ConnectionList = (props: ConnectionListProps): React.JSX.Element => {
   const { setOpen } = props;
   const {
     connect,
-    availableConnectTypes,
-    availableConnections,
-    availableInstallations,
+    availableWallets,
   } = useWallet();
 
   return (
@@ -56,20 +56,22 @@ const ConnectionList = (props: ConnectionListProps) => {
       footer={
         <Footer
           setOpen={setOpen}
-          includesReadonly={availableConnectTypes.includes(
-            ConnectType.READONLY,
-          )}
+          includesReadonly={true}
+
+        // {availableConnectTypes.includes(
+        //   ConnectType.READONLY,
+        // )}
         />
       }
     >
-      {availableConnections
-        .filter(({ type }) => type !== ConnectType.READONLY)
-        .map(({ type, icon, name, identifier }) => (
+      {availableWallets
+        .filter(({ isInstalled }) => isInstalled)
+        .map(({ id, icon, name }) => (
           <FlatButton
-            key={'connection' + type + identifier}
+            key={'connection' + id}
             className="connect"
             onClick={() => {
-              connect(type, identifier);
+              connect(id);
               setOpen(false);
             }}
           >
@@ -78,7 +80,7 @@ const ConnectionList = (props: ConnectionListProps) => {
               <img
                 src={
                   icon ===
-                  'https://assets.terra.dev/icon/station-extension/icon.png'
+                    'https://assets.terra.dev/icon/station-extension/icon.png'
                     ? 'https://assets.terra.dev/icon/wallet-provider/station.svg'
                     : icon
                 }
@@ -88,14 +90,14 @@ const ConnectionList = (props: ConnectionListProps) => {
           </FlatButton>
         ))}
 
-      {availableInstallations
-        .filter(({ type }) => type === ConnectType.EXTENSION)
-        .map(({ type, identifier, name, icon, url }) => (
+      {availableWallets
+        .filter(({ isInstalled, website }) => !isInstalled && website)
+        .map(({ name, icon, website }) => (
           <BorderButton
-            key={'installation' + type + identifier}
+            key={'installation' + name}
             className="install"
             component="a"
-            href={url}
+            href={website}
             target="_blank"
             rel="noreferrer"
             onClick={() => {

@@ -1,6 +1,6 @@
 import { TEST_ADDRESSES } from "@anchor-protocol/app-fns/test-env";
 import { TEST_LCD_CLIENT } from "@libs/app-fns/test-env";
-import { AccAddress } from "@terra-money/terra.js";
+import { AccAddress } from "@terra-money/feather.js";
 import { cw20MinterQuery } from "../minter";
 
 describe("cw20MinterQuery", () => {

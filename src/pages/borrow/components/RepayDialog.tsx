@@ -35,7 +35,7 @@ import { LTVGraph } from './LTVGraph';
 import { RepayFormParams } from './types';
 import big from 'big.js';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
-import { Coin, Coins, MsgExecuteContract } from '@terra-money/terra.js';
+import { Coin, Coins, MsgExecuteContract } from '@terra-money/feather.js';
 import { CircleSpinner } from 'react-spinners-kit';
 
 export interface RepayDialogParams extends UIElementProps, RepayFormParams {
@@ -117,7 +117,7 @@ function RepayDialogBase(props: RepayDialogProps) {
         input({
           repayAmount: formatUSTInput(demicrofy(nextAmount)),
         });
-      } catch {}
+      } catch { }
     },
     [input, states.ltvToAmount],
   );

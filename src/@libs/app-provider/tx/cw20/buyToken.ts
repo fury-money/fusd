@@ -2,7 +2,7 @@ import { cw20BuyTokenTx } from "@libs/app-fns";
 import { useFixedFee } from "@libs/app-provider/hooks/useFixedFee";
 import { formatExecuteMsgNumber } from "@libs/formatter";
 import { HumanAddr, Rate, Token, u, UST } from "@libs/types";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import big from "big.js";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
@@ -26,7 +26,7 @@ export function useCW20BuyTokenTx(
 ) {
   const { availablePost, connected } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, constants } = useApp();
 
@@ -65,7 +65,7 @@ export function useCW20BuyTokenTx(
         taxRate,
         maxTaxUUSD: maxTax,
         maxSpread,
-        buyerAddr: connectedWallet.walletAddress,
+        buyerAddr: connectedWallet.terraWalletAddress as HumanAddr,
         fixedFee,
         gasWanted: constants.gasWanted,
         gasAdjustment: constants.gasAdjustment,

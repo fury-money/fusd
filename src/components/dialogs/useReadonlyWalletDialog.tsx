@@ -3,10 +3,10 @@ import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import { NativeSelect } from '@libs/neumorphism-ui/components/NativeSelect';
 import { TextInput } from '@libs/neumorphism-ui/components/TextInput';
-import { ReadonlyWalletSession } from '@terra-money/wallet-provider';
+// import { ReadonlyWalletSession } from '@terra-money/wallet-provider';
 import { DialogProps, OpenDialog, useDialog } from '@libs/use-dialog';
-import { NetworkInfo } from '@terra-money/wallet-provider';
-import { AccAddress } from '@terra-money/terra.js';
+import { NetworkInfo } from 'utils/consts';
+import { AccAddress } from '@terra-money/feather.js';
 import React, {
   ChangeEvent,
   KeyboardEvent,
@@ -22,7 +22,7 @@ interface FormParams {
   networks: NetworkInfo[];
 }
 
-type FormReturn = ReadonlyWalletSession | null;
+type FormReturn = any //ReadonlyWalletSession | null;
 
 export function useReadonlyWalletDialog(): [
   OpenDialog<FormParams, FormReturn>,

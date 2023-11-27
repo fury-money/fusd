@@ -38,8 +38,9 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from "@terra-money/terra.js";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+  TxResult
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import big, { BigSource } from "big.js";
 import { CollateralInfo } from "pages/borrow/components/useCollaterals";
 import { Observable } from "rxjs";
@@ -47,6 +48,7 @@ import { getLiquidationWithdrawCollateralMsg } from "../liquidate/collateral";
 import _ from "lodash";
 import { Big } from "big.js";
 import { WithdrawableBids } from "pages/liquidation/components/useWithdrawDefaultedCollateral";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export interface AbortMissionCollaterals {
   allWithdrawableDefaultedCollaterals: ({
@@ -217,7 +219,7 @@ export function abortMissionTx(
     txFee: u<UST>;
     network: NetworkInfo;
     queryClient: QueryClient;
-    post: (tx: CreateTxOptions) => Promise<TxResult>;
+    post: (tx: CreateTxOptions) => Promise<PostResponse>;
     txErrorReporter?: (error: unknown) => string;
     onTxSucceed?: () => void;
   } & AbortMissionCollaterals
@@ -239,6 +241,7 @@ export function abortMissionTx(
       }),
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

@@ -35,11 +35,15 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from "@terra-money/terra.js";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+} from "@terra-money/feather.js";
+import { 
+  TxResult
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import big, { Big } from "big.js";
 import { Observable } from "rxjs";
 import { AnchorTax } from "../../types";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export function ancBuyTx($: {
   fromAmount: UST;
@@ -55,7 +59,7 @@ export function ancBuyTx($: {
   tax: AnchorTax;
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   txErrorReporter?: (error: unknown) => string;
   onTxSucceed?: () => void;
 }): Observable<TxResultRendering> {
@@ -86,6 +90,7 @@ export function ancBuyTx($: {
       ],
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

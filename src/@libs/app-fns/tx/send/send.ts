@@ -1,7 +1,7 @@
 import { floor } from "@libs/big-math";
 import { HumanAddr, Rate, terraswap, Token, u, UST } from "@libs/types";
 import { pipe } from "@rx-stream/pipe";
-import { Coin, MsgExecuteContract, MsgSend, Fee } from "@terra-money/terra.js";
+import { Coin, MsgExecuteContract, MsgSend, Fee } from "@terra-money/feather.js";
 import { Observable } from "rxjs";
 import { TxResultRendering, TxStreamPhase } from "../../models/tx";
 import { pickEvent, pickRawLog } from "../../queries/txInfo";
@@ -53,6 +53,7 @@ export function sendTx(
       fee: new Fee($.gasWanted, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
       memo: $.memo,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

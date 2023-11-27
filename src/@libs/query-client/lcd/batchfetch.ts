@@ -13,7 +13,7 @@ import { HttpBatchClient, Tendermint34Client } from "@cosmjs/tendermint-rpc";
 
 // Tendermint extension
 import { ServiceClientImpl as TenderMintServiceClientImpl } from "cosmjs-types/cosmos/base/tendermint/v1beta1/query";
-import { NetworkInfo } from "@terra-money/wallet-provider";
+import { NetworkInfo } from "utils/consts";
 import { useCallback, useEffect, useState } from "react";
 
 export interface TenderMintExtension {

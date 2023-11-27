@@ -9,14 +9,16 @@ import {
   DropdownBox,
 } from 'components/Header/desktop/DropdownContainer';
 import { useBuyUstDialog } from 'pages/earn/components/useBuyUstDialog';
-import { useWallet } from '@terra-money/wallet-provider';
+import { WalletStatus, useWallet } from '@terra-money/wallet-kit';
 import { useVestingClaimNotification } from 'components/Header/vesting/VestingClaimNotification';
 
-const TerraWalletSelector = () => {
-  const { terraWalletAddress, status } = useAccount();
+const TerraWalletSelector = (): React.JSX.Element => {
+  const { terraWalletAddress, status, connection } = useAccount();
 
-  const { connect, disconnect, connection, availableConnectTypes } =
+  const { connect, disconnect, availableWallets } =
     useWallet();
+
+  const availableConnectTypes = availableWallets.filter(({ isInstalled }) => isInstalled);
 
   const [open, setOpen] = useState(false);
 
@@ -30,7 +32,7 @@ const TerraWalletSelector = () => {
     if (availableConnectTypes.length > 1) {
       setOpen(true);
     } else if (availableConnectTypes.length === 1) {
-      connect(availableConnectTypes[0]);
+      connect(availableConnectTypes[0].id);
     }
   }, [availableConnectTypes, connect]);
 
@@ -46,7 +48,7 @@ const TerraWalletSelector = () => {
   return (
     <WalletSelector
       walletAddress={terraWalletAddress}
-      initializing={status === 'initialization'}
+      initializing={status === WalletStatus.INITIALIZING}
       onClick={connectWallet}
       onClose={onClose}
     >

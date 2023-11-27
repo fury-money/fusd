@@ -41,14 +41,15 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from "@terra-money/terra.js";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import { WhitelistCollateral } from "queries";
 import { QueryObserverResult } from "react-query";
 import { Observable } from "rxjs";
 import { BorrowBorrower } from "../../queries/borrow/borrower";
 import { BorrowMarket } from "../../queries/borrow/market";
 import { _fetchBorrowData } from "./_fetchBorrowData";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export function borrowProvideCollateralTx($: {
   collateral: WhitelistCollateral;
@@ -60,7 +61,7 @@ export function borrowProvideCollateralTx($: {
   fixedGas: u<UST>;
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   txErrorReporter?: (error: unknown) => string;
   borrowMarketQuery: () => Promise<
     QueryObserverResult<BorrowMarket | undefined>
@@ -106,6 +107,7 @@ export function borrowProvideCollateralTx($: {
       ],
       fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

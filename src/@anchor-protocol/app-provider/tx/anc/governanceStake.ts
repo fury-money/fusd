@@ -2,7 +2,7 @@ import { ancGovernanceStakeTx } from "@anchor-protocol/app-fns";
 import { ANC } from "@anchor-protocol/types";
 import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
 import { useAnchorWebapp } from "../../contexts/context";
@@ -17,7 +17,7 @@ export interface AncGovernanceStakeTxParams {
 export function useAncGovernanceStakeTx() {
   const { availablePost, connected, terraWalletAddress } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, contractAddress, constants } =
     useAnchorWebapp();

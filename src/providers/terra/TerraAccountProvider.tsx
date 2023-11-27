@@ -3,44 +3,41 @@ import { UIElementProps } from '@libs/ui';
 import {
   useConnectedWallet,
   useWallet,
-  ConnectType,
-} from '@terra-money/wallet-provider';
+} from '@terra-money/wallet-kit';
 import { AccountContext, Account } from 'contexts/account';
-import { WalletStatus } from '@terra-money/wallet-provider';
+import { WalletStatus } from '@terra-money/wallet-kit';
 import { HumanAddr } from '../../@libs/types';
+import { MAINNET, useNetwork } from '@anchor-protocol/app-provider';
+import { ConnectType } from 'utils/consts';
 
 const TerraAccountProvider = ({ children }: UIElementProps): React.JSX.Element => {
   const wallet = useWallet();
   const connectedWallet = useConnectedWallet();
-  let walletStatus: Account['status'];
-
-  switch (wallet.status) {
-    case WalletStatus.INITIALIZING:
-      walletStatus = 'initialization';
-      break;
-    case WalletStatus.WALLET_CONNECTED:
-      walletStatus = 'connected';
-      break;
-    case WalletStatus.WALLET_NOT_CONNECTED:
-    default:
-      walletStatus = 'disconnected';
-      break;
-  }
+  const { network } = useNetwork();
 
 
   const account = useMemo<Account>(() => {
     return {
       connected: !!connectedWallet as true, // Cast to "true" to fix discriminated union
-      nativeWalletAddress: connectedWallet?.walletAddress as HumanAddr,
-      network: 'terra',
-      status: walletStatus,
-      terraWalletAddress: connectedWallet?.terraAddress as HumanAddr,
-      readonly:
-        connectedWallet === undefined ||
-        connectedWallet.connectType === ConnectType.READONLY,
-      availablePost: !!connectedWallet && connectedWallet.availablePost,
+      nativeWalletAddress: connectedWallet?.addresses[network.chainID] as HumanAddr,
+      network: MAINNET,
+      status: wallet.status as WalletStatus,
+      terraWalletAddress: connectedWallet?.addresses[network.chainID] as HumanAddr,
+      readonly: !!connectedWallet as true,
+      availablePost: !!connectedWallet as true,
+      post: wallet.post,
+      connection: connectedWallet ? {
+        ...wallet.availableWallets.filter(({ name }) => name == connectedWallet?.name)[0],
+        type: ConnectType.WALLET_KIT
+      } : undefined,
+
+      // TODO : Read-Address
+      // readonly:
+      //   connectedWallet === undefined ||
+      //   connectedWallet.connectType === ConnectType.READONLY,
+      // availablePost: !!connectedWallet && connectedWallet.availablePost,
     };
-  }, [connectedWallet, walletStatus]);
+  }, [connectedWallet, network.chainID, wallet.availableWallets, wallet.post, wallet.status]);
 
   return (
     <AccountContext.Provider value={account}>

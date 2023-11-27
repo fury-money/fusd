@@ -1,52 +1,57 @@
-import { LCDClient } from '@terra-money/terra.js';
-import { NetworkInfo } from '@terra-money/wallet-provider';
+import { LCDClient, LCDClientConfig } from '@terra-money/feather.js';
 import { createContext, useContext } from 'react';
 
-export const TESTNET: NetworkInfo = {
-  name: 'testnet',
+export type CavernNetworkInfo = LCDClientConfig & { name: string };
+
+
+export const TESTNET: CavernNetworkInfo = {
+  name: "testnet",
   chainID: 'pisco-1',
   lcd: 'https://pisco-lcd.erisprotocol.com/',
-  walletconnectID: 0,
+  prefix: "terra",
+  gasAdjustment: 1.6,
+  gasPrices: "0.015uluna"
 };
 
-export const CLASSIC: NetworkInfo = {
-  name: 'classic',
+export const CLASSIC: CavernNetworkInfo = {
+  name: "classic",
   chainID: 'columbus-5',
   lcd: 'https://columbus-lcd.terra.dev',
-  walletconnectID: 0,
+  prefix: "terra",
+  gasAdjustment: 1.6,
+  gasPrices: "0.015uluna"
 };
 
-export const MAINNET: NetworkInfo = {
-  name: 'mainnet',
+export const MAINNET: CavernNetworkInfo = {
+  name: "mainnet",
   chainID: 'phoenix-1',
   lcd: 'https://phoenix-lcd.erisprotocol.com/',
-  walletconnectID: 0,
+  prefix: "terra",
+  gasAdjustment: 1.6,
+  gasPrices: "28.325uluna"
 };
 
 const LCDClients: Record<string, LCDClient> = {
   testnet: new LCDClient({
-    chainID: TESTNET.chainID,
-    URL: TESTNET.lcd,
-  }),
-  classic: new LCDClient({
-    chainID: CLASSIC.chainID,
-    URL: CLASSIC.lcd,
+    testnet: TESTNET,
   }),
   mainnet: new LCDClient({
-    chainID: MAINNET.chainID,
-    URL: MAINNET.lcd,
+    mainnet: MAINNET,
   }),
-};
+  classic: new LCDClient({
+    classic: CLASSIC,
+  }),
+}
 
-const RPCClients: Record<string, string> =  {
+const RPCClients: Record<string, string> = {
   testnet: "https://pisco-rpc.erisprotocol.com/",
   mainnet: `https://phoenix-rpc.erisprotocol.com/`,
 }
 
-export const NetworkContext = createContext<NetworkInfo>(MAINNET);
+export const NetworkContext = createContext<CavernNetworkInfo>(MAINNET);
 
 type UseNetworkReturn = {
-  network: NetworkInfo;
+  network: CavernNetworkInfo;
   lcdClient: LCDClient;
   rpcClient: string;
 };

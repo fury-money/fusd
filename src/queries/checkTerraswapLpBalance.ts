@@ -1,4 +1,4 @@
-import { useAnchorWebapp } from "@anchor-protocol/app-provider";
+import { useAnchorWebapp, useNetwork } from "@anchor-protocol/app-provider";
 import { ANC, anchorToken, AncUstLP, cw20 } from "@anchor-protocol/types";
 import {
   QueryClient,
@@ -7,7 +7,7 @@ import {
   WasmQueryData,
 } from "@libs/query-client";
 import { CW20Addr, HumanAddr, u } from "@libs/types";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import big from "big.js";
 import { useEffect, useState } from "react";
 import { useAccount } from "contexts/account";
@@ -32,7 +32,8 @@ const address = {
 export function useCheckTerraswapLpBalance() {
   const { connected, terraWalletAddress } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
+  const {network} = useNetwork();
 
   const { queryClient } = useAnchorWebapp();
 
@@ -49,7 +50,7 @@ export function useCheckTerraswapLpBalance() {
 
     const { terraswapAncUstLPToken, staking } =
       address[
-        connectedWallet.network.chainID === "columbus-5"
+        network.chainID === "columbus-5"
           ? "columbus-5"
           : "bombay-12"
       ];
@@ -76,7 +77,7 @@ export function useCheckTerraswapLpBalance() {
         });
       }
     });
-  }, [connected, connectedWallet, queryClient, terraWalletAddress]);
+  }, [connected, connectedWallet, queryClient, terraWalletAddress, network]);
 
   return balances;
 }
@@ -84,7 +85,8 @@ export function useCheckTerraswapLpBalance() {
 export function useCheckTerraswapLpRewards() {
   const { connected, terraWalletAddress } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
+  const {network} = useNetwork();
 
   const { queryClient } = useAnchorWebapp();
 
@@ -99,7 +101,7 @@ export function useCheckTerraswapLpRewards() {
 
     const { terraswapAncUstLPToken, staking } =
       address[
-        connectedWallet.network.chainID === "columbus-5"
+        network.chainID === "columbus-5"
           ? "columbus-5"
           : "bombay-12"
       ];
@@ -120,7 +122,7 @@ export function useCheckTerraswapLpRewards() {
         });
       }
     });
-  }, [connected, connectedWallet, queryClient, terraWalletAddress]);
+  }, [connected, connectedWallet, queryClient, terraWalletAddress, network]);
 
   return balances;
 }

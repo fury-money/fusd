@@ -1,7 +1,6 @@
 import { sendTx } from "@libs/app-fns";
 import { useFixedFee } from "@libs/app-provider/hooks/useFixedFee";
 import { HumanAddr, terraswap, Token, u, UST } from "@libs/types";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
 import { useApp } from "../../contexts/app";
@@ -22,7 +21,7 @@ export interface SendTxParams {
 export function useSendTx() {
   const { availablePost, connected } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, constants } = useApp();
 
@@ -44,7 +43,7 @@ export function useSendTx() {
         memo,
         toAddr,
         amount,
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         taxRate,
         maxTaxUUSD: maxTax,
         fixedFee,

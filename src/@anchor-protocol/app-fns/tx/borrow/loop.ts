@@ -1,7 +1,7 @@
 import { AnchorContractAddress } from "@anchor-protocol/app-provider";
 import { bAsset, CollateralAmount } from "@anchor-protocol/types";
 import { HumanAddr, Rate, Token, u, UST } from "@libs/types";
-import { Coin, MsgExecuteContract } from "@terra-money/terra.js";
+import { Coin, MsgExecuteContract } from "@terra-money/feather.js";
 import { WhitelistWrappedCollateral } from "queries";
 import big, { Big } from "big.js";
 import { getWrappedCollateralMessages } from "./provideWrappedCollateral";

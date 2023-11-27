@@ -5,7 +5,6 @@ import {
   HumanAddr,
   Rate,
   u,
-  CW20Addr,
   Luna,
   Token,
 } from "@anchor-protocol/types";
@@ -32,12 +31,13 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from "@terra-money/terra.js";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import { Observable } from "rxjs";
 import _ from "lodash";
 import { CollateralInfo } from "pages/borrow/components/useCollaterals";
 import Big from "big.js";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export interface LiquidationWithdrawCollateralMsgArgs {
   walletAddr: HumanAddr;
@@ -166,7 +166,7 @@ export function liquidationWithdrawCollateralTx($: {
   txFee: u<Luna>;
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   txErrorReporter?: (error: unknown) => string;
   onTxSucceed?: () => void;
 }): Observable<TxResultRendering> {
@@ -183,6 +183,7 @@ export function liquidationWithdrawCollateralTx($: {
       }),
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, ReactNode } from 'react';
 import styled from 'styled-components';
 
-export interface ErrorBoundaryProps {}
+export interface ErrorBoundaryProps {
+  children: ReactNode | undefined
+}
 
 interface ErrorBoundaryState {
   error: null | Error;
@@ -16,11 +18,11 @@ export class ErrorBoundary extends Component<
     this.state = { error: null };
   }
 
-  static getDerivedStateFromError(error: Error) {
+  static getDerivedStateFromError(error: Error): { error: Error } {
     return { error };
   }
 
-  componentDidCatch(error: Error, errorInfo: any) {
+  componentDidCatch(error: Error, errorInfo: unknown): void {
     this.setState({
       error,
     });
@@ -28,7 +30,7 @@ export class ErrorBoundary extends Component<
     console.error(errorInfo);
   }
 
-  render() {
+  render(): ReactNode {
     if (this.state.error) {
       return <ErrorView>{this.state.error.toString()}</ErrorView>;
     }

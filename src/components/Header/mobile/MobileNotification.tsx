@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { ReactComponent as NotificationOff } from '../assets/NotificationOff.svg';
 import { ReactComponent as NotificationOn } from '../assets/NotificationOn.svg';
 import { useNotificationDialog } from './useNotificationDialog';
+import { WalletStatus } from '@terra-money/wallet-kit';
 
 export interface MobileNotificationProps {
   className?: string;
@@ -19,7 +20,7 @@ function MobileNotificationBase({ className }: MobileNotificationProps) {
   const [openDialog, dialogElement] = useNotificationDialog();
 
   const visible = useMemo(() => {
-    return status === 'connected' && permission === 'granted';
+    return status === WalletStatus.CONNECTED && permission === 'granted';
   }, [permission, status]);
 
   return visible ? (

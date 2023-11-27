@@ -12,7 +12,7 @@ import { CollateralAmount, moneyMarket, Rate } from "@anchor-protocol/types";
 import { formatRate, microfy } from "@libs/formatter";
 import { Denom, HumanAddr, Luna, Token, u, UST } from "@libs/types";
 import { FormReturn } from "@libs/use-form";
-import { MsgExecuteContract } from "@terra-money/terra.js";
+import { MsgExecuteContract } from "@terra-money/feather.js";
 import big, { Big } from "big.js";
 import { SwapSimulationAndSwapResponse } from "pages/swap/queries/tfmQueries";
 import { WhitelistWrappedCollateral } from "queries";

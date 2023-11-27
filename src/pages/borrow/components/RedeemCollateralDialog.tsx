@@ -41,12 +41,12 @@ import {
 import { BroadcastTxStreamResult } from 'pages/earn/components/types';
 import big from 'big.js';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
-import { MsgExecuteContract } from '@terra-money/terra.js';
+import { MsgExecuteContract } from '@terra-money/feather.js';
 import { CircleSpinner } from 'react-spinners-kit';
 
 export interface RedeemCollateralDialogParams
   extends UIElementProps,
-    RedeemCollateralFormParams {
+  RedeemCollateralFormParams {
   txResult: StreamResult<TxResultRendering> | null;
   uTokenBalance: u<bAsset>;
   proceedable: boolean;
@@ -157,7 +157,7 @@ function RedeemCollateralDialogBase(props: RedeemCollateralDialogProps) {
             collateral.decimals,
           ),
         });
-      } catch {}
+      } catch { }
     },
     [input, states.ltvToAmount, collateral.decimals],
   );
@@ -246,11 +246,11 @@ function RedeemCollateralDialogBase(props: RedeemCollateralDialogProps) {
             >
               {states.withdrawableAmount
                 ? formatOutput(
-                    demicrofy(states.withdrawableAmount, collateral.decimals),
-                    {
-                      decimals: 3,
-                    },
-                  )
+                  demicrofy(states.withdrawableAmount, collateral.decimals),
+                  {
+                    decimals: 3,
+                  },
+                )
                 : 0}{' '}
               {states.collateral.symbol}
             </span>

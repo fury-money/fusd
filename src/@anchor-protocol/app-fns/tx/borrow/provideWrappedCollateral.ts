@@ -17,11 +17,9 @@ import {
   Rate,
   u,
   UST,
-  Token,
   CW20Addr,
 } from "@anchor-protocol/types";
 import {
-  pickAttributeValue,
   pickAttributeValueByKey,
   pickEvent,
   pickRawLog,
@@ -44,8 +42,8 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from "@terra-money/terra.js";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import { WhitelistWrappedCollateral } from "queries";
 import { QueryObserverResult } from "react-query";
 import { Observable } from "rxjs";
@@ -56,6 +54,7 @@ import big from "big.js";
 import { LSDContracts } from "@anchor-protocol/app-provider";
 import _ from "lodash";
 import { getUnderlyingToken } from "pages/swap/queries/balanceQuery";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export function getWrappedCollateralMessages(
   walletAddr: HumanAddr,
@@ -104,7 +103,6 @@ export function getWrappedCollateralMessages(
           asset.name
         }`
       );
-  } else {
   }
 
   return _.compact([
@@ -142,7 +140,7 @@ export function borrowProvideWrappedCollateralTx($: {
   fixedGas: u<UST>;
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   txErrorReporter?: (error: unknown) => string;
   borrowMarketQuery: () => Promise<
     QueryObserverResult<BorrowMarket | undefined>
@@ -168,6 +166,7 @@ export function borrowProvideWrappedCollateralTx($: {
       ),
       fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

@@ -4,7 +4,7 @@ import { FormParams, FormReturn } from './types';
 import { TerraDepositDialog } from './terra';
 import { DeploymentSwitch } from 'components/layouts/DeploymentSwitch';
 
-function Component({ closeDialog }: DialogProps<FormParams, FormReturn>) {
+function Component({ closeDialog }: DialogProps<FormParams, FormReturn>): React.JSX.Element {
   return (
     <DeploymentSwitch
       terra={<TerraDepositDialog closeDialog={closeDialog} />}

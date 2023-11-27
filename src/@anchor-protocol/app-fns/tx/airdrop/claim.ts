@@ -17,17 +17,21 @@ import {
 import { floor } from "@libs/big-math";
 import { QueryClient } from "@libs/query-client";
 import { pipe } from "@rx-stream/pipe";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { 
+  TxResult
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-} from "@terra-money/terra.js";
+} from "@terra-money/feather.js";
 import { Observable } from "rxjs";
 import { airdropStageCache } from "../../caches/airdropStage";
 import { Airdrop } from "../../queries/airdrop/check";
 import { formatANC } from "@anchor-protocol/notation";
 import { demicrofy } from "@libs/formatter";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export function airdropClaimTx($: {
   airdrop: Airdrop;
@@ -38,7 +42,7 @@ export function airdropClaimTx($: {
   txFee: u<UST>;
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   txErrorReporter?: (error: unknown) => string;
   onTxSucceed?: () => void;
 }): Observable<TxResultRendering> {
@@ -61,6 +65,7 @@ export function airdropClaimTx($: {
       ],
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

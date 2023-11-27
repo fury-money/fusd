@@ -1,5 +1,5 @@
 import { aluna } from "@anchor-protocol/types";
-import { Dec, Int } from "@terra-money/terra.js";
+import { Dec, Int } from "@terra-money/feather.js";
 import { log } from "console";
 
 test("claimable rewards error case 1", () => {

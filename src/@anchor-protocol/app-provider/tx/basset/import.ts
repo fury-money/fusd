@@ -1,13 +1,13 @@
 import { bAssetImportTx } from "@anchor-protocol/app-fns";
 import { bAsset } from "@anchor-protocol/types";
 import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
-import { CW20Addr } from "@libs/types";
+import { CW20Addr, HumanAddr } from "@libs/types";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
 import { useBAssetInfoByTokenAddrQuery } from "../../queries/basset/bAssetInfoByTokenAddr";
+import { useAccount } from "contexts/account";
 
 export interface BAssetImportTxParams {
   amount: bAsset;
@@ -15,7 +15,7 @@ export interface BAssetImportTxParams {
 }
 
 export function useBAssetImportTx(tokenAddr: CW20Addr | undefined) {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, constants } = useAnchorWebapp();
 
@@ -39,7 +39,7 @@ export function useBAssetImportTx(tokenAddr: CW20Addr | undefined) {
       }
 
       return bAssetImportTx({
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         converterAddr: bAssetInfo.minter.minter,
         wormholeTokenAddr: bAssetInfo.converterConfig.wormhole_token_address,
         wormholeTokenAmount: amount,

@@ -13,7 +13,7 @@ import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { Luna, u } from '@libs/types';
 import { StreamStatus } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { useConnectedWallet } from '@terra-money/wallet-kit';
 import big, { Big } from 'big.js';
 import { CenteredLayout } from 'components/layouts/CenteredLayout';
 import { MessageBox } from 'components/MessageBox';
@@ -21,6 +21,7 @@ import { Sub } from 'components/Sub';
 import { TxResultRenderer } from 'components/tx/TxResultRenderer';
 import { TxFeeList, TxFeeListItem } from 'components/TxFeeList';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
+import { useAccount } from 'contexts/account';
 import { fixHMR } from 'fix-hmr';
 import { BLunaBurnProcess } from 'pages/basset/components/BLunaBurnProcess';
 import { WithdrawHistory } from 'pages/basset/components/WithdrawHistory';
@@ -36,7 +37,7 @@ function Component({ className }: BlunaWithdrawProps) {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const fixedFee = useFixedFee();
 

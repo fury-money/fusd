@@ -7,8 +7,8 @@ import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { StreamStatus } from '@rx-stream/react';
-import { MsgExecuteContract } from '@terra-money/terra.js';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { MsgExecuteContract } from '@terra-money/feather.js';
+import { useConnectedWallet } from '@terra-money/wallet-kit';
 import big from 'big.js';
 import { CenteredLayout } from 'components/layouts/CenteredLayout';
 import { MessageBox } from 'components/MessageBox';
@@ -32,10 +32,10 @@ function Component({ className }: BAssetClaimProps) {
   // ---------------------------------------------
   // dependencies
   // ---------------------------------------------
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
   const navigate = useNavigate();
 
-  const {connected, terraWalletAddress} = useAccount();
+  const { connected, terraWalletAddress } = useAccount();
 
   const [estimatedFee, estimatedFeeError, estimateFee] =
     useFeeEstimationFor(terraWalletAddress);
@@ -58,26 +58,26 @@ function Component({ className }: BAssetClaimProps) {
   // ---------------------------------------------
 
   useEffect(() => {
-    setNoRewards(()=>false);
+    setNoRewards(() => false);
     if (!connected || !rewardBreakdowns) {
       return;
     }
 
     if (rewardBreakdowns.length === 0) {
-      setNoRewards(()=>true);
+      setNoRewards(() => true);
     }
 
     estimateFee(rewardBreakdowns.map((rewardBreakdown) => {
-        return new MsgExecuteContract(
-          terraWalletAddress as string,
-          rewardBreakdown.rewardAddr,
-          {
-            claim_rewards: {
-              recipient: undefined,
-            },
+      return new MsgExecuteContract(
+        terraWalletAddress as string,
+        rewardBreakdown.rewardAddr,
+        {
+          claim_rewards: {
+            recipient: undefined,
           },
-        );
-      }),);
+        },
+      );
+    }),);
   }, [
     terraWalletAddress,
     rewardBreakdowns,
@@ -161,17 +161,17 @@ function Component({ className }: BAssetClaimProps) {
             </TxFeeListItem>
           )}
           <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-              {estimatedFee && !noRewards && 
-                big(estimatedFee.txFee).gt(0) &&
-                `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
-              {!estimatedFeeError && !estimatedFee && (
-                <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
-                </span>
-              )}
-              {estimatedFeeError}
-              {noRewards && !!estimatedFeeError && " : there is no rewards available"}
-            </TxFeeListItem>
+            {estimatedFee && !noRewards &&
+              big(estimatedFee.txFee).gt(0) &&
+              `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
+            {!estimatedFeeError && !estimatedFee && (
+              <span className="spinner">
+                <CircleSpinner size={14} color={theme.colors.positive} />
+              </span>
+            )}
+            {estimatedFeeError}
+            {noRewards && !!estimatedFeeError && " : there is no rewards available"}
+          </TxFeeListItem>
         </TxFeeList>
 
         <ViewAddressWarning>

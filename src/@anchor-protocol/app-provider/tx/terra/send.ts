@@ -2,7 +2,7 @@ import { HumanAddr, Token } from "@anchor-protocol/types";
 import { terraSendTx } from "@anchor-protocol/app-fns";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
 import { useAnchorWebapp } from "../../contexts/context";
@@ -21,7 +21,7 @@ export interface TerraSendTxParams {
 export function useTerraSendTx() {
   const { availablePost, connected } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, constants } = useAnchorWebapp();
 
@@ -41,7 +41,7 @@ export function useTerraSendTx() {
       }
 
       return terraSendTx({
-        myWalletAddress: connectedWallet.walletAddress,
+        myWalletAddress: connectedWallet.terraWalletAddress as HumanAddr,
         toWalletAddress,
         amount,
         currency,

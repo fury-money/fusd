@@ -39,11 +39,14 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-  MsgSend,
-} from "@terra-money/terra.js";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+} from "@terra-money/feather.js";
+import { 
+  TxResult
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import big, { BigSource } from "big.js";
 import { Observable } from "rxjs";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export function earnDepositTx($: {
   walletAddr: HumanAddr;
@@ -56,7 +59,7 @@ export function earnDepositTx($: {
   txFee: u<UST>;
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   txErrorReporter?: (error: unknown) => string;
   onTxSucceed?: () => void;
 }): Observable<TxResultRendering> {
@@ -84,6 +87,7 @@ export function earnDepositTx($: {
       ],
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

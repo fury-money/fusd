@@ -3,7 +3,7 @@ import {
   MAX_LOOPS,
 } from '@anchor-protocol/app-fns';
 import {
-    useAnchorBank,
+  useAnchorBank,
   useAnchorWebapp,
   useBorrowMarketQuery,
   useLSDCollateralQuery,
@@ -44,7 +44,7 @@ import { LTVGraph } from '../LTVGraph';
 import { isWrappedCollateral, useWhitelistCollateralQuery, WhitelistCollateral, WhitelistWrappedCollateral } from 'queries';
 import { useBalances } from 'contexts/balances';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
-import { MsgExecuteContract } from '@terra-money/terra.js';
+import { MsgExecuteContract } from '@terra-money/feather.js';
 import { CircleSpinner } from 'react-spinners-kit';
 import { useBorrowLoopForm } from '@anchor-protocol/app-provider/forms/borrow/loop';
 import { CavernSlider } from 'pages/liquidation/components/PlaceBidSection';
@@ -73,8 +73,8 @@ export interface BorrowDialogParams extends UIElementProps {
 
 interface TxRenderFnProps {
   txResult:
-    | StreamInProgress<TxResultRendering<unknown>>
-    | StreamDone<TxResultRendering<unknown>>;
+  | StreamInProgress<TxResultRendering<unknown>>
+  | StreamDone<TxResultRendering<unknown>>;
   closeDialog: () => void;
 }
 
@@ -150,11 +150,11 @@ function BorrowDialogBase(props: BorrowDialogProps) {
 
 
 
-  const {data: allCollaterals} = useWhitelistCollateralQuery();
+  const { data: allCollaterals } = useWhitelistCollateralQuery();
 
-  const allLSDCollaterals: WhitelistWrappedCollateral[] = useMemo(()=> 
+  const allLSDCollaterals: WhitelistWrappedCollateral[] = useMemo(() =>
     (allCollaterals ?? []).filter(isWrappedCollateral)
-  ,[allCollaterals])
+    , [allCollaterals])
 
   const onCollateralChanged = useCallback(
     (collateral: WhitelistWrappedCollateral) => {
@@ -193,13 +193,13 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           return;
         }
       }
-      proceedGenericTx({msgs, txFee: estimatedFee});
+      proceedGenericTx({ msgs, txFee: estimatedFee });
     },
     [onProceed, connected, estimatedFee, openConfirm, availablePost],
   );
 
   const {
-    data: { oraclePrices } = {data: {oraclePrices: undefined}}
+    data: { oraclePrices } = { data: { oraclePrices: undefined } }
   } = useBorrowMarketQuery();
 
 
@@ -216,7 +216,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
 
   useEffect(() => {
     input({
-      collateral:loopToken
+      collateral: loopToken
     })
   }, [loopToken, input])
 
@@ -225,15 +225,15 @@ function BorrowDialogBase(props: BorrowDialogProps) {
   };
 
   const handleClose = useCallback((token?: WhitelistWrappedCollateral) => {
-    if(token){  
-        setLoopToken(token)
-        onCollateralChanged(token);
-      }
+    if (token) {
+      setLoopToken(token)
+      onCollateralChanged(token);
+    }
     setCollaterallAnchorEl(null);
   }, [setLoopToken, setCollaterallAnchorEl]);
 
   useEffect(() => {
-    if(!states.executeMsgs){
+    if (!states.executeMsgs) {
       return undefined;
     }
     estimateFee(states.executeMsgs);
@@ -288,7 +288,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
   }
 
   return (
-    <Modal open onClose={() => closeDialog()} sx={{overflowY: "scroll"}}>
+    <Modal open onClose={() => closeDialog()} sx={{ overflowY: "scroll" }}>
       <Dialog className={className} onClose={() => closeDialog()}>
         <h1>
           Borrow with Leverage{' '}
@@ -307,7 +307,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           <MessageBox>{invalidTxFee}</MessageBox>
         )}
 
-        
+
         {/* Collateral amount */}
         <NumberInput
           className="amount"
@@ -323,17 +323,17 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-              {/* Collateral looping selection */}
+                {/* Collateral looping selection */}
                 <SelectAndTextInputContainerLabel>
                   <Button
                     id="basic-button"
                     aria-controls={collateralDialogOpen ? 'basic-menu' : undefined}
                     aria-haspopup="true"
-                    aria-expanded={collateralDialogOpen? 'true' : undefined}
+                    aria-expanded={collateralDialogOpen ? 'true' : undefined}
                     onClick={(event) => handleClick(event)}
-                    sx={{color: theme.textColor, textTransform: "unset"}}
+                    sx={{ color: theme.textColor, textTransform: "unset" }}
                   >
-                    <TokenIcon token={loopToken?.info.info.symbol} /> {loopToken?.info.info.symbol} <ArrowDropDown/>
+                    <TokenIcon token={loopToken?.info.info.symbol} /> {loopToken?.info.info.symbol} <ArrowDropDown />
                   </Button>
                   <Menu
                     id="basic-menu"
@@ -351,10 +351,10 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                             <TokenIcon token={collateral.info.info.symbol} />
                           </ListItemIcon>
                           <ListItemText>
-                          {collateral.info.info.symbol} 
+                            {collateral.info.info.symbol}
                           </ListItemText>
                         </MenuItem>
-                       )
+                      )
                     })}
                   </Menu>
                 </SelectAndTextInputContainerLabel>
@@ -377,19 +377,19 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                 textDecoration: 'underline',
                 cursor: 'pointer',
               }}
-              onClick={() =>{
+              onClick={() => {
                 updateTargetLeverage(states.maximumLeverage.toFixed(2))
               }
               }
             >
-            Max : {formatOutput(demicrofy(loopTokenBalance as u<Token>))} {loopToken?.info.info.symbol}
+              Max : {formatOutput(demicrofy(loopTokenBalance as u<Token>))} {loopToken?.info.info.symbol}
             </span>
           </span>
-          
+
         </div>
         <div
-          style={{marginBottom : "-40px", marginTop: "40px"}}
-          >
+          style={{ marginBottom: "-40px", marginTop: "40px" }}
+        >
           Maximum Borrow Usage
         </div>
         <figure className="graph">
@@ -406,7 +406,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
         </figure>
 
         <div
-          style={{marginTop: "-30px", marginBottom: "30px"}}
+          style={{ marginTop: "-30px", marginBottom: "30px" }}
           className="wallet"
           aria-invalid={
             !!states.invalidLTV
@@ -416,181 +416,181 @@ function BorrowDialogBase(props: BorrowDialogProps) {
           {' '}
         </div>
 
-        { !states.invalidLTV && <>
-        <div style={{marginBottom: "10px"}}>
-          Target Leverage
-        </div>
-        <CavernSlider
-          value={parseFloat(states.targetLeverage)}
-          defaultValue={1 + parseFloat(states.collateral?.max_ltv ?? "0.6")}
-          step={1/100}
-          min={states.minimumLeverage}
-          max={parseFloat(states.maximumLeverage.toFixed(2))}
-          aria-labelledby="discrete-slider"
-          valueLabelDisplay="auto"
-          onChange={(
-            { target }: Event,
-            newValue: number | number[],
-          ) => {        
-            updateTargetLeverage(Array.isArray(newValue) ? newValue[0] : newValue)
-          }}
-          valueLabelFormat={(value) => `${value}x`}
-        />
-        <div
-          className="wallet"
-          aria-invalid={
-            !!states.invalidLeverage
-          }
-        >
-          <span>{states.invalidLeverage}</span>
-          {' '}
-          <span>
-            <span
-              style={{
-                textDecoration: 'underline',
-                cursor: 'pointer',
-              }}
-              onClick={() =>{
-                updateTargetLeverage((states.maximumLeverage).toFixed(2))
-              }
-              }
-            >
-            Max : {states.maximumLeverage.toFixed(2)}x
-            </span>
-          </span>
-        </div>
-
-        <div style={{margin: "20px auto"}}>
-          <DiscloseSlippageSelector
-            className="slippage"
-            items={SLIPPAGE_VALUES}
-            value={parseFloat(states.slippage)}
-            onChange={updateSlippage}
-            helpText={
-              parseFloat(states.slippage) < LOW_SLIPPAGE ? (
-                <SlippageSelectorNegativeHelpText>
-                  The transaction may fail
-                </SlippageSelectorNegativeHelpText>
-              ) : parseFloat(states.slippage) > FRONTRUN_SLIPPAGE ? (
-                <SlippageSelectorNegativeHelpText>
-                  The transaction may be frontrun
-                </SlippageSelectorNegativeHelpText>
-              ) : undefined
-            }
+        {!states.invalidLTV && <>
+          <div style={{ marginBottom: "10px" }}>
+            Target Leverage
+          </div>
+          <CavernSlider
+            value={parseFloat(states.targetLeverage)}
+            defaultValue={1 + parseFloat(states.collateral?.max_ltv ?? "0.6")}
+            step={1 / 100}
+            min={states.minimumLeverage}
+            max={parseFloat(states.maximumLeverage.toFixed(2))}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            onChange={(
+              { target }: Event,
+              newValue: number | number[],
+            ) => {
+              updateTargetLeverage(Array.isArray(newValue) ? newValue[0] : newValue)
+            }}
+            valueLabelFormat={(value) => `${value}x`}
           />
-        </div>
-
-        <Box sx={{gap: "10px", display: "flex", flexDirection: "column"}}>
-        {states.numberOfLoops && !states.finalLoopData && !states.loopError &&
-          <span className="spinner" style={{margin: "auto"}}>
-            <CircleSpinner size={50} color={theme.colors.positive} />
-          </span>
-        }
-        {
-          states.allLoopData?.map(({provideAmount, stableAmount}, i) => {
-            return (<div key={`provideAmount-${i}`}>
-              Loop n° {i +1 }
-            <div className="wallet">
-              <span>
-                Provide Amount 
-              </span>
-              {' '}
-              <span>
-                {formatOutput(demicrofy(provideAmount))} {loopToken?.info.info.symbol}
-              </span>
-            </div>
-            <div className="wallet">
-              <span>
-                Borrow Amount
-              </span>
-              {' '}
-              <span>
-                {formatOutput(demicrofy(stableAmount))} axlUSDC
-              </span>
-            </div>
-            </div>)
-          })
-        }
-        {states.finalLoopData && 
-          <div className="wallet" style={{marginTop: "15px"}}>
-            <span>
-              Collateral left in wallet after looping
-            </span>
+          <div
+            className="wallet"
+            aria-invalid={
+              !!states.invalidLeverage
+            }
+          >
+            <span>{states.invalidLeverage}</span>
             {' '}
             <span>
-              {formatOutput(demicrofy(states.finalLoopData))} {loopToken?.info.info.symbol}
-            </span>
-          </div>
-        }
-        {<Box sx={{color: theme.colors.negative}}>{states.loopError}</Box>}
-        {states?.swapSimulation?.quote.price_impact && 
-          <div className="wallet" style={{marginTop: "15px"}}>
-            <span>
-              TFM Swap Price Impact
-            </span>
-            {' '}
-            <span>
-              {formatRate((states.swapSimulation.quote.price_impact) as Rate<number>)} %
-            </span>
-          </div>
-        }
-
-        </Box>
-
-        
-
-        <div style={{textAlign: "center", display: "flex", flexDirection: "column", marginTop: "20px"}}>
-          <div className="wallet">
-            <span>
-              Loop Number (Max : {MAX_LOOPS})
-            </span>
-            {' '}
-            <span>
-              {states.numberOfLoops}
-            </span>
-          </div>
-        </div>
-        {(estimatedFee || estimatedFeeError || isEstimatingFee) && <TxFeeList className="receipt">
-          <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-            {estimatedFee &&
-              big(estimatedFee.txFee).gt(0) &&
-              `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
-            {(!estimatedFeeError && !estimatedFee) && (
-              <span className="spinner">
-                <CircleSpinner size={14} color={theme.colors.positive} />
+              <span
+                style={{
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  updateTargetLeverage((states.maximumLeverage).toFixed(2))
+                }
+                }
+              >
+                Max : {states.maximumLeverage.toFixed(2)}x
               </span>
-            )}
-            {estimatedFeeError}
-          </TxFeeListItem>
-        </TxFeeList>}
-        {estimatedFee && 
+            </span>
+          </div>
 
-        <ViewAddressWarning>
-          <div style={{textAlign: "center", marginTop: "10px"}}>
-            <ActionButton 
-              style={{padding: "10px", margin :"auto"}}
-              className="estimateFee"
-              disabled={
-                !connected ||
-                !loopToken ||
-                !terraWalletAddress ||
-                !states.collateralAmount ||
-                !oraclePrices ||
-                !states.executeMsgs ||
-                !availablePost
+          <div style={{ margin: "20px auto" }}>
+            <DiscloseSlippageSelector
+              className="slippage"
+              items={SLIPPAGE_VALUES}
+              value={parseFloat(states.slippage)}
+              onChange={updateSlippage}
+              helpText={
+                parseFloat(states.slippage) < LOW_SLIPPAGE ? (
+                  <SlippageSelectorNegativeHelpText>
+                    The transaction may fail
+                  </SlippageSelectorNegativeHelpText>
+                ) : parseFloat(states.slippage) > FRONTRUN_SLIPPAGE ? (
+                  <SlippageSelectorNegativeHelpText>
+                    The transaction may be frontrun
+                  </SlippageSelectorNegativeHelpText>
+                ) : undefined
               }
-              onClick={() => proceed(states.executeMsgs, states.warningOverSafeLtv)}
-            >
-              Loop !
-            </ActionButton>
+            />
+          </div>
 
+          <Box sx={{ gap: "10px", display: "flex", flexDirection: "column" }}>
+            {states.numberOfLoops && !states.finalLoopData && !states.loopError &&
+              <span className="spinner" style={{ margin: "auto" }}>
+                <CircleSpinner size={50} color={theme.colors.positive} />
+              </span>
+            }
+            {
+              states.allLoopData?.map(({ provideAmount, stableAmount }, i) => {
+                return (<div key={`provideAmount-${i}`}>
+                  Loop n° {i + 1}
+                  <div className="wallet">
+                    <span>
+                      Provide Amount
+                    </span>
+                    {' '}
+                    <span>
+                      {formatOutput(demicrofy(provideAmount))} {loopToken?.info.info.symbol}
+                    </span>
+                  </div>
+                  <div className="wallet">
+                    <span>
+                      Borrow Amount
+                    </span>
+                    {' '}
+                    <span>
+                      {formatOutput(demicrofy(stableAmount))} axlUSDC
+                    </span>
+                  </div>
+                </div>)
+              })
+            }
+            {states.finalLoopData &&
+              <div className="wallet" style={{ marginTop: "15px" }}>
+                <span>
+                  Collateral left in wallet after looping
+                </span>
+                {' '}
+                <span>
+                  {formatOutput(demicrofy(states.finalLoopData))} {loopToken?.info.info.symbol}
+                </span>
+              </div>
+            }
+            {<Box sx={{ color: theme.colors.negative }}>{states.loopError}</Box>}
+            {states?.swapSimulation?.quote.price_impact &&
+              <div className="wallet" style={{ marginTop: "15px" }}>
+                <span>
+                  TFM Swap Price Impact
+                </span>
+                {' '}
+                <span>
+                  {formatRate((states.swapSimulation.quote.price_impact) as Rate<number>)} %
+                </span>
+              </div>
+            }
+
+          </Box>
+
+
+
+          <div style={{ textAlign: "center", display: "flex", flexDirection: "column", marginTop: "20px" }}>
+            <div className="wallet">
+              <span>
+                Loop Number (Max : {MAX_LOOPS})
+              </span>
+              {' '}
+              <span>
+                {states.numberOfLoops}
+              </span>
             </div>
-          </ViewAddressWarning>
+          </div>
+          {(estimatedFee || estimatedFeeError || isEstimatingFee) && <TxFeeList className="receipt">
+            <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
+              {estimatedFee &&
+                big(estimatedFee.txFee).gt(0) &&
+                `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
+              {(!estimatedFeeError && !estimatedFee) && (
+                <span className="spinner">
+                  <CircleSpinner size={14} color={theme.colors.positive} />
+                </span>
+              )}
+              {estimatedFeeError}
+            </TxFeeListItem>
+          </TxFeeList>}
+          {estimatedFee &&
+
+            <ViewAddressWarning>
+              <div style={{ textAlign: "center", marginTop: "10px" }}>
+                <ActionButton
+                  style={{ padding: "10px", margin: "auto" }}
+                  className="estimateFee"
+                  disabled={
+                    !connected ||
+                    !loopToken ||
+                    !terraWalletAddress ||
+                    !states.collateralAmount ||
+                    !oraclePrices ||
+                    !states.executeMsgs ||
+                    !availablePost
+                  }
+                  onClick={() => proceed(states.executeMsgs, states.warningOverSafeLtv)}
+                >
+                  Loop !
+                </ActionButton>
+
+              </div>
+            </ViewAddressWarning>
           }
         </>
 
-      }
-      {confirmElement}
+        }
+        {confirmElement}
       </Dialog>
     </Modal>
   );

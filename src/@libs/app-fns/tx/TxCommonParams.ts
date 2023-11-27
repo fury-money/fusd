@@ -1,7 +1,11 @@
 import { QueryClient } from "@libs/query-client";
 import { Gas, Rate, u, UST } from "@libs/types";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
-import { CreateTxOptions } from "@terra-money/terra.js";
+import { 
+  TxResult
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
+import { CreateTxOptions } from "@terra-money/feather.js";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export interface TxCommonParams {
   // tx
@@ -12,7 +16,7 @@ export interface TxCommonParams {
   // network
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   // error handle
   txErrorReporter?: (error: unknown) => string;
 }

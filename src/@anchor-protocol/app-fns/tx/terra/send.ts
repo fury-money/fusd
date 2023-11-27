@@ -17,10 +17,14 @@ import {
   Fee,
   MsgExecuteContract,
   MsgSend,
-} from "@terra-money/terra.js";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+} from "@terra-money/feather.js";
+import { 
+  TxResult
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import { CurrencyInfo } from "pages/send/models/currency";
 import { Observable } from "rxjs";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export function terraSendTx($: {
   myWalletAddress: HumanAddr;
@@ -33,7 +37,7 @@ export function terraSendTx($: {
   txFee: u<UST>;
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   txErrorReporter?: (error: unknown) => string;
   onTxSucceed?: () => void;
 }): Observable<TxResultRendering> {
@@ -64,6 +68,7 @@ export function terraSendTx($: {
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
       memo: $.memo,
+      chainID: $.network.chainID,
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

@@ -1,5 +1,5 @@
 import { App, useApp } from '@libs/app-provider';
-import { NetworkInfo } from '@terra-money/wallet-provider';
+import { NetworkInfo } from 'utils/consts';
 import React, {
   Context,
   createContext,
@@ -21,8 +21,9 @@ export interface AnchorWebapp {
 }
 
 const AnchorWebappContext: Context<AnchorWebapp> =
-  // @ts-ignore
-  createContext<AnchorWebapp>();
+  createContext<AnchorWebapp>({
+    indexerApiEndpoint: "no-api-endpoint-defined"
+  });
 
 export function AnchorWebappProvider({
   children,

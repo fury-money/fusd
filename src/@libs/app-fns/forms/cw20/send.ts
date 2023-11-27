@@ -2,7 +2,7 @@ import { min } from "@libs/big-math";
 import { microfy } from "@libs/formatter";
 import { Rate, Token, u, UST } from "@libs/types";
 import { FormFunction, FormReturn } from "@libs/use-form";
-import { AccAddress } from "@terra-money/terra.js";
+import { AccAddress } from "@terra-money/feather.js";
 import big, { BigSource } from "big.js";
 import { computeMaxUstBalanceForUstTransfer } from "../../logics/computeMaxUstBalanceForUstTransfer";
 import { SendTokenInfo } from "./tokens";

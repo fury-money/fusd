@@ -38,7 +38,7 @@ import {
   Coin,
   MsgExecuteContract,
   MsgSend,
-} from '@terra-money/terra.js';
+} from '@terra-money/feather.js';
 import big, { Big, BigSource } from 'big.js';
 import { MessageBox } from 'components/MessageBox';
 import { TxResultRenderer } from 'components/tx/TxResultRenderer';
@@ -190,7 +190,7 @@ function ComponentBase({
     (nextCurrencyValue: string) => {
       setCurrency(
         currencies.find(({ value }) => nextCurrencyValue === value) ??
-          currencies[0],
+        currencies[0],
       );
 
       setAmount('' as Token);
@@ -208,22 +208,22 @@ function ComponentBase({
     estimateFee(
       currency.cw20Address
         ? [
-            new MsgExecuteContract(
-              terraWalletAddress as string,
-              currency.cw20Address,
-              {
-                transfer: {
-                  recipient: address,
-                  amount: formatTokenInput(amount),
-                },
+          new MsgExecuteContract(
+            terraWalletAddress as string,
+            currency.cw20Address,
+            {
+              transfer: {
+                recipient: address,
+                amount: formatTokenInput(amount),
               },
-            ),
-          ]
+            },
+          ),
+        ]
         : [
-            new MsgSend(terraWalletAddress as string, address, [
-              new Coin(`${currency.name}`, formatTokenInput(amount)),
-            ]),
-          ],
+          new MsgSend(terraWalletAddress as string, address, [
+            new Coin(`${currency.name}`, formatTokenInput(amount)),
+          ]),
+        ],
     );
   }, [
     amount,

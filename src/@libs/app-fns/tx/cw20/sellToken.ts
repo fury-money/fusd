@@ -21,7 +21,7 @@ import {
   UST,
 } from "@libs/types";
 import { pipe } from "@rx-stream/pipe";
-import { MsgExecuteContract, Fee } from "@terra-money/terra.js";
+import { MsgExecuteContract, Fee } from "@terra-money/feather.js";
 import big, { Big } from "big.js";
 import { Observable } from "rxjs";
 import {
@@ -70,6 +70,7 @@ export function cw20SellTokenTx<T extends Token>(
       ],
       fee: new Fee($.gasWanted, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

@@ -1,13 +1,13 @@
+
 import { useNetwork } from '@anchor-protocol/app-provider';
 import { GasPrice, lastSyncedHeightQuery } from '@libs/app-fns';
 import {
-    BatchQueryClient,
+  BatchQueryClient,
   HiveQueryClient,
   LcdQueryClient,
   QueryClient,
 } from '@libs/query-client';
 import { useBatchQuery } from '@libs/query-client/lcd/batchfetch';
-import { NetworkInfo, useWallet, WalletStatus } from '@terra-money/wallet-provider';
 import React, {
   Consumer,
   Context,
@@ -24,6 +24,8 @@ import {
 } from '../env';
 import { useGasPriceQuery } from '../queries/gasPrice';
 import { AppConstants, AppContractAddress, TxRefetchMap } from '../types';
+import { WalletStatus, useWallet } from '@terra-money/wallet-kit';
+import { NetworkInfo } from 'utils/consts';
 
 export interface AppProviderProps<
   ContractAddress extends AppContractAddress,
@@ -35,10 +37,10 @@ export interface AppProviderProps<
   constants: (network: NetworkInfo) => Constants;
 
   defaultQueryClient?:
-    | 'lcd'
-    | 'hive'
-    | 'batch'
-    | ((network: NetworkInfo) => 'lcd' | 'hive' | 'batch');
+  | 'lcd'
+  | 'hive'
+  | 'batch'
+  | ((network: NetworkInfo) => 'lcd' | 'hive' | 'batch');
   lcdQueryClient?: (network: NetworkInfo) => LcdQueryClient;
   hiveQueryClient?: (network: NetworkInfo) => HiveQueryClient;
 
@@ -85,8 +87,7 @@ export interface App<
   queryErrorReporter?: (error: unknown) => void;
 }
 
-//@ts-ignore
-const AppContext: Context<App<any, any>> = createContext<App<any, any>>();
+const AppContext: Context<App<any, any>> = createContext<App<any, any>>(null!);
 
 export function AppProvider<
   ContractAddress extends AppContractAddress,
@@ -123,29 +124,24 @@ export function AppProvider<
   >(() => {
     const lcdQueryClient = _lcdQueryClient(network);
     const hiveQueryClient = _hiveQueryClient(network);
-    let queryClientType =
+    const queryClientType =
       typeof defaultQueryClient === 'function'
         ? defaultQueryClient(network)
         : defaultQueryClient;
 
 
     let queryClient;
-      switch(queryClientType){
-        case 'lcd':
-          queryClient = lcdQueryClient;
-          break;
-        case "hive":
-          queryClient = hiveQueryClient;
-          break;
-        case "batch":
-          queryClient = batchQueryClient
-          break;
-      };
-
-
-    
-
-
+    switch (queryClientType) {
+      case 'lcd':
+        queryClient = lcdQueryClient;
+        break;
+      case "hive":
+        queryClient = hiveQueryClient;
+        break;
+      case "batch":
+        queryClient = batchQueryClient
+        break;
+    }
 
     return {
       contractAddress: contractAddress(network),
@@ -158,14 +154,14 @@ export function AppProvider<
     _hiveQueryClient,
     _lcdQueryClient,
     constants,
-    contractAddress,  
+    contractAddress,
     defaultQueryClient,
     network,
     batchQueryClient
   ]);
 
   const lastSyncedHeight = useMemo(() => {
-    if(!networkBoundStates.queryClient){
+    if (!networkBoundStates.queryClient) {
       return async () => 0;
     }
     return () => lastSyncedHeightQuery(networkBoundStates.queryClient!);

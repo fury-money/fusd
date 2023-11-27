@@ -16,7 +16,6 @@ import {
   DeploymentTarget,
   useDeploymentTarget,
 } from "@anchor-protocol/app-provider";
-import { NetworkInfo } from "@terra-money/wallet-provider";
 
 const fetchWhitelistCollateral = async (
   overseerContract: HumanAddr,
@@ -65,7 +64,6 @@ async function whitelistCollateralQuery(
   queryClient: QueryClient,
   overseerContract: HumanAddr,
   target: DeploymentTarget,
-  network: NetworkInfo,
   tokenInformation: Record<string, CW20TokenDisplayInfo> | undefined
 ): Promise<WhitelistCollateral[]> {
   const whitelist = await fetchWhitelistCollateral(
@@ -126,7 +124,6 @@ export function useWhitelistCollateralQuery(): UseQueryResult<
       ANCHOR_QUERY_KEY.WHITELIST_COLLATERAL,
       contractAddress.moneyMarket.overseer,
       target,
-      network,
       { ...(tokens && tokens[network.name]), ...localTokenInformation },
     ],
     createQueryFn(whitelistCollateralQuery, queryClient!),

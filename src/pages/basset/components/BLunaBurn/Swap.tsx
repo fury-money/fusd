@@ -60,7 +60,7 @@ import { fixHMR } from 'fix-hmr';
 import { useFeeEstimationFor } from '@libs/app-provider';
 import { useAlert } from '@libs/neumorphism-ui/components/useAlert';
 import { floor } from '@libs/big-math';
-import { MsgExecuteContract } from '@terra-money/terra.js';
+import { MsgExecuteContract } from '@terra-money/feather.js';
 import { createHookMsg } from '@libs/app-fns/tx/internal';
 import { CircleSpinner } from 'react-spinners-kit';
 
@@ -177,11 +177,11 @@ export function Component({
           ).then(({ simulation }) => {
             return simulation
               ? swapGetSimulation(
-                  simulation as terraswap.pair.SimulationResponse<Luna>,
-                  amount,
-                  bank.tax,
-                  maxSpread,
-                )
+                simulation as terraswap.pair.SimulationResponse<Luna>,
+                amount,
+                bank.tax,
+                maxSpread,
+              )
               : undefined;
           }),
         );
@@ -231,11 +231,11 @@ export function Component({
           ).then(({ simulation }) => {
             return simulation
               ? swapBurnSimulation(
-                  simulation as terraswap.pair.SimulationResponse<Luna>,
-                  amount,
-                  bank.tax,
-                  maxSpread,
-                )
+                simulation as terraswap.pair.SimulationResponse<Luna>,
+                amount,
+                bank.tax,
+                maxSpread,
+              )
               : undefined;
           }),
         );

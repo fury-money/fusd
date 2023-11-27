@@ -5,7 +5,7 @@ import LogoTerra from './Header/assets//LogoTerra.svg';
 import { DeploymentSwitch } from 'components/layouts/DeploymentSwitch';
 import { UIElementProps } from '@libs/ui';
 
-export const ChainLogo = (props: UIElementProps) => {
+export const ChainLogo = (props: UIElementProps): React.JSX.Element => {
   const { className } = props;
   return (
     <DeploymentSwitch

@@ -18,14 +18,18 @@ import { floor } from "@libs/big-math";
 import { demicrofy } from "@libs/formatter";
 import { QueryClient } from "@libs/query-client";
 import { pipe } from "@rx-stream/pipe";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
+import { 
+  TxResult
+} from "@terra-money/feather.js";
+import { NetworkInfo } from "utils/consts";
 import {
   CreateTxOptions,
   MsgExecuteContract,
   Fee,
-} from "@terra-money/terra.js";
+} from "@terra-money/feather.js";
 import { Observable } from "rxjs";
 import { AnchorTax } from "../../types";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export function vestingClaimTx($: {
   walletAddr: HumanAddr;
@@ -36,7 +40,7 @@ export function vestingClaimTx($: {
   tax: AnchorTax;
   network: NetworkInfo;
   queryClient: QueryClient;
-  post: (tx: CreateTxOptions) => Promise<TxResult>;
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
   txErrorReporter?: (error: unknown) => string;
   onTxSucceed?: () => void;
 }): Observable<TxResultRendering> {
@@ -55,6 +59,7 @@ export function vestingClaimTx($: {
       ],
       fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
+      chainID: $.network.chainID
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

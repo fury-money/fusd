@@ -1,11 +1,12 @@
 import { earnDepositTx } from "@anchor-protocol/app-fns";
-import { UST } from "@anchor-protocol/types";
+import { HumanAddr, UST } from "@anchor-protocol/types";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
+import { useAccount } from "contexts/account";
 
 export interface EarnDepositTxParams {
   depositAmount: UST;
@@ -14,7 +15,7 @@ export interface EarnDepositTxParams {
 }
 
 export function useEarnDepositTx() {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
     useAnchorWebapp();
@@ -29,7 +30,7 @@ export function useEarnDepositTx() {
 
       return earnDepositTx({
         // fabricateMarketDepositStableCoin
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         marketAddr: contractAddress.moneyMarket.market,
         depositAmount,
         stableDenom: contractAddress.native.usd,

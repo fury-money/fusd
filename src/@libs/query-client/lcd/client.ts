@@ -1,6 +1,6 @@
 import { GasPrice } from "@cosmjs/stargate";
 import { Rate } from "@libs/types";
-import { LCDClient } from "@terra-money/terra.js";
+import { LCDClient } from "@terra-money/feather.js";
 import { LcdQueryClient, SimulateFetchParams, SimulateFetchQuery } from "..";
 import { LcdFault } from "../errors";
 import { WasmFetchBaseParams, WasmQueryData } from "../interface";

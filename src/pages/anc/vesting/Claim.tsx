@@ -21,9 +21,10 @@ import { useNavigate } from 'react-router-dom';
 import { MessageBox } from 'components/MessageBox';
 import { useAncVestingAccountQuery } from '@anchor-protocol/app-provider/queries/anc/vestingClaim';
 import { ANC, u } from '@anchor-protocol/types';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
-import { Dec } from '@terra-money/terra.js';
+import { useConnectedWallet } from '@terra-money/wallet-kit';
+import { Dec } from '@terra-money/feather.js';
 import { useVestingClaimNotification } from 'components/Header/vesting/VestingClaimNotification';
+import { useAccount } from 'contexts/account';
 
 interface ClaimableListProps {
   totalVestedAmount: u<ANC>;
@@ -53,7 +54,7 @@ function ClaimBase(props: UIElementProps) {
 
   const navigate = useNavigate();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const fixedFee = useFixedFee();
 
@@ -77,7 +78,7 @@ function ClaimBase(props: UIElementProps) {
     const onExit =
       vestingClaimResult.status === StreamStatus.DONE
         ? () => navigate('/mypage')
-        : () => {};
+        : () => { };
 
     return (
       <CenteredLayout className={className} maxWidth={800}>

@@ -4,7 +4,8 @@ import { bAsset } from '@anchor-protocol/types';
 import { useCW20Balance } from '@libs/app-provider';
 import { demicrofy, formatUToken } from '@libs/formatter';
 import { CW20Addr, HumanAddr } from '@libs/types';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { useConnectedWallet } from '@terra-money/wallet-kit';
+import { useAccount } from 'contexts/account';
 import React from 'react';
 
 export interface AssetCardContentWormholeProps {
@@ -22,15 +23,15 @@ export function AssetCardContentWormhole({
   whAssetSymbol,
   rewardAddr,
 }: AssetCardContentWormholeProps) {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const bAssetBalance = useCW20Balance<bAsset>(
     bAssetTokenAddr,
-    connectedWallet?.terraAddress,
+    connectedWallet?.terraWalletAddress,
   );
   const whAssetBalance = useCW20Balance<bAsset>(
     whAssetTokenAddr ?? undefined,
-    connectedWallet?.terraAddress,
+    connectedWallet?.terraWalletAddress,
   );
 
   const { data: { claimableReward } = {} } =

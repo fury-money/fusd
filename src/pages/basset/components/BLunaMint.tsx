@@ -27,7 +27,7 @@ import {
 import { useAlert } from '@libs/neumorphism-ui/components/useAlert';
 import { Luna, Rate } from '@libs/types';
 import { StreamStatus } from '@rx-stream/react';
-import { MsgExecuteContract } from '@terra-money/terra.js';
+import { MsgExecuteContract } from '@terra-money/feather.js';
 import big, { Big } from 'big.js';
 import { MessageBox } from 'components/MessageBox';
 import { IconLineSeparator } from 'components/primitives/IconLineSeparator';

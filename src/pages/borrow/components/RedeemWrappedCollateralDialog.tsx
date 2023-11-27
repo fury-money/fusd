@@ -42,13 +42,13 @@ import {
 import { BroadcastTxStreamResult } from 'pages/earn/components/types';
 import big from 'big.js';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
-import { MsgExecuteContract } from '@terra-money/terra.js';
+import { MsgExecuteContract } from '@terra-money/feather.js';
 import { CircleSpinner } from 'react-spinners-kit';
 import { WhitelistWrappedCollateral } from 'queries';
 
 export interface RedeemCollateralDialogParams
   extends UIElementProps,
-    RedeemCollateralFormParams {
+  RedeemCollateralFormParams {
   collateral: WhitelistWrappedCollateral
   txResult: StreamResult<TxResultRendering> | null;
   uTokenBalance: u<bAsset>;
@@ -141,9 +141,9 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
       ),
       // Burn the tokens to get back the underlying token
       new MsgExecuteContract(
-        terraWalletAddress as string, 
+        terraWalletAddress as string,
         collateral.info.token,
-         {
+        {
           // @see https://github.com/Anchor-Protocol/money-market-contracts/blob/master/contracts/custody/src/msg.rs#L69
           burn: {
             amount: formatInput(
@@ -151,7 +151,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
               props.collateral.decimals,
             ),
           },
-      }),
+        }),
     ]);
   }, [
     terraWalletAddress,
@@ -173,7 +173,7 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
             collateral.decimals,
           ),
         });
-      } catch {}
+      } catch { }
     },
     [input, states.ltvToAmount, collateral.decimals],
   );
@@ -262,11 +262,11 @@ function RedeemWrappedCollateralDialogBase(props: RedeemCollateralDialogProps) {
             >
               {states.withdrawableAmount
                 ? formatOutput(
-                    demicrofy(states.withdrawableAmount, collateral.decimals),
-                    {
-                      decimals: 3,
-                    },
-                  )
+                  demicrofy(states.withdrawableAmount, collateral.decimals),
+                  {
+                    decimals: 3,
+                  },
+                )
                 : 0}{' '}
               {states.collateral.info.info.symbol}
             </span>

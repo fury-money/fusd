@@ -1,11 +1,11 @@
 import { PollingTimeout, TxErrorRendering } from '@libs/app-fns';
-import {
-  CreateTxFailed,
-  Timeout,
-  TxFailed,
-  TxUnspecifiedError,
-  UserDenied,
-} from '@terra-money/wallet-provider';
+// import {
+//   CreateTxFailed,
+//   Timeout,
+//   TxFailed,
+//   TxUnspecifiedError,
+//   UserDenied,
+// } from '@terra-money/wallet-provider';
 import React, { ReactNode } from 'react';
 
 // ----------------------------------------------------------------
@@ -78,77 +78,77 @@ export function renderTxFailedReason({
   error,
   errorId,
 }: TxErrorRendering): ReactNode {
-  // @terra-money/wallet-provider
-  if (
-    error instanceof UserDenied ||
-    instanceofWithName<UserDenied>(error, 'UserDenied')
-  ) {
-    return <h2>User Denied</h2>;
-  } else if (
-    error instanceof CreateTxFailed ||
-    instanceofWithName<CreateTxFailed>(error, 'CreateTxFailed')
-  ) {
-    return (
-      <>
-        <h2>Failed to broadcast transaction</h2>
-        <ErrorMessageView error={error} errorId={errorId}>
-          {createTxFailedMessage(error.message)}
-        </ErrorMessageView>
-      </>
-    );
-  } else if (
-    error instanceof TxFailed ||
-    instanceofWithName<TxFailed>(error, 'TxFailed')
-  ) {
-    return (
-      <>
-        <h2>Transaction failed</h2>
-      </>
-    );
-  } else if (
-    error instanceof Timeout ||
-    instanceofWithName<Timeout>(error, 'Timeout')
-  ) {
-    return (
-      <>
-        <h2>Timeout</h2>
-        <div style={{ marginBottom: '1em' }}>{error.message}</div>
-      </>
-    );
-  } else if (
-    error instanceof PollingTimeout ||
-    instanceofWithName<PollingTimeout>(error, 'PollingTimeout')
-  ) {
-    return (
-      <>
-        <h2>Transaction Queued</h2>
-        <div style={{ marginBottom: '1em' }}>{error.message}</div>
-      </>
-    );
-  } else if (
-    error instanceof TxUnspecifiedError ||
-    instanceofWithName<TxUnspecifiedError>(error, 'TxUnspecifiedError')
-  ) {
-    return (
-      <>
-        <h2>Transaction failed (unspecified)</h2>
-        <ErrorMessageView error={error} errorId={errorId}>
-          {txUnspecifiedErrorMessage(error.message)}
-        </ErrorMessageView>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <h2>Oops, something went wrong!</h2>
-        <ErrorMessageView error={error} errorId={errorId}>
-          {uncaughtErrorMessage(
-            error instanceof Error ? error.message : String(error),
-          )}
-        </ErrorMessageView>
-      </>
-    );
-  }
+
+  // // @terra-money/wallet-provider
+  // if (
+  //   error instanceof UserDenied ||
+  //   instanceofWithName<UserDenied>(error, 'UserDenied')
+  // ) {
+  //   return <h2>User Denied</h2>;
+  // } else if (
+  //   error instanceof CreateTxFailed ||
+  //   instanceofWithName<CreateTxFailed>(error, 'CreateTxFailed')
+  // ) {
+  //   return (
+  //     <>
+  //       <h2>Failed to broadcast transaction</h2>
+  //       <ErrorMessageView error={error} errorId={errorId}>
+  //         {createTxFailedMessage(error.message)}
+  //       </ErrorMessageView>
+  //     </>
+  //   );
+  // } else if (
+  //   error instanceof TxFailed ||
+  //   instanceofWithName<TxFailed>(error, 'TxFailed')
+  // ) {
+  //   return (
+  //     <>
+  //       <h2>Transaction failed</h2>
+  //     </>
+  //   );
+  // } else if (
+  //   error instanceof Timeout ||
+  //   instanceofWithName<Timeout>(error, 'Timeout')
+  // ) {
+  //   return (
+  //     <>
+  //       <h2>Timeout</h2>
+  //       <div style={{ marginBottom: '1em' }}>{error.message}</div>
+  //     </>
+  //   );
+  // } else if (
+  //   error instanceof PollingTimeout ||
+  //   instanceofWithName<PollingTimeout>(error, 'PollingTimeout')
+  // ) {
+  //   return (
+  //     <>
+  //       <h2>Transaction Queued</h2>
+  //       <div style={{ marginBottom: '1em' }}>{error.message}</div>
+  //     </>
+  //   );
+  // } else if (
+  //   error instanceof TxUnspecifiedError ||
+  //   instanceofWithName<TxUnspecifiedError>(error, 'TxUnspecifiedError')
+  // ) {
+  //   return (
+  //     <>
+  //       <h2>Transaction failed (unspecified)</h2>
+  //       <ErrorMessageView error={error} errorId={errorId}>
+  //         {txUnspecifiedErrorMessage(error.message)}
+  //       </ErrorMessageView>
+  //     </>
+  //   );
+  // }
+  return (
+    <>
+      <h2>Oops, something went wrong!</h2>
+      <ErrorMessageView error={error} errorId={errorId}>
+        {uncaughtErrorMessage(
+          error instanceof Error ? error.message : String(error),
+        )}
+      </ErrorMessageView>
+    </>
+  );
 }
 
 function ErrorMessageView({

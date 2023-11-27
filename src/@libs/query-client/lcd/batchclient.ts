@@ -1,5 +1,5 @@
 import { GasPrice } from "@cosmjs/stargate";
-import { Account, LCDClient, Msg } from "@terra-money/terra.js";
+import { Account, LCDClient, Msg } from "@terra-money/feather.js";
 import {
   BatchQueryClient,
   GasInfoParams,

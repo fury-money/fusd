@@ -29,7 +29,7 @@ import { useAlert } from '@libs/neumorphism-ui/components/useAlert';
 import { Luna, Rate } from '@libs/types';
 import { InfoOutlined } from '@mui/icons-material';
 import { StreamStatus } from '@rx-stream/react';
-import { MsgExecuteContract } from '@terra-money/terra.js';
+import { MsgExecuteContract } from '@terra-money/feather.js';
 import big, { Big } from 'big.js';
 import { MessageBox } from 'components/MessageBox';
 import { IconLineSeparator } from 'components/primitives/IconLineSeparator';
@@ -57,7 +57,7 @@ export function Component({
   getAmount,
   setGetAmount,
   setBurnAmount,
-  connectedWallet,
+  account,
   setMode,
 }: BurnProps) {
   // ---------------------------------------------
@@ -189,7 +189,7 @@ export function Component({
   // effects
   // ---------------------------------------------
   useEffect(() => {
-    if (!connectedWallet || burnAmount.length === 0) {
+    if (!account || !account.terraWalletAddress || burnAmount.length === 0) {
       estimateFee(null);
       return;
     }
@@ -203,7 +203,7 @@ export function Component({
 
     estimateFee([
       new MsgExecuteContract(
-        connectedWallet.terraAddress,
+        account.terraWalletAddress,
         contractAddress.cw20.aLuna,
         {
           send: {
@@ -216,16 +216,7 @@ export function Component({
         },
       ),
     ]);
-  }, [
-    bank.tokenBalances.uaLuna,
-    burnAmount,
-    connectedWallet,
-    constants.bondGasWanted,
-    contractAddress.aluna.hub,
-    contractAddress.cw20.aLuna,
-    estimateFee,
-    gasPrice.uluna,
-  ]);
+  }, [account, bank.tokenBalances.uaLuna, burnAmount, constants.bondGasWanted, contractAddress.aluna.hub, contractAddress.cw20.aLuna, estimateFee, gasPrice.uluna]);
 
   useEffect(() => {
     if (burnAmount.length > 0) {

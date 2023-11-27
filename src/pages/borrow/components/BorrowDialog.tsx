@@ -52,7 +52,7 @@ import { PageDivider } from './PageDivider';
 import { WhitelistCollateral } from 'queries';
 import { useBalances } from 'contexts/balances';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
-import { MsgExecuteContract } from '@terra-money/terra.js';
+import { MsgExecuteContract } from '@terra-money/feather.js';
 import { CircleSpinner } from 'react-spinners-kit';
 
 export interface BorrowDialogParams extends UIElementProps, BorrowFormParams {
@@ -68,8 +68,8 @@ export interface BorrowDialogParams extends UIElementProps, BorrowFormParams {
 
 interface TxRenderFnProps {
   txResult:
-    | StreamInProgress<TxResultRendering<unknown>>
-    | StreamDone<TxResultRendering<unknown>>;
+  | StreamInProgress<TxResultRendering<unknown>>
+  | StreamDone<TxResultRendering<unknown>>;
   closeDialog: () => void;
 }
 
@@ -214,7 +214,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
         input({
           borrowAmount: formatUSTInput(demicrofy(nextAmount)),
         });
-      } catch {}
+      } catch { }
     },
     [input, states.borrowLimit, states.borrowedAmount],
   );

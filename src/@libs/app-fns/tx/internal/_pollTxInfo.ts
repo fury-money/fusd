@@ -1,8 +1,8 @@
 import { QueryClient } from "@libs/query-client";
-import { TxResult } from "@terra-money/wallet-provider";
 import { TxResultRendering, TxStreamPhase } from "../../models/tx";
 import { pollTxInfo, TxInfoData } from "../../queries/txInfo";
 import { TxHelper } from "./TxHelper";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 interface Params {
   helper: TxHelper;
@@ -11,11 +11,11 @@ interface Params {
 }
 
 export function _pollTxInfo({ helper, queryClient, onTxSucceed }: Params) {
-  return ({ value: txResult }: TxResultRendering<TxResult>) => {
+  return ({ value: txResult }: TxResultRendering<PostResponse>) => {
     return pollTxInfo({
       queryClient,
       tx: helper.savedTx,
-      txhash: txResult.result.txhash,
+      txhash: txResult.txhash,
     }).then((txInfo) => {
       onTxSucceed?.();
 

@@ -7,12 +7,12 @@ interface DeploymentSwitchProps {
   avalanche?: FunctionComponent | ReactNode;
 }
 
-export function DeploymentSwitch(props: DeploymentSwitchProps) {
+export function DeploymentSwitch(props: DeploymentSwitchProps): React.JSX.Element {
   const { terra, ethereum, avalanche } = props;
   const {
     target: { chain },
   } = useDeploymentTarget();
-  let content: ReactNode;
+  let content: ReactNode | FunctionComponent = <></>;
 
   switch (chain) {
     case Chain.Terra:
@@ -24,9 +24,7 @@ export function DeploymentSwitch(props: DeploymentSwitchProps) {
     case Chain.Avalanche:
       content = avalanche ?? ethereum;
       break;
-    default:
-      content = <></>;
   }
 
-  return typeof content === 'function' ? content() : content;
+  return (typeof content === 'function' ? content({}) : content) as React.JSX.Element;
 }

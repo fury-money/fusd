@@ -28,11 +28,8 @@ import { CircleSpinner } from 'react-spinners-kit';
 import { useBalances } from 'contexts/balances';
 import { LSDLiquidationBidsResponse } from '@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser';
 import { useAbortMissionTx } from '@anchor-protocol/app-provider/tx/abortMission/abortMission';
-import { CollateralInfo } from "pages/borrow/components/useCollaterals";
 import { TokenIcon } from '@anchor-protocol/token-icons';
 import { AbortMissionCollaterals, getAbortMissionMessages } from '@anchor-protocol/app-fns';
-import { DeepPartial } from '@terra-money/terra.proto/cosmwasm/wasm/v1/types';
-import { WithdrawableBids } from 'pages/liquidation/components/useWithdrawDefaultedCollateral';
 
 
 export type BroadcastTxStreamResult<T = unknown> =
@@ -43,13 +40,13 @@ export type BroadcastTxStreamResult<T = unknown> =
 
 export type AbortMissionParams = {
   totalDeposit: u<UST<Big>>,
-  totalAUST: u<aUST>, 
+  totalAUST: u<aUST>,
   allLiquidationBids: LSDLiquidationBidsResponse,
   liquidationQueueValue: u<UST<Big>>,
   borrowedValue: u<UST<Big>>,
 } & AbortMissionCollaterals;
 
-interface DepositDialogParams extends UIElementProps, AbortMissionParams {}
+interface DepositDialogParams extends UIElementProps, AbortMissionParams { }
 
 type DepositDialogReturn = void;
 type DepositDialogProps = DialogProps<
@@ -75,15 +72,21 @@ function DepositDialogBase(props: DepositDialogProps) {
   } = props;
 
 
+  // ---------------------------------------------
+  //  Transaction preparation --> Queries and queries
+  // ---------------------------------------------
+
+  const { uaUST } = useBalances();
+
   const {
     axlUSDC: { formatOutput, demicrofy, symbol },
   } = useFormatters();
 
   const theme = useTheme();
 
-   const account = useAccount();
+  const account = useAccount();
 
-  const {contractAddress} = useAnchorWebapp();
+  const { contractAddress } = useAnchorWebapp();
 
   const [openConfirm, confirmElement] = useConfirm();
 
@@ -121,15 +124,10 @@ function DepositDialogBase(props: DepositDialogProps) {
         txFee,
       });
     },
-    [account.connected, abortMission, openConfirm],
+    [account.connected, abortMission, totalAUST, allLiquidationBids, allWithdrawableDefaultedCollaterals, collateralsWithdrawAmount, borrowedValue, uaUST, openConfirm],
   );
 
 
-  // ---------------------------------------------
-  //  Transaction preparation --> Queries and queries
-  // ---------------------------------------------
-  
-  const { uaUST } = useBalances();
 
   // ---------------------------------------------
   //  Fee estimation and transaction execution
@@ -144,7 +142,7 @@ function DepositDialogBase(props: DepositDialogProps) {
 
 
   useEffect(() => {
-    if(!estimateFee || !account?.terraWalletAddress){
+    if (!estimateFee || !account?.terraWalletAddress) {
       return
     }
 
@@ -160,7 +158,7 @@ function DepositDialogBase(props: DepositDialogProps) {
     })
 
     estimateFee(messages)
-  }, [estimateFee])
+  }, [account.terraWalletAddress, allLiquidationBids, allWithdrawableDefaultedCollaterals, borrowedValue, collateralsWithdrawAmount, contractAddress, estimateFee, totalAUST, uaUST])
 
   const renderBroadcastTx = useMemo(() => {
     if (renderBroadcastTxResult) {
@@ -190,14 +188,14 @@ function DepositDialogBase(props: DepositDialogProps) {
       <Dialog className={className} onClose={() => closeDialog()}>
         <h1>Abort Mission</h1>
 
-        This action will in order : 
+        This action will in order :
 
         <ol>
           <li> Withdraw all the funds you deposited in the <strong>Earn Tab</strong></li>
           <li> Withdraw all funds you put in the <strong>Liquidation Tab</strong></li>
           <li> Withdraw all the collaterals you earned depositing in the <strong>Liquidation Tab</strong></li>
           <li> Repay all the debts you incurred in the borrow Tab</li>
-          <li> Withdraw all collaterals you deposited on the borrow Tab <br/>this will not unwrap aLuna collaterals</li>
+          <li> Withdraw all collaterals you deposited on the borrow Tab <br />this will not unwrap aLuna collaterals</li>
         </ol>
         {(
           <TxFeeList className="receipt">
@@ -215,36 +213,36 @@ function DepositDialogBase(props: DepositDialogProps) {
             <TxFeeListItem label="Amount to Withdraw">
               {`${formatUSTWithPostfixUnits(demicrofy(totalDeposit.add(liquidationQueueValue ?? 0).toString() as u<UST>))} ${symbol}`}
             </TxFeeListItem>
-            
+
             <TxFeeListItem label="Collateral to withdraw">
-              <Box sx={{display: "flex", flexDirection:"column", alignItems: "end"}} >
-              {
-                collateralsWithdrawAmount.map((el, i) => 
-                  <Box key={i}>
-                    <TokenIcon token={el.collateral?.collateral?.symbol} /> {`${formatOutput(demicrofy(el.amount))} ${el.collateral?.collateral.symbol}`}
-                  </Box>
-                )
-              }
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "end" }} >
+                {
+                  collateralsWithdrawAmount.map((el, i) =>
+                    <Box key={i}>
+                      <TokenIcon token={el.collateral?.collateral?.symbol} /> {`${formatOutput(demicrofy(el.amount))} ${el.collateral?.collateral.symbol}`}
+                    </Box>
+                  )
+                }
               </Box>
 
 
             </TxFeeListItem>
-            
+
             <TxFeeListItem label="Amount to repay">
               {`${formatOutput(demicrofy(borrowedValue))} ${symbol}`}
             </TxFeeListItem>
-            
+
           </TxFeeList>
         )}
-      
+
         <ViewAddressWarning>
           <ActionButton
             className="button"
             style={
               estimatedFeeError
                 ? {
-                    backgroundColor: '#c12535',
-                  }
+                  backgroundColor: '#c12535',
+                }
                 : undefined
             }
             disabled={
@@ -321,6 +319,6 @@ export function useAbortMissionDialog(): [
   OpenDialog<AbortMissionParams, void>,
   ReactNode,
 ] {
-  return useDialog<AbortMissionParams,void>(AbortMissionDialog);
+  return useDialog<AbortMissionParams, void>(AbortMissionDialog);
 }
 

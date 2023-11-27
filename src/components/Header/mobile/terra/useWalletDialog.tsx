@@ -2,7 +2,7 @@ import { buttonBaseStyle } from '@libs/neumorphism-ui/components/ActionButton';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import { DialogProps, OpenDialog, useDialog } from '@libs/use-dialog';
 import { Modal } from '@mui/material';
-import { useConnectedWallet, useWallet } from '@terra-money/wallet-provider';
+import { useWallet } from '@terra-money/wallet-kit';
 import React, { ReactNode, useCallback } from 'react';
 import styled from 'styled-components';
 import { useAccount } from 'contexts/account';
@@ -26,8 +26,7 @@ export function useWalletDialog(): [
 function ComponentBase(props: DialogProps<FormParams, FormReturn>) {
   const { className, closeDialog, openSend, openBuyUst } = props;
   const { disconnect } = useWallet();
-  const { connected, terraWalletAddress } = useAccount();
-  const connectedWallet = useConnectedWallet();
+  const { connected, terraWalletAddress, connection } = useAccount();
 
   const disconnectWallet = useCallback(() => {
     disconnect();
@@ -38,10 +37,10 @@ function ComponentBase(props: DialogProps<FormParams, FormReturn>) {
   return (
     <Modal open onClose={() => closeDialog()}>
       <Dialog className={className} onClose={() => closeDialog()}>
-        {connected && !!connectedWallet && (
+        {connected && !!connection && connection && (
           <Content
             walletAddress={terraWalletAddress!}
-            connection={connectedWallet.connection}
+            connection={connection}
             onClose={closeDialog}
             onDisconnectWallet={disconnectWallet}
             onSend={openSend}
@@ -90,7 +89,7 @@ const Component = styled(ComponentBase)`
 
     &:hover {
       background-color: ${({ theme }) =>
-        theme.actionButton.backgroundHoverColor};
+    theme.actionButton.backgroundHoverColor};
     }
   }
 `;

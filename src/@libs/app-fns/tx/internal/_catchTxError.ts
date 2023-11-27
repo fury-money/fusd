@@ -1,4 +1,3 @@
-import { Timeout, UserDenied } from "@terra-money/wallet-provider";
 import { OperatorFunction } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { TxResultRendering, TxStreamPhase } from "../../models/tx";
@@ -15,10 +14,11 @@ export function _catchTxError({
 }: Params): OperatorFunction<any, any> {
   return catchError((error) => {
     const errorId =
-      txErrorReporter &&
-      !(error instanceof UserDenied || error instanceof Timeout)
-        ? txErrorReporter(error)
-        : undefined;
+    undefined
+      // txErrorReporter &&
+      // !(error instanceof UserDenied || error instanceof Timeout)
+      //   ? txErrorReporter(error)
+      //   : undefined;
 
     return Promise.resolve<TxResultRendering>({
       value: null,

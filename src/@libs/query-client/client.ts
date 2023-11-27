@@ -1,6 +1,6 @@
 import { GasPrice } from "@cosmjs/stargate";
 import { Rate } from "@libs/types";
-import { LCDClient } from "@terra-money/terra.js";
+import { LCDClient } from "@terra-money/feather.js";
 import { hiveFetch } from "./hive/client";
 import { HiveFetcher } from "./hive/fetch";
 import { WasmFetchBaseParams, WasmQueryData } from "./interface";

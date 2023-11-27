@@ -1,3 +1,5 @@
+import { CreateTxOptions } from "@terra-money/feather.js";
+
 export class PollingTimeout extends Error {
   constructor(message: string, readonly txhash: string) {
     super(message);

@@ -7,7 +7,7 @@ import {
 import { CW20Addr, HumanAddr } from "@anchor-protocol/types";
 import { TERRA_QUERY_KEY, TxRefetchMap } from "@libs/app-provider";
 import { Gas, NativeDenom, Rate } from "@libs/types";
-import { NetworkInfo } from "@terra-money/wallet-provider";
+import { NetworkInfo } from "utils/consts";
 
 // ---------------------------------------------
 // style

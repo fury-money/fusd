@@ -1,13 +1,15 @@
 import { bAssetExportTx } from "@anchor-protocol/app-fns";
 import { bAsset } from "@anchor-protocol/types";
 import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
-import { CW20Addr } from "@libs/types";
+import { CW20Addr, HumanAddr } from "@libs/types";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet, useWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
 import { useBAssetInfoByTokenAddrQuery } from "../../queries/basset/bAssetInfoByTokenAddr";
+import { useAccount } from "contexts/account";
+import { useNetwork } from "@anchor-protocol/app-provider/contexts/network";
 
 export interface BAssetExportTxParams {
   amount: bAsset;
@@ -15,7 +17,8 @@ export interface BAssetExportTxParams {
 }
 
 export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
-  const connectedWallet = useConnectedWallet();
+  const walletOperations = useWallet();
+  const account = useAccount();
 
   const { queryClient, txErrorReporter, constants } = useAnchorWebapp();
 
@@ -28,8 +31,8 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
   const stream = useCallback(
     ({ onTxSucceed, amount }: BAssetExportTxParams) => {
       if (
-        !connectedWallet ||
-        !connectedWallet.availablePost ||
+        !account.connected ||
+        !account.availablePost ||
         !bAssetInfo ||
         !bAssetInfo.converterConfig.anchor_token_address ||
         !queryClient
@@ -38,14 +41,14 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
       }
 
       return bAssetExportTx({
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: account.terraWalletAddress as HumanAddr,
         bAssetInfo,
         // converterAddr: converterContract,
         // bAssetTokenAddr: bAssetInfo.converterConfig.anchor_token_address,
         bAssetTokenAmount: amount,
         // post
-        network: connectedWallet.network,
-        post: connectedWallet.post,
+        network: account.network,
+        post: walletOperations.post,
         fixedGas: fixedFee,
         gasFee: constants.gasWanted,
         gasAdjustment: constants.gasAdjustment,
@@ -61,7 +64,6 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
       });
     },
     [
-      connectedWallet,
       bAssetInfo,
       fixedFee,
       constants.gasWanted,
@@ -69,10 +71,15 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
       queryClient,
       txErrorReporter,
       refetchQueries,
+      account.availablePost,
+      account.terraWalletAddress,
+      account.network,
+      account.connected,
+      walletOperations.post
     ]
   );
 
   const streamReturn = useStream(stream);
 
-  return connectedWallet ? streamReturn : [null, null];
+  return account.connected ? streamReturn : [null, null];
 }

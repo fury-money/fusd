@@ -50,6 +50,7 @@ const DialogBase = forwardRef<HTMLDivElement, DialogProps>(
     );
   },
 );
+DialogBase.displayName = 'DialogBase';
 
 const ScrollLock = createGlobalStyle`
   html {

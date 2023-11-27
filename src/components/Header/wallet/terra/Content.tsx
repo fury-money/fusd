@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { FlatButton } from '@libs/neumorphism-ui/components/FlatButton';
 import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
-import { ConnectType, Connection } from '@terra-money/wallet-provider';
 import { useAccount } from 'contexts/account';
 import { WalletContent } from '../WalletContent';
 import { KeyboardArrowRight, Launch } from '@mui/icons-material';
@@ -11,6 +10,7 @@ import styled from 'styled-components';
 import { useNetwork } from '@anchor-protocol/app-provider';
 import { TokenList } from '../TokenList';
 import { getAccountUrl } from 'utils/terrascope';
+import { ConnectType, Connection } from 'utils/consts';
 
 type Action = () => void;
 
@@ -26,29 +26,31 @@ interface ContentProps extends UIElementProps {
 const ContentBase = (props: ContentProps) => {
   const {
     className,
-    walletAddress,
-    connection,
     onClose,
     onDisconnectWallet,
     // onSend,
     onBuyUST,
   } = props;
 
-  const { availablePost } = useAccount();
+  const { availablePost, terraWalletAddress, connection } = useAccount();
 
   const { network } = useNetwork();
 
   const viewOnTerraFinder = useCallback(() => {
-    window.open(getAccountUrl(network.chainID, walletAddress), '_blank');
-  }, [network.chainID, walletAddress]);
+    if (!terraWalletAddress) {
+      return;
+    }
+    window.open(getAccountUrl(network.chainID, terraWalletAddress), '_blank');
+  }, [network.chainID, terraWalletAddress]);
+
 
   return (
     <WalletContent
       className={className}
-      walletAddress={walletAddress}
-      connectionName={connection.name}
-      connectionIcon={connection.icon}
-      readonly={connection.type === ConnectType.READONLY}
+      walletAddress={terraWalletAddress || "Error"}
+      connectionName={connection?.name || "No wallet connected"}
+      connectionIcon={connection?.icon || "No wallet icon"}
+      readonly={connection ? connection.type === ConnectType.READONLY : false}
       onDisconnectWallet={onDisconnectWallet}
     >
       <>
@@ -189,19 +191,19 @@ export const Content = styled(ContentBase)`
         }
 
         background-color: ${({ theme }) =>
-          theme.palette_type === 'light' ? '#f1f1f1' : 'rgba(0, 0, 0, 0.15)'};
+    theme.palette_type === 'light' ? '#f1f1f1' : 'rgba(0, 0, 0, 0.15)'};
         color: ${({ theme }) =>
-          theme.palette_type === 'light'
-            ? '#666666'
-            : 'rgba(255, 255, 255, 0.6)'};
+    theme.palette_type === 'light'
+      ? '#666666'
+      : 'rgba(255, 255, 255, 0.6)'};
 
         &:hover {
           background-color: ${({ theme }) =>
-            theme.palette_type === 'light' ? '#e1e1e1' : 'rgba(0, 0, 0, 0.2)'};
+    theme.palette_type === 'light' ? '#e1e1e1' : 'rgba(0, 0, 0, 0.2)'};
           color: ${({ theme }) =>
-            theme.palette_type === 'light'
-              ? '#666666'
-              : 'rgba(255, 255, 255, 0.6)'};
+    theme.palette_type === 'light'
+      ? '#666666'
+      : 'rgba(255, 255, 255, 0.6)'};
         }
       }
     }

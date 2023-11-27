@@ -1,18 +1,19 @@
 import { vestingClaimTx } from "@anchor-protocol/app-fns/tx/anc/vestingClaim";
 import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
 import { useAnchorBank } from "../../hooks/useAnchorBank";
+import { useAccount } from "contexts/account";
+import { HumanAddr } from "@libs/types";
 
 export interface AncVestingClaimTxParams {
   onTxSucceed?: () => void;
 }
 
 export function useAncVestingClaimTx() {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, contractAddress, constants } =
     useAnchorWebapp();
@@ -30,7 +31,7 @@ export function useAncVestingClaimTx() {
       }
       return vestingClaimTx({
         // fabricatebBuy
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         vestingContractAddr: contractAddress.anchorToken.vesting,
         // post
         tax,

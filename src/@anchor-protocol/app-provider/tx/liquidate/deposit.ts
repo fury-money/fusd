@@ -1,12 +1,13 @@
 import { placeLiquidationBidTx } from "@anchor-protocol/app-fns/tx/liquidate/deposit";
-import { UST } from "@anchor-protocol/types";
+import { HumanAddr, UST } from "@anchor-protocol/types";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { WhitelistCollateral } from "queries";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
+import { useAccount } from "contexts/account";
 
 export interface PlaceLiquidationBidTxParams {
   depositAmount: UST;
@@ -18,7 +19,7 @@ export interface PlaceLiquidationBidTxParams {
 export function usePlaceLiquidationBidTx(
   collateral: WhitelistCollateral | undefined
 ) {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
     useAnchorWebapp();
@@ -43,7 +44,7 @@ export function usePlaceLiquidationBidTx(
 
       return placeLiquidationBidTx({
         // fabricateMarketDepositStableCoin
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
         collateralAddr: collateral.collateral_token,

@@ -10,7 +10,7 @@ import { createHookMsg } from "@libs/app-fns/tx/internal";
 import { useFeeEstimationFor } from "@libs/app-provider";
 import { formatTokenInput } from "@libs/formatter";
 import { useForm } from "@libs/use-form";
-import { MsgExecuteContract } from "@terra-money/terra.js";
+import { MsgExecuteContract } from "@terra-money/feather.js";
 import { useAccount } from "contexts/account";
 import { useBalances } from "contexts/balances";
 import { useCallback, useMemo } from "react";

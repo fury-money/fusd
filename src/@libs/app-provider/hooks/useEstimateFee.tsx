@@ -1,6 +1,6 @@
 import { useAnchorWebapp, useNetwork } from '@anchor-protocol/app-provider';
 import { Gas, HumanAddr, Luna, u } from '@libs/types';
-import { Msg } from '@terra-money/terra.js';
+import { Msg } from '@terra-money/feather.js';
 import { useCallback, useMemo, useState } from 'react';
 import { useApp } from '../contexts/app';
 import debounce from 'lodash.debounce';
@@ -17,10 +17,10 @@ const errorMap = {
   "Overflow: Cannot Wub with": "Amount is too high",
 }
 
-function mapEstimateFeeError(error: Error): string{
+function mapEstimateFeeError(error: Error): string {
   const stringError = error.toString()
-  for(let [key, value] of Object.entries(errorMap)){
-    if(stringError.includes(key)){
+  for (let [key, value] of Object.entries(errorMap)) {
+    if (stringError.includes(key)) {
       return value
     }
   }
@@ -64,12 +64,12 @@ export function useEstimateFee(
         address: walletAddress,
         lcdClient,
         gasInfo: {
-          gasAdjustment: constants.gasAdjustment,  
+          gasAdjustment: constants.gasAdjustment,
           //@ts-ignore
           gasPrice: gasPrice,
         }
       })
-      if(!gasWanted){
+      if (!gasWanted) {
         throw "Gas Wanted is zero, tx Fee compute error"
       }
 
@@ -77,7 +77,7 @@ export function useEstimateFee(
         gasWanted: gasWanted as Gas,
         txFee: Math.ceil(gasWanted * parseFloat(gasPrice.uluna)).toString() as u<Luna>
       };
-      
+
     },
     [constants.gasAdjustment, gasPrice, lcdClient, walletAddress, queryClient],
   );
@@ -86,11 +86,11 @@ export function useEstimateFee(
 export function useFeeEstimationFor(
   walletAddress: HumanAddr | undefined,
 ): [
-  EstimatedFee | undefined,
-  string | JSX.Element | undefined,
-  (msgs: Msg[] | null) => void,
-  boolean
-] {
+    EstimatedFee | undefined,
+    string | JSX.Element | undefined,
+    (msgs: Msg[] | null) => void,
+    boolean
+  ] {
   const estimateFee = useEstimateFee(walletAddress);
   const [estimatedFeeError, setEstimatedFeeError] = useState<
     string | JSX.Element | undefined
@@ -121,16 +121,16 @@ export function useFeeEstimationFor(
           .catch((error) => {
 
             const mappedError = mapEstimateFeeError(error);
-            setEstimatedFeeError(() => (<div style={{display:"flex", alignItems: "center"}}>
-                Error simulating the transaction
-                <InfoTooltip style={{display: "inline", marginLeft: 10}}>
-                  {mappedError}
-                </InfoTooltip>
-              </div>)); 
+            setEstimatedFeeError(() => (<div style={{ display: "flex", alignItems: "center" }}>
+              Error simulating the transaction
+              <InfoTooltip style={{ display: "inline", marginLeft: 10 }}>
+                {mappedError}
+              </InfoTooltip>
+            </div>));
             setEstimatedFee(undefined);
             setIsEstimatingFee(false);
           })
-          .then((ui) => {});
+          .then((ui) => { });
       }, 500);
     }, [estimateFee, setEstimatedFeeError, setEstimatedFee]),
     isEstimatingFee

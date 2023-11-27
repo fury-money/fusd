@@ -4,7 +4,7 @@ import { ANC, Rate, UST } from "@anchor-protocol/types";
 import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
 import { formatExecuteMsgNumber } from "@libs/formatter";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import big from "big.js";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
@@ -22,7 +22,7 @@ export interface AncSellTxParams {
 export function useAncSellTx() {
   const { availablePost, connected, terraWalletAddress } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, contractAddress, constants } =
     useAnchorWebapp();

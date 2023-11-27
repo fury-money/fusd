@@ -1,11 +1,12 @@
 import { rewardsAncUstLpClaimTx } from "@anchor-protocol/app-fns";
 import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
+import { HumanAddr } from "@libs/types";
 
 export interface RewardsAncUstLpClaimTxParams {
   onTxSucceed?: () => void;
@@ -14,7 +15,7 @@ export interface RewardsAncUstLpClaimTxParams {
 export function useRewardsAncUstLpClaimTx() {
   const { availablePost, connected } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, contractAddress, constants } =
     useAnchorWebapp();
@@ -30,7 +31,7 @@ export function useRewardsAncUstLpClaimTx() {
       }
 
       return rewardsAncUstLpClaimTx({
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         lpTokenAddr: contractAddress.cw20.AncUstLP,
         generatorAddr: contractAddress.astroport.generator,
         // post

@@ -20,13 +20,12 @@ function createIndex(packageRoot: string, addedExports: string[]) {
   const index = template(
     addedExports.map((exp) => `export * from '${exp}';`).join('\n'),
     files
-      .map((file) => `export * from './${file.replace(/\.tsx?$/, '')}';`)
+      .map((file: string) => `export * from './${file.replace(/\.tsx?$/, '')}';`)
       .join('\n'),
   );
 
   fs.writeFile(path.resolve(packageRoot, 'index.ts'), index, {
     encoding: 'utf8',
-  }).then(() => {
   });
 }
 

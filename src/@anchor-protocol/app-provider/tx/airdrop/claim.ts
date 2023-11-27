@@ -2,7 +2,7 @@ import { Airdrop, airdropClaimTx } from "@anchor-protocol/app-fns";
 import { useGasPrice, useRefetchQueries } from "@libs/app-provider";
 import { u, UST } from "@libs/types";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
 import { useAnchorWebapp } from "../../contexts/context";
@@ -17,7 +17,7 @@ export interface AirdropClaimTxParams {
 export function useAirdropClaimTx() {
   const { availablePost, connected, terraWalletAddress } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, constants, contractAddress } =
     useAnchorWebapp();

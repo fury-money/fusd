@@ -56,7 +56,7 @@ import {
 } from '@libs/app-provider';
 import { pressed } from '@libs/styled-neumorphism';
 import { TextInput } from '@libs/neumorphism-ui/components/TextInput';
-import { Coin, Coins, MsgExecuteContract } from '@terra-money/terra.js';
+import { Coin, Coins, MsgExecuteContract } from '@terra-money/feather.js';
 import { formatTokenInput } from '@libs/formatter';
 import { CircleSpinner } from 'react-spinners-kit';
 import { useMediaQuery } from 'react-responsive';
@@ -78,7 +78,7 @@ export function PlaceBidSectionBase({
   clickedBarState: [clickedBar, setClickedBar],
   collateral
 }: PlaceBidSectionProps) {
-  const { connected, terraWalletAddress, availablePost} = useAccount();
+  const { connected, terraWalletAddress, availablePost } = useAccount();
   const { contractAddress } = useAnchorWebapp();
 
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -89,7 +89,7 @@ export function PlaceBidSectionBase({
     luna,
   } = useFormatters();
 
-  const {withdrawableWrapper, withdrawableLSD, withdrawableUnderlying, withdrawableText} = useWithdrawDefaultedCollateral(collateral);
+  const { withdrawableWrapper, withdrawableLSD, withdrawableUnderlying, withdrawableText } = useWithdrawDefaultedCollateral(collateral);
   console.log(withdrawableLSD.toString(), withdrawableUnderlying.toString())
   /*******************************
    *
@@ -112,7 +112,7 @@ export function PlaceBidSectionBase({
       txFee: EstimatedFee | undefined,
       confirm: ReactNode,
     ) => {
-      
+
       setIsSubmittingBidTx(true);
       if (!connected || !placeBid) {
         return;
@@ -196,7 +196,7 @@ export function PlaceBidSectionBase({
   const [estimatedWithdrawalFee, estimatedWithdrawalFeeError, estimateWithdrawalFee] =
     useFeeEstimationFor(terraWalletAddress);
   useEffect(() => {
-    if (!collateral || !withdrawableLSD || withdrawableLSD.eq(0)|| !withdrawableUnderlying || withdrawableUnderlying.eq(0)) {
+    if (!collateral || !withdrawableLSD || withdrawableLSD.eq(0) || !withdrawableUnderlying || withdrawableUnderlying.eq(0)) {
       return;
     }
     estimateWithdrawalFee(
@@ -285,7 +285,7 @@ export function PlaceBidSectionBase({
    *********************************/
 
   const theme = useTheme();
-  const isVeryLarge = useMediaQuery({minWidth: screen.monitor.min})
+  const isVeryLarge = useMediaQuery({ minWidth: screen.monitor.min })
 
   const renderBroadcastCollateralTx = useMemo(() => {
     return (
@@ -434,9 +434,9 @@ export function PlaceBidSectionBase({
                       style={
                         state.maxAmount
                           ? {
-                              textDecoration: 'underline',
-                              cursor: 'pointer',
-                            }
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                          }
                           : undefined
                       }
                       onClick={() =>
@@ -545,21 +545,22 @@ export function PlaceBidSectionBase({
                   value={withdrawableText}
                   sx={{
                     fontSize: isVeryLarge ? "30px" : "3em",
-                    caretColor: 'transparent' }}
+                    caretColor: 'transparent'
+                  }}
                 />
               </Grid>
-              {(collateral?.collateral.type == "spectrum_lp" || collateral?.collateral.type == "amp_lp") && 
-                <FormControlLabel 
+              {(collateral?.collateral.type == "spectrum_lp" || collateral?.collateral.type == "amp_lp") &&
+                <FormControlLabel
                   control={
-                    <Checkbox 
+                    <Checkbox
                       checked={collateralState.withdrawLpAssets}
-                      onChange = {(event) => collateralState.updateWithdrawLpAssets(event.target.checked)}/>
-                  } 
-                  label="Withdraw assets from LP"  />
+                      onChange={(event) => collateralState.updateWithdrawLpAssets(event.target.checked)} />
+                  }
+                  label="Withdraw assets from LP" />
               }
               <TxFeeList className="receipt">
                 <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
-                {estimatedWithdrawalFeeError}
+                  {estimatedWithdrawalFeeError}
                   {(!estimatedWithdrawalFeeError && (!estimatedWithdrawalFee ||
                     (!big(estimatedWithdrawalFee?.txFee ?? ('0' as u<Luna>)).gt(
                       0,
@@ -611,12 +612,12 @@ export const CavernSlider = styled(Slider)`
     color: ${({ theme }) => theme.colors.positive} !important;
     padding: 1px !important;
     ${({ theme }) =>
-      pressed({
-        color: theme.textInput.backgroundColor,
-        backgroundColor: theme.backgroundColor,
-        intensity: theme.intensity,
-        distance: 1,
-      })};
+    pressed({
+      color: theme.textInput.backgroundColor,
+      backgroundColor: theme.backgroundColor,
+      intensity: theme.intensity,
+      distance: 1,
+    })};
 
     & .MuiSlider-thumb {
       box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.18);

@@ -1,11 +1,12 @@
 import { earnWithdrawTx } from "@anchor-protocol/app-fns";
-import { aUST } from "@anchor-protocol/types";
+import { HumanAddr, aUST } from "@anchor-protocol/types";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
+import { useAccount } from "contexts/account";
 
 export interface EarnWithdrawTxParams {
   withdrawAmount: aUST;
@@ -14,7 +15,7 @@ export interface EarnWithdrawTxParams {
 }
 
 export function useEarnWithdrawTx() {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { constants, queryClient, txErrorReporter, contractAddress } =
     useAnchorWebapp();
@@ -29,7 +30,7 @@ export function useEarnWithdrawTx() {
 
       return earnWithdrawTx({
         // fabricateMarketReedeemStableCoin
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         withdrawAmount,
         marketAddr: contractAddress.moneyMarket.market,
         aUstTokenAddr: contractAddress.cw20.aUST,

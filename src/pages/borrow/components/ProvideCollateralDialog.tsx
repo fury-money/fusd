@@ -40,13 +40,13 @@ import {
 } from '@anchor-protocol/formatter';
 import { BroadcastTxStreamResult } from 'pages/earn/components/types';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
-import { MsgExecuteContract } from '@terra-money/terra.js';
+import { MsgExecuteContract } from '@terra-money/feather.js';
 import { createHookMsg } from '@libs/app-fns/tx/internal';
 import { CircleSpinner } from 'react-spinners-kit';
 
 export interface ProvideCollateralDialogParams
   extends UIElementProps,
-    ProvideCollateralFormParams {
+  ProvideCollateralFormParams {
   txResult: StreamResult<TxResultRendering> | null;
   uTokenBalance: u<bAsset>;
   proceedable: boolean;
@@ -162,7 +162,7 @@ function ProvideCollateralDialogBase(props: ProvideCollateralDialogProps) {
             collateral.decimals,
           ),
         );
-      } catch {}
+      } catch { }
     },
     [updateDepositAmount, ltvToAmount, collateral.decimals],
   );

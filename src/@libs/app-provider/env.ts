@@ -6,7 +6,7 @@ import {
   LcdQueryClient,
 } from "@libs/query-client";
 import { useBatchQuery } from "@libs/query-client/lcd/batchfetch";
-import { NetworkInfo } from "@terra-money/wallet-provider";
+import { NetworkInfo } from "utils/consts";
 import { UseQueryResult } from "react-query";
 
 export function DEFAULT_HIVE_WASM_CLIENT(

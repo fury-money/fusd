@@ -3,14 +3,14 @@ import {
   abortMissionTx,
 } from "@anchor-protocol/app-fns";
 import { LSDLiquidationBidsResponse } from "@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser";
-import { aUST, u, UST } from "@anchor-protocol/types";
+import { aUST, HumanAddr, u, UST } from "@anchor-protocol/types";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
 import { Big } from "big.js";
+import { useAccount } from "contexts/account";
 
 export type AbortMissionTxParams = {
   txFee: EstimatedFee;
@@ -23,7 +23,7 @@ export type AbortMissionTxParams = {
 } & AbortMissionCollaterals;
 
 export function useAbortMissionTx() {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
     useAnchorWebapp();
@@ -47,7 +47,7 @@ export function useAbortMissionTx() {
 
       return abortMissionTx({
         // fabricateMarketDepositStableCoin
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         totalAUST,
         contractAddress,
         allLiquidationBids,
@@ -73,15 +73,7 @@ export function useAbortMissionTx() {
         },
       });
     },
-    [
-      connectedWallet,
-      contractAddress.moneyMarket.market,
-      contractAddress.native.usd,
-      constants.gasAdjustment,
-      queryClient,
-      txErrorReporter,
-      refetchQueries,
-    ]
+    [connectedWallet, queryClient, contractAddress, constants.gasAdjustment, txErrorReporter, refetchQueries]
   );
 
   const streamReturn = useStream(stream);

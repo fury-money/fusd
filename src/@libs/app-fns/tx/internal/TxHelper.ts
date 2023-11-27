@@ -1,14 +1,15 @@
 import { formatUToken } from "@libs/formatter";
 import { Luna, u } from "@libs/types";
-import { NetworkInfo, TxResult } from "@terra-money/wallet-provider";
-import { CreateTxOptions } from "@terra-money/terra.js";
+import { NetworkInfo } from "utils/consts";
+import { CreateTxOptions } from "@terra-money/feather.js";
 import { BigSource } from "big.js";
 import { TxReceipt, TxResultRendering, TxStreamPhase } from "../../models/tx";
 import { getTransactionDetailUrl } from "utils/terrascope";
+import { PostResponse } from "@terra-money/wallet-kit";
 
 export class TxHelper {
   private _savedTx: CreateTxOptions | null = null;
-  private _savedTxResult: TxResult | null = null;
+  private _savedTxResult: PostResponse | null = null;
 
   constructor(private $: { txFee: u<Luna>; network: NetworkInfo }) {}
 
@@ -19,11 +20,11 @@ export class TxHelper {
     return this._savedTx;
   }
 
-  saveTx = (tx: CreateTxOptions) => {
+  saveTx = (tx: CreateTxOptions): void => {
     this._savedTx = tx;
   };
 
-  saveTxResult = (txResult: TxResult) => {
+  saveTxResult = (txResult: PostResponse): void => {
     this._savedTxResult = txResult;
   };
 
@@ -33,7 +34,7 @@ export class TxHelper {
     }
 
     const chainID = this.$.network.name;
-    const txhash = this._savedTxResult.result.txhash;
+    const txhash = this._savedTxResult.txhash;
     const html = `<a href="${getTransactionDetailUrl(
       chainID,
       txhash
@@ -80,7 +81,7 @@ export class TxHelper {
 }
 
 function truncate(
-  text: string = "",
+  text = "",
   [h, t]: [number, number] = [6, 6]
 ): string {
   const head = text.slice(0, h);

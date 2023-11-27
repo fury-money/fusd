@@ -5,11 +5,13 @@ import {
   useRefetchQueries,
 } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { RewardBreakdown } from "pages/basset/hooks/useRewardsBreakdown";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
+import { useAccount } from "contexts/account";
+import { HumanAddr } from "@libs/types";
 
 export interface BAssetClaimTxParams {
   rewardBreakdowns: RewardBreakdown[];
@@ -20,7 +22,7 @@ export interface BAssetClaimTxParams {
 export function useBAssetClaimTx() {
   //const { availablePost, connected, terraWalletAddress } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { queryClient, txErrorReporter, constants } = useAnchorWebapp();
 
@@ -34,7 +36,7 @@ export function useBAssetClaimTx() {
 
       return bAssetClaimTx({
         // fabricatebAssetClaimRewards
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         rewardBreakdowns,
         // post
         network: connectedWallet.network,

@@ -1,4 +1,3 @@
-import { WalletControllerChainOptions } from '@terra-money/wallet-provider';
 import { GlobalStyle } from 'components/GlobalStyle';
 import { Header } from 'components/Header';
 import { Claim as AncVestingClaim } from 'pages/anc/vesting';
@@ -26,14 +25,10 @@ import { LiquidationInterface } from 'pages/liquidation/LiquidationInterface';
 import { MonitorPositions } from 'pages/liquidation/MonitorPositions';
 import { Swap } from 'pages/swap';
 
-type TerraAppProps = {
-  chainOptions: WalletControllerChainOptions | null;
-};
-
-export function TerraApp({ chainOptions }: TerraAppProps) {
+export function TerraApp() {
   return (
-    chainOptions && (
-      <TerraAppProviders {...chainOptions}>
+    (
+      <TerraAppProviders>
         <div>
           <GlobalStyle />
           <Header />

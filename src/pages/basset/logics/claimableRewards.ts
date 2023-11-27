@@ -1,6 +1,6 @@
 import type { u, UST } from "@anchor-protocol/types";
 import { aluna } from "@anchor-protocol/types";
-import { Dec, Int } from "@terra-money/terra.js";
+import { Dec, Int } from "@terra-money/feather.js";
 import big, { Big } from "big.js";
 
 export function claimableRewards(

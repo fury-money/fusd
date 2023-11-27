@@ -4,12 +4,12 @@ import {
   useRefetchQueries,
 } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
 import { useAnchorWebapp } from "../contexts/context";
 import { ANCHOR_TX_KEY } from "../env";
-import { MsgExecuteContract } from "@terra-money/terra.js";
+import { MsgExecuteContract } from "@terra-money/feather.js";
 import { genericTx } from "@anchor-protocol/app-fns/tx/genericTx";
 
 export interface GenericTxParams {
@@ -20,7 +20,7 @@ export interface GenericTxParams {
 export function useGenericTx() {
   const { availablePost, connected, terraWalletAddress } = useAccount();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { txErrorReporter, constants, queryClient } = useAnchorWebapp();
 

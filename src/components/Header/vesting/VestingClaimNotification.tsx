@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { UIElementProps } from 'components/layouts/UIElementProps';
 import errorImage from '../assets/error.svg';
 import { useAncVestingAccountQuery } from '@anchor-protocol/app-provider/queries/anc/vestingClaim';
-import { Dec } from '@terra-money/terra.js';
+import { Dec } from '@terra-money/feather.js';
 import { DropdownContainer, DropdownBox } from '../desktop/DropdownContainer';
 import { useLocalStorage } from 'usehooks-ts';
 
@@ -236,7 +236,7 @@ export const VestingClaimNotification = styled(VestingClaimNotificationBase)`
     align-items: center;
 
     background-color: ${({ theme }) =>
-      theme.palette_type === 'dark' ? '#363c5f' : '#ededed'};
+    theme.palette_type === 'dark' ? '#363c5f' : '#ededed'};
 
     img {
       width: 70px;

@@ -1,7 +1,6 @@
 import { QueryClient } from "@libs/query-client";
 import { Gas, ISODateFormat, Num } from "@libs/types";
-import { TxFailed } from "@terra-money/wallet-provider";
-import { CreateTxOptions } from "@terra-money/terra.js";
+import { CreateTxOptions } from "@terra-money/feather.js";
 import { PollingTimeout } from "../errors";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -171,6 +170,27 @@ export class TxInfoFailed extends Error {
     super(message);
     this.name = "TxInfoFailed";
   }
+}
+export class TxFailed extends Error {
+  constructor(
+    public readonly tx: CreateTxOptions,
+    public readonly txhash: string | undefined,
+    message: string,
+    public readonly raw_message: unknown,
+  ) {
+    super(message);
+    this.name = 'TxFailed';
+  }
+
+  toString = () => {
+    return `[${this.name} txhash="${this.txhash}" message="${
+      this.message
+    }"]\n${JSON.stringify(this.tx, null, 2)}\n${JSON.stringify(
+      this.raw_message,
+      null,
+      2,
+    )}`;
+  };
 }
 
 export type PollTxInfoParams = TxInfoQueryParams & {

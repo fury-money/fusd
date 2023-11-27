@@ -21,7 +21,7 @@ import {
   SelectAndTextInputContainerLabel,
 } from '@libs/neumorphism-ui/components/SelectAndTextInputContainer';
 import { StreamStatus } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-provider';
+import { useConnectedWallet } from '@terra-money/wallet-kit';
 import big from 'big.js';
 import { MessageBox } from 'components/MessageBox';
 import { IconLineSeparator } from 'components/primitives/IconLineSeparator';
@@ -32,6 +32,7 @@ import { fixHMR } from 'fix-hmr';
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { ConvertSymbols, ConvertSymbolsContainer } from './ConvertSymbols';
+import { useAccount } from 'contexts/account';
 
 export interface WhExportProps {
   className?: string;
@@ -39,7 +40,7 @@ export interface WhExportProps {
 }
 
 function Component({ className, bAssetInfo }: WhExportProps) {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const [convert, convertResult] = useBAssetExportTx(
     bAssetInfo.bAsset.collateral_token,
@@ -59,7 +60,7 @@ function Component({ className, bAssetInfo }: WhExportProps) {
 
   const balance = useCW20Balance<bAsset>(
     bAssetInfo.converterConfig.anchor_token_address ?? undefined,
-    connectedWallet?.walletAddress,
+    connectedWallet?.terraWalletAddress,
   );
 
   // ---------------------------------------------

@@ -7,7 +7,7 @@ import {
   AncVestingAccount,
   ancVestingAccountQuery,
 } from "@anchor-protocol/app-fns/queries/anc/vesting";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useAccount } from "contexts/account";
 
 export function useAncVestingAccountQuery(): UseQueryResult<
   AncVestingAccount | undefined
@@ -15,12 +15,12 @@ export function useAncVestingAccountQuery(): UseQueryResult<
   const { queryClient, contractAddress, queryErrorReporter } =
     useAnchorWebapp();
 
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const result = useQuery(
     [
       ANCHOR_QUERY_KEY.ANC_VESTING_ACCOUNT,
-      connectedWallet?.walletAddress ?? undefined,
+      connectedWallet?.terraWalletAddress ?? undefined,
       contractAddress.anchorToken.vesting,
     ],
     createQueryFn(ancVestingAccountQuery, queryClient!),
@@ -32,5 +32,5 @@ export function useAncVestingAccountQuery(): UseQueryResult<
     }
   );
 
-  return connectedWallet?.walletAddress ? result : EMPTY_QUERY_RESULT;
+  return connectedWallet?.terraWalletAddress ? result : EMPTY_QUERY_RESULT;
 }

@@ -1,10 +1,11 @@
 import { activateLiquidationBidTx } from "@anchor-protocol/app-fns/tx/liquidate/activate";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
+import { useAccount } from "contexts/account";
+import { HumanAddr } from "@libs/types";
 
 export interface ActivateLiquidationBidTxParams {
   estimatedFee: EstimatedFee;
@@ -12,7 +13,7 @@ export interface ActivateLiquidationBidTxParams {
 }
 
 export function useActivateLiquidationBidTx() {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
     useAnchorWebapp();
@@ -27,7 +28,7 @@ export function useActivateLiquidationBidTx() {
 
       return activateLiquidationBidTx({
         // fabricateMarketDepositStableCoin
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
         aLunaAddr: contractAddress.cw20.aLuna,

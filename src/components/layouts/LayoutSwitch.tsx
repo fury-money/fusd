@@ -6,12 +6,12 @@ interface LayoutSwitchProps {
   mobile: FunctionComponent | ReactNode;
 }
 
-export const LayoutSwitch = (props: LayoutSwitchProps) => {
+export const LayoutSwitch = (props: LayoutSwitchProps): React.JSX.Element => {
   const { desktop, mobile } = props;
 
   const isMobile = useMediaQuery({ maxWidth: 900 });
 
-  let content: ReactNode;
+  let content: ReactNode | FunctionComponent;
 
   if (isMobile) {
     content = mobile;
@@ -19,5 +19,5 @@ export const LayoutSwitch = (props: LayoutSwitchProps) => {
     content = desktop;
   }
 
-  return typeof content === 'function' ? content() : desktop;
+  return (typeof content === 'function' ? content({}) : desktop) as React.JSX.Element;
 };

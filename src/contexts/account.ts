@@ -1,11 +1,16 @@
 import { HumanAddr } from "@libs/types";
+import { CreateTxOptions } from "@terra-money/feather.js";
+import { PostResponse, WalletResponse, WalletStatus } from "@terra-money/wallet-kit";
 import { createContext, useContext } from "react";
+import { Connection, NetworkInfo } from "utils/consts";
 
 interface AccountCommon {
   availablePost: boolean;
   readonly: boolean;
-  network: "terra" | "evm";
-  status: "initialization" | "connected" | "disconnected";
+  network: NetworkInfo;
+  status: WalletStatus
+  post: (tx: CreateTxOptions) => Promise<PostResponse>;
+  connection: Connection | undefined;
   // connect: (connectType: 'extension' | 'walletconnect' | 'readonly') => void;
   // disconnect: () => void;
 }
@@ -26,12 +31,14 @@ export type Account = AccountConnected | AccountDisconnected;
 
 export const AccountContext = createContext<Account | undefined>(undefined);
 
-const useAccount = (): Account => {
+const useAccount = (): Account & Pick<WalletResponse, "post"> => {
   const context = useContext(AccountContext);
   if (context === undefined) {
     throw new Error("The AccountContext has not been defined.");
   }
-  return context;
+  return {
+    ...context,
+  };
 };
 
 export { useAccount };

@@ -1,12 +1,14 @@
 import { liquidationWithdrawCollateralTx } from "@anchor-protocol/app-fns/tx/liquidate/collateral";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-provider";
+import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { CollateralInfo } from "pages/borrow/components/useCollaterals";
 import { useWithdrawDefaultedCollateral } from "pages/liquidation/components/useWithdrawDefaultedCollateral";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
+import { useAccount } from "contexts/account";
+import { HumanAddr } from "@libs/types";
 
 export interface LiquidationWithdrawCollateralTxParams {
   txFee: EstimatedFee;
@@ -17,7 +19,7 @@ export interface LiquidationWithdrawCollateralTxParams {
 export function useLiquidationWithdrawCollateralTx(
   collateral: CollateralInfo | undefined
 ) {
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet = useAccount();
 
   const { constants, txErrorReporter, queryClient, contractAddress } =
     useAnchorWebapp();
@@ -45,7 +47,7 @@ export function useLiquidationWithdrawCollateralTx(
 
       return liquidationWithdrawCollateralTx({
         // fabricateMarketDepositStableCoin
-        walletAddr: connectedWallet.walletAddress,
+        walletAddr: connectedWallet.terraWalletAddress as HumanAddr,
         liquidationQueueAddr:
           contractAddress.liquidation.liquidationQueueContract,
         collateral: collateral,
