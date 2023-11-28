@@ -2,7 +2,7 @@ import { TokenIcon } from '@anchor-protocol/token-icons';
 import { CenteredLayout } from 'components/layouts/CenteredLayout';
 import { PageTitle, TitleContainer } from 'components/primitives/PageTitle';
 import { links } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import React from 'react';
 import styled from 'styled-components';
 import { AssetCard } from './components/AssetCard';
@@ -23,27 +23,27 @@ function Component({ className }: BAssetMainProps) {
 
   const lsdCollaterals = useLSDCollateralQuery();
 
-  function printCollateralCard(type: string){
+  function printCollateralCard(type: string) {
     return (
       <ul className="asset-list">
-        {lsdCollaterals.filter((collateral) => collateral.info?.type == type).map((collateral) => 
+        {lsdCollaterals.filter((collateral) => collateral.info?.type == type).map((collateral) =>
           <AssetCard
             key={collateral.name}
             to={collateral.info.info.link}
             title={<p>{collateral.info.info.symbol} ({collateral.info.info.protocol})</p>}
             bAssetIcon={<TokenIcon token={collateral.info.info.symbol} variant="@4x" />}
             originAssetIcon={<TokenIcon token={collateral.info.info.underlyingName} />}
-            hoverText={<Box sx={{gap: "5px",display: "flex", alignItems: "center", fontSize: "1em !important"}}>MINT & BURN <OpenInNewIcon/> </Box>}
+            hoverText={<Box sx={{ gap: "5px", display: "flex", alignItems: "center", fontSize: "1em !important" }}>MINT & BURN <OpenInNewIcon /> </Box>}
           >
-            <AssetCardContentLSD 
-              asset={collateral.info.info.symbol} 
-              underlyingName={collateral.info.info.underlyingName} 
-              underlyingToken={collateral.info.info.underlyingToken} 
+            <AssetCardContentLSD
+              asset={collateral.info.info.symbol}
+              underlyingName={collateral.info.info.underlyingName}
+              underlyingToken={collateral.info.info.underlyingToken}
             />
           </AssetCard>
         )}
       </ul>
-      )
+    )
   }
 
 
@@ -55,19 +55,19 @@ function Component({ className }: BAssetMainProps) {
 
       <Claimable className="claimable-section" />
 
-        {printCollateralCard("whale")}
-         
-        {printCollateralCard("luna")}
-         
-        {printCollateralCard("spectrum_lp")}
-         
-        {printCollateralCard("amp_lp")}
+      {printCollateralCard("whale")}
+
+      {printCollateralCard("luna")}
+
+      {printCollateralCard("spectrum_lp")}
+
+      {printCollateralCard("amp_lp")}
 
 
       <ul className="asset-list">
         <AssetCard
           to="/aasset/aluna"
-          title={<p>LUNA/aLUNA<span style={{fontSize: "0.7em"}}> (mint here)</span></p>}
+          title={<p>LUNA/aLUNA<span style={{ fontSize: "0.7em" }}> (mint here)</span></p>}
           bAssetIcon={<TokenIcon token="aluna" />}
           originAssetIcon={<TokenIcon token="luna" />}
           hoverText={<Box>MINT & BURN</Box>}
@@ -117,4 +117,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const BAssetMain = fixHMR(StyledComponent);
+export const BAssetMain = StyledComponent;

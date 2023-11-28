@@ -16,11 +16,11 @@ const channels = (
     <li>
       Github Issues :{' '}
       <a
-        href="https://github.com/Anchor-Protocol/anchor-web-app/issues"
+        href="https://github.com/CavernPerson/webapp//issues"
         target="_blank"
         rel="noreferrer"
       >
-        https://github.com/Anchor-Protocol/anchor-web-app
+        https://github.com/CavernPerson/webapp/
       </a>
     </li>
   </ul>

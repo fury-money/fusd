@@ -45,7 +45,7 @@ import { isWrappedCollateral, useWhitelistCollateralQuery, WhitelistCollateral, 
 import { useBalances } from 'contexts/balances';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
 import { MsgExecuteContract } from '@terra-money/feather.js';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 import { useBorrowLoopForm } from '@anchor-protocol/app-provider/forms/borrow/loop';
 import { CavernSlider } from 'pages/liquidation/components/PlaceBidSection';
 import { SelectAndTextInputContainerLabel } from '@libs/neumorphism-ui/components/SelectAndTextInputContainer';
@@ -557,7 +557,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                 `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
               {(!estimatedFeeError && !estimatedFee) && (
                 <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
+                  <CircleSpinner size={18} color={theme.colors.positive} />
                 </span>
               )}
               {estimatedFeeError}

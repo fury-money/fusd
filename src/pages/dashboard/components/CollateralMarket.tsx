@@ -5,7 +5,7 @@ import { Section } from '@libs/neumorphism-ui/components/Section';
 import { u, UST, Rate } from '@libs/types';
 import { AnimateNumber, UIElementProps } from '@libs/ui';
 import big, { Big } from 'big.js';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useMemo } from 'react';
 import { useTheme } from 'styled-components';
 import { CollateralsChart } from './CollateralsChart';
@@ -23,7 +23,7 @@ function CollateralMarketBase(props: UIElementProps) {
 
   const { data: marketCollaterals } = useMarketCollateralsQuery();
 
-  const additionalLSDInfo = useLSDCollateralQuery(); 
+  const additionalLSDInfo = useLSDCollateralQuery();
 
   const collaterals = useMemo(() => {
     if (!marketCollaterals || marketCollaterals.history.length === 0) {
@@ -33,11 +33,11 @@ function CollateralMarketBase(props: UIElementProps) {
     const last = marketCollaterals.now;
     const last1DayBefore =
       marketCollaterals.history.find(findPrevDay(last.timestamp)) ??
-      marketCollaterals.history[marketCollaterals.history.length - 2]??
+      marketCollaterals.history[marketCollaterals.history.length - 2] ??
       marketCollaterals.history[marketCollaterals.history.length - 1];
 
     let totalCollateralDiff = big("0");
-    if(last1DayBefore.total_value != "0"){
+    if (last1DayBefore.total_value != "0") {
       totalCollateralDiff = big(
         big(last.total_value).minus(last1DayBefore.total_value),
       ).div(last1DayBefore.total_value)
@@ -96,4 +96,4 @@ function CollateralMarketBase(props: UIElementProps) {
   );
 }
 
-export const CollateralMarket = fixHMR(CollateralMarketBase);
+export const CollateralMarket = CollateralMarketBase;

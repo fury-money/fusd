@@ -2,7 +2,6 @@ import { cw20SellTokenTx } from "@libs/app-fns";
 import { useFixedFee } from "@libs/app-provider/hooks/useFixedFee";
 import { formatExecuteMsgNumber } from "@libs/formatter";
 import { CW20Addr, HumanAddr, Rate, Token, u, UST } from "@libs/types";
-import { useConnectedWallet } from "@terra-money/wallet-kit";
 import big from "big.js";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";

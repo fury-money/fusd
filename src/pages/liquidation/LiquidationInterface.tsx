@@ -2,7 +2,7 @@ import { CenteredLayout } from 'components/layouts/CenteredLayout';
 
 import { FlexTitleContainer, PageTitle } from 'components/primitives/PageTitle';
 import { links, screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { LiquidationQueueSection } from './components/LiquidationQueueSection';
@@ -21,25 +21,25 @@ export interface LiquidationProps {
 function Component({ className }: EarnProps) {
   const [clickedBar, setClickedBar] = useState<number | undefined>();
 
-  let {tokenSymbol} = useParams();
+  let { tokenSymbol } = useParams();
 
   const collaterals = useCollaterals();
 
-  const collateral= useMemo(()=>{
+  const collateral = useMemo(() => {
 
     let foundWhitelist: CollateralInfo | undefined = collaterals
-      ?.find(({collateral}) => collateral.symbol === tokenSymbol || ("info" in collateral && collateral.info.info.symbol == tokenSymbol))
+      ?.find(({ collateral }) => collateral.symbol === tokenSymbol || ("info" in collateral && collateral.info.info.symbol == tokenSymbol))
 
-    if(!foundWhitelist){
+    if (!foundWhitelist) {
       foundWhitelist = collaterals
-      ?.find(({collateral}) => collateral.symbol == "aLuna");
+        ?.find(({ collateral }) => collateral.symbol == "aLuna");
     }
 
-    if(foundWhitelist){
-       foundWhitelist.collateral.symbol = ("info" in foundWhitelist.collateral) ? foundWhitelist.collateral.info.info.symbol : foundWhitelist.collateral.symbol
-    }    
+    if (foundWhitelist) {
+      foundWhitelist.collateral.symbol = ("info" in foundWhitelist.collateral) ? foundWhitelist.collateral.info.info.symbol : foundWhitelist.collateral.symbol
+    }
 
-    return foundWhitelist 
+    return foundWhitelist
 
   }, [collaterals, tokenSymbol])
 
@@ -59,15 +59,15 @@ function Component({ className }: EarnProps) {
           setClickedBar={setClickedBar}
           collateral={collateral?.collateral}
         />
-        <LiquidationStatsSection className="liquidation-stats" 
+        <LiquidationStatsSection className="liquidation-stats"
           collateral={collateral?.collateral}
-          />
+        />
         <MyBidsSection className="my-bids"
           collateral={collateral?.collateral}
-          />
+        />
         <LiquidationQueueHistory className="liquidation-queue-chart"
           collateral={collateral?.collateral}
-          />
+        />
       </section>
     </CenteredLayout>
   );
@@ -283,4 +283,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const LiquidationInterface = fixHMR(StyledComponent);
+export const LiquidationInterface = StyledComponent;

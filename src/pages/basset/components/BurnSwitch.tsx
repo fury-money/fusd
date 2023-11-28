@@ -1,6 +1,6 @@
 import { EmbossButton } from '@libs/neumorphism-ui/components/EmbossButton';
 import { DoneOutlined } from '@mui/icons-material';
-import { fixHMR } from 'fix-hmr';
+
 import styled from 'styled-components';
 import React, { CSSProperties } from 'react';
 
@@ -84,4 +84,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const BurnSwitch = fixHMR(StyledComponent);
+export const BurnSwitch = StyledComponent;

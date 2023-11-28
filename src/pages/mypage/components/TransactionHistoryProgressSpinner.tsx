@@ -1,6 +1,6 @@
-import { fixHMR } from 'fix-hmr';
+
 import React from 'react';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 import styled, { useTheme } from 'styled-components';
 
 export interface TransactionHistoryProgressSpinnerProps {
@@ -32,6 +32,4 @@ export const StyledTransactionHistoryProgressSpinner = styled(
   color: ${({ theme }) => theme.textColor};
 `;
 
-export const TransactionHistoryProgressSpinner = fixHMR(
-  StyledTransactionHistoryProgressSpinner,
-);
+export const TransactionHistoryProgressSpinner = StyledTransactionHistoryProgressSpinner;

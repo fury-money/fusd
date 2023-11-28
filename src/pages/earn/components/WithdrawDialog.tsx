@@ -28,7 +28,7 @@ import { UIElementProps } from '@libs/ui';
 import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
 import big from 'big.js';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 
 interface WithdrawDialogParams extends UIElementProps, EarnWithdrawFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
@@ -164,7 +164,7 @@ function WithdrawDialogBase(props: WithdrawDialogProps) {
                 `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
               {!estimatedFeeError && !estimatedFee && (
                 <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
+                  <CircleSpinner size={18} color={theme.colors.positive} />
                 </span>
               )}
               {estimatedFeeError}

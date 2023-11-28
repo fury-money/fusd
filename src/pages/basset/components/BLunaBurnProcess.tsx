@@ -1,5 +1,5 @@
 import { Info, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { fixHMR } from 'fix-hmr';
+
 import React, { CSSProperties } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import styled from 'styled-components';
@@ -62,7 +62,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const BLunaBurnProcess = fixHMR(StyledComponent);
+export const BLunaBurnProcess = StyledComponent;
 
 function Content() {
   return (

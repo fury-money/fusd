@@ -29,7 +29,7 @@ import big, { Big } from 'big.js';
 import { Footer } from 'components/Footer';
 import { PageTitle, TitleContainer } from 'components/primitives/PageTitle';
 import { screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useEffect, useMemo, useState } from 'react';
 import styled, { css, useTheme } from 'styled-components';
 import { findPrevDay } from './components/internal/axisUtils';
@@ -707,11 +707,11 @@ const StyledDashboard = styled(DashboardBase)`
           }
 
           .positive{
-            color: ${({theme}) => theme.colors.primary}
+            color: ${({ theme }) => theme.colors.primary}
           }
 
           .negative{
-            color: ${({theme}) => theme.colors.warning}
+            color: ${({ theme }) => theme.colors.warning}
           }
 
           .volatility,
@@ -1070,4 +1070,4 @@ const StyledDashboard = styled(DashboardBase)`
   }
 `;
 
-export const Dashboard = fixHMR(StyledDashboard);
+export const Dashboard = StyledDashboard;

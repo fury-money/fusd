@@ -6,7 +6,7 @@ import { d2Formatter, formatUTokenDecimal2 } from '@libs/formatter';
 import { AnimateNumber } from '@libs/ui';
 import { DoughnutChart } from 'pages/dashboard/components/DoughnutChart';
 import styled from 'styled-components';
-import { fixHMR } from 'fix-hmr';
+
 import {
   RewardBreakdown,
   RewardsBreakdown,
@@ -135,4 +135,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const ClaimableRewardsBreakdown = fixHMR(StyledComponent);
+export const ClaimableRewardsBreakdown = StyledComponent;

@@ -13,7 +13,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import big from "big.js";
 import { useNameServiceQuery } from "@anchor-protocol/app-provider/queries/nameservice/nameservice";
 import styled, { useTheme } from "styled-components";
-import { fixHMR } from "fix-hmr";
 import { fromIPFSImageURLtoImageURL } from "@anchor-protocol/app-fns/ipfs";
 import { Box, Divider, Grid } from "@mui/material";
 import { useMultipleBorrowerQuery } from "@anchor-protocol/app-provider";
@@ -23,8 +22,8 @@ import { TokenIcon } from "@anchor-protocol/token-icons";
 import { useCollaterals } from "pages/borrow/components/useCollaterals";
 import { useWhitelistCollateralQuery, WhitelistCollateral } from "queries";
 
-function getCollateralSymbol(collateral: WhitelistCollateral | undefined){
-  if(!collateral){
+function getCollateralSymbol(collateral: WhitelistCollateral | undefined) {
+  if (!collateral) {
     return "aluna"
   }
   return "info" in collateral ? collateral.info.info.symbol : collateral.symbol
@@ -34,28 +33,28 @@ export interface MonitorPositionsProps {
   className?: string;
 }
 
-function Component({className}: MonitorPositionsProps){
+function Component({ className }: MonitorPositionsProps) {
 
 
-	const {data: positionData} = useAllPositionsQuery();
+  const { data: positionData } = useAllPositionsQuery();
 
-	const displayData = useMemo(()=>{
-		return positionData
-			?.sort((a, b) => b.borrow - a.borrow)
-			?.sort((a, b)=> +(a.over_limit == "false") - +(b.over_limit == "false"))
-	},[positionData])
+  const displayData = useMemo(() => {
+    return positionData
+      ?.sort((a, b) => b.borrow - a.borrow)
+      ?.sort((a, b) => +(a.over_limit == "false") - +(b.over_limit == "false"))
+  }, [positionData])
 
-	const totalBorrowed = useMemo(()=> {
-		return positionData
-		?.reduce((acc, v)=> acc.add(v.borrow), big(0))
-	}, [positionData])
+  const totalBorrowed = useMemo(() => {
+    return positionData
+      ?.reduce((acc, v) => acc.add(v.borrow), big(0))
+  }, [positionData])
 
 
-	const {data: nameServiceData} = useNameServiceQuery(positionData?.map((position)=> position.borrower));
+  const { data: nameServiceData } = useNameServiceQuery(positionData?.map((position) => position.borrower));
 
-  const {data: collaterals} = useMultipleBorrowerQuery(positionData?.map(position=> position.borrower));
+  const { data: collaterals } = useMultipleBorrowerQuery(positionData?.map(position => position.borrower));
 
-  const {data: registeredCollaterals} = useWhitelistCollateralQuery();
+  const { data: registeredCollaterals } = useWhitelistCollateralQuery();
 
   const {
     ust: { formatOutput: formatUSTOutput, demicrofy: demicrofyUST },
@@ -63,18 +62,18 @@ function Component({className}: MonitorPositionsProps){
 
   const theme = useTheme();
 
-	return (
-	<CenteredLayout className={className} maxWidth={2000}>
+  return (
+    <CenteredLayout className={className} maxWidth={2000}>
       <>
         <FlexTitleContainer>
-          <PageTitle title="MONITOR POSITIONS"/>
+          <PageTitle title="MONITOR POSITIONS" />
         </FlexTitleContainer>
         <section className="grid">
-          <PaddingSection className="main-section" padding="20px 20px" style={{margin: "auto 50px"}}>
+          <PaddingSection className="main-section" padding="20px 20px" style={{ margin: "auto 50px" }}>
             <HorizontalScrollTable minWidth={850}>
               <thead>
                 <tr>
-                  <th style={{display: "flex", alignItems: "center", gap: "5px"}}>Borrower
+                  <th style={{ display: "flex", alignItems: "center", gap: "5px" }}>Borrower
                   </th>
                   <th>
                     <IconSpan>
@@ -113,26 +112,26 @@ function Component({className}: MonitorPositionsProps){
               <tbody>
                 {positionData?.map(
                   ({
-                  	borrower,
-          					over_limit,
-          					borrow,
-          					limit,
+                    borrower,
+                    over_limit,
+                    borrow,
+                    limit,
                   }, i) => (
                     <tr key={borrower}>
                       <td>
-                      	{!!nameServiceData?.[i]?.domainInfo?.extension?.name && 
-                        <div style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "8px"}} >
-                           <img alt=""  src={fromIPFSImageURLtoImageURL(nameServiceData?.[i]?.domainInfo?.extension?.image ?? "")[0]} height="40px" />
-                        		<Box>
+                        {!!nameServiceData?.[i]?.domainInfo?.extension?.name &&
+                          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "8px" }} >
+                            <img alt="" src={fromIPFSImageURLtoImageURL(nameServiceData?.[i]?.domainInfo?.extension?.image ?? "")[0]} height="40px" />
+                            <Box>
                               <div className="value">{nameServiceData?.[i]?.domainInfo?.extension?.name}.luna</div>
-    	                        <p className="volatility">
-    	                        	{borrower}
-    	                        </p>
+                              <p className="volatility">
+                                {borrower}
+                              </p>
                             </Box>
-	                        </div>
-	                    }
-	                    {!nameServiceData?.[i]?.domainInfo?.extension?.name && <div className="value">{borrower}</div>}
-                      </td>	
+                          </div>
+                        }
+                        {!nameServiceData?.[i]?.domainInfo?.extension?.name && <div className="value">{borrower}</div>}
+                      </td>
                       <td>
                         <div className="value">
                           {formatUSTOutput(demicrofyUST((borrow ?? 0).toString() as u<UST>))} axlUSDC
@@ -140,33 +139,33 @@ function Component({className}: MonitorPositionsProps){
                       </td>
                       <td>
                         <div className="value">
-                           {formatUSTOutput(demicrofyUST((limit ?? 0).toString() as u<UST>))} axlUSDC
+                          {formatUSTOutput(demicrofyUST((limit ?? 0).toString() as u<UST>))} axlUSDC
                         </div>
                       </td>
                       <td>
-                      	{over_limit == "true" && <CheckIcon style={{backgroundColor: "green"}}/>}
-                      	{over_limit == "false" && <CloseIcon style={{backgroundColor: "red"}}/>}
+                        {over_limit == "true" && <CheckIcon style={{ backgroundColor: "green" }} />}
+                        {over_limit == "false" && <CloseIcon style={{ backgroundColor: "red" }} />}
                       </td>
-                      <td style={{textAlign:"center"}}>
+                      <td style={{ textAlign: "center" }}>
                         <Grid container spacing={2}>
-                        {collaterals?.[i]?.overseerCollaterals.collaterals.map(([collateral, lockedAmount], i) => (
-                          <Grid item xs={6}
-                            key={collateral}
-                            sx={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}
-                          >
-                             <TokenIcon token={getCollateralSymbol(registeredCollaterals?.find(token=> token.collateral_token == collateral))} variant="@4x"/> {formatBAssetWithPostfixUnits(demicrofy(lockedAmount))}
-                          </Grid>
-                        ))}
+                          {collaterals?.[i]?.overseerCollaterals.collaterals.map(([collateral, lockedAmount], i) => (
+                            <Grid item xs={6}
+                              key={collateral}
+                              sx={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20 }}
+                            >
+                              <TokenIcon token={getCollateralSymbol(registeredCollaterals?.find(token => token.collateral_token == collateral))} variant="@4x" /> {formatBAssetWithPostfixUnits(demicrofy(lockedAmount))}
+                            </Grid>
+                          ))}
                         </Grid>
 
-                      </td>  
+                      </td>
                     </tr>
                   ),
                 )}
               </tbody>
             </HorizontalScrollTable>
-        </PaddingSection>
-      </section>
+          </PaddingSection>
+        </section>
       </>
     </CenteredLayout>)
 }
@@ -182,4 +181,4 @@ const StyledComponent = styled(Component)`
 
           `;
 
-export const MonitorPositions = fixHMR(StyledComponent);
+export const MonitorPositions = StyledComponent;

@@ -9,7 +9,7 @@ import { Section } from '@libs/neumorphism-ui/components/Section';
 import { AnimateNumber } from '@libs/ui';
 import { Big, BigSource } from 'big.js';
 import { Sub } from 'components/Sub';
-import { fixHMR } from 'fix-hmr';
+
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import useResizeObserver from 'use-resize-observer/polyfilled';
@@ -152,4 +152,4 @@ export const StyledBorrowedValue = styled(BorrowedValueBase)`
   }
 `;
 
-export const BorrowedValue = fixHMR(StyledBorrowedValue);
+export const BorrowedValue = StyledBorrowedValue;

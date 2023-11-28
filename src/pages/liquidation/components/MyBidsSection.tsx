@@ -36,7 +36,7 @@ import {
 } from '@libs/app-provider';
 import debounce from 'lodash.debounce';
 import { Msg, MsgExecuteContract } from '@terra-money/feather.js';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 import styled, { useTheme } from 'styled-components';
 import { Mutex } from 'async-mutex';
 import { useActivateLiquidationBidTx } from '@anchor-protocol/app-provider/tx/liquidate/activate';
@@ -389,7 +389,7 @@ export function MyBidsSection({ className, collateral }: MyBidsSectionProps) {
                       </Button>
                     )}
                     {!feeEstimates[bid.idx] && (
-                      <CircleSpinner size={14} color={theme.colors.positive} />
+                      <CircleSpinner size={18} color={theme.colors.positive} />
                     )}
                   </TableCell>
                 </TableRow>
@@ -444,7 +444,7 @@ export function MyBidsSection({ className, collateral }: MyBidsSectionProps) {
                   </Button>
                 )}
                 {!feeEstimates[bid.idx] && (
-                  <CircleSpinner size={14} color={theme.colors.positive} />
+                  <CircleSpinner size={18} color={theme.colors.positive} />
                 )}
               </Grid>
               <Grid item xs={12}>

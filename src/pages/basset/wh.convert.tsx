@@ -3,7 +3,7 @@ import { Tab } from '@libs/neumorphism-ui/components/Tab';
 import { UIElementProps } from '@libs/ui';
 import { CenteredLayout } from 'components/layouts/CenteredLayout';
 import { PageTitle, TitleContainer } from 'components/primitives/PageTitle';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useCallback, useMemo } from 'react';
 import { useMatch, useNavigate, Outlet } from 'react-router-dom';
 import styled from 'styled-components';
@@ -85,4 +85,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const WormholeConvert = fixHMR(StyledComponent);
+export const WormholeConvert = StyledComponent;

@@ -23,7 +23,7 @@ const TerraAccountProvider = ({ children }: UIElementProps): React.JSX.Element =
       network: MAINNET,
       status: wallet.status as WalletStatus,
       terraWalletAddress: connectedWallet?.addresses[network.chainID] as HumanAddr,
-      readonly: !!connectedWallet as true,
+      readonly: !connectedWallet as false,
       availablePost: !!connectedWallet as true,
       post: wallet.post,
       connection: connectedWallet ? {

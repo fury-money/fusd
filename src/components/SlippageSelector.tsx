@@ -1,6 +1,6 @@
 import { DelayedNumberInput } from '@libs/ui';
 import big from 'big.js';
-import { fixHMR } from 'fix-hmr';
+
 import React, { ReactNode, useMemo } from 'react';
 import styled from 'styled-components';
 
@@ -151,7 +151,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const SlippageSelector = fixHMR(StyledComponent);
+export const SlippageSelector = StyledComponent;
 
 export const SlippageSelectorPositiveHelpText = styled.span`
   font-size: 12px;

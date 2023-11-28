@@ -24,7 +24,7 @@ import { UIElementProps } from '@libs/ui';
 import { TxResultRendering } from '@libs/app-fns';
 import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import big, { Big } from 'big.js';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 import { useBalances } from 'contexts/balances';
 import { LSDLiquidationBidsResponse } from '@anchor-protocol/app-provider/queries/liquidate/allBIdsByUser';
 import { useAbortMissionTx } from '@anchor-protocol/app-provider/tx/abortMission/abortMission';
@@ -205,7 +205,7 @@ function DepositDialogBase(props: DepositDialogProps) {
                 `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
               {!estimatedFeeError && !estimatedFee && (
                 <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
+                  <CircleSpinner size={18} color={theme.colors.positive} />
                 </span>
               )}
               {estimatedFeeError}

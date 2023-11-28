@@ -6,12 +6,12 @@ import {
   SlippageSelector,
   SlippageSelectorProps,
 } from 'components/SlippageSelector';
-import { fixHMR } from 'fix-hmr';
+
 import React from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import styled from 'styled-components';
 
-export interface DiscloseSlippageSelectorProps extends SlippageSelectorProps {}
+export interface DiscloseSlippageSelectorProps extends SlippageSelectorProps { }
 
 function Component({
   className,
@@ -71,4 +71,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const DiscloseSlippageSelector = fixHMR(StyledComponent);
+export const DiscloseSlippageSelector = StyledComponent;

@@ -38,13 +38,13 @@ import {
 } from '@anchor-protocol/formatter';
 import { BroadcastTxStreamResult } from 'pages/earn/components/types';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 import { WhitelistWrappedCollateral } from 'queries';
 import { getWrappedCollateralMessages } from '@anchor-protocol/app-fns';
 
 export interface ProvideCollateralDialogParams
   extends UIElementProps,
-    ProvideWrappedCollateralFormParams {
+  ProvideWrappedCollateralFormParams {
   txResult: StreamResult<TxResultRendering> | null;
   uTokenBalance: u<bAsset>;
   proceedable: boolean;
@@ -107,13 +107,13 @@ function ProvideWrappedCollateralDialogBase(props: ProvideCollateralDialogProps)
     }
 
     estimateFee(getWrappedCollateralMessages(
-      terraWalletAddress, 
-      states.depositAmount, 
-      states.lunaAmount, 
-      props.collateral.info, 
-      props.collateral.collateral_token, 
-      props.collateral.custody_contract, 
-      contractAddress.moneyMarket.overseer, 
+      terraWalletAddress,
+      states.depositAmount,
+      states.lunaAmount,
+      props.collateral.info,
+      props.collateral.collateral_token,
+      props.collateral.custody_contract,
+      contractAddress.moneyMarket.overseer,
       props.collateral.decimals
     ));
   }, [
@@ -135,7 +135,7 @@ function ProvideWrappedCollateralDialogBase(props: ProvideCollateralDialogProps)
             collateral.decimals,
           ),
         );
-      } catch {}
+      } catch { }
     },
     [updateDepositAmount, ltvToAmount, collateral.decimals],
   );
@@ -276,7 +276,7 @@ function ProvideWrappedCollateralDialogBase(props: ProvideCollateralDialogProps)
                 `${formatLuna(demicrofy(estimatedFee.txFee, 6))} Luna`}
               {!estimatedFeeError && !estimatedFee && (
                 <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
+                  <CircleSpinner size={18} color={theme.colors.positive} />
                 </span>
               )}
               {estimatedFeeError}
@@ -293,7 +293,7 @@ function ProvideWrappedCollateralDialogBase(props: ProvideCollateralDialogProps)
               !states.availablePost ||
               !proceedable ||
               !estimatedFee ||
-              !states.lunaAmount||
+              !states.lunaAmount ||
               !states.exchangeRate
             }
             onClick={() =>

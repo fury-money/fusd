@@ -2,7 +2,7 @@ import { Tab } from '@libs/neumorphism-ui/components/Tab';
 import { UIElementProps } from '@libs/ui';
 import { CenteredLayout } from 'components/layouts/CenteredLayout';
 import { PageTitle, TitleContainer } from 'components/primitives/PageTitle';
-import { fixHMR } from 'fix-hmr';
+
 import { BLunaBurn } from 'pages/basset/components/BLunaBurn';
 import { BLunaMint } from 'pages/basset/components/BLunaMint';
 import React, { useCallback, useMemo } from 'react';
@@ -65,6 +65,6 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const BlunaConvert = fixHMR(StyledComponent);
+export const BlunaConvert = StyledComponent;
 
 export { BLunaMint, BLunaBurn };

@@ -1,5 +1,5 @@
 import { screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
@@ -34,7 +34,7 @@ const StyledComponent = styled(Component)`
 
   // tablet
   @media (min-width: ${screen.tablet.min}px) and (max-width: ${screen.tablet
-      .max}px) {
+    .max}px) {
     > h1 {
       margin-top: 40px;
     }
@@ -50,4 +50,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const CenteredTitleLayout = fixHMR(StyledComponent);
+export const CenteredTitleLayout = StyledComponent;

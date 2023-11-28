@@ -10,7 +10,7 @@ import { Section } from '@libs/neumorphism-ui/components/Section';
 import { AnimateNumber } from '@libs/ui';
 import { Big } from 'big.js';
 import { Sub } from 'components/Sub';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import useResizeObserver from 'use-resize-observer/polyfilled';
@@ -223,4 +223,4 @@ export const StyledTotalCollateralValue = styled(TotalCollateralValueBase)`
   }
 `;
 
-export const TotalCollateralValue = fixHMR(StyledTotalCollateralValue);
+export const TotalCollateralValue = StyledTotalCollateralValue;

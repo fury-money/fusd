@@ -1,7 +1,7 @@
 import { aLuna, Luna } from '@anchor-protocol/types';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { useConnectedWallet } from '@terra-money/wallet-kit';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Burn } from './Burn';
@@ -34,7 +34,7 @@ function Component({ className }: BLunaBurnProps) {
           getAmount={getAmount}
           setBurnAmount={setBurnAmount}
           setGetAmount={setGetAmount}
-          connectedWallet={connectedWallet}
+          account={connectedWallet}
           setMode={setMode}
         />
       ) : (
@@ -43,7 +43,7 @@ function Component({ className }: BLunaBurnProps) {
           getAmount={getAmount}
           setBurnAmount={setBurnAmount}
           setGetAmount={setGetAmount}
-          connectedWallet={connectedWallet}
+          account={connectedWallet}
           setMode={setMode}
         />
       )}
@@ -120,4 +120,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const BLunaBurn = fixHMR(StyledComponent);
+export const BLunaBurn = StyledComponent;

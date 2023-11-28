@@ -58,7 +58,7 @@ import { pressed } from '@libs/styled-neumorphism';
 import { TextInput } from '@libs/neumorphism-ui/components/TextInput';
 import { Coin, Coins, MsgExecuteContract } from '@terra-money/feather.js';
 import { formatTokenInput } from '@libs/formatter';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 import { useMediaQuery } from 'react-responsive';
 import { useWithdrawDefaultedCollateral } from './useWithdrawDefaultedCollateral';
 import { getLiquidationWithdrawCollateralMsg } from '@anchor-protocol/app-fns/tx/liquidate/collateral';
@@ -496,7 +496,7 @@ export function PlaceBidSectionBase({
                   {estimatedFeeError}
 
                   {!estimatedFeeError && !state.estimatedFee && (
-                    <CircleSpinner size={14} color={theme.colors.positive} />
+                    <CircleSpinner size={18} color={theme.colors.positive} />
                   )}
 
                   {!estimatedFeeError &&
@@ -565,7 +565,7 @@ export function PlaceBidSectionBase({
                     (!big(estimatedWithdrawalFee?.txFee ?? ('0' as u<Luna>)).gt(
                       0,
                     )))) && (
-                      <CircleSpinner size={14} color={theme.colors.positive} />
+                      <CircleSpinner size={18} color={theme.colors.positive} />
                     )}
                   {!estimatedWithdrawalFeeError && !!estimatedWithdrawalFee?.txFee &&
                     big(estimatedWithdrawalFee?.txFee).gt(0) &&

@@ -7,7 +7,7 @@ import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { HorizontalScrollTable } from '@libs/neumorphism-ui/components/HorizontalScrollTable';
 import { Section } from '@libs/neumorphism-ui/components/Section';
-import { fixHMR } from 'fix-hmr';
+
 import { useAccount } from 'contexts/account';
 import { useDepositDialog } from 'pages/earn/components/useDepositDialog';
 import { useWithdrawDialog } from 'pages/earn/components/useWithdrawDialog';
@@ -188,4 +188,4 @@ export const StyledEarn = styled(EarnBase)`
   }
 `;
 
-export const Earn = fixHMR(StyledEarn);
+export const Earn = StyledEarn;

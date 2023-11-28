@@ -1,7 +1,7 @@
 import { PaddedLayout } from 'components/layouts/PaddedLayout';
 import { FlexTitleContainer, PageTitle } from 'components/primitives/PageTitle';
 import { links, screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import React from 'react';
 import styled from 'styled-components';
 import { ExpectedInterestSection } from './components/ExpectedInterestSection';
@@ -257,4 +257,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const Earn = fixHMR(StyledComponent);
+export const Earn = StyledComponent;

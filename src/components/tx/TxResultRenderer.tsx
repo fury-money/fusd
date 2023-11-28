@@ -5,10 +5,41 @@ import { TxReceipt, TxResultRendering, TxStreamPhase } from '@libs/app-fns';
 import { AccessTime, Close, Done as DoneIcon } from '@mui/icons-material';
 import { TxFeeList, TxFeeListItem } from 'components/TxFeeList';
 import React, { useCallback } from 'react';
-import { GuardSpinner, PushSpinner } from 'react-spinners-kit';
 import styled, { useTheme } from 'styled-components';
 import { renderTxFailedReason } from './renderTxFailedReason';
 import { Container } from 'components/primitives/Container';
+import { ProgressBar, ThreeDots } from 'react-loader-spinner';
+
+function ProgressBarStyled({ size, color }: { size?: number, color: string } = { size: 80, color: "#51E5FF" }) {
+
+  const theme = useTheme();
+
+  return (<ProgressBar
+    height={size}
+    width={size}
+    ariaLabel="progress-bar-loading"
+    wrapperStyle={{}}
+    wrapperClass="progress-bar-wrapper"
+    borderColor={theme.colors.positive}
+    barColor={color}
+  />
+  )
+}
+
+function GuardStyled({ size, color }: { size?: number, color: string } = { size: 80, color: "#4fa94d" }) {
+  return (<ThreeDots
+    height={size}
+    width={size}
+    radius="9"
+    color={color}
+    ariaLabel="three-dots-loading"
+    wrapperStyle={{}}
+    visible={true}
+  />
+  )
+}
+
+
 
 export interface TxResultRendererProps {
   resultRendering: TxResultRendering;
@@ -46,7 +77,7 @@ export function TxResultRenderer({
         <Layout>
           <article>
             <figure data-state={phase}>
-              <PushSpinner color={dimTextColor} />
+              <ProgressBarStyled color={dimTextColor} />
             </figure>
 
             <h2>{message}</h2>
@@ -62,7 +93,7 @@ export function TxResultRenderer({
         <Layout>
           <article>
             <figure data-state={phase}>
-              <GuardSpinner frontColor={primary} />
+              <GuardStyled color={primary} />
             </figure>
 
             <h2>

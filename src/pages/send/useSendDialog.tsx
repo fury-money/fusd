@@ -56,7 +56,7 @@ import React, {
 } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { formatTokenInput } from '@libs/formatter';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 
 interface FormParams {
   className?: string;
@@ -432,7 +432,7 @@ function ComponentBase({
               <TxFeeListItem label={<IconSpan>Tx Fee</IconSpan>}>
                 {!estimatedFee && !estimatedFeeError && (
                   <span className="spinner">
-                    <CircleSpinner size={14} color={theme.colors.positive} />
+                    <CircleSpinner size={18} color={theme.colors.positive} />
                   </span>
                 )}
 

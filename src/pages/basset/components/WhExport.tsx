@@ -28,7 +28,7 @@ import { IconLineSeparator } from 'components/primitives/IconLineSeparator';
 import { TxResultRenderer } from 'components/tx/TxResultRenderer';
 import { SwapListItem, TxFeeList, TxFeeListItem } from 'components/TxFeeList';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
-import { fixHMR } from 'fix-hmr';
+
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { ConvertSymbols, ConvertSymbolsContainer } from './ConvertSymbols';
@@ -302,4 +302,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const WhExport = fixHMR(StyledComponent);
+export const WhExport = StyledComponent;

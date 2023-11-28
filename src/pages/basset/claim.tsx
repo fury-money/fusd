@@ -17,12 +17,12 @@ import { TxResultRenderer } from 'components/tx/TxResultRenderer';
 import { TxFeeList, TxFeeListItem } from 'components/TxFeeList';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
 import { useAccount } from 'contexts/account';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CircleSpinner } from 'react-spinners-kit';
 import styled, { useTheme } from 'styled-components';
 import { useClaimableRewardsBreakdown } from './hooks/useRewardsBreakdown';
+import { CircleSpinner } from 'utils/consts';
 
 export interface BAssetClaimProps {
   className?: string;
@@ -166,7 +166,7 @@ function Component({ className }: BAssetClaimProps) {
               `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
             {!estimatedFeeError && !estimatedFee && (
               <span className="spinner">
-                <CircleSpinner size={14} color={theme.colors.positive} />
+                <CircleSpinner size={18} color={theme.colors.positive} />
               </span>
             )}
             {estimatedFeeError}
@@ -234,4 +234,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const BAssetClaim = fixHMR(StyledComponent);
+export const BAssetClaim = StyledComponent;

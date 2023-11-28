@@ -1,4 +1,4 @@
-import { fixHMR } from 'fix-hmr';
+
 import React, { ReactNode } from 'react';
 import styled, { css, DefaultTheme } from 'styled-components';
 
@@ -202,7 +202,7 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const ConvertSymbols = fixHMR(StyledComponent);
+export const ConvertSymbols = StyledComponent;
 
 export const ConvertSymbolsContainer = styled.div`
   display: flex;

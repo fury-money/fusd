@@ -1,4 +1,4 @@
-import { fixHMR } from 'fix-hmr';
+
 import styled from 'styled-components';
 import React from 'react';
 
@@ -38,6 +38,4 @@ export const StyledTransactionHistoryEmptyMessage = styled(
   }
 `;
 
-export const TransactionHistoryEmptyMessage = fixHMR(
-  StyledTransactionHistoryEmptyMessage,
-);
+export const TransactionHistoryEmptyMessage = StyledTransactionHistoryEmptyMessage;

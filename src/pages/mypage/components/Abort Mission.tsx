@@ -6,7 +6,7 @@ import { demicrofy } from '@libs/formatter';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { HorizontalScrollTable } from '@libs/neumorphism-ui/components/HorizontalScrollTable';
 import { Section } from '@libs/neumorphism-ui/components/Section';
-import { fixHMR } from 'fix-hmr';
+
 import { useAccount } from 'contexts/account';
 import React, { useCallback, useMemo } from 'react';
 import styled, { useTheme } from 'styled-components';
@@ -35,7 +35,7 @@ function AbortMissionBase({ className }: AbortMissionProps) {
   const { connected } = useAccount();
 
 
-  const { data: {overseerCollaterals} = {} } = useBorrowBorrowerQuery();
+  const { data: { overseerCollaterals } = {} } = useBorrowBorrowerQuery();
 
   const { borrowedValue } =
     useBorrowOverviewData();
@@ -61,7 +61,7 @@ function AbortMissionBase({ className }: AbortMissionProps) {
   const collaterals = useCollaterals();
 
   const totalCollateralValue = useMemo(() => {
-    return sum(...collaterals.map((collateral)=> collateral.lockedAmountInUST)) as u<UST<BigSource>>;
+    return sum(...collaterals.map((collateral) => collateral.lockedAmountInUST)) as u<UST<BigSource>>;
 
   }, [collaterals]);
 
@@ -71,7 +71,7 @@ function AbortMissionBase({ className }: AbortMissionProps) {
         //.filter(bid => parseFloat(bid.amount) !== 0)
         .map((bid) => bid.bids?.bidByUser.bids
           .reduce((arraySum, el) => arraySum.plus(el.amount), big(0)) ?? big(0))
-          .reduce((arraySum, el)=> arraySum.plus(el), big(0)),
+        .reduce((arraySum, el) => arraySum.plus(el), big(0)),
     [allLiquidationBids],
   );
 
@@ -82,14 +82,14 @@ function AbortMissionBase({ className }: AbortMissionProps) {
   const [openAbortMissionDialog, abortMissionDialogElement] = useAbortMissionDialog();
 
   const openAbortMission = useCallback(async () => {
-    if(!allLiquidationBids || !overseerCollaterals?.collaterals){
+    if (!allLiquidationBids || !overseerCollaterals?.collaterals) {
       return;
     }
 
     const collateralsWithdrawAmount = collaterals.map((collateral) => {
       const liquidatedCollaterals = allWithdrawableDefaultedCollaterals
-      .find(({collateral: other}) => collateral.collateral.collateral_token == other?.collateral.collateral_token)
-      ?.withdrawableWrapper ?? big(0) as u<Token<Big>>;
+        .find(({ collateral: other }) => collateral.collateral.collateral_token == other?.collateral.collateral_token)
+        ?.withdrawableWrapper ?? big(0) as u<Token<Big>>;
       const providedCollaterals = collateral.lockedAmount;
       return {
         collateral,
@@ -104,8 +104,8 @@ function AbortMissionBase({ className }: AbortMissionProps) {
       allLiquidationBids,
       liquidationQueueValue: liquidationQueueValue as u<UST<Big>>,
       borrowedValue,
-      allWithdrawableDefaultedCollaterals:allWithdrawableDefaultedCollaterals.filter(({withdrawableWrapper})=>withdrawableWrapper.gt(MIN_FOR_ABORT)),
-      collateralsWithdrawAmount: collateralsWithdrawAmount.filter(({amount}) => amount && amount.gt(MIN_FOR_ABORT))
+      allWithdrawableDefaultedCollaterals: allWithdrawableDefaultedCollaterals.filter(({ withdrawableWrapper }) => withdrawableWrapper.gt(MIN_FOR_ABORT)),
+      collateralsWithdrawAmount: collateralsWithdrawAmount.filter(({ amount }) => amount && amount.gt(MIN_FOR_ABORT))
     }
     );
   }, [openAbortMissionDialog, overseerCollaterals, allLiquidationBids, borrowedValue, uaUST, totalDeposit]);
@@ -141,34 +141,34 @@ function AbortMissionBase({ className }: AbortMissionProps) {
             </td>
             <td>
               <Grid container spacing={2}>
-              {allWithdrawableDefaultedCollaterals.filter(({withdrawableLSD})=>withdrawableLSD.gt(MIN_FOR_ABORT)).map(({ collateral, withdrawableLSD }, i) => (
-                <Grid item xs={6}
-                  key={collateral?.collateral.symbol}
-                  style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}
-                >
-                   <TokenIcon token={collateral?.collateral.symbol} variant="@4x"/> {formatBAssetWithPostfixUnits(demicrofy(withdrawableLSD) as bAsset<Big>)} 
-                </Grid>
-              ))}
-              </Grid>            
-              </td>
+                {allWithdrawableDefaultedCollaterals.filter(({ withdrawableLSD }) => withdrawableLSD.gt(MIN_FOR_ABORT)).map(({ collateral, withdrawableLSD }, i) => (
+                  <Grid item xs={6}
+                    key={collateral?.collateral.symbol}
+                    style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20 }}
+                  >
+                    <TokenIcon token={collateral?.collateral.symbol} variant="@4x" /> {formatBAssetWithPostfixUnits(demicrofy(withdrawableLSD) as bAsset<Big>)}
+                  </Grid>
+                ))}
+              </Grid>
+            </td>
             <td>
               {formatUSTWithPostfixUnits(demicrofy(borrowedValue))} axlUSDC
             </td>
-            <td style={{textAlign:"center"}}>
-              {formatUSTWithPostfixUnits(demicrofy(totalCollateralValue))} axlUSDC              
-              <Divider style={{borderColor: theme.textColor, margin: 10}} />
+            <td style={{ textAlign: "center" }}>
+              {formatUSTWithPostfixUnits(demicrofy(totalCollateralValue))} axlUSDC
+              <Divider style={{ borderColor: theme.textColor, margin: 10 }} />
               <Grid container spacing={2}>
-              {collaterals.filter(({lockedAmount})=>big(lockedAmount).gt(MIN_FOR_ABORT)).map(({ collateral, lockedAmount }, i) => (
-                <Grid item xs={6}
-                  key={collateral.symbol}
-                  style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20}}
-                >
-                   <TokenIcon token={collateral.symbol} variant="@4x"/> {formatBAssetWithPostfixUnits(demicrofy(lockedAmount))} 
-                </Grid>
-              ))}
+                {collaterals.filter(({ lockedAmount }) => big(lockedAmount).gt(MIN_FOR_ABORT)).map(({ collateral, lockedAmount }, i) => (
+                  <Grid item xs={6}
+                    key={collateral.symbol}
+                    style={{ color: theme.dimTextColor, fontSize: "0.95em", textAlign: "left", paddingLeft: 20 }}
+                  >
+                    <TokenIcon token={collateral.symbol} variant="@4x" /> {formatBAssetWithPostfixUnits(demicrofy(lockedAmount))}
+                  </Grid>
+                ))}
               </Grid>
 
-            </td>         
+            </td>
             <td>
               <ActionButton
                 disabled={
@@ -251,4 +251,4 @@ const StyledAbortMission = styled(AbortMissionBase)`
   }
 `;
 
-export const AbortMission = fixHMR(StyledAbortMission);
+export const AbortMission = StyledAbortMission;

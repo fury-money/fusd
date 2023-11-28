@@ -1,5 +1,5 @@
 import { Footer } from 'components/Footer';
-import { fixHMR } from 'fix-hmr';
+
 import React from 'react';
 import Markdown from 'react-markdown';
 import styled from 'styled-components';
@@ -32,7 +32,7 @@ function TermsOfServiceBase({ className }: TermsOfServiceProps) {
 export const StyledTermsOfService = styled(TermsOfServiceBase)`
   font-size: 14px;
 
-  color: ${({theme}) => theme.textColor};
+  color: ${({ theme }) => theme.textColor};
 
   section {
     padding: 5.71428571em 100px;
@@ -66,7 +66,7 @@ export const StyledTermsOfService = styled(TermsOfServiceBase)`
 
   .header {
     background-color: ${({ theme }) =>
-      theme.palette_type === 'light' ? '#f4f4f5' : '#181c2d'};
+    theme.palette_type === 'light' ? '#f4f4f5' : '#181c2d'};
 
     > h1:nth-child(1) {
       margin-bottom: 12px;
@@ -106,4 +106,4 @@ export const StyledTermsOfService = styled(TermsOfServiceBase)`
   }
 `;
 
-export const TermsOfService = fixHMR(StyledTermsOfService);
+export const TermsOfService = StyledTermsOfService;

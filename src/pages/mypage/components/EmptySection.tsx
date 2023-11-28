@@ -1,6 +1,6 @@
 import { ChevronRightRounded } from '@mui/icons-material';
 import { Section } from '@libs/neumorphism-ui/components/Section';
-import { fixHMR } from 'fix-hmr';
+
 import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -45,4 +45,4 @@ export const StyledEmptySection = styled(EmptySectionBase)`
   }
 `;
 
-export const EmptySection = fixHMR(StyledEmptySection);
+export const EmptySection = StyledEmptySection;

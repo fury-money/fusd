@@ -22,7 +22,7 @@ import { TxResultRenderer } from 'components/tx/TxResultRenderer';
 import { TxFeeList, TxFeeListItem } from 'components/TxFeeList';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
 import { useAccount } from 'contexts/account';
-import { fixHMR } from 'fix-hmr';
+
 import { BLunaBurnProcess } from 'pages/basset/components/BLunaBurnProcess';
 import { WithdrawHistory } from 'pages/basset/components/WithdrawHistory';
 import { withdrawAllHistory } from 'pages/basset/logics/withdrawAllHistory';
@@ -234,4 +234,4 @@ const StyledComponent = styled(Component)`
     theme.palette_type === 'dark' ? '#d3d3d3' : '#1A1A1A'};
 `;
 
-export const BlunaWithdraw = fixHMR(StyledComponent);
+export const BlunaWithdraw = StyledComponent;

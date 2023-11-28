@@ -19,7 +19,7 @@ import { TooltipIconCircle } from '@libs/neumorphism-ui/components/TooltipIconCi
 import { AnimateNumber } from '@libs/ui';
 import { SubAmount } from 'components/primitives/SubAmount';
 import { screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import { LoanButtons } from 'pages/borrow/components/LoanButtons';
 import React from 'react';
 import styled from 'styled-components';
@@ -44,11 +44,11 @@ function Component({ className }: OverviewProps) {
           <LoopButtons />
         </div>
       </header>
-      <strong>Cavern Protocol</strong> allows you to borrow funds with leverage. 
-      <br/>
+      <strong>Cavern Protocol</strong> allows you to borrow funds with leverage.
+      <br />
       This feature enables single transaction borrowing loops and unlocks simple decentralized leverage trading.leverage
-      <br/> 
-      This function is for advanced user only. 
+      <br />
+      This function is for advanced user only.
       By borrowing with leverage, you understand that you will be more exposed to the price of the underlying collateral.
     </Section>
   );
@@ -159,7 +159,7 @@ const StyledComponent = styled(Component)`
 
   article > div {
     background: ${({ theme }) =>
-      theme.palette_type === 'light' ? '#fcfcfc' : '#262940'};
+    theme.palette_type === 'light' ? '#fcfcfc' : '#262940'};
     box-shadow: 0 8px 14px -8px rgba(0, 0, 0, 0.07);
     border-radius: 22px;
     padding: 35px 40px;
@@ -207,4 +207,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const Loop = fixHMR(StyledComponent);
+export const Loop = StyledComponent;

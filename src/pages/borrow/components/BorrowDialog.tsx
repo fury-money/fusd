@@ -53,7 +53,7 @@ import { WhitelistCollateral } from 'queries';
 import { useBalances } from 'contexts/balances';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
 import { MsgExecuteContract } from '@terra-money/feather.js';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 
 export interface BorrowDialogParams extends UIElementProps, BorrowFormParams {
   txResult: StreamResult<TxResultRendering> | null;
@@ -362,7 +362,7 @@ function BorrowDialogBase(props: BorrowDialogProps) {
                 `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
               {!estimatedFeeError && !estimatedFee && (
                 <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
+                  <CircleSpinner size={18} color={theme.colors.positive} />
                 </span>
               )}
               {estimatedFeeError}

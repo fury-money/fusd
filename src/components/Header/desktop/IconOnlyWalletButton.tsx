@@ -1,5 +1,5 @@
 import { MenuWallet } from '@anchor-protocol/icons';
-import { fixHMR } from 'fix-hmr';
+
 import React, { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
 import styled from 'styled-components';
 
@@ -44,4 +44,4 @@ export const StyledIconOnlyWalletButton = styled(IconOnlyWalletButtonBase)`
   }
 `;
 
-export const IconOnlyWalletButton = fixHMR(StyledIconOnlyWalletButton);
+export const IconOnlyWalletButton = StyledIconOnlyWalletButton;

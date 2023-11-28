@@ -1,5 +1,5 @@
 import { flat } from '@libs/styled-neumorphism';
-import { fixHMR } from 'fix-hmr';
+
 import React, { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -29,7 +29,7 @@ function Component({
   return (
     <li className={className}>
       {to.includes("http") &&
-       <a href={to} target={"_blank"}>
+        <a href={to} target={"_blank"}>
           <h3>
             <i>
               {originAssetIcon}
@@ -40,7 +40,7 @@ function Component({
 
           <div>{children}</div>
         </a>}
-      {!to.includes("https") && 
+      {!to.includes("https") &&
         <Link to={to}>
           <h3>
             <i>
@@ -53,7 +53,7 @@ function Component({
           <div>{children}</div>
         </Link>
       }
-      
+
 
       <div className="hover">
         <Icon />
@@ -153,9 +153,9 @@ const StyledComponent = styled(Component)`
     right: 0;
 
     background-color: ${({ theme }) =>
-      theme.palette_type === 'dark'
-        ? 'rgba(255, 255, 255, 0.1)'
-        : 'rgba(255, 255, 255, 0.5)'};
+    theme.palette_type === 'dark'
+      ? 'rgba(255, 255, 255, 0.1)'
+      : 'rgba(255, 255, 255, 0.5)'};
     color: ${({ theme }) => theme.colors.positive};
 
     font-size: 16px;
@@ -184,4 +184,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const AssetCard = fixHMR(StyledComponent);
+export const AssetCard = StyledComponent;

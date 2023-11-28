@@ -24,7 +24,7 @@ import { Sub } from 'components/Sub';
 import { useAccount } from 'contexts/account';
 import { useBalances } from 'contexts/balances';
 import { useTheme } from 'contexts/theme';
-import { fixHMR } from 'fix-hmr';
+
 import { computeHoldings } from 'pages/mypage/logics/computeHoldings';
 // import { useSendDialog } from 'pages/send/useSendDialog';
 import { useAssetPriceInUstQuery } from 'queries';
@@ -92,7 +92,7 @@ function TotalValueBase({ className }: TotalValueProps) {
     const borrowing =
       overseerCollaterals && oraclePrices && marketBorrowerInfo
         ? (computeCollateralsTotalUST(overseerCollaterals, oraclePrices)
-            .minus(marketBorrowerInfo.loan_amount) as u<UST<Big>>)
+          .minus(marketBorrowerInfo.loan_amount) as u<UST<Big>>)
         : ('0' as u<UST>);
     const holdings = computeHoldings(
       tokenBalances,
@@ -347,4 +347,4 @@ export const StyledTotalValue = styled(TotalValueBase)`
   }
 `;
 
-export const TotalValue = fixHMR(StyledTotalValue);
+export const TotalValue = StyledTotalValue;

@@ -2,7 +2,7 @@ import { CenteredLayout } from 'components/layouts/CenteredLayout';
 
 import { FlexTitleContainer, PageTitle } from 'components/primitives/PageTitle';
 import { links, screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { EarnProps } from 'pages/earn';
@@ -47,7 +47,7 @@ function Component({ className }: EarnProps) {
 
   const { data: whitelist } = useWhitelistCollateralQuery();
 
-  const additionalLSDInfo = useLSDCollateralQuery(); 
+  const additionalLSDInfo = useLSDCollateralQuery();
 
   const { data: borrowMarket } = useBorrowMarketQuery();
 
@@ -81,97 +81,97 @@ function Component({ className }: EarnProps) {
         const liquidationStats = globalLiquidationStats?.find(
           (c) => c.info?.token === collateral.collateral_token
         );
-      const exchangeRate = parseFloat(additionalInfo?.priceInfo?.hubState?.exchange_rate ?? "1");
+        const exchangeRate = parseFloat(additionalInfo?.priceInfo?.hubState?.exchange_rate ?? "1");
 
-      // We exchange the token values with the one in memory for LSD
-      if(additionalInfo?.info?.info?.symbol){
-        collateral.symbol = additionalInfo?.info?.info?.symbol;
-      }
-      if(additionalInfo?.info?.info?.name){
-        collateral.name = additionalInfo?.info?.info?.name;
-      }
+        // We exchange the token values with the one in memory for LSD
+        if (additionalInfo?.info?.info?.symbol) {
+          collateral.symbol = additionalInfo?.info?.info?.symbol;
+        }
+        if (additionalInfo?.info?.info?.name) {
+          collateral.name = additionalInfo?.info?.info?.name;
+        }
 
-      const bids = bidAmounts?.bids?.bidByUser.bids;
-      const totalBidAmountStat = liquidationStats?.liquidationStats?.otherStats.find((c) => c.id == "pool_value_stable");
-      return {
-        collateral,
-        type,
-        price: big(microfyPrice(oracle?.price, collateral.decimals)).mul(exchangeRate).toString() as UST,
-        bidNumber: bids?.filter((bid) => bid.amount !="0").length ?? 0,
-        bidAmountInUST: big(bids?.reduce((partialSum, el) => partialSum.plus(el.amount), big(0)) ?? 0) as u<UST<BigSource>>,
-        totalBidAmountInUST: totalBidAmountStat?.format_func(totalBidAmountStat.value ?? 0),
-        poolToCollateralRatio: liquidationStats?.liquidationStats?.ratio ?? 0
-      };
-    })
-    .sort((a, b) =>
-      big(a.bidAmountInUST).gte(big(b.bidAmountInUST)) ? -1 : 1,
-    )
+        const bids = bidAmounts?.bids?.bidByUser.bids;
+        const totalBidAmountStat = liquidationStats?.liquidationStats?.otherStats.find((c) => c.id == "pool_value_stable");
+        return {
+          collateral,
+          type,
+          price: big(microfyPrice(oracle?.price, collateral.decimals)).mul(exchangeRate).toString() as UST,
+          bidNumber: bids?.filter((bid) => bid.amount != "0").length ?? 0,
+          bidAmountInUST: big(bids?.reduce((partialSum, el) => partialSum.plus(el.amount), big(0)) ?? 0) as u<UST<BigSource>>,
+          totalBidAmountInUST: totalBidAmountStat?.format_func(totalBidAmountStat.value ?? 0),
+          poolToCollateralRatio: liquidationStats?.liquidationStats?.ratio ?? 0
+        };
+      })
+      .sort((a, b) =>
+        big(a.bidAmountInUST).gte(big(b.bidAmountInUST)) ? -1 : 1,
+      )
   }, [liquidationBids, borrowMarket, whitelist, additionalLSDInfo, globalLiquidationStats]);
 
 
-  function collateralCells(type: string){
+  function collateralCells(type: string) {
     return (collaterals.filter((collateral) => collateral.type == type).map(
-                  ({
-                    collateral,
-                    price,
-                    bidNumber,
-                    bidAmountInUST,
-                    totalBidAmountInUST,
-                    poolToCollateralRatio
-                  }) => (
-                    <tr key={collateral.collateral_token}>
-                      <td>
-                        <i>
-                          <PossibleLpIcon
-                            icon={collateral.icon}
-                          />
-                        </i>
-                        <div>
-                          <div className="coin">
-                            {collateral.symbol}
-                          </div>
-                          <p className="name">{collateral.name}</p>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="value">{formatUSTOutput(price)} axlUSDC</div>
-                      </td>
-                      <td>
-                        <div className="value">
-                          {bidNumber} {bidNumber != 1 ? "bids" : "bid"}
-                        </div>
-                      </td>
-                      <td>
-                        <div className="value">
-                          {formatOutput(
-                            demicrofy(bidAmountInUST, collateral.decimals),
-                            {
-                              decimals: 3,
-                            },
-                          )}{' '}
-                          axlUSDC
-                        </div>
-                        <p className="volatility">
-                          {totalBidAmountInUST} axlUSDC
-                        </p>
-                      </td>
-                      <td>
-                        <AlignedRightStatsDoughnutCard
-                          title=""
-                          value={poolToCollateralRatio}
-                          className={'stats-doughtnut-card'}
-                        />
-                      </td>
-                      <td>
-                          <Link to={`${collateral.symbol}`} style={{color:"inherit", textDecoration: "none"}}>
-                            <BorderButton>
-                              See Liquidation Queue
-                            </BorderButton>
-                          </Link>
-                      </td>
-                    </tr>
-                  ),
-                ))
+      ({
+        collateral,
+        price,
+        bidNumber,
+        bidAmountInUST,
+        totalBidAmountInUST,
+        poolToCollateralRatio
+      }) => (
+        <tr key={collateral.collateral_token}>
+          <td>
+            <i>
+              <PossibleLpIcon
+                icon={collateral.icon}
+              />
+            </i>
+            <div>
+              <div className="coin">
+                {collateral.symbol}
+              </div>
+              <p className="name">{collateral.name}</p>
+            </div>
+          </td>
+          <td>
+            <div className="value">{formatUSTOutput(price)} axlUSDC</div>
+          </td>
+          <td>
+            <div className="value">
+              {bidNumber} {bidNumber != 1 ? "bids" : "bid"}
+            </div>
+          </td>
+          <td>
+            <div className="value">
+              {formatOutput(
+                demicrofy(bidAmountInUST, collateral.decimals),
+                {
+                  decimals: 3,
+                },
+              )}{' '}
+              axlUSDC
+            </div>
+            <p className="volatility">
+              {totalBidAmountInUST} axlUSDC
+            </p>
+          </td>
+          <td>
+            <AlignedRightStatsDoughnutCard
+              title=""
+              value={poolToCollateralRatio}
+              className={'stats-doughtnut-card'}
+            />
+          </td>
+          <td>
+            <Link to={`${collateral.symbol}`} style={{ color: "inherit", textDecoration: "none" }}>
+              <BorderButton>
+                See Liquidation Queue
+              </BorderButton>
+            </Link>
+          </td>
+        </tr>
+      ),
+    ))
   }
 
   return (
@@ -191,10 +191,10 @@ function Component({ className }: EarnProps) {
               </colgroup>
               <thead>
                 <tr>
-                  <th style={{display: "flex", alignItems: "center", gap: "5px"}}>LIQUIDATION QUEUES 
+                  <th style={{ display: "flex", alignItems: "center", gap: "5px" }}>LIQUIDATION QUEUES
                     <InfoTooltip>
-                      Cavern Protocol allows depositing multiple collaterals. 
-                      Collateral liquidations are carried out using liquidation Queues when loans default. 
+                      Cavern Protocol allows depositing multiple collaterals.
+                      Collateral liquidations are carried out using liquidation Queues when loans default.
                       Provide some liquidity to either queue in order to get assets for cheaper that their market price.
                     </InfoTooltip>
                   </th>
@@ -202,7 +202,7 @@ function Component({ className }: EarnProps) {
                     <IconSpan>
                       Price{' '}
                       <InfoTooltip>
-                        Current price of Collateral 
+                        Current price of Collateral
                       </InfoTooltip>
                     </IconSpan>
                   </th>
@@ -242,10 +242,10 @@ function Component({ className }: EarnProps) {
                 {collateralCells("amp_lp")}
               </tbody>
             </HorizontalScrollTable>
-        </PaddingSection>
-      </section>
-        <section style={{margin: "auto 50px"}}>
-           <h2>MONITOR POSITIONS</h2>
+          </PaddingSection>
+        </section>
+        <section style={{ margin: "auto 50px" }}>
+          <h2>MONITOR POSITIONS</h2>
 
           <EmptySection to="/liquidation/monitor">Monitor Positions pending liquidations</EmptySection>
 
@@ -427,4 +427,4 @@ const StyledComponent = styled(Component)`
 
 `;
 
-export const LiquidateList = fixHMR(StyledComponent);
+export const LiquidateList = StyledComponent;

@@ -56,13 +56,13 @@ import { BurnSwitch } from '../BurnSwitch';
 import { ConvertSymbols, ConvertSymbolsContainer } from '../ConvertSymbols';
 import { BurnComponent } from './types';
 import styled, { useTheme } from 'styled-components';
-import { fixHMR } from 'fix-hmr';
+
 import { useFeeEstimationFor } from '@libs/app-provider';
 import { useAlert } from '@libs/neumorphism-ui/components/useAlert';
 import { floor } from '@libs/big-math';
 import { MsgExecuteContract } from '@terra-money/feather.js';
 import { createHookMsg } from '@libs/app-fns/tx/internal';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 
 export interface SwapProps extends BurnComponent {
   className?: string;
@@ -529,7 +529,7 @@ export function Component({
           <TxFeeListItem label="Tx Fee">
             {!estimatedFeeError && !estimatedFee && (
               <span className="spinner">
-                <CircleSpinner size={14} color={theme.colors.positive} />
+                <CircleSpinner size={18} color={theme.colors.positive} />
               </span>
             )}
             {estimatedFee &&
@@ -575,4 +575,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const Swap = fixHMR(StyledComponent);
+export const Swap = StyledComponent;

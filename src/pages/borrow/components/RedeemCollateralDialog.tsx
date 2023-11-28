@@ -42,7 +42,7 @@ import { BroadcastTxStreamResult } from 'pages/earn/components/types';
 import big from 'big.js';
 import { EstimatedFee, useFeeEstimationFor } from '@libs/app-provider';
 import { MsgExecuteContract } from '@terra-money/feather.js';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 
 export interface RedeemCollateralDialogParams
   extends UIElementProps,
@@ -313,7 +313,7 @@ function RedeemCollateralDialogBase(props: RedeemCollateralDialogProps) {
                 `${formatLuna(demicrofy(estimatedFee.txFee, 6))} Luna`}
               {!estimatedFeeError && !estimatedFee && (
                 <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
+                  <CircleSpinner size={18} color={theme.colors.positive} />
                 </span>
               )}
               {estimatedFeeError}

@@ -1,5 +1,4 @@
 import { formatUToken } from '@libs/formatter';
-import { fixHMR } from 'fix-hmr';
 import { useCheckTerraswapLpBalance } from 'queries/checkTerraswapLpBalance';
 import React from 'react';
 import styled from 'styled-components';
@@ -86,4 +85,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const AstroportGuideBanner = fixHMR(StyledComponent);
+export const AstroportGuideBanner = StyledComponent;

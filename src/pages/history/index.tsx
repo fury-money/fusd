@@ -5,7 +5,7 @@ import { CenteredLayout } from 'components/layouts/CenteredLayout';
 
 import { FlexTitleContainer, PageTitle } from 'components/primitives/PageTitle';
 import { screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import styled from 'styled-components';
 import { PaddingSection } from 'pages/liquidation/components/PaddingSection';
 
@@ -18,7 +18,7 @@ import rehypeRaw from 'rehype-raw'
 import remarkEmoji from "remark-emoji";
 import { useWhitePaperQuery } from './queries/useWhitePaperQuery';
 import { decompressFromUTF16 } from 'lz-string';
-import {markdownString} from "./markdown"
+import { markdownString } from "./markdown"
 
 export interface HistoryProps {
   className?: string;
@@ -32,7 +32,7 @@ let scrollFunction: Function | null = null;
 
 function Component({ className }: HistoryProps) {
 
-  const scrollReset = () =>{
+  const scrollReset = () => {
     hashFragment = '';
     if (observer !== null) observer.disconnect();
     if (asyncTimerId !== null) {
@@ -88,17 +88,17 @@ function Component({ className }: HistoryProps) {
     }, 0);
   }
 
-  useEffect(() =>{
+  useEffect(() => {
     const els = document.querySelectorAll("#whitepaper-document a");
-    els.forEach((el: any)=>{
+    els.forEach((el: any) => {
 
 
       const footnoteRegex = /(#(fn|fnref)[0-9]+)/
-      if(el.href.match(footnoteRegex)){
+      if (el.href.match(footnoteRegex)) {
         // We remove the existing listener
         const elClone = el.cloneNode(true);
         el.parentNode.replaceChild(elClone, el);
-       // We add a click event listener for going to the # ref
+        // We add a click event listener for going to the # ref
         elClone.addEventListener("click", function handleClick(e: any) {
           e.preventDefault();
           hashFragment = elClone.href.match(footnoteRegex)[1];
@@ -110,7 +110,7 @@ function Component({ className }: HistoryProps) {
             !(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey) // ignore clicks with modifier keys
           ) {
 
-            scrollFunction = 
+            scrollFunction =
               (el: any) => el.scrollIntoView({ behavior: 'smooth' });
             hashLinkScroll(10000);
           }
@@ -120,16 +120,16 @@ function Component({ className }: HistoryProps) {
   })
 
 
-  const {data: whitePaper} = useWhitePaperQuery();
+  const { data: whitePaper } = useWhitePaperQuery();
   const [whitePaperMarkdownText, setWhitePaperMarkdownText] = useState<string | null>(null);
 
   useEffect(() => {
-    if(!whitePaper?.nftInfo?.extension?.image_data){
+    if (!whitePaper?.nftInfo?.extension?.image_data) {
       return;
     }
     const decompressData = async () => {
 
-      if(!whitePaper?.nftInfo?.extension?.image_data){
+      if (!whitePaper?.nftInfo?.extension?.image_data) {
         return;
       }
       const text = await decompressFromUTF16(whitePaper.nftInfo.extension.image_data);
@@ -144,21 +144,21 @@ function Component({ className }: HistoryProps) {
   return (
     <CenteredLayout className={className} maxWidth={2000}>
       <FlexTitleContainer>
-        <PageTitle className="historyTitle" title="HISTORY"/>
+        <PageTitle className="historyTitle" title="HISTORY" />
       </FlexTitleContainer>
-      <PaddingSection className="introductory-text" padding="20px 30px" style={{margin: "10px 30px 50px 30px"}}>
-        You will find in this section a little history avout Cavern Protocol as well as the future orientations the protocol will take. 
-        <br/>
+      <PaddingSection className="introductory-text" padding="20px 30px" style={{ margin: "10px 30px 50px 30px" }}>
+        You will find in this section a little history avout Cavern Protocol as well as the future orientations the protocol will take.
+        <br />
         All this content will be solely stored on-chain in the form of NFTs.
-        <br/>
+        <br />
         This will be published in order for everyone to be able to access them as long as the Terra blockchain exists (it will surely outlive this protocol).
-        <br/>
-        <br/>
-        This is what you could call our <strong>Whitepaper</strong>. 
+        <br />
+        <br />
+        This is what you could call our <strong>Whitepaper</strong>.
       </PaddingSection>
       <PaddingSection id="whitepaper-document" className="latex-reader">
-        <ReactMarkdown 
-          remarkPlugins={[remarkMath,remarkGfm, remarkEmoji as any]}
+        <ReactMarkdown
+          remarkPlugins={[remarkMath, remarkGfm, remarkEmoji as any]}
           rehypePlugins={[rehypeKatex, rehypeRaw]}
         >
           {/*markdownString ||*/ whitePaperMarkdownText || ""}
@@ -424,4 +424,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const History = fixHMR(StyledComponent);
+export const History = StyledComponent;

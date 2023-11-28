@@ -34,7 +34,7 @@ import { IconLineSeparator } from 'components/primitives/IconLineSeparator';
 import { TxResultRenderer } from 'components/tx/TxResultRenderer';
 import { SwapListItem, TxFeeList, TxFeeListItem } from 'components/TxFeeList';
 import { ViewAddressWarning } from 'components/ViewAddressWarning';
-import { fixHMR } from 'fix-hmr';
+
 import { useAccount } from 'contexts/account';
 import React, {
   ChangeEvent,
@@ -47,7 +47,7 @@ import styled, { useTheme } from 'styled-components';
 import { pegRecovery } from '../logics/pegRecovery';
 import { validateBondAmount } from '../logics/validateBondAmount';
 import { ConvertSymbols, ConvertSymbolsContainer } from './ConvertSymbols';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 
 export interface BLunaMintProps {
   className?: string;
@@ -372,7 +372,7 @@ function Component({ className }: BLunaMintProps) {
           <TxFeeListItem label={<IconSpan>Estimated Tx Fee</IconSpan>}>
             {!estimatedFeeError && !estimatedFee && (
               <span className="spinner">
-                <CircleSpinner size={14} color={theme.colors.positive} />
+                <CircleSpinner size={18} color={theme.colors.positive} />
               </span>
             )}
 
@@ -457,4 +457,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const BLunaMint = fixHMR(StyledComponent);
+export const BLunaMint = StyledComponent;

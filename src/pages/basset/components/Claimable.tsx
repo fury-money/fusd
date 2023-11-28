@@ -10,7 +10,7 @@ import { AnimateNumber } from '@libs/ui';
 import big, { Big } from 'big.js';
 import { Sub } from 'components/Sub';
 import { screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -179,4 +179,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const Claimable = fixHMR(StyledComponent);
+export const Claimable = StyledComponent;

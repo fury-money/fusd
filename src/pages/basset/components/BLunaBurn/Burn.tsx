@@ -44,8 +44,8 @@ import { BurnSwitch } from '../BurnSwitch';
 import { ConvertSymbols, ConvertSymbolsContainer } from '../ConvertSymbols';
 import { BurnComponent } from './types';
 import styled, { useTheme } from 'styled-components';
-import { fixHMR } from 'fix-hmr';
-import { CircleSpinner } from 'react-spinners-kit';
+
+import { CircleSpinner } from 'utils/consts';
 
 export interface BurnProps extends BurnComponent {
   className?: string;
@@ -393,7 +393,7 @@ export function Component({
           <TxFeeListItem label={<IconSpan>Estimated Tx Fee</IconSpan>}>
             {!estimatedFeeError && !estimatedFee && (
               <span className="spinner">
-                <CircleSpinner size={14} color={theme.colors.positive} />
+                <CircleSpinner size={18} color={theme.colors.positive} />
               </span>
             )}
 
@@ -439,4 +439,4 @@ const StyledComponent = styled(Component)`
   }
 `;
 
-export const Burn = fixHMR(StyledComponent);
+export const Burn = StyledComponent;

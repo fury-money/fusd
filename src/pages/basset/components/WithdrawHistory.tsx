@@ -6,7 +6,7 @@ import {
   rulerLightColor,
   rulerShadowColor,
 } from '@libs/styled-neumorphism';
-import { fixHMR } from 'fix-hmr';
+
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { WithdrawHistory as History } from '../logics/withdrawAllHistory';
@@ -63,8 +63,8 @@ function WithdrawHistoryBase({
                 !claimableTime
                   ? 'PENDING'
                   : claimableTime <= currentDate
-                  ? 'WITHDRAWABLE'
-                  : 'UNBONDING';
+                    ? 'WITHDRAWABLE'
+                    : 'UNBONDING';
 
               return (
                 <li key={`withdraw-history-${index}`} data-status={status}>
@@ -140,11 +140,11 @@ export const StyledWithdrawHistory = styled(WithdrawHistoryBase)`
     border-radius: 5px;
 
     ${({ theme }) =>
-      pressed({
-        color: theme.selector.backgroundColor,
-        distance: 0.3,
-        intensity: theme.intensity,
-      })};
+    pressed({
+      color: theme.selector.backgroundColor,
+      distance: 0.3,
+      intensity: theme.intensity,
+    })};
 
     li {
       h5 {
@@ -180,10 +180,10 @@ export const StyledWithdrawHistory = styled(WithdrawHistoryBase)`
 
         border-bottom: 1px solid
           ${({ theme }) =>
-            rulerShadowColor({
-              color: theme.selector.backgroundColor,
-              intensity: theme.intensity,
-            })};
+    rulerShadowColor({
+      color: theme.selector.backgroundColor,
+      intensity: theme.intensity,
+    })};
       }
 
       &:not(:first-child) {
@@ -191,10 +191,10 @@ export const StyledWithdrawHistory = styled(WithdrawHistoryBase)`
 
         border-top: 1px solid
           ${({ theme }) =>
-            rulerLightColor({
-              color: theme.selector.backgroundColor,
-              intensity: theme.intensity,
-            })};
+    rulerLightColor({
+      color: theme.selector.backgroundColor,
+      intensity: theme.intensity,
+    })};
       }
 
       &[data-status='PENDING'] {
@@ -236,4 +236,4 @@ export const StyledWithdrawHistory = styled(WithdrawHistoryBase)`
   }
 `;
 
-export const WithdrawHistory = fixHMR(StyledWithdrawHistory);
+export const WithdrawHistory = StyledWithdrawHistory;

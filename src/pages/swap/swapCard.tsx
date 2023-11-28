@@ -46,11 +46,11 @@ import React, {
 import { validateSwapAmount } from './logic/validateSwapAmount';
 import { ConvertSymbols, ConvertSymbolsContainer } from './components/ConvertSymbols';
 import styled, { useTheme } from 'styled-components';
-import { fixHMR } from 'fix-hmr';
+
 import { useFeeEstimationFor } from '@libs/app-provider';
 import { useAlert } from '@libs/neumorphism-ui/components/useAlert';
 import { floor } from '@libs/big-math';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 import { Box, Button, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { SwapResponse, SwapSimulationAndSwapResponse, tfmEstimation, TFMToken, useTFMTokensQuery } from './queries/tfmQueries';
 import { useBalance } from './queries/balanceQuery';
@@ -72,11 +72,11 @@ const swapAssetsIcons: Tokens[] = [
   "luna",
   "bLuna",
   "ampLuna",
-  "aluna"  
+  "aluna"
 ];
 
 
-function nameToIcon(name: string){
+function nameToIcon(name: string) {
   return swapAssetsIcons[swapAssetsWhitelist.indexOf(name)]
 }
 
@@ -108,9 +108,9 @@ export function Component({
   const [swap, swapResult] = useTFMSwapTx();
 
   const [openAlert, alertElement] = useAlert();
-  const {data: allAvailableTokens} = useTFMTokensQuery();
+  const { data: allAvailableTokens } = useTFMTokensQuery();
 
-  const availableTokens = useMemo(()=> (allAvailableTokens ?? []).filter(({name}) => {
+  const availableTokens = useMemo(() => (allAvailableTokens ?? []).filter(({ name }) => {
     return swapAssetsWhitelist.includes(name)
   }), [allAvailableTokens])
 
@@ -122,10 +122,11 @@ export function Component({
   const [getAmount, setGetAmount] = useState<number>(0);
   const [slippage, setSlippage] = useState<number>(0.05);
 
-  const [swapTokens, setSwapTokens] = useState({out: {
+  const [swapTokens, setSwapTokens] = useState({
+    out: {
       contract_addr: contractAddress.native.usd as string,
       name: "uusdc",
-      symbol:"axlUSDC",
+      symbol: "axlUSDC",
       is_token_liquid: true,
     }, in: {
       contract_addr: "uluna",
@@ -178,7 +179,7 @@ export function Component({
   // ---------------------------------------------
 
 
-  
+
   const runtfmEstimation = useCallback(
     async (nextSwapAmount: string, slippage: number) => {
       if (nextSwapAmount.trim().length === 0 || isZero(nextSwapAmount)) {
@@ -188,7 +189,7 @@ export function Component({
         const amount = microfy(swapAmount).toString() as u<aLuna>;
 
         resolveSimulation(
-          tfmEstimation({tokenIn: swapTokens.in.contract_addr, tokenOut: swapTokens.out.contract_addr, amount, slippage})
+          tfmEstimation({ tokenIn: swapTokens.in.contract_addr, tokenOut: swapTokens.out.contract_addr, amount, slippage })
         );
         setResolving(true);
       }
@@ -235,12 +236,12 @@ export function Component({
     },
     [swapAmount, updateSwapAmount],
   );
-  
+
   useEffect(
     () => {
       runtfmEstimation(swapAmount, slippage);
     }, [swapAmount, updateSwapAmount, slippage, swapTokens])
-    
+
   const init = useCallback(() => {
     setGetAmount(0);
     setSwapAmount('' as aLuna);
@@ -322,7 +323,7 @@ export function Component({
   const theme = useTheme();
 
   // Token selector
-  const [anchorEl, setAnchorEl] = React.useState<{in: null | HTMLElement, out:null | HTMLElement}>({
+  const [anchorEl, setAnchorEl] = React.useState<{ in: null | HTMLElement, out: null | HTMLElement }>({
     in: null,
     out: null
   });
@@ -331,15 +332,15 @@ export function Component({
     out: Boolean(anchorEl.out)
   }
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>, type: "in" | "out") => {
-    setAnchorEl((el)=> ({
+    setAnchorEl((el) => ({
       ...el,
       [type]: event.currentTarget
     }));
   };
 
   const handleClose = (type: "in" | "out", token?: TFMToken) => {
-    if(token && type){  
-      if((type == "in" && swapTokens.out.name != token.name) || (type == "out" && swapTokens.in.name != token.name) ){
+    if (token && type) {
+      if ((type == "in" && swapTokens.out.name != token.name) || (type == "out" && swapTokens.in.name != token.name)) {
         setSwapTokens((swapToken) => ({
           ...swapToken,
           [type]: {
@@ -389,247 +390,247 @@ export function Component({
 
   return (
     <>
-      <Box sx={{textAlign: "right", display: "flex", alignItems: "center", justifyContent: "end", color: theme.dimTextColor}}>
-        Powered by TFM <img style={{marginLeft: "8px"}} src="/tfm-logo.png" />
+      <Box sx={{ textAlign: "right", display: "flex", alignItems: "center", justifyContent: "end", color: theme.dimTextColor }}>
+        Powered by TFM <img style={{ marginLeft: "8px" }} src="/tfm-logo.png" />
       </Box>
-    <div className={className} style={{
-      display: "flex",
-      flexDirection: "column",
-      gap: "10px",
-    }}>
-
-
-      <ConvertSymbolsContainer>
-        <ConvertSymbols
-          className="symbols"
-          view="swap"
-          fromIcon={<TokenIcon token={nameToIcon(swapTokens.in.name)} />}
-          toIcon={<TokenIcon token={nameToIcon(swapTokens.out.name)} />}
-        />
-      </ConvertSymbolsContainer>
-
-      {/* Swap any asset (related to Cavern) */}
-      <div className="swap-description">
-        <p>I want to swap</p>
-        <p />
-      </div>
-
-      <SelectAndTextInputContainer
-        className="swap"
-        gridColumns={[140, '1fr']}
-        error={!!invalidSwapAmount}
-        leftHelperText={invalidSwapAmount}
-        rightHelperText={
-          connected && (
-            <span>
-              Balance:{' '}
-              <span
-                style={{ textDecoration: 'underline', cursor: 'pointer' }}
-                onClick={() =>
-                  updateSwapAmount(
-                    formatLunaInput(demicrofy(swapTokenBalances.in as u<Luna>) as Luna<Big>),
-                    slippage,
-                  )
-                }
-              >
-                {formatLuna(demicrofy(swapTokenBalances.in as u<Luna>) as Luna<Big>)} {swapTokens.in.symbol}
-              </span>
-            </span>
-          )
-        }
-      >
-        <SelectAndTextInputContainerLabel>
-          <Button
-            id="basic-button"
-            aria-controls={open.in ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open.in ? 'true' : undefined}
-            onClick={(event) => handleClick(event, "in")}
-            sx={{color: theme.textColor, textTransform: "unset"}}
-          >
-            <TokenIcon token={nameToIcon(swapTokens.in.name)} /> {swapTokens.in.symbol} <ArrowDropDown/>
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl.in}
-            open={open.in}
-            onClose={() => handleClose("in")}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            {availableTokens.map(token => {
-              return (
-                <MenuItem key={`${token.name}-${token.id}-in`} onClick={() => handleClose("in",token)}>
-                  <ListItemIcon>
-                    <TokenIcon token={nameToIcon(token.name)} />
-                  </ListItemIcon>
-                  <ListItemText>
-                  {token.symbol} 
-                  </ListItemText>
-                </MenuItem>
-               )
-            })}
-          </Menu>
-        </SelectAndTextInputContainerLabel>
-        <NumberMuiInput
-          placeholder="0.00"
-          error={!!invalidSwapAmount}
-          value={swapAmount}
-          maxIntegerPoinsts={LUNA_INPUT_MAXIMUM_INTEGER_POINTS}
-          maxDecimalPoints={LUNA_INPUT_MAXIMUM_DECIMAL_POINTS}
-          onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
-            updateSwapAmount(target.value, slippage)
-          }
-        />
-      </SelectAndTextInputContainer>
-
-      <Button role="button" onClick={switchAssets} sx={{maxWidth: "100px", margin: "auto"}}>
-        <CompareArrowsIcon style={{transform:"rotate(90deg)"}}/>
-      </Button>
-
-      {/* Get (Asset) */}
-      <div className="gett-description">
-        <p>and get</p>
-        <p />
-      </div>
-
-      <SelectAndTextInputContainer
-        className="gett"
-        gridColumns={[140, '1fr']}
-        error={!!invalidSwapAmount}
-        rightHelperText={resolving && <CircleSpinner size={14} color={theme.colors.positive} />}
-      >
-        <SelectAndTextInputContainerLabel>
-          <Button
-            id="basic-button"
-            aria-controls={open.out ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open.out ? 'true' : undefined}
-            onClick={(event) => handleClick(event, "out")}
-            sx={{color: theme.textColor, textTransform: "unset"}}
-          >
-            <TokenIcon token={nameToIcon(swapTokens.out.name)} /> {swapTokens.out.symbol} <ArrowDropDown/>
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl.out}
-            open={open.out}
-            onClose={() => handleClose("out")}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            {availableTokens.map(token => {
-              return (
-                <MenuItem key={`${token.name}-${token.id}-out`} onClick={() => handleClose("out", token)}>
-                  <ListItemIcon>
-                    <TokenIcon token={nameToIcon(token.name)} />
-                  </ListItemIcon>
-                   <ListItemText>
-                  {token.symbol} 
-                  </ListItemText>
-                </MenuItem>
-               )
-            })}
-          </Menu>
-        </SelectAndTextInputContainerLabel>
-        <NumberMuiInput
-          placeholder="0.00"
-          error={!!invalidSwapAmount}
-          value={getAmount}
-          maxIntegerPoinsts={LUNA_INPUT_MAXIMUM_INTEGER_POINTS}
-          maxDecimalPoints={LUNA_INPUT_MAXIMUM_DECIMAL_POINTS}
-        />
-      </SelectAndTextInputContainer>
-
-      {((simulation?.quote.price_impact ?? 0) > slippage) && <MessageBox style={{color: theme.colors.negative, borderColor: theme.colors.negative}}>Slippage is big, be careful when trading this asset</MessageBox>}
-      {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
-
-
-      <DiscloseSlippageSelector
-        className="slippage"
-        items={SLIPPAGE_VALUES}
-        value={slippage}
-        onChange={updateSlippage}
-        helpText={
-          slippage < LOW_SLIPPAGE ? (
-            <SlippageSelectorNegativeHelpText>
-              The transaction may fail
-            </SlippageSelectorNegativeHelpText>
-          ) : slippage > FRONTRUN_SLIPPAGE ? (
-            <SlippageSelectorNegativeHelpText>
-              The transaction may be frontrun
-            </SlippageSelectorNegativeHelpText>
-          ) : undefined
-        }
-      />
-
-      {swapAmount.length > 0 && simulation && (
-        <TxFeeList className="receipt">
-          <SwapListItem
-            label="Price"
-            currencyA={swapTokens.out.symbol}
-            currencyB={swapTokens.in.symbol}
-            exchangeRateAB={big(simulation.quote.return_amount ?? "0").div(simulation.quote.input_amount ?? "1")}
-            initialDirection="a/b"
-            formatExchangeRate={(price) =>
-              formatFluidDecimalPoints(
-                price,
-                LUNA_INPUT_MAXIMUM_DECIMAL_POINTS,
-                { delimiter: true },
-              )
-            }
-          />
-          <TxFeeListItem label="Minimum Received">
-            {formatLuna(simulation.quote.return_amount * (1 - slippage) as Luna<BigSource>)} {swapTokens.out.symbol}
-          </TxFeeListItem>
-          {!invalidTxFee && !invalidSwapAmount &&
-            <TxFeeListItem label="Tx Fee">
-              {!estimatedFeeError && !estimatedFee && (
-                <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
-                </span>
-              )}
-              {estimatedFee &&
-                `≈ ${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}{' '}
-              {estimatedFeeError}
-            </TxFeeListItem>
-          }
-        </TxFeeList>
-      )}
-
-      {/* Submit */}
-      <Box sx={{
-        textAlign: "center",
-        marginTop: "30px",
+      <div className={className} style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "10px",
       }}>
-      <ViewAddressWarning >
-        <ActionButton
-          className="submit"
-          sx={{
-            padding: "20px 50px"
-          }}
-          disabled={
-            !availablePost ||
-            !connected ||
-            !swap ||
-            !simulation ||
-            swapAmount.length === 0 ||
-            big(swapAmount).lte(0) ||
-            !!invalidTxFee ||
-            !!invalidSwapAmount
-          }
-          onClick={() =>
-            simulation && proceed(simulation?.swap)
+
+
+        <ConvertSymbolsContainer>
+          <ConvertSymbols
+            className="symbols"
+            view="swap"
+            fromIcon={<TokenIcon token={nameToIcon(swapTokens.in.name)} />}
+            toIcon={<TokenIcon token={nameToIcon(swapTokens.out.name)} />}
+          />
+        </ConvertSymbolsContainer>
+
+        {/* Swap any asset (related to Cavern) */}
+        <div className="swap-description">
+          <p>I want to swap</p>
+          <p />
+        </div>
+
+        <SelectAndTextInputContainer
+          className="swap"
+          gridColumns={[140, '1fr']}
+          error={!!invalidSwapAmount}
+          leftHelperText={invalidSwapAmount}
+          rightHelperText={
+            connected && (
+              <span>
+                Balance:{' '}
+                <span
+                  style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                  onClick={() =>
+                    updateSwapAmount(
+                      formatLunaInput(demicrofy(swapTokenBalances.in as u<Luna>) as Luna<Big>),
+                      slippage,
+                    )
+                  }
+                >
+                  {formatLuna(demicrofy(swapTokenBalances.in as u<Luna>) as Luna<Big>)} {swapTokens.in.symbol}
+                </span>
+              </span>
+            )
           }
         >
-          Swap
-        </ActionButton>
-      </ViewAddressWarning>
-      </Box>
-      {alertElement}
-    </div>
+          <SelectAndTextInputContainerLabel>
+            <Button
+              id="basic-button"
+              aria-controls={open.in ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open.in ? 'true' : undefined}
+              onClick={(event) => handleClick(event, "in")}
+              sx={{ color: theme.textColor, textTransform: "unset" }}
+            >
+              <TokenIcon token={nameToIcon(swapTokens.in.name)} /> {swapTokens.in.symbol} <ArrowDropDown />
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl.in}
+              open={open.in}
+              onClose={() => handleClose("in")}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              {availableTokens.map(token => {
+                return (
+                  <MenuItem key={`${token.name}-${token.id}-in`} onClick={() => handleClose("in", token)}>
+                    <ListItemIcon>
+                      <TokenIcon token={nameToIcon(token.name)} />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {token.symbol}
+                    </ListItemText>
+                  </MenuItem>
+                )
+              })}
+            </Menu>
+          </SelectAndTextInputContainerLabel>
+          <NumberMuiInput
+            placeholder="0.00"
+            error={!!invalidSwapAmount}
+            value={swapAmount}
+            maxIntegerPoinsts={LUNA_INPUT_MAXIMUM_INTEGER_POINTS}
+            maxDecimalPoints={LUNA_INPUT_MAXIMUM_DECIMAL_POINTS}
+            onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
+              updateSwapAmount(target.value, slippage)
+            }
+          />
+        </SelectAndTextInputContainer>
+
+        <Button role="button" onClick={switchAssets} sx={{ maxWidth: "100px", margin: "auto" }}>
+          <CompareArrowsIcon style={{ transform: "rotate(90deg)" }} />
+        </Button>
+
+        {/* Get (Asset) */}
+        <div className="gett-description">
+          <p>and get</p>
+          <p />
+        </div>
+
+        <SelectAndTextInputContainer
+          className="gett"
+          gridColumns={[140, '1fr']}
+          error={!!invalidSwapAmount}
+          rightHelperText={resolving && <CircleSpinner size={18} color={theme.colors.positive} />}
+        >
+          <SelectAndTextInputContainerLabel>
+            <Button
+              id="basic-button"
+              aria-controls={open.out ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open.out ? 'true' : undefined}
+              onClick={(event) => handleClick(event, "out")}
+              sx={{ color: theme.textColor, textTransform: "unset" }}
+            >
+              <TokenIcon token={nameToIcon(swapTokens.out.name)} /> {swapTokens.out.symbol} <ArrowDropDown />
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl.out}
+              open={open.out}
+              onClose={() => handleClose("out")}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              {availableTokens.map(token => {
+                return (
+                  <MenuItem key={`${token.name}-${token.id}-out`} onClick={() => handleClose("out", token)}>
+                    <ListItemIcon>
+                      <TokenIcon token={nameToIcon(token.name)} />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {token.symbol}
+                    </ListItemText>
+                  </MenuItem>
+                )
+              })}
+            </Menu>
+          </SelectAndTextInputContainerLabel>
+          <NumberMuiInput
+            placeholder="0.00"
+            error={!!invalidSwapAmount}
+            value={getAmount}
+            maxIntegerPoinsts={LUNA_INPUT_MAXIMUM_INTEGER_POINTS}
+            maxDecimalPoints={LUNA_INPUT_MAXIMUM_DECIMAL_POINTS}
+          />
+        </SelectAndTextInputContainer>
+
+        {((simulation?.quote.price_impact ?? 0) > slippage) && <MessageBox style={{ color: theme.colors.negative, borderColor: theme.colors.negative }}>Slippage is big, be careful when trading this asset</MessageBox>}
+        {!!invalidTxFee && <MessageBox>{invalidTxFee}</MessageBox>}
+
+
+        <DiscloseSlippageSelector
+          className="slippage"
+          items={SLIPPAGE_VALUES}
+          value={slippage}
+          onChange={updateSlippage}
+          helpText={
+            slippage < LOW_SLIPPAGE ? (
+              <SlippageSelectorNegativeHelpText>
+                The transaction may fail
+              </SlippageSelectorNegativeHelpText>
+            ) : slippage > FRONTRUN_SLIPPAGE ? (
+              <SlippageSelectorNegativeHelpText>
+                The transaction may be frontrun
+              </SlippageSelectorNegativeHelpText>
+            ) : undefined
+          }
+        />
+
+        {swapAmount.length > 0 && simulation && (
+          <TxFeeList className="receipt">
+            <SwapListItem
+              label="Price"
+              currencyA={swapTokens.out.symbol}
+              currencyB={swapTokens.in.symbol}
+              exchangeRateAB={big(simulation.quote.return_amount ?? "0").div(simulation.quote.input_amount ?? "1")}
+              initialDirection="a/b"
+              formatExchangeRate={(price) =>
+                formatFluidDecimalPoints(
+                  price,
+                  LUNA_INPUT_MAXIMUM_DECIMAL_POINTS,
+                  { delimiter: true },
+                )
+              }
+            />
+            <TxFeeListItem label="Minimum Received">
+              {formatLuna(simulation.quote.return_amount * (1 - slippage) as Luna<BigSource>)} {swapTokens.out.symbol}
+            </TxFeeListItem>
+            {!invalidTxFee && !invalidSwapAmount &&
+              <TxFeeListItem label="Tx Fee">
+                {!estimatedFeeError && !estimatedFee && (
+                  <span className="spinner">
+                    <CircleSpinner size={18} color={theme.colors.positive} />
+                  </span>
+                )}
+                {estimatedFee &&
+                  `≈ ${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}{' '}
+                {estimatedFeeError}
+              </TxFeeListItem>
+            }
+          </TxFeeList>
+        )}
+
+        {/* Submit */}
+        <Box sx={{
+          textAlign: "center",
+          marginTop: "30px",
+        }}>
+          <ViewAddressWarning >
+            <ActionButton
+              className="submit"
+              sx={{
+                padding: "20px 50px"
+              }}
+              disabled={
+                !availablePost ||
+                !connected ||
+                !swap ||
+                !simulation ||
+                swapAmount.length === 0 ||
+                big(swapAmount).lte(0) ||
+                !!invalidTxFee ||
+                !!invalidSwapAmount
+              }
+              onClick={() =>
+                simulation && proceed(simulation?.swap)
+              }
+            >
+              Swap
+            </ActionButton>
+          </ViewAddressWarning>
+        </Box>
+        {alertElement}
+      </div>
     </>
   );
 }
@@ -644,4 +645,4 @@ const StyledComponent = styled(Component)`
   padding: 20px;
 `;
 
-export const SwapCard = fixHMR(StyledComponent);
+export const SwapCard = StyledComponent;

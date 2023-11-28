@@ -1,6 +1,6 @@
 import { Launch } from '@mui/icons-material';
 import { screen } from 'env';
-import { fixHMR } from 'fix-hmr';
+
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { InfoTooltip } from '@libs/neumorphism-ui/components/InfoTooltip';
 import React, { ReactNode } from 'react';
@@ -62,7 +62,7 @@ export const StyledPageTitle = styled(PageTitleBase)`
   }
 `;
 
-export const PageTitle = fixHMR(StyledPageTitle);
+export const PageTitle = StyledPageTitle;
 
 export const FlexTitleContainer = styled.div`
   display: flex;

@@ -23,13 +23,13 @@ import { TxResultRendering } from '@libs/app-fns';
 import { useFormatters } from '@anchor-protocol/formatter/useFormatters';
 import { BroadcastTxStreamResult } from './types';
 import big from 'big.js';
-import { CircleSpinner } from 'react-spinners-kit';
+import { CircleSpinner } from 'utils/consts';
 
 interface DepositDialogParams extends UIElementProps, EarnDepositFormReturn {
   txResult: StreamResult<TxResultRendering> | null;
 }
 
-type  DepositDialogReturn = void;
+type DepositDialogReturn = void;
 type DepositDialogProps = DialogProps<
   DepositDialogParams,
   DepositDialogReturn
@@ -119,9 +119,9 @@ function DepositDialogBase(props: DepositDialogProps) {
               style={
                 maxAmount
                   ? {
-                      textDecoration: 'underline',
-                      cursor: 'pointer',
-                    }
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                  }
                   : undefined
               }
               onClick={() =>
@@ -155,7 +155,7 @@ function DepositDialogBase(props: DepositDialogProps) {
                 `${formatLuna(demicrofy(estimatedFee.txFee))} Luna`}
               {!estimatedFeeError && !estimatedFee && (
                 <span className="spinner">
-                  <CircleSpinner size={14} color={theme.colors.positive} />
+                  <CircleSpinner size={18} color={theme.colors.positive} />
                 </span>
               )}
               {estimatedFeeError}
