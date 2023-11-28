@@ -457,25 +457,21 @@ export const ANCHOR_CONTRACT_ADDRESS = (
     nameservice: addressMap.nameservice as HumanAddr,
     lsds: Object.assign(
       {},
-      ...Object.values(RegisteredLSDs).map(
-        (
-          lsd: RegisteredLSDs
-        ) => {
-          if (!addressMap.LSDs[lsd as string]) {
-            return {};
-          }
-          return {
-            [lsd]: {
-              info: addressMap.LSDs[lsd as string].info,
-              type: addressMap.LSDs[lsd as string].type,
-              hub: addressMap.LSDs[lsd as string].hub,
-              reward: addressMap.LSDs[lsd as string].reward,
-              token: addressMap.LSDs[lsd as string].token,
-              custody: addressMap.LSDs[lsd as string].custody,
-            },
-          };
+      ...Object.values(RegisteredLSDs).map((lsd: RegisteredLSDs) => {
+        if (!addressMap.LSDs[lsd as string]) {
+          return {};
         }
-      )
+        return {
+          [lsd]: {
+            info: addressMap.LSDs[lsd as string].info,
+            type: addressMap.LSDs[lsd as string].type,
+            hub: addressMap.LSDs[lsd as string].hub,
+            reward: addressMap.LSDs[lsd as string].reward,
+            token: addressMap.LSDs[lsd as string].token,
+            custody: addressMap.LSDs[lsd as string].custody,
+          },
+        };
+      })
     ),
   };
 };

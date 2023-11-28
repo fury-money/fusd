@@ -58,7 +58,7 @@ export function activateLiquidationBidTx($: {
         }),
       ],
       gasAdjustment: $.gasAdjustment,
-      chainID: $.network.chainID
+      chainID: $.network.chainID,
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

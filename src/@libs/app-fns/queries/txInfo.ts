@@ -176,10 +176,10 @@ export class TxFailed extends Error {
     public readonly tx: CreateTxOptions,
     public readonly txhash: string | undefined,
     message: string,
-    public readonly raw_message: unknown,
+    public readonly raw_message: unknown
   ) {
     super(message);
-    this.name = 'TxFailed';
+    this.name = "TxFailed";
   }
 
   toString = () => {
@@ -188,7 +188,7 @@ export class TxFailed extends Error {
     }"]\n${JSON.stringify(this.tx, null, 2)}\n${JSON.stringify(
       this.raw_message,
       null,
-      2,
+      2
     )}`;
   };
 }

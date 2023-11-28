@@ -1,23 +1,23 @@
-import { isObservable, Observable } from 'rxjs';
-import { Operator, ValueOfOperatorResult } from './types';
+import { isObservable, Observable } from "rxjs";
+import { Operator, ValueOfOperatorResult } from "./types";
 
 export function pipe<Params, R1>(
-  o1: Operator<Params, R1>,
+  o1: Operator<Params, R1>
 ): (params: Params) => Observable<R1>;
 
 export function pipe<Params, R1, R2>(
   o1: Operator<Params, R1>,
-  o2: Operator<ValueOfOperatorResult<R1>, R2>,
+  o2: Operator<ValueOfOperatorResult<R1>, R2>
 ): (
-  params: Params,
+  params: Params
 ) => Observable<ValueOfOperatorResult<R1> | ValueOfOperatorResult<R2>>;
 
 export function pipe<Params, R1, R2, R3>(
   o1: Operator<Params, R1>,
   o2: Operator<ValueOfOperatorResult<R1>, R2>,
-  o3: Operator<ValueOfOperatorResult<R2>, R3>,
+  o3: Operator<ValueOfOperatorResult<R2>, R3>
 ): (
-  params: Params,
+  params: Params
 ) => Observable<
   | ValueOfOperatorResult<R1>
   | ValueOfOperatorResult<R2>
@@ -28,9 +28,9 @@ export function pipe<Params, R1, R2, R3, R4>(
   o1: Operator<Params, R1>,
   o2: Operator<ValueOfOperatorResult<R1>, R2>,
   o3: Operator<ValueOfOperatorResult<R2>, R3>,
-  o4: Operator<ValueOfOperatorResult<R3>, R4>,
+  o4: Operator<ValueOfOperatorResult<R3>, R4>
 ): (
-  params: Params,
+  params: Params
 ) => Observable<
   | ValueOfOperatorResult<R1>
   | ValueOfOperatorResult<R2>
@@ -43,9 +43,9 @@ export function pipe<Params, R1, R2, R3, R4, R5>(
   o2: Operator<ValueOfOperatorResult<R1>, R2>,
   o3: Operator<ValueOfOperatorResult<R2>, R3>,
   o4: Operator<ValueOfOperatorResult<R3>, R4>,
-  o5: Operator<ValueOfOperatorResult<R4>, R5>,
+  o5: Operator<ValueOfOperatorResult<R4>, R5>
 ): (
-  params: Params,
+  params: Params
 ) => Observable<
   | ValueOfOperatorResult<R1>
   | ValueOfOperatorResult<R2>
@@ -60,9 +60,9 @@ export function pipe<Params, R1, R2, R3, R4, R5, R6>(
   o3: Operator<ValueOfOperatorResult<R2>, R3>,
   o4: Operator<ValueOfOperatorResult<R3>, R4>,
   o5: Operator<ValueOfOperatorResult<R4>, R5>,
-  o6: Operator<ValueOfOperatorResult<R5>, R6>,
+  o6: Operator<ValueOfOperatorResult<R5>, R6>
 ): (
-  params: Params,
+  params: Params
 ) => Observable<
   | ValueOfOperatorResult<R1>
   | ValueOfOperatorResult<R2>
@@ -79,9 +79,9 @@ export function pipe<Params, R1, R2, R3, R4, R5, R6, R7>(
   o4: Operator<ValueOfOperatorResult<R3>, R4>,
   o5: Operator<ValueOfOperatorResult<R4>, R5>,
   o6: Operator<ValueOfOperatorResult<R5>, R6>,
-  o7: Operator<ValueOfOperatorResult<R6>, R7>,
+  o7: Operator<ValueOfOperatorResult<R6>, R7>
 ): (
-  params: Params,
+  params: Params
 ) => Observable<
   | ValueOfOperatorResult<R1>
   | ValueOfOperatorResult<R2>
@@ -100,9 +100,9 @@ export function pipe<Params, R1, R2, R3, R4, R5, R6, R7, R8>(
   o5: Operator<ValueOfOperatorResult<R4>, R5>,
   o6: Operator<ValueOfOperatorResult<R5>, R6>,
   o7: Operator<ValueOfOperatorResult<R6>, R7>,
-  o8: Operator<ValueOfOperatorResult<R7>, R8>,
+  o8: Operator<ValueOfOperatorResult<R7>, R8>
 ): (
-  params: Params,
+  params: Params
 ) => Observable<
   | ValueOfOperatorResult<R1>
   | ValueOfOperatorResult<R2>
@@ -146,7 +146,7 @@ export function pipe(
               },
               () => {
                 run(latestValue);
-              },
+              }
             );
           } else {
             Promise.resolve(operation)

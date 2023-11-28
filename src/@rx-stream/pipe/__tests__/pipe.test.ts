@@ -1,5 +1,5 @@
-import { pipe } from '@rx-stream/pipe';
-import { Observable, of } from 'rxjs';
+import { pipe } from "@rx-stream/pipe";
+import { Observable, of } from "rxjs";
 
 class StreamRecorder {
   readonly records: unknown[] = [];
@@ -9,13 +9,13 @@ class StreamRecorder {
   };
 }
 
-describe('pipe', () => {
-  test('simple test', (done) => {
+describe("pipe", () => {
+  test("simple test", (done) => {
     // Arrange
     const fn = pipe(
       (n: number) => of(n.toString()),
       (s: string) => Promise.resolve(parseInt(s)),
-      (n: number) => n.toString(),
+      (n: number) => n.toString()
     );
 
     const recorder = new StreamRecorder();
@@ -26,19 +26,19 @@ describe('pipe', () => {
       complete: () => {
         // Assert
         expect(JSON.stringify(recorder.records)).toBe(
-          JSON.stringify(['10', 10, '10']),
+          JSON.stringify(["10", 10, "10"])
         );
         done();
       },
     });
   });
 
-  test('unsubscribe test', (done) => {
+  test("unsubscribe test", (done) => {
     // Arrange
     const fn = pipe(
       (n: number) => of(n.toString()),
       (s: string) => Promise.resolve(parseInt(s)),
-      (n: number) => n.toString(),
+      (n: number) => n.toString()
     );
 
     const recorder = new StreamRecorder();
@@ -54,25 +54,25 @@ describe('pipe', () => {
         }
       },
       complete: () => {
-        throw new Error('never come here!');
+        throw new Error("never come here!");
       },
     });
 
     // Assert
     setTimeout(() => {
       expect(subscription.closed).toBeTruthy();
-      expect(JSON.stringify(recorder.records)).toBe(JSON.stringify(['10', 10]));
+      expect(JSON.stringify(recorder.records)).toBe(JSON.stringify(["10", 10]));
       done();
     }, 1000);
   });
 
-  test('wrap the pipe', (done) => {
+  test("wrap the pipe", (done) => {
     // Arrange
     const fn = (n: number) => {
       return pipe(
         (n1: number) => of(n1.toString()),
         (s: string) => Promise.resolve(parseInt(s) + n),
-        (n3: number) => (n3 + n).toString(),
+        (n3: number) => (n3 + n).toString()
       )(n);
     };
 
@@ -84,14 +84,14 @@ describe('pipe', () => {
       complete: () => {
         // Assert
         expect(JSON.stringify(recorder.records)).toBe(
-          JSON.stringify(['10', 20, '30']),
+          JSON.stringify(["10", 20, "30"])
         );
         done();
       },
     });
   });
 
-  test('wrap the pipe with side effect', (done) => {
+  test("wrap the pipe with side effect", (done) => {
     // Arrange
     const fn = (n: number) => {
       let x: number;
@@ -104,7 +104,7 @@ describe('pipe', () => {
         (s: string) => Promise.resolve(parseInt(s) + n),
         (n3: number) => {
           return (n3 + x).toString();
-        },
+        }
       )(n);
     };
 
@@ -116,14 +116,14 @@ describe('pipe', () => {
       complete: () => {
         // Assert
         expect(JSON.stringify(recorder.records)).toBe(
-          JSON.stringify(['10', 20, '40']),
+          JSON.stringify(["10", 20, "40"])
         );
         done();
       },
     });
   });
 
-  test('async test', (done) => {
+  test("async test", (done) => {
     // Arrange
     const fn = pipe(
       (n: number) =>
@@ -152,8 +152,8 @@ describe('pipe', () => {
         }),
       (s: number | string) =>
         new Promise<string>((resolve) =>
-          setTimeout(() => resolve(s + '?'), 1000),
-        ),
+          setTimeout(() => resolve(s + "?"), 1000)
+        )
     );
 
     const recorder = new StreamRecorder();
@@ -164,14 +164,14 @@ describe('pipe', () => {
       complete: () => {
         // Assert
         expect(JSON.stringify(recorder.records)).toBe(
-          JSON.stringify([0, '10', 20, '30', 40, '50', '50?']),
+          JSON.stringify([0, "10", 20, "30", 40, "50", "50?"])
         );
         done();
       },
     });
   });
 
-  test('error test', (done) => {
+  test("error test", (done) => {
     // Arrange
     const fn = pipe(
       (n: number) =>
@@ -189,7 +189,7 @@ describe('pipe', () => {
               i += 1;
 
               if (i > 5) {
-                subscriber.error(new Error('error!'));
+                subscriber.error(new Error("error!"));
               } else {
                 run();
               }
@@ -200,8 +200,8 @@ describe('pipe', () => {
         }),
       (s: number | string) =>
         new Promise<string>((resolve) =>
-          setTimeout(() => resolve(s + '?'), 1000),
-        ),
+          setTimeout(() => resolve(s + "?"), 1000)
+        )
     );
 
     const recorder = new StreamRecorder();
@@ -212,18 +212,18 @@ describe('pipe', () => {
       error: (error) => {
         // Assert
         expect(JSON.stringify(recorder.records)).toBe(
-          JSON.stringify([0, '10', 20, '30', 40, '50']),
+          JSON.stringify([0, "10", 20, "30", 40, "50"])
         );
-        expect(error.message).toBe('error!');
+        expect(error.message).toBe("error!");
         done();
       },
       complete: () => {
-        throw new Error('never come here!');
+        throw new Error("never come here!");
       },
     });
   });
 
-  test('error test with throw', (done) => {
+  test("error test with throw", (done) => {
     // Arrange
     const fn = pipe(
       (n: number) =>
@@ -240,7 +240,7 @@ describe('pipe', () => {
             i += 1;
 
             if (i > 5) {
-              throw new Error('error!');
+              throw new Error("error!");
             } else {
               run();
             }
@@ -250,8 +250,8 @@ describe('pipe', () => {
         }),
       (s: number | string) =>
         new Promise<string>((resolve) =>
-          setTimeout(() => resolve(s + '?'), 1000),
-        ),
+          setTimeout(() => resolve(s + "?"), 1000)
+        )
     );
 
     const recorder = new StreamRecorder();
@@ -262,13 +262,13 @@ describe('pipe', () => {
       error: (error) => {
         // Assert
         expect(JSON.stringify(recorder.records)).toBe(
-          JSON.stringify([0, '10', 20, '30', 40, '50']),
+          JSON.stringify([0, "10", 20, "30", 40, "50"])
         );
-        expect(error.message).toBe('error!');
+        expect(error.message).toBe("error!");
         done();
       },
       complete: () => {
-        throw new Error('never come here!');
+        throw new Error("never come here!");
       },
     });
   });

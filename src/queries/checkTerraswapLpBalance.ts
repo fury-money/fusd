@@ -33,7 +33,7 @@ export function useCheckTerraswapLpBalance() {
   const { connected, terraWalletAddress } = useAccount();
 
   const connectedWallet = useAccount();
-  const {network} = useNetwork();
+  const { network } = useNetwork();
 
   const { queryClient } = useAnchorWebapp();
 
@@ -49,11 +49,7 @@ export function useCheckTerraswapLpBalance() {
     }
 
     const { terraswapAncUstLPToken, staking } =
-      address[
-        network.chainID === "columbus-5"
-          ? "columbus-5"
-          : "bombay-12"
-      ];
+      address[network.chainID === "columbus-5" ? "columbus-5" : "bombay-12"];
 
     rewardsAncUstLpRewardsQuery(
       terraWalletAddress,
@@ -86,7 +82,7 @@ export function useCheckTerraswapLpRewards() {
   const { connected, terraWalletAddress } = useAccount();
 
   const connectedWallet = useAccount();
-  const {network} = useNetwork();
+  const { network } = useNetwork();
 
   const { queryClient } = useAnchorWebapp();
 
@@ -100,11 +96,7 @@ export function useCheckTerraswapLpRewards() {
     }
 
     const { terraswapAncUstLPToken, staking } =
-      address[
-        network.chainID === "columbus-5"
-          ? "columbus-5"
-          : "bombay-12"
-      ];
+      address[network.chainID === "columbus-5" ? "columbus-5" : "bombay-12"];
 
     rewardsAncUstLpRewardsQuery(
       terraWalletAddress,

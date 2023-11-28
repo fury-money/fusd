@@ -73,7 +73,14 @@ export function useAbortMissionTx() {
         },
       });
     },
-    [connectedWallet, queryClient, contractAddress, constants.gasAdjustment, txErrorReporter, refetchQueries]
+    [
+      connectedWallet,
+      queryClient,
+      contractAddress,
+      constants.gasAdjustment,
+      txErrorReporter,
+      refetchQueries,
+    ]
   );
 
   const streamReturn = useStream(stream);

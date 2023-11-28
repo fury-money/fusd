@@ -24,9 +24,7 @@ import {
   Fee,
   MsgExecuteContract,
 } from "@terra-money/feather.js";
-import { 
-  TxResult
-} from "@terra-money/feather.js";
+import { TxResult } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import { RewardBreakdown } from "pages/basset/hooks/useRewardsBreakdown";
 import { Observable } from "rxjs";
@@ -67,7 +65,7 @@ export function bAssetClaimTx($: {
       }),
       fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
-      chainID: $.network.chainID
+      chainID: $.network.chainID,
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

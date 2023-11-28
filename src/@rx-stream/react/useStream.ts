@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
-import { AbortStream } from './errors';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { BehaviorSubject, Observable, Subject, Subscription } from "rxjs";
+import { AbortStream } from "./errors";
 
 export enum StreamStatus {
-  IN_PROGRESS = 'IN_PROGRESS',
-  DONE = 'DONE',
-  ERROR = 'ERROR',
-  READY = 'READY',
+  IN_PROGRESS = "IN_PROGRESS",
+  DONE = "DONE",
+  ERROR = "ERROR",
+  READY = "READY",
 }
 
 export interface StreamReady {
@@ -39,7 +39,7 @@ export type StreamResult<Result> =
 
 export type StreamReturn<Params, Result> = [
   (params: Params) => Observable<Result>,
-  StreamResult<Result>,
+  StreamResult<Result>
 ];
 
 const ready: StreamReady = {
@@ -48,7 +48,7 @@ const ready: StreamReady = {
 
 export function useStream<Params, Value>(
   fn: (params: Params) => Observable<Value>,
-  transferOnUnmount?: (stream: Observable<StreamResult<Value>>) => void,
+  transferOnUnmount?: (stream: Observable<StreamResult<Value>>) => void
 ): StreamReturn<Params, Value> {
   const [result, setResult] = useState<StreamResult<Value>>(() => ready);
 
@@ -189,7 +189,7 @@ export function useStream<Params, Value>(
 
       return subscriber.asObservable();
     },
-    [fn],
+    [fn]
   );
 
   useEffect(() => {

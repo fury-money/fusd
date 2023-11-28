@@ -1,9 +1,9 @@
-import { Observable } from 'rxjs';
+import { Observable } from "rxjs";
 
 export function createTimeline(
   delay: number,
   duration: number,
-  repeat: boolean,
+  repeat: boolean
 ): Observable<number> {
   return new Observable<number>((subscriber) => {
     let startTime: number = Date.now();

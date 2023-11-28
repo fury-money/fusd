@@ -183,7 +183,7 @@ export function liquidationWithdrawCollateralTx($: {
       }),
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
-      chainID: $.network.chainID
+      chainID: $.network.chainID,
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

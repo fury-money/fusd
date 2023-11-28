@@ -3,10 +3,7 @@ import { CW20TokenDisplayInfo } from "@libs/app-fns";
 import { useCW20TokenDisplayInfosQuery } from "@libs/app-provider";
 import { createQueryFn } from "@libs/react-query-utils";
 import { HumanAddr } from "@anchor-protocol/types";
-import {
-  useAnchorQuery,
-  WhitelistCollateral,
-} from "queries";
+import { useAnchorQuery, WhitelistCollateral } from "queries";
 import { UseQueryResult } from "react-query";
 import { useAnchorWebapp } from "../../@anchor-protocol/app-provider/contexts/context";
 import { ANCHOR_QUERY_KEY } from "../../@anchor-protocol/app-provider/env";
@@ -71,7 +68,7 @@ async function whitelistCollateralQuery(
     queryClient
   );
 
-  return mapTokenInformation(whitelist, tokenInformation ?? {})
+  return mapTokenInformation(whitelist, tokenInformation ?? {});
 }
 
 function useLocalTokenInformation() {

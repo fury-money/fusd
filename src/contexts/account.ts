@@ -1,6 +1,10 @@
 import { HumanAddr } from "@libs/types";
 import { CreateTxOptions } from "@terra-money/feather.js";
-import { PostResponse, WalletResponse, WalletStatus } from "@terra-money/wallet-kit";
+import {
+  PostResponse,
+  WalletResponse,
+  WalletStatus,
+} from "@terra-money/wallet-kit";
 import { createContext, useContext } from "react";
 import { Connection, NetworkInfo } from "utils/consts";
 
@@ -8,7 +12,7 @@ interface AccountCommon {
   availablePost: boolean;
   readonly: boolean;
   network: NetworkInfo;
-  status: WalletStatus
+  status: WalletStatus;
   post: (tx: CreateTxOptions) => Promise<PostResponse>;
   connection: Connection | undefined;
   // connect: (connectType: 'extension' | 'walletconnect' | 'readonly') => void;

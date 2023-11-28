@@ -70,7 +70,7 @@ export function cw20SellTokenTx<T extends Token>(
       ],
       fee: new Fee($.gasWanted, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
-      chainID: $.network.chainID
+      chainID: $.network.chainID,
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

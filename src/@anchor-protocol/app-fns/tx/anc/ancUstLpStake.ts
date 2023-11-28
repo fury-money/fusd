@@ -32,9 +32,7 @@ import {
   Fee,
   MsgExecuteContract,
 } from "@terra-money/feather.js";
-import { 
-  TxResult
-} from "@terra-money/feather.js";
+import { TxResult } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import { Observable } from "rxjs";
 import { PostResponse } from "@terra-money/wallet-kit";
@@ -71,7 +69,7 @@ export function ancAncUstLpStakeTx($: {
       ],
       fee: new Fee($.gasFee, floor($.fixedGas) + "uluna"),
       gasAdjustment: $.gasAdjustment,
-      chainID: $.network.chainID
+      chainID: $.network.chainID,
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

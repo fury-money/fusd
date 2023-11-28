@@ -17,9 +17,7 @@ import {
 import { floor } from "@libs/big-math";
 import { QueryClient } from "@libs/query-client";
 import { pipe } from "@rx-stream/pipe";
-import { 
-  TxResult
-} from "@terra-money/feather.js";
+import { TxResult } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import {
   CreateTxOptions,
@@ -65,7 +63,7 @@ export function airdropClaimTx($: {
       ],
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
-      chainID: $.network.chainID
+      chainID: $.network.chainID,
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

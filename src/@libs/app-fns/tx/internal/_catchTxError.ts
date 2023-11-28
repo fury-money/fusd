@@ -13,12 +13,11 @@ export function _catchTxError({
   txErrorReporter,
 }: Params): OperatorFunction<any, any> {
   return catchError((error) => {
-    const errorId =
-    undefined
-      // txErrorReporter &&
-      // !(error instanceof UserDenied || error instanceof Timeout)
-      //   ? txErrorReporter(error)
-      //   : undefined;
+    const errorId = undefined;
+    // txErrorReporter &&
+    // !(error instanceof UserDenied || error instanceof Timeout)
+    //   ? txErrorReporter(error)
+    //   : undefined;
 
     return Promise.resolve<TxResultRendering>({
       value: null,

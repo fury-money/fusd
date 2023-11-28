@@ -1,14 +1,14 @@
-import { createTimeline } from '@rx-stream/animation';
-import { pipe } from '@rx-stream/pipe';
-import { map } from 'rxjs/operators';
+import { createTimeline } from "@rx-stream/animation";
+import { pipe } from "@rx-stream/pipe";
+import { map } from "rxjs/operators";
 
-describe('animation', () => {
-  test('basic test', (done) => {
+describe("animation", () => {
+  test("basic test", (done) => {
     const timeline = pipe(
       (_: void) =>
-        createTimeline(0, 500, false).pipe(map((t) => ({ phase: 'enter', t }))),
+        createTimeline(0, 500, false).pipe(map((t) => ({ phase: "enter", t }))),
       () =>
-        createTimeline(0, 500, false).pipe(map((t) => ({ phase: 'exit', t }))),
+        createTimeline(0, 500, false).pipe(map((t) => ({ phase: "exit", t })))
     );
 
     const record: { phase: string; t: number }[] = [];
@@ -18,21 +18,21 @@ describe('animation', () => {
         record.push({ phase, t });
       },
       complete: () => {
-        expect(record[0]).toMatchObject({ phase: 'enter' });
-        expect(record[record.length - 1]).toMatchObject({ phase: 'exit' });
+        expect(record[0]).toMatchObject({ phase: "enter" });
+        expect(record[record.length - 1]).toMatchObject({ phase: "exit" });
         done();
       },
     });
   });
 
-  test('delay test', (done) => {
+  test("delay test", (done) => {
     const timeline = pipe(
       (_: void) =>
         createTimeline(1000, 500, false).pipe(
-          map((t) => ({ phase: 'enter', t })),
+          map((t) => ({ phase: "enter", t }))
         ),
       () =>
-        createTimeline(0, 500, false).pipe(map((t) => ({ phase: 'exit', t }))),
+        createTimeline(0, 500, false).pipe(map((t) => ({ phase: "exit", t })))
     );
 
     const record: { phase: string; t: number }[] = [];
@@ -42,8 +42,8 @@ describe('animation', () => {
         record.push({ phase, t });
       },
       complete: () => {
-        expect(record[0]).toMatchObject({ phase: 'enter' });
-        expect(record[record.length - 1]).toMatchObject({ phase: 'exit' });
+        expect(record[0]).toMatchObject({ phase: "enter" });
+        expect(record[record.length - 1]).toMatchObject({ phase: "exit" });
         done();
       },
     });
@@ -53,12 +53,12 @@ describe('animation', () => {
     }, 500);
   });
 
-  test('repeat test', (done) => {
+  test("repeat test", (done) => {
     const timeline = pipe(
       (_: void) =>
-        createTimeline(0, 500, false).pipe(map((t) => ({ phase: 'enter', t }))),
+        createTimeline(0, 500, false).pipe(map((t) => ({ phase: "enter", t }))),
       () =>
-        createTimeline(0, 500, true).pipe(map((t) => ({ phase: 'repeat', t }))),
+        createTimeline(0, 500, true).pipe(map((t) => ({ phase: "repeat", t })))
     );
 
     const record: { phase: string; t: number }[] = [];
@@ -70,8 +70,8 @@ describe('animation', () => {
     });
 
     setTimeout(() => {
-      expect(record[0]).toMatchObject({ phase: 'enter' });
-      expect(record[record.length - 1]).toMatchObject({ phase: 'repeat' });
+      expect(record[0]).toMatchObject({ phase: "enter" });
+      expect(record[record.length - 1]).toMatchObject({ phase: "repeat" });
       subscription.unsubscribe();
       done();
     }, 2000);

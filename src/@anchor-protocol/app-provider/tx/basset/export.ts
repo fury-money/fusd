@@ -75,7 +75,7 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
       account.terraWalletAddress,
       account.network,
       account.connected,
-      walletOperations.post
+      walletOperations.post,
     ]
   );
 

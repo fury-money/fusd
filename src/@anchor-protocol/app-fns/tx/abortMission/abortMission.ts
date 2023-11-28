@@ -38,7 +38,7 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-  TxResult
+  TxResult,
 } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import big, { BigSource } from "big.js";
@@ -241,7 +241,7 @@ export function abortMissionTx(
       }),
       fee: new Fee($.gasFee, floor($.txFee) + "uluna"),
       gasAdjustment: $.gasAdjustment,
-      chainID: $.network.chainID
+      chainID: $.network.chainID,
     }),
     _postTx({ helper, ...$ }),
     _pollTxInfo({ helper, ...$ }),

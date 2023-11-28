@@ -1,4 +1,4 @@
-import { ObservableInput } from 'rxjs';
+import { ObservableInput } from "rxjs";
 
 export type OperatorReturn<R> = ObservableInput<R> | R extends ObservableInput<
   infer U
