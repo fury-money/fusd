@@ -147,7 +147,6 @@ export async function getSpectrumLSDExchangeRate(
   let share = parseFloat(cStateResponse.state.total_bond_share);
   let amount = parseFloat(userInfoResponse.user_info.bond_amount);
 
-  console.log(cStateResponse, userInfoResponse);
   if (share == 0 || amount == 0) {
     return "1" as Rate<string>;
   }

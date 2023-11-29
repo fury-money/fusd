@@ -45,7 +45,10 @@ export function WalletContentBase(props: WalletContentProps) {
         </button>
       </section>
       <section className="children">{children}</section>
-      <button className="disconnect" onClick={onDisconnectWallet}>
+      <button className="disconnect" type="button" onClick={(event) => {
+        event.preventDefault()
+        onDisconnectWallet()
+      }}>
         Disconnect
       </button>
     </div>
@@ -74,12 +77,12 @@ export const WalletContent = styled(WalletContentBase)`
       padding: 5px 10px;
 
       background-color: ${({ theme }) =>
-        theme.palette_type === 'light' ? '#f1f1f1' : 'rgba(0, 0, 0, 0.15)'};
+    theme.palette_type === 'light' ? '#f1f1f1' : 'rgba(0, 0, 0, 0.15)'};
       color: ${({ theme }) => theme.dimTextColor};
 
       &:hover {
         background-color: ${({ theme }) =>
-          theme.palette_type === 'light' ? '#e1e1e1' : 'rgba(0, 0, 0, 0.2)'};
+    theme.palette_type === 'light' ? '#e1e1e1' : 'rgba(0, 0, 0, 0.2)'};
         color: ${({ theme }) => theme.textColor};
       }
     }
@@ -96,12 +99,12 @@ export const WalletContent = styled(WalletContentBase)`
     outline: none;
 
     background-color: ${({ theme }) =>
-      theme.palette_type === 'light' ? '#f1f1f1' : 'rgba(0, 0, 0, 0.15)'};
+    theme.palette_type === 'light' ? '#f1f1f1' : 'rgba(0, 0, 0, 0.15)'};
     color: ${({ theme }) => theme.dimTextColor};
 
     &:hover {
       background-color: ${({ theme }) =>
-        theme.palette_type === 'light' ? '#e1e1e1' : 'rgba(0, 0, 0, 0.2)'};
+    theme.palette_type === 'light' ? '#e1e1e1' : 'rgba(0, 0, 0, 0.2)'};
       color: ${({ theme }) => theme.textColor};
     }
 

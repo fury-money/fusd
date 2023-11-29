@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { UIElementProps } from '@libs/ui';
 import {
+  ConnectResponse,
   useConnectedWallet,
   useWallet,
 } from '@terra-money/wallet-kit';
@@ -12,11 +13,23 @@ import { ConnectType } from 'utils/consts';
 
 const TerraAccountProvider = ({ children }: UIElementProps): React.JSX.Element => {
   const wallet = useWallet();
-  const connectedWallet = useConnectedWallet();
+  const connectedWallet: (ConnectResponse & { id?: string } | undefined) = useConnectedWallet();
   const { network } = useNetwork();
 
 
   const account = useMemo<Account>(() => {
+    let connection_wallet: any = {};
+    if (connectedWallet) {
+      if (connectedWallet.id) {
+        // If id is not defined, it's terra station
+        connection_wallet = wallet.availableWallets.filter(({ id }) => id == "station-extension")[0];
+      } else {
+        // Otherwise, it's ok, it's listed
+        connection_wallet = wallet.availableWallets.filter(({ id }) => id == connectedWallet.id)[0];
+      }
+    }
+
+
     return {
       connected: !!connectedWallet as true, // Cast to "true" to fix discriminated union
       nativeWalletAddress: connectedWallet?.addresses[network.chainID] as HumanAddr,
@@ -27,7 +40,7 @@ const TerraAccountProvider = ({ children }: UIElementProps): React.JSX.Element =
       availablePost: !!connectedWallet as true,
       post: wallet.post,
       connection: connectedWallet ? {
-        ...wallet.availableWallets.filter(({ name }) => name == connectedWallet?.name)[0],
+        ...connection_wallet,
         type: ConnectType.WALLET_KIT
       } : undefined,
 

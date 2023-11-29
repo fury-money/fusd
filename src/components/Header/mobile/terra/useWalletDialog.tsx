@@ -31,7 +31,6 @@ function ComponentBase(props: DialogProps<FormParams, FormReturn>) {
   const disconnectWallet = useCallback(() => {
     disconnect();
     closeDialog();
-    //window.location.reload();
   }, [closeDialog, disconnect]);
 
   return (

@@ -5,24 +5,24 @@ import { NativeSelect } from '@libs/neumorphism-ui/components/NativeSelect';
 import { TextInput } from '@libs/neumorphism-ui/components/TextInput';
 // import { ReadonlyWalletSession } from '@terra-money/wallet-provider';
 import { DialogProps, OpenDialog, useDialog } from '@libs/use-dialog';
-import { NetworkInfo } from 'utils/consts';
 import { AccAddress } from '@terra-money/feather.js';
 import React, {
-  ChangeEvent,
-  KeyboardEvent,
   ReactNode,
-  useCallback,
-  useMemo,
-  useState,
 } from 'react';
 import styled from 'styled-components';
+import { useFormik } from 'formik';
+import * as yup from 'yup'
+import { CavernNetworkInfo } from '@anchor-protocol/app-provider';
 
 interface FormParams {
   className?: string;
-  networks: NetworkInfo[];
+  networks: CavernNetworkInfo[]
 }
 
-type FormReturn = any //ReadonlyWalletSession | null;
+type FormReturn = {
+  address: string,
+  chainID: string
+} | null;
 
 export function useReadonlyWalletDialog(): [
   OpenDialog<FormParams, FormReturn>,
@@ -31,91 +31,103 @@ export function useReadonlyWalletDialog(): [
   return useDialog(Component);
 }
 
+const validationSchema = yup.object({
+  address: yup.string().required('You have to provide an address to impersonate').test("test-is-address", "Please enter a valid Terra Address", (address) => {
+    console.log(address)
+    return AccAddress.validate(address)
+  }),
+})
+
 function ComponentBase({
   className,
   networks,
   closeDialog,
 }: DialogProps<FormParams, FormReturn>) {
-  const [chainID, setChainID] = useState<string>(() => networks[1].chainID);
-  const [address, setAddress] = useState<string>('');
 
-  const invalidAddress = useMemo(() => {
-    if (address.length === 0) {
-      return undefined;
-    }
-
-    return !AccAddress.validate(address) ? 'Invalid address' : undefined;
-  }, [address]);
-
-  const submit = useCallback(
-    (terraAddress: string, networkChainID: string) => {
-      if (AccAddress.validate(terraAddress)) {
-        closeDialog({
-          terraAddress,
-          network:
-            networks.find(({ chainID }) => chainID === networkChainID) ??
-            networks[0],
-        });
-      }
+  const formik = useFormik({
+    initialValues: {
+      address: '',
+      chainID: '',
     },
-    [closeDialog, networks],
-  );
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      closeDialog({
+        address: values.address,
+        chainID: values.chainID
+      })
+    },
+  })
 
   return (
     <Modal open onClose={() => closeDialog(null)}>
       <Dialog className={className} onClose={() => closeDialog(null)}>
-        <h1>View an Address</h1>
 
-        {/* Network */}
-        <div className="network-description">
-          <p>Network</p>
-          <p />
-        </div>
+        <form onSubmit={(event) => {
+          event.preventDefault();
+          formik.handleSubmit()
+        }}>
+          <h1>View an Address</h1>
 
-        <NativeSelect
-          fullWidth
-          value={chainID}
-          onChange={({ target }: ChangeEvent<HTMLSelectElement>) =>
-            setChainID(target.value)
-          }
-        >
-          {networks.map(({ chainID, name }) => (
-            <option key={chainID} value={chainID}>
-              {name} ({chainID})
-            </option>
-          ))}
-        </NativeSelect>
+          {/* Network */}
+          <div className="network-description">
+            <p>Network</p>
+            <p />
+          </div>
 
-        {/* Address */}
-        <div className="address-description">
-          <p>Wallet Address</p>
-          <p />
-        </div>
-
-        <TextInput
-          className="address"
-          fullWidth
-          placeholder="ADDRESS"
-          value={address}
-          error={!!invalidAddress}
-          helperText={invalidAddress}
-          onChange={({ target }: ChangeEvent<HTMLInputElement>) =>
-            setAddress(target.value)
-          }
-          onKeyPress={({ key }: KeyboardEvent<HTMLInputElement>) => {
-            if (key === 'Enter') {
-              submit(address, chainID);
+          <NativeSelect
+            fullWidth
+            value={formik.values.chainID}
+            id="chainID"
+            type="chainID"
+            name="chainID"
+            className="chainID"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.chainID &&
+              Boolean(formik.errors.chainID)
             }
-          }}
-        />
+          >
+            {networks.map(({ chainID, name }) => (
+              <option key={chainID} value={chainID}>
+                {name} ({chainID})
+              </option>
+            ))}
+          </NativeSelect>
 
-        <ActionButton
-          className="connect"
-          disabled={address.length === 0 || !!invalidAddress}
-          onClick={() => submit(address, chainID)}
-        >
-          View
-        </ActionButton>
+          {/* Address */}
+          <div className="address-description">
+            <p>Wallet Address</p>
+            <p />
+          </div>
+
+          <TextInput
+            id="address"
+            type="address"
+            name="address"
+            className="address"
+            fullWidth
+            placeholder="ADDRESS" value={formik.values.address}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.address &&
+              Boolean(formik.errors.address)
+            }
+            helperText={
+              formik.touched.address &&
+              formik.errors.address
+            }
+          />
+
+          <ActionButton
+            className="connect"
+            disabled={formik.touched.address && !!formik.errors.address}
+            type="submit"
+          >
+            View
+          </ActionButton>
+        </form>
       </Dialog>
     </Modal>
   );
