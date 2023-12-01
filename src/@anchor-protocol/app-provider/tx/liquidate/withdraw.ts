@@ -1,7 +1,6 @@
 import { withdrawLiquidationBidTx } from "@anchor-protocol/app-fns/tx/liquidate/withdraw";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";

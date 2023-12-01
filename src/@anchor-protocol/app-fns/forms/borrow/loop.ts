@@ -10,7 +10,7 @@ import {
 import { LoopsAndMessageQueryArgs } from "@anchor-protocol/app-provider/forms/borrow/loop";
 import { CollateralAmount, moneyMarket, Rate } from "@anchor-protocol/types";
 import { formatRate, microfy } from "@libs/formatter";
-import { Denom, HumanAddr, Luna, Token, u, UST } from "@libs/types";
+import { Denom, HumanAddr, Token, u, UST } from "@libs/types";
 import { FormReturn } from "@libs/use-form";
 import { MsgExecuteContract } from "@terra-money/feather.js";
 import big, { Big } from "big.js";
@@ -119,7 +119,7 @@ export const borrowLoopForm = ({
         ? "WARNING: Are you sure you want to borrow above the recommended borrow usage? Crypto markets can be very volatile and you may be subject to liquidation in events of downward price swings of the aAsset."
         : undefined;
 
-    let minimumLeverage = 1;
+    const minimumLeverage = 1;
     let maximumLeverage = 1;
     const actualMaximumLTV =
       parsedMaximumLTV * parseFloat(collateral?.max_ltv ?? "0");

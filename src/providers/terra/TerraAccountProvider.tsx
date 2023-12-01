@@ -17,7 +17,7 @@ const TerraAccountProvider = ({ children }: UIElementProps): React.JSX.Element =
   const { network } = useNetwork();
 
 
-  const account = useMemo<Account>(() => {
+  const account = useMemo<Account>((): Account => {
     let connection_wallet: any = {};
     if (connectedWallet) {
       if (connectedWallet.id) {
@@ -31,6 +31,8 @@ const TerraAccountProvider = ({ children }: UIElementProps): React.JSX.Element =
 
 
     return {
+      connect: wallet.connect,
+      disconnect: wallet.disconnect,
       connected: !!connectedWallet as true, // Cast to "true" to fix discriminated union
       nativeWalletAddress: connectedWallet?.addresses[network.chainID] as HumanAddr,
       network: MAINNET,
@@ -43,14 +45,14 @@ const TerraAccountProvider = ({ children }: UIElementProps): React.JSX.Element =
         ...connection_wallet,
         type: ConnectType.WALLET_KIT
       } : undefined,
-
+      availableWallets: wallet.availableWallets
       // TODO : Read-Address
       // readonly:
       //   connectedWallet === undefined ||
       //   connectedWallet.connectType === ConnectType.READONLY,
       // availablePost: !!connectedWallet && connectedWallet.availablePost,
     };
-  }, [connectedWallet, network.chainID, wallet.availableWallets, wallet.post, wallet.status]);
+  }, [connectedWallet, network.chainID, wallet.availableWallets, wallet.connect, wallet.post, wallet.status, wallet.disconnect]);
 
   return (
     <AccountContext.Provider value={account}>

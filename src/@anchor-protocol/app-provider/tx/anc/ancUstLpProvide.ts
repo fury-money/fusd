@@ -2,7 +2,6 @@ import { ancAncUstLpProvideTx } from "@anchor-protocol/app-fns";
 import { ANC, Rate, u, UST } from "@anchor-protocol/types";
 import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
 import { useAnchorWebapp } from "../../contexts/context";

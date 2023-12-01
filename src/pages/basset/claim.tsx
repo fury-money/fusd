@@ -1,14 +1,13 @@
 import { validateTxFee } from '@anchor-protocol/app-fns';
 import { useAnchorBank, useBAssetClaimTx } from '@anchor-protocol/app-provider';
 import { formatLuna, formatUST } from '@anchor-protocol/notation';
-import { useFeeEstimationFor, useFixedFee } from '@libs/app-provider';
+import { useFeeEstimationFor } from '@libs/app-provider';
 import { demicrofy } from '@libs/formatter';
 import { ActionButton } from '@libs/neumorphism-ui/components/ActionButton';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { Section } from '@libs/neumorphism-ui/components/Section';
 import { StreamStatus } from '@rx-stream/react';
 import { MsgExecuteContract } from '@terra-money/feather.js';
-import { useConnectedWallet } from '@terra-money/wallet-kit';
 import big from 'big.js';
 import { CenteredLayout } from 'components/layouts/CenteredLayout';
 import { MessageBox } from 'components/MessageBox';

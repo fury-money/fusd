@@ -9,14 +9,14 @@ import {
   DropdownBox,
 } from 'components/Header/desktop/DropdownContainer';
 import { useBuyUstDialog } from 'pages/earn/components/useBuyUstDialog';
-import { WalletStatus, useWallet } from '@terra-money/wallet-kit';
+import { WalletStatus } from '@terra-money/wallet-kit';
 import { useVestingClaimNotification } from 'components/Header/vesting/VestingClaimNotification';
 
 const TerraWalletSelector = (): React.JSX.Element => {
   const { terraWalletAddress, status, connection } = useAccount();
 
   const { connect, disconnect, availableWallets } =
-    useWallet();
+    useAccount();
 
   const availableConnectTypes = availableWallets.filter(({ isInstalled }) => isInstalled);
 

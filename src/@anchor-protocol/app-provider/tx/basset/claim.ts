@@ -5,7 +5,6 @@ import {
   useRefetchQueries,
 } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { RewardBreakdown } from "pages/basset/hooks/useRewardsBreakdown";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";

@@ -24,8 +24,9 @@ import {
 } from '../env';
 import { useGasPriceQuery } from '../queries/gasPrice';
 import { AppConstants, AppContractAddress, TxRefetchMap } from '../types';
-import { WalletStatus, useWallet } from '@terra-money/wallet-kit';
+import { WalletStatus } from '@terra-money/wallet-kit';
 import { NetworkInfo } from 'utils/consts';
+import { useAccount } from 'contexts/account';
 
 export interface AppProviderProps<
   ContractAddress extends AppContractAddress,
@@ -107,10 +108,10 @@ export function AppProvider<
 }: AppProviderProps<ContractAddress, Constants>) {
   const { network, rpcClient } = useNetwork();
 
-  const wallet = useWallet();
+  const account = useAccount();
 
   // We wait for wallet init before querying stuff
-  const batchQueryClient = useBatchQuery(wallet.status == WalletStatus.INITIALIZING ? undefined : rpcClient);
+  const batchQueryClient = useBatchQuery(account.status == WalletStatus.INITIALIZING ? undefined : rpcClient);
 
   const networkBoundStates = useMemo<
     Pick<

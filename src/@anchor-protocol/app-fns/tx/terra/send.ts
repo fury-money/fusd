@@ -18,7 +18,6 @@ import {
   MsgExecuteContract,
   MsgSend,
 } from "@terra-money/feather.js";
-import { TxResult } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import { CurrencyInfo } from "pages/send/models/currency";
 import { Observable } from "rxjs";

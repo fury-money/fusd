@@ -2,7 +2,6 @@ import { bondMintTx } from "@anchor-protocol/app-fns";
 import { Gas, Luna, Rate, u, UST } from "@anchor-protocol/types";
 import { useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAccount } from "contexts/account";
 import { useAnchorWebapp } from "../../contexts/context";

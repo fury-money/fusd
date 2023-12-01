@@ -24,7 +24,6 @@ import {
   Fee,
   MsgExecuteContract,
 } from "@terra-money/feather.js";
-import { TxResult } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import { RewardBreakdown } from "pages/basset/hooks/useRewardsBreakdown";
 import { Observable } from "rxjs";

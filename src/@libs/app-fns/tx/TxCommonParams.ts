@@ -1,6 +1,5 @@
 import { QueryClient } from "@libs/query-client";
 import { Gas, Rate, u, UST } from "@libs/types";
-import { TxResult } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import { CreateTxOptions } from "@terra-money/feather.js";
 import { PostResponse } from "@terra-money/wallet-kit";

@@ -7,7 +7,6 @@ import {
   WasmQueryData,
 } from "@libs/query-client";
 import { CW20Addr, HumanAddr, u } from "@libs/types";
-import { useConnectedWallet } from "@terra-money/wallet-kit";
 import big from "big.js";
 import { useEffect, useState } from "react";
 import { useAccount } from "contexts/account";

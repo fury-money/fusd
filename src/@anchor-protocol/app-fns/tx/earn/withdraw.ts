@@ -40,7 +40,6 @@ import {
   Fee,
   MsgExecuteContract,
 } from "@terra-money/feather.js";
-import { TxResult } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import big, { BigSource } from "big.js";
 import { Observable } from "rxjs";

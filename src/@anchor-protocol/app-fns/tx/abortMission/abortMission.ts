@@ -38,7 +38,6 @@ import {
   CreateTxOptions,
   Fee,
   MsgExecuteContract,
-  TxResult,
 } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import big, { BigSource } from "big.js";

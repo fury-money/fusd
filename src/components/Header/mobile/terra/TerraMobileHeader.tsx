@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useWallet } from '@terra-money/wallet-kit';
 import { useAccount } from 'contexts/account';
 import { useBuyUstDialog } from 'pages/earn/components/useBuyUstDialog';
 import { useSendDialog } from 'pages/send/useSendDialog';
@@ -12,8 +11,7 @@ import { ConnectType } from 'utils/consts';
 
 export function TerraMobileHeader() {
   const [open, setOpen] = useState<boolean>(false);
-  const { status } = useAccount();
-  const { connect } = useWallet();
+  const { status, connect } = useAccount();
   const [openWalletDialog, walletDialogElement] = useWalletDialog();
   const [openSendDialog, sendDialogElement] = useSendDialog();
   const [openBuyUstDialog, buyUstDialogElement] = useBuyUstDialog();

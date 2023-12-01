@@ -21,7 +21,6 @@ import {
   SelectAndTextInputContainerLabel,
 } from '@libs/neumorphism-ui/components/SelectAndTextInputContainer';
 import { StreamStatus } from '@rx-stream/react';
-import { useConnectedWallet } from '@terra-money/wallet-kit';
 import big from 'big.js';
 import { MessageBox } from 'components/MessageBox';
 import { IconLineSeparator } from 'components/primitives/IconLineSeparator';

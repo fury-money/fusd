@@ -3,10 +3,10 @@ import { BorderButton } from '@libs/neumorphism-ui/components/BorderButton';
 import { FlatButton } from '@libs/neumorphism-ui/components/FlatButton';
 import { IconSpan } from '@libs/neumorphism-ui/components/IconSpan';
 import { Tooltip } from '@libs/neumorphism-ui/components/Tooltip';
-import { useWallet } from '@terra-money/wallet-kit';
 import { ConnectionTypeList } from '../../desktop/ConnectionTypeList';
 import { TermsMessage } from '../../desktop/TermsMessage';
 import { ConnectType } from 'utils/consts';
+import { useAccount } from 'contexts/account';
 
 
 interface FooterProps {
@@ -16,7 +16,7 @@ interface FooterProps {
 
 const Footer = (props: FooterProps) => {
   const { setOpen, includesReadonly } = props;
-  const { connect } = useWallet();
+  const { connect } = useAccount();
   return (
     <>
       {includesReadonly && (
@@ -49,7 +49,7 @@ const ConnectionList = (props: ConnectionListProps): React.JSX.Element => {
   const {
     connect,
     availableWallets,
-  } = useWallet();
+  } = useAccount();
 
   return (
     <ConnectionTypeList

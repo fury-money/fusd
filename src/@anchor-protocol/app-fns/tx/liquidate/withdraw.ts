@@ -27,7 +27,6 @@ import { demicrofy } from "@libs/formatter";
 import { QueryClient } from "@libs/query-client";
 import { pipe } from "@rx-stream/pipe";
 import { CreateTxOptions, MsgExecuteContract } from "@terra-money/feather.js";
-import { TxResult } from "@terra-money/feather.js";
 import { NetworkInfo } from "utils/consts";
 import { Observable } from "rxjs";
 import { PostResponse } from "@terra-money/wallet-kit";

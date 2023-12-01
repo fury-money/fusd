@@ -3,13 +3,11 @@ import { bAsset } from "@anchor-protocol/types";
 import { useFixedFee, useRefetchQueries } from "@libs/app-provider";
 import { CW20Addr, HumanAddr } from "@libs/types";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet, useWallet } from "@terra-money/wallet-kit";
 import { useCallback } from "react";
 import { useAnchorWebapp } from "../../contexts/context";
 import { ANCHOR_TX_KEY } from "../../env";
 import { useBAssetInfoByTokenAddrQuery } from "../../queries/basset/bAssetInfoByTokenAddr";
 import { useAccount } from "contexts/account";
-import { useNetwork } from "@anchor-protocol/app-provider/contexts/network";
 
 export interface BAssetExportTxParams {
   amount: bAsset;
@@ -17,7 +15,6 @@ export interface BAssetExportTxParams {
 }
 
 export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
-  const walletOperations = useWallet();
   const account = useAccount();
 
   const { queryClient, txErrorReporter, constants } = useAnchorWebapp();
@@ -48,7 +45,7 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
         bAssetTokenAmount: amount,
         // post
         network: account.network,
-        post: walletOperations.post,
+        post: account.post,
         fixedGas: fixedFee,
         gasFee: constants.gasWanted,
         gasAdjustment: constants.gasAdjustment,
@@ -75,7 +72,7 @@ export function useBAssetExportTx(tokenAddr: CW20Addr | undefined) {
       account.terraWalletAddress,
       account.network,
       account.connected,
-      walletOperations.post,
+      account.post,
     ]
   );
 

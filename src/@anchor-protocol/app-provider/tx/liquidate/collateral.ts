@@ -1,7 +1,6 @@
 import { liquidationWithdrawCollateralTx } from "@anchor-protocol/app-fns/tx/liquidate/collateral";
 import { EstimatedFee, useRefetchQueries } from "@libs/app-provider";
 import { useStream } from "@rx-stream/react";
-import { useConnectedWallet } from "@terra-money/wallet-kit";
 import { CollateralInfo } from "pages/borrow/components/useCollaterals";
 import { useWithdrawDefaultedCollateral } from "pages/liquidation/components/useWithdrawDefaultedCollateral";
 import { useCallback } from "react";

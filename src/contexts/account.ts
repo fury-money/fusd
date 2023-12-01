@@ -15,8 +15,15 @@ interface AccountCommon {
   status: WalletStatus;
   post: (tx: CreateTxOptions) => Promise<PostResponse>;
   connection: Connection | undefined;
-  // connect: (connectType: 'extension' | 'walletconnect' | 'readonly') => void;
-  // disconnect: () => void;
+  connect: (id?: string | undefined) => void;
+  disconnect: () => void;
+  availableWallets: {
+      id: string;
+      isInstalled: boolean | undefined;
+      name: string;
+      icon: string;
+      website?: string | undefined;
+  }[]
 }
 
 interface AccountConnected extends AccountCommon {

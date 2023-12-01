@@ -2,7 +2,6 @@ import { buttonBaseStyle } from '@libs/neumorphism-ui/components/ActionButton';
 import { Dialog } from '@libs/neumorphism-ui/components/Dialog';
 import { DialogProps, OpenDialog, useDialog } from '@libs/use-dialog';
 import { Modal } from '@mui/material';
-import { useWallet } from '@terra-money/wallet-kit';
 import React, { ReactNode, useCallback } from 'react';
 import styled from 'styled-components';
 import { useAccount } from 'contexts/account';
@@ -25,7 +24,7 @@ export function useWalletDialog(): [
 
 function ComponentBase(props: DialogProps<FormParams, FormReturn>) {
   const { className, closeDialog, openSend, openBuyUst } = props;
-  const { disconnect } = useWallet();
+  const { disconnect } = useAccount();
   const { connected, terraWalletAddress, connection } = useAccount();
 
   const disconnectWallet = useCallback(() => {

@@ -1,6 +1,5 @@
 import { aLuna, Luna } from '@anchor-protocol/types';
 import { Section } from '@libs/neumorphism-ui/components/Section';
-import { useConnectedWallet } from '@terra-money/wallet-kit';
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
