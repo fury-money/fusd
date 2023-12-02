@@ -3,14 +3,14 @@ import { CreateTxOptions } from "@terra-money/feather.js";
 import {
   PostResponse,
   WalletResponse,
-  WalletStatus,
 } from "@terra-money/wallet-kit";
 import { createContext, useContext } from "react";
 import { Connection, NetworkInfo } from "utils/consts";
+import { WalletStatus } from "@cosmos-kit/core";
+
 
 interface AccountCommon {
   availablePost: boolean;
-  readonly: boolean;
   network: NetworkInfo;
   status: WalletStatus;
   post: (tx: CreateTxOptions) => Promise<PostResponse>;

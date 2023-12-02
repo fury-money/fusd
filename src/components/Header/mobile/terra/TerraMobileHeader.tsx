@@ -6,7 +6,7 @@ import { useWalletDialog } from './useWalletDialog';
 import { useVestingClaimNotification } from 'components/Header/vesting/VestingClaimNotification';
 import { ViewAddressButton } from '../ViewAddressButton';
 import { MobileHeader } from '../MobileHeader';
-import { WalletStatus } from '@terra-money/wallet-kit';
+import { WalletStatus } from '@cosmos-kit/core';
 import { ConnectType } from 'utils/consts';
 
 export function TerraMobileHeader() {
@@ -17,12 +17,12 @@ export function TerraMobileHeader() {
   const [openBuyUstDialog, buyUstDialogElement] = useBuyUstDialog();
 
   const toggleWallet = useCallback(() => {
-    if (status === WalletStatus.CONNECTED) {
+    if (status === WalletStatus.Connected) {
       openWalletDialog({
         openSend: () => openSendDialog({}),
         openBuyUst: () => openBuyUstDialog({}),
       });
-    } else if (status === WalletStatus.NOT_CONNECTED) {
+    } else if (status === WalletStatus.Disconnected) {
       connect();
     }
   }, [connect, openBuyUstDialog, openSendDialog, openWalletDialog, status]);
@@ -32,14 +32,14 @@ export function TerraMobileHeader() {
   const viewAddress = useCallback(() => {
     setOpen(false);
 
-    if (status === WalletStatus.NOT_CONNECTED) {
+    if (status === WalletStatus.Disconnected) {
       connect(ConnectType.READONLY);
     }
   }, [connect, status]);
 
   const viewAddressButtonElement = useMemo(() => {
     return (
-      status === WalletStatus.NOT_CONNECTED && <ViewAddressButton onClick={viewAddress} />
+      status === WalletStatus.Disconnected && <ViewAddressButton onClick={viewAddress} />
     );
   }, [status, viewAddress]);
 

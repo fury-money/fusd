@@ -189,7 +189,7 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         protocol: "Stride Labs",
         symbol: "stLuna",
         name: "Stride Luna",
-        icon: "https://app.astroport.fi/tokens/stLuna.svg",
+        icon: "https://app.astroport.fi/tokens/generated/stLuna.svg",
         link: "https://app.stride.zone/",
         underlyingToken: "uluna",
         underlyingName: "luna",

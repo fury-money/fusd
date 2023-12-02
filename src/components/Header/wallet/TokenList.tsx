@@ -8,7 +8,7 @@ import { useBalances } from 'contexts/balances';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import kado from 'pages/earn/components/assets/kado.svg';
-
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 type Action = () => void;
 
 export type TokenListType = 'UST' | 'aUST' | 'ANC';
@@ -70,10 +70,10 @@ export function TokenListBase(props: TokenListProps) {
                   onClose();
                 }}
               >
-                BUY on
-              <i style={{marginLeft:"-5px"}}>
+                BUY with <CreditCardIcon />
+                {/* <i style={{marginLeft:"-5px"}}>
                 <img src={kado} alt="Kado Ramp" style={{width: "32px", paddingLeft: "10px"}} />
-              </i>
+              </i> */}
               </BuyButton>
             )}
           </span>
@@ -110,7 +110,7 @@ export const TokenList = styled(TokenListBase)`
 
   border-top: 1px solid
     ${({ theme }) =>
-      theme.palette_type === 'light' ? '#e5e5e5' : 'rgba(255, 255, 255, 0.1)'};
+    theme.palette_type === 'light' ? '#e5e5e5' : 'rgba(255, 255, 255, 0.1)'};
 
   li {
     display: flex;
@@ -138,9 +138,9 @@ export const TokenList = styled(TokenListBase)`
     &:not(:last-child) {
       border-bottom: 1px dashed
         ${({ theme }) =>
-          theme.palette_type === 'light'
-            ? '#e5e5e5'
-            : 'rgba(255, 255, 255, 0.1)'};
+    theme.palette_type === 'light'
+      ? '#e5e5e5'
+      : 'rgba(255, 255, 255, 0.1)'};
     }
   }
 `;

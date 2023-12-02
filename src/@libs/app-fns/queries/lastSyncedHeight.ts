@@ -114,7 +114,8 @@ class BlockHeightFetcher {
       fetchLatestBlock = this.client
         .batchFetcher!.tendermint.latestBlock()
         .then((response) => {
-          return response.block.header.height.toNumber();
+          console.log(response.block.header.height)
+          return parseInt(response.block.header.height);
         });
     }
 

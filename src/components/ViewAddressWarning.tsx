@@ -8,7 +8,7 @@ export interface ViewAddressStrikeProps {
 }
 
 export function ViewAddressWarning({ children }: ViewAddressStrikeProps) {
-  const { readonly } = useAccount();
+  const readonly = false;
 
   return readonly ? (
     <Tooltip

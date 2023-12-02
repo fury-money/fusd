@@ -24,9 +24,9 @@ import {
 } from '../env';
 import { useGasPriceQuery } from '../queries/gasPrice';
 import { AppConstants, AppContractAddress, TxRefetchMap } from '../types';
-import { WalletStatus } from '@terra-money/wallet-kit';
 import { NetworkInfo } from 'utils/consts';
 import { useAccount } from 'contexts/account';
+import { WalletStatus } from '@cosmos-kit/core';
 
 export interface AppProviderProps<
   ContractAddress extends AppContractAddress,
@@ -111,7 +111,7 @@ export function AppProvider<
   const account = useAccount();
 
   // We wait for wallet init before querying stuff
-  const batchQueryClient = useBatchQuery(account.status == WalletStatus.INITIALIZING ? undefined : rpcClient);
+  const batchQueryClient = useBatchQuery(account.status == WalletStatus.Connecting ? undefined : rpcClient);
 
   const networkBoundStates = useMemo<
     Pick<

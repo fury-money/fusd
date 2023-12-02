@@ -7,6 +7,10 @@ import { ConnectionTypeList } from '../../desktop/ConnectionTypeList';
 import { TermsMessage } from '../../desktop/TermsMessage';
 import { ConnectType } from 'utils/consts';
 import { useAccount } from 'contexts/account';
+import { Button } from '@mui/material';
+import { useChain } from '@cosmos-kit/react';
+import { useNetwork } from '@anchor-protocol/app-provider';
+import { ADDRESS_VIEWER_ID } from 'wallets/viewer';
 
 
 interface FooterProps {
@@ -27,7 +31,7 @@ const Footer = (props: FooterProps) => {
           <BorderButton
             className="readonly"
             onClick={() => {
-              connect(ConnectType.READONLY);
+              connect(ADDRESS_VIEWER_ID);
               setOpen(false);
             }}
           >
@@ -51,6 +55,10 @@ const ConnectionList = (props: ConnectionListProps): React.JSX.Element => {
     availableWallets,
   } = useAccount();
 
+  const { network } = useNetwork();
+
+  const { openView } = useChain(network.chainName);
+
   return (
     <ConnectionTypeList
       footer={
@@ -66,6 +74,9 @@ const ConnectionList = (props: ConnectionListProps): React.JSX.Element => {
     >
       {availableWallets
         .filter(({ isInstalled }) => isInstalled)
+        .filter(({ id }) => {
+          return id != ADDRESS_VIEWER_ID
+        })
         .map(({ id, icon, name }) => (
           <FlatButton
             key={'connection' + id}
@@ -110,6 +121,11 @@ const ConnectionList = (props: ConnectionListProps): React.JSX.Element => {
             </IconSpan>
           </BorderButton>
         ))}
+
+      <BorderButton
+        className="connect" type="button" onClick={openView}>
+        Other Wallets
+      </BorderButton>
     </ConnectionTypeList>
   );
 };

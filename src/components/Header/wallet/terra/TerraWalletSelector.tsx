@@ -9,8 +9,8 @@ import {
   DropdownBox,
 } from 'components/Header/desktop/DropdownContainer';
 import { useBuyUstDialog } from 'pages/earn/components/useBuyUstDialog';
-import { WalletStatus } from '@terra-money/wallet-kit';
 import { useVestingClaimNotification } from 'components/Header/vesting/VestingClaimNotification';
+import { WalletStatus } from '@cosmos-kit/core';
 
 const TerraWalletSelector = (): React.JSX.Element => {
   const { terraWalletAddress, status, connection } = useAccount();
@@ -48,7 +48,7 @@ const TerraWalletSelector = (): React.JSX.Element => {
   return (
     <WalletSelector
       walletAddress={terraWalletAddress}
-      initializing={status === WalletStatus.INITIALIZING}
+      initializing={status === WalletStatus.Connecting}
       onClick={connectWallet}
       onClose={onClose}
     >

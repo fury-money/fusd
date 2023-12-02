@@ -48,8 +48,8 @@ const ContentBase = (props: ContentProps) => {
     <WalletContent
       className={className}
       walletAddress={terraWalletAddress || "Error"}
-      connectionName={connection?.name || "No wallet connected"}
-      connectionIcon={connection?.icon || "No wallet icon"}
+      connectionName={connection?.name || "Terra Station"}
+      connectionIcon={connection?.icon || "https://station.terra.money/static/media/favicon.6ba850f5.svg"}
       readonly={connection ? connection.type === ConnectType.READONLY : false}
       onDisconnectWallet={onDisconnectWallet}
     >
@@ -60,16 +60,19 @@ const ContentBase = (props: ContentProps) => {
             <div className="bridge">
               <div>
                 <Tooltip
-                  title="Transfer Terra assets from Ethereum"
+                  title="Transfer all assets across all blockchains"
                   placement="top"
                 >
                   <FlatButton
                     component="a"
-                    href="https://bridge.terra.money/"
+                    href="https://app.squidrouter.com/"
                     target="_blank"
                     rel="noreferrer"
+                    sx={{
+                      gap: "10px"
+                    }}
                   >
-                    <img src="/assets/bridge.png" alt="Terra Bridge" />
+                    <img src="https://app.squidrouter.com/images/icons/squid_logo.svg" alt="Squid Router" />Transfers
                   </FlatButton>
                 </Tooltip>
                 <FlatButton
@@ -87,7 +90,7 @@ const ContentBase = (props: ContentProps) => {
             </div> */}
             <div className="outlink">
               <button onClick={viewOnTerraFinder}>
-                View on Terra Finder{' '}
+                View on TerraScope{' '}
                 <i>
                   <KeyboardArrowRight />
                 </i>
@@ -108,7 +111,7 @@ const ContentBase = (props: ContentProps) => {
           </>
         )}
       </>
-    </WalletContent>
+    </WalletContent >
   );
 };
 

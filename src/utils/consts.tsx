@@ -8,6 +8,7 @@ export type NetworkInfo = InfoResponse[string] & { name: string };
 export enum ConnectType {
   READONLY = "readonly",
   WALLET_KIT = "wallet_kit",
+  COSMOS_KIT = "cosmos_kit",
 }
 
 export type Connection = WalletResponse["availableWallets"][number] & {

@@ -1,7 +1,7 @@
 import { LCDClient, LCDClientConfig } from '@terra-money/feather.js';
 import { createContext, useContext } from 'react';
 
-export type CavernNetworkInfo = LCDClientConfig & { name: string };
+export type CavernNetworkInfo = LCDClientConfig & { name: string, chainName: string };
 
 
 export const TESTNET: CavernNetworkInfo = {
@@ -10,7 +10,8 @@ export const TESTNET: CavernNetworkInfo = {
   lcd: 'https://pisco-lcd.erisprotocol.com/',
   prefix: "terra",
   gasAdjustment: 1.6,
-  gasPrices: "0.015uluna"
+  gasPrices: "0.015uluna",
+  chainName: "terra2",
 };
 
 export const CLASSIC: CavernNetworkInfo = {
@@ -19,16 +20,18 @@ export const CLASSIC: CavernNetworkInfo = {
   lcd: 'https://columbus-lcd.terra.dev',
   prefix: "terra",
   gasAdjustment: 1.6,
-  gasPrices: "0.015uluna"
+  gasPrices: "0.015uluna",
+  chainName: "terra",
 };
 
 export const MAINNET: CavernNetworkInfo = {
   name: "mainnet",
   chainID: 'phoenix-1',
-  lcd: 'https://phoenix-lcd.erisprotocol.com/',
+  lcd: 'https://phoenix-lcd.terra.dev/',
   prefix: "terra",
   gasAdjustment: 1.6,
-  gasPrices: "28.325uluna"
+  gasPrices: "28.325uluna",
+  chainName: "terra2",
 };
 
 const LCDClients: Record<string, LCDClient> = {

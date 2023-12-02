@@ -15,6 +15,7 @@ export enum EventTypes {
 }
 
 const LOCAL_STORAGE_KEY = "CAVERN_ADDRESS_VIEWER";
+export const ADDRESS_VIEWER_ID = "cavern-address-viewer";
 
 export default class AddressViewerWallet implements Wallet {
     private _address: string | undefined = undefined
@@ -120,7 +121,7 @@ export default class AddressViewerWallet implements Wallet {
 
     isInstalled = true
 
-    id = "cavern-address-viewer"
+    id = ADDRESS_VIEWER_ID
 
     details = {
         name: "Address Viewer",

@@ -61,7 +61,7 @@ export function TxResultRenderer({
 
   const {
     phase,
-    message = 'Waiting for Terra Station...',
+    message = 'Waiting for your wallet to sign and broadcast the transaction...',
     description = 'Transaction broadcasted. There is no need to send another until it has been complete.',
     failedReason,
   } = resultRendering;
