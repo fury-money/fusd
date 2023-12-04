@@ -15,25 +15,9 @@ export default defineConfig({
       'readable-stream': 'vite-compatible-readable-stream/readable-browser.js',
     },
   },
-  //define: {
-  //  'process.env': {},
-  //},
-  server: {
-    // enable for ngrok to work properly
-    // hmr: {
-    //   clientPort: 3000,
-    // },
-    https: false,
-  },
   plugins: [viteCommonjs(), reactRefresh(), tsconfigPaths(), svgr()],
   build: {
     sourcemap: true,
     outDir: 'build',
-    //  rollupOptions: {
-    //    input: {
-    //      main: path.resolve(__dirname, 'index.html'),
-    //      subpage: path.resolve(__dirname, 'subpage.html'),
-    //    },
-    //  },
   },
 });

@@ -24,7 +24,7 @@ import { u, UST } from '@libs/types';
 import { Grid } from '@mui/material';
 import { EmbossButton } from '@libs/neumorphism-ui/components/EmbossButton';
 
-import kado from './assets/kado.svg';
+import kado from 'assets/earn/kado.svg';
 import { useBuyUstDialog } from './useBuyUstDialog';
 
 export interface TotalDepositSectionProps {

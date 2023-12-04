@@ -6,8 +6,6 @@ import { DialogProps, OpenDialog, useDialog } from '@libs/use-dialog';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
-import kado from './assets/kado.svg';
-
 import { dialogStyle } from './useInsuranceCoverageDialog';
 
 interface FormParams {
@@ -30,7 +28,7 @@ function ComponentBase({
 
   const [openKado, setOpenKado] = React.useState(true);
 
-   const handleClickOpen = () => {
+  const handleClickOpen = () => {
     setOpenKado(true);
   };
 
@@ -41,10 +39,10 @@ function ComponentBase({
 
   return (
     <Modal open onClose={() => closeDialog()}>
-          <KadoDialog
-            open={openKado}
-            onClose={handleClose}
-          />
+      <KadoDialog
+        open={openKado}
+        onClose={handleClose}
+      />
     </Modal>
   );
 }
@@ -65,7 +63,7 @@ export function KadoDialog(props: KadoDialogProps) {
   return (
     <MaterialUIDialog onClose={handleClose} open={open}>
       <DialogTitle>Buy axlUSDC on Kado OnRamp</DialogTitle>
-      <iframe src="https://app.kado.money/?onPayCurrency=USD&onRevCurrency=USDC&network=TERRA" width="480" height="620" style={{border: "0px"}}></iframe>
+      <iframe src="https://app.kado.money/?onPayCurrency=USD&onRevCurrency=USDC&network=TERRA" width="480" height="620" style={{ border: "0px" }}></iframe>
     </MaterialUIDialog>
   );
 }

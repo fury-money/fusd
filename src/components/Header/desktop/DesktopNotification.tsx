@@ -4,8 +4,8 @@ import { useAccount } from 'contexts/account';
 import { useJobs } from 'jobs/Jobs';
 import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as NotificationOff } from '../assets/NotificationOff.svg';
-import { ReactComponent as NotificationOn } from '../assets/NotificationOn.svg';
+import NotificationOff from '../assets/NotificationOff.svg?react';
+import NotificationOn from '../assets/NotificationOn.svg?react';
 import { NotificationContent } from '../notifications/NotificationContent';
 import { DropdownBox, DropdownContainer } from './DropdownContainer';
 

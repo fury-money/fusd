@@ -7,7 +7,6 @@ import { BuyButton } from 'components/BuyButton';
 import { useBalances } from 'contexts/balances';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import kado from 'pages/earn/components/assets/kado.svg';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 type Action = () => void;
 
@@ -70,7 +69,8 @@ export function TokenListBase(props: TokenListProps) {
                   onClose();
                 }}
               >
-                BUY with <CreditCardIcon />
+                <span>BUY with</span>
+                <CreditCardIcon />
                 {/* <i style={{marginLeft:"-5px"}}>
                 <img src={kado} alt="Kado Ramp" style={{width: "32px", paddingLeft: "10px"}} />
               </i> */}

@@ -17,55 +17,55 @@ export interface DesktopHeaderProps {
 }
 
 function DesktopHeaderBase({ className }: DesktopHeaderProps) {
-  const menus = useMenus(); 
+  const menus = useMenus();
 
-  const {network} = useNetwork();
+  const { network } = useNetwork();
 
   return (
     <>
       {
-        network.name != "mainnet" && 
-        <div style={{color: "white", backgroundColor:"red", textAlign:"center", padding: "5px"}}> 
-          You are not on Terra Mainnet. 
+        network.name != "mainnet" &&
+        <div style={{ color: "white", backgroundColor: "red", textAlign: "center", padding: "5px" }}>
+          You are not on Terra Mainnet.
           You can still interact with the platform if it exists on the chain you are using
         </div>
       }
-    <header className={className} style={{position: "relative"}}>
-      <a
-        className="logo"
-        href="https://cavernprotocol.com/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        <DeploymentSwitch
-          terra={() => <img src={LogoTerra} alt="terraLogo" height="24px"/>}
-          ethereum={() => <img src={LogoEth} alt="ethLogo" />}
-          avalanche={() => <img src={LogoAvax} alt="avaxLogo" />}
-        />
-      </a>
+      <header className={className} style={{ position: "relative" }}>
+        <a
+          className="logo"
+          href="https://cavernprotocol.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <DeploymentSwitch
+            terra={() => <img src={LogoTerra} alt="terraLogo" height="24px" />}
+            ethereum={() => <img src={LogoEth} alt="ethLogo" />}
+            avalanche={() => <img src={LogoAvax} alt="avaxLogo" />}
+          />
+        </a>
 
-      <nav className="menu">
-        {menus.map((itemMenu) => (
-          <NavMenu key={'menu-' + itemMenu.to} {...itemMenu} />
-        ))}
-      </nav>
+        <nav className="menu">
+          {menus.map((itemMenu) => (
+            <NavMenu key={'menu-' + itemMenu.to} {...itemMenu} />
+          ))}
+        </nav>
 
-      <div />
+        <div />
 
-      <DesktopNotification className="notification" />
+        <DesktopNotification className="notification" />
 
-      <section
-        className="wallet"
-        style={{ display: 'flex', alignItems: 'center' }}
-      >
-        <ChainSelector className="chain-selector" />
-        <DeploymentSwitch
-          terra={() => <TerraWalletSelector />}
-        />
-      </section>
+        <section
+          className="wallet"
+          style={{ display: 'flex', alignItems: 'center' }}
+        >
+          <ChainSelector className="chain-selector" />
+          <DeploymentSwitch
+            terra={() => <TerraWalletSelector />}
+          />
+        </section>
 
-      <GlobalStyle />
-    </header>
+        <GlobalStyle />
+      </header>
     </>
   );
 }
