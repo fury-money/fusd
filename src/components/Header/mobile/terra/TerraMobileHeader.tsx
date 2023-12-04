@@ -11,11 +11,12 @@ import { ConnectType } from 'utils/consts';
 
 export function TerraMobileHeader() {
   const [open, setOpen] = useState<boolean>(false);
-  const { status, connect } = useAccount();
+  const { status, connect, availableWallets } = useAccount();
   const [openWalletDialog, walletDialogElement] = useWalletDialog();
   const [openSendDialog, sendDialogElement] = useSendDialog();
   const [openBuyUstDialog, buyUstDialogElement] = useBuyUstDialog();
 
+  console.log(availableWallets)
   const toggleWallet = useCallback(() => {
     if (status === WalletStatus.Connected) {
       openWalletDialog({
@@ -23,7 +24,7 @@ export function TerraMobileHeader() {
         openBuyUst: () => openBuyUstDialog({}),
       });
     } else if (status === WalletStatus.Disconnected) {
-      connect();
+      connect("terra-station-mobile");
     }
   }, [connect, openBuyUstDialog, openSendDialog, openWalletDialog, status]);
 
