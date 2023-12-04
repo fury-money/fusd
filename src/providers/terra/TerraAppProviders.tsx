@@ -15,6 +15,7 @@ import { GasPrice } from '@cosmjs/stargate';
 import { wallets as leapwallets } from "@cosmos-kit/leap";
 import { wallets as xdefi } from "@cosmos-kit/xdefi";
 import { wallets as cosmos_extension_mm } from "@cosmos-kit/cosmos-extension-metamask";
+import { wallets as cosmostation } from "@cosmos-kit/cosmostation";
 
 // Import this in your top-level route/layout
 import "@interchain-ui/react/styles";
@@ -50,9 +51,10 @@ export function TerraAppProviders({
         assetLists={assets} // supported asset lists
         wallets={[
           ...wallets,
+          ...cosmostation,
           ...leapwallets,
           ...xdefi,
-          ...cosmos_extension_mm
+          ...cosmos_extension_mm,
         ]} // supported wallets
         walletConnectOptions={{
           signClient: {
