@@ -79,30 +79,30 @@ export enum RegisteredLSDs {
 }
 
 const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
-  aLunaHub: "terra1c4x3x5ptxw4yy436rvz5u9cru6868ksxr95gsyya55ycgll0xdas0g7htx",
+  aLunaHub: "furya1aden0qgmsg256zd300wgjmg40jhknvc0pa5vvtctfthp4rxv3dqqyp987m",
   aLunaReward:
-    "terra1w7ssgvtetdzczyl98pdxvs79nw9g6rjejt0urxegm30dukddyesqy0g95n",
+    "furya1pvensf0yvh4qpxlur8kdgd2ft8d64s9gstzwa7mtdx07ztakvs8slsuvld",
   aLunaToken:
-    "terra170e8mepwmndwfgs5897almdewrt6phnkksktlf958s90eh055xvsrndvku",
+    "furya1rtepy8uchg2fh4huaktzw8x972s7cfqxm6rfe88zr567qrgpuwts89ha4h",
   aLunaValidatorsRegistry:
-    "terra1ftwj8jk5k5hfg0ypaj54k8ha4kzjfnrrlpgd2xsmpsalgsud957qv6q367",
-  mmMarket: "terra1zqlcp3aty4p4rjv96h6qdascdn953v6crhwedu5vddxjnp349upscluex6",
-  mmOracle: "terra1gp3a4cz9magxuvj6n0x8ra8jqc79zqvquw85xrn0suwvml2cqs4q4l7ss7",
+    "furya1mj4wr7u4zdlq9el98ldwk0ng7aa7gd5djk5hda2pczng3hc2phksat8au0",
+  mmMarket: "furya1288n2fwmfd6dtls2vrl6q0m8lz2gl4ncv0farytlyqck6zuxl2hquh6x3d",
+  mmOracle: "furya1a2r4qcdvw8zgpzyvpvvlxp7f2y3wqq8wcaljf7zkzw0xxc2z8usq5hk00s",
   mmOverseer:
-    "terra1l6rq7905263uqmayurtulzc09sfcgxdedsfen7m0y6wf28s49tvqdkwau9",
+    "furya1a7fjv2yta02td2y07gwqen4jc9s4c7vlfv3nqh9tgq4dvyppu34qeuk0ha",
 
-  mmCustody: "terra1ly8gd96kc8rwhjhpvx64jr9qd3nkn8yrm0gflplk5vhyff0fllxqc43w3k",
+  mmCustody: "furya120dn2cr7tqnvup0p6qv2gft5zyjuh8nqhjdzyytc0xapcm08hmzsuz33r9",
 
   mmLiquidationQueue:
-    "terra12p4rhaywjdm8wtyrkdj6z2ley53sl8dkc38mv3p4jvnjqp4we7pqd0526w",
-  aUSDC: "terra1gwdxyqtu75es0x5l6cd9flqhh87zjtj7qdankayyr0vtt7s9w4ssm7ds8m",
+    "furya10ry7xja9jlyd324f35nua3yq06c5dkt6vsj5swuqhx9zd2fc39zs7uz3rj",
+  aUSDC: "furya1062jkn73ew8gzmrhyr4dc7nhl4q2na4y5d2s720szfdlzzj344dqu67e3g",
   mmInterestModel:
-    "terra12m5q4cs22dj9sz5k56cdnwr48mzjqqf7w8sxsg35vxmk2gdtf2fssgduva",
+    "furya1sljac9htlm2adhpzkdvuahgtxery6fyat5dlmrpyj8e8he03d36qds34nj",
   mmDistributionModel:
-    "terra175xavlptc4fhgtvzmq95z6s7wnt4larh5xp6nufz6xwwec7gygpsjw08v6",
+    "furya1hmkqtjl64qa6eg4flqm8a8adql70sldhr50dyuy9crjqep6m9sasqtqkg8",
 
   stableDenom:
-    "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
+    "ibc/093231535A38351AD2FEEFF897D23CF8FE43A44F6EAA3611F55F4B3D62C45014",
 
   aLunaLunaPair: "",
   aLunaLunaLPToken: "",
@@ -122,63 +122,63 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
   astroportGenerator: "",
   vesting: "",
   astroUstPair: "",
-  usd: "ibc/B3504E092456BA618CC28AC671A71FB08C6CA0FD0BE7C8A5B5A3E2DD933CC9E4",
+  usd: "ibc/093231535A38351AD2FEEFF897D23CF8FE43A44F6EAA3611F55F4B3D62C45014",
   documentsMain:
-    "terra1cx38qvyv4mj9hrn6p6m4fj7vhj726t5dg3ldpeupkkgel495ngnq5rtplq",
-  feeAddress: "terra1ytj0hhw39j88qsx4yapsr6ker83jv3aj354gmj",
+    "furya1cx38qvyv4mj9hrn6p6m4fj7vhj726t5dg3ldpeupkkgel495ngnqntchn4",
+  feeAddress: "furya1f9eh8dh7j4nqe8nfq0lhpnr2elh5jr2w4nngt2",
   tokenId: {
     whitePaper: "whitepaper",
   },
   nameservice:
-    "terra16a6qkmxpqzeyez8gh3w7qhrk7x3xe3arlv9nwfg944y8vzg9smrqntark3",
+    "furya16a6qkmxpqzeyez8gh3w7qhrk7x3xe3arlv9nwfg944y8vzg9smrq5rw46y",
   LSDs: {
     ampLuna: {
       info: {
         cw20: {
           tokenAddress:
-            "terra1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2s5lvsct",
+            "furya1ecgazyd0waaj3g7l9cmy5gulhxkps2gmxu9ghducvuypjq68mq2snhlx57",
           hubAddress:
-            "terra10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaqyd3enk",
+            "furya10788fkzah89xrdm27zkj5yvhj9x3494lxawzm5qq3vvxcqz2yzaqr9z0lr",
         },
         protocol: "Eris Protocol",
         symbol: "ampLuna",
         name: "Eris Amplified Luna",
         icon: "https://www.erisprotocol.com/assets/ampLuna100.png",
         link: "https://www.erisprotocol.com/terra/amplifier",
-        underlyingToken: "uluna",
-        underlyingName: "luna",
+        underlyingToken: "ufury",
+        underlyingName: "fury",
       },
-      type: "luna",
-      hub: "terra1neq7ds3cd2rx0ht0fycgqkf26fed2v73g7wrp5xav5dfas0fwcqqy47t5n",
+      type: "fury",
+      hub: "furya1neq7ds3cd2rx0ht0fycgqkf26fed2v73g7wrp5xav5dfas0fwcqqradacx",
       reward:
-        "terra1zrgzj7luyw9mtqcwqdtn6p8gwy262upx3p7wa3v3cj07us7j9ztsa8r4n5",
-      token: "terra173z5ggu6k6slyumrrf59rd3ywmpu6hdfftwpqlkc7fp549yk9fmqzqyepj",
+        "furya1zrgzj7luyw9mtqcwqdtn6p8gwy262upx3p7wa3v3cj07us7j9zts60srlp",
+      token: "furya173z5ggu6k6slyumrrf59rd3ywmpu6hdfftwpqlkc7fp549yk9fmq9gh0d8",
       custody:
-        "terra1tlascrgjzlut6j2g4jlgv54zg3aw3c3whcjusudk24j0d3k5aucswpwzrz",
+        "furya1tlascrgjzlut6j2g4jlgv54zg3aw3c3whcjusudk24j0d3k5aucsffa50h",
     },
     bLuna: {
       info: {
         cw20: {
           tokenAddress:
-            "terra17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zqnpc0ml",
+            "furya17aj4ty4sz4yhgm08na8drc0v03v2jwr3waxcqrwhajj729zhl7zq5fteh2",
           hubAddress:
-            "terra1l2nd99yze5fszmhl5svyh5fky9wm4nz4etlgnztfu4e8809gd52q04n3ea",
+            "furya1l2nd99yze5fszmhl5svyh5fky9wm4nz4etlgnztfu4e8809gd52qgaq84g",
         },
         protocol: "Backbone Labs",
         symbol: "bLuna",
         name: "boneLuna",
         icon: "https://gravedigger.backbonelabs.io/boneluna.png",
         link: "https://terra.gravedigger.zone/ ",
-        underlyingToken: "uluna",
-        underlyingName: "luna",
+        underlyingToken: "ufury",
+        underlyingName: "fury",
       },
-      type: "luna",
-      hub: "terra17gvtvnmyyqwas2nanek5u8cjl57e7z2zu4dkl3de45060725ly4sep7050",
+      type: "fury",
+      hub: "furya17gvtvnmyyqwas2nanek5u8cjl57e7z2zu4dkl3de45060725ly4s7fdec6",
       reward:
-        "terra1m42u5zt3c4l7ekqy9pr4ltv2at9q78tn8fu9vhz04vt57x3z0ydq6qamvr",
-      token: "terra1uq59f5lhzg6ut605ntevvf2a8kg9t2xk2873lgx6pweagkw76r4sdzj6ap",
+        "furya1m42u5zt3c4l7ekqy9pr4ltv2at9q78tn8fu9vhz04vt57x3z0ydqagwdqk",
+      token: "furya1uq59f5lhzg6ut605ntevvf2a8kg9t2xk2873lgx6pweagkw76r4s22pv35",
       custody:
-        "terra1sw7c9evzf44eq8k7j0kcquga0xy2ff76yhnvns4gphg37snvn26qgzjgz4",
+        "furya1sw7c9evzf44eq8k7j0kcquga0xy2ff76yhnvns4gphg37snvn26q02p7wq",
     },
     stLuna: {
       info: {
@@ -191,16 +191,16 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         name: "Stride Luna",
         icon: "https://app.astroport.fi/tokens/generated/stLuna.svg",
         link: "https://app.stride.zone/",
-        underlyingToken: "uluna",
-        underlyingName: "luna",
+        underlyingToken: "ufury",
+        underlyingName: "fury",
       },
-      type: "luna",
-      hub: "terra1hjk5lhezu5ppazknhpeclh4vmxnjt32e4hgzhjqk7ahcflf8v80s830q37",
+      type: "fury",
+      hub: "furya1hjk5lhezu5ppazknhpeclh4vmxnjt32e4hgzhjqk7ahcflf8v80sqeukat",
       reward:
-        "terra1sjw7nyp5r6cycwpvsfmnnlcdmmhkng06uvxlryrd40ahetfdl48qdzdvmg",
-      token: "terra18mls96hhatg6k03zg29tz02a76q3w66z4qsa8pfww6hupszlhqns6fm9ad",
+        "furya1sjw7nyp5r6cycwpvsfmnnlcdmmhkng06uvxlryrd40ahetfdl48q2276ha",
+      token: "furya18mls96hhatg6k03zg29tz02a76q3w66z4qsa8pfww6hupszlhqnsapgn3c",
       custody:
-        "terra1t8uy83ddg6g6vadgckm0nyn3qjqd8d0s3tlyu0tesrs7ykkn2szqcrdumt",
+        "furya1t8uy83ddg6g6vadgckm0nyn3qjqd8d0s3tlyu0tesrs7ykkn2szqlt72h7",
     },
     ampWhale: {
       info: {
@@ -218,12 +218,12 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         underlyingName: "whale",
       },
       type: "whale",
-      hub: "terra1k67g8hhml2nfrqqavwy9cvkcln4grp400f0klfjrk430el48x8pqaehfdg",
+      hub: "furya1k67g8hhml2nfrqqavwy9cvkcln4grp400f0klfjrk430el48x8pq63ylpa",
       reward:
-        "terra1am3v78e75exr7gt8d3367jxfp7c0ar7xkj04q6h5zfc72clvyf8snuv9tm",
-      token: "terra1kd85952285xfdlp5ck8nt62vuvur8cem9h3svm7yptpsvmr9tuusqpm2sw",
+        "furya1am3v78e75exr7gt8d3367jxfp7c0ar7xkj04q6h5zfc72clvyf8s55ln8w",
+      token: "furya1kd85952285xfdlp5ck8nt62vuvur8cem9h3svm7yptpsvmr9tuus8fguum",
       custody:
-        "terra1pggsjvjdjjr3ffm85m2kjr9ddjpnu99wts6hzxdz4cqf0kstg6gs7rnuac",
+        "furya1pggsjvjdjjr3ffm85m2kjr9ddjpnu99wts6hzxdz4cqf0kstg6gsetq23d",
     },
     bWhale: {
       info: {
@@ -241,23 +241,23 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         underlyingName: "whale",
       },
       type: "whale",
-      hub: "terra1zysm3sy6vepy2h9yw04ej408k990tugp7chx49vqfn6waucpcp0scjpnr4",
+      hub: "furya1zysm3sy6vepy2h9yw04ej408k990tugp7chx49vqfn6waucpcp0sl6j90q",
       reward:
-        "terra1yt7ndfnran9lutcsh5p03evcazs8pgae86r70flwdne3lc4dmx8ssvtkuu",
-      token: "terra1ze3c86la6wynenrqewhq4j9hw24yrvardudsl5mkq3mhgs6ag4cqrva0pg",
+        "furya1yt7ndfnran9lutcsh5p03evcazs8pgae86r70flwdne3lc4dmx8shycqsf",
+      token: "furya1ze3c86la6wynenrqewhq4j9hw24yrvardudsl5mkq3mhgs6ag4cqyyweda",
       custody:
-        "terra1vmr33lncm0jhkm9gfj8824ahk50asysjgzt3ex7e94clecss8nzqftzzv2",
+        "furya1vmr33lncm0jhkm9gfj8824ahk50asysjgzt3ex7e94clecss8nzqwr35ql",
     },
     "Eris Usdc Luna Lp": {
       info: {
         amp_lp: {
           token:
-            "terra1as76h247wvey3aqmw22mlkq8g6vj8zj7qw4wywwn388s2mjt0rtqpp570z",
-          hub: "terra1xskgvsew6u6nmfwv2mc58m4hscr77xw884x65fuxup8ewvvvuyysr5k3lj",
+            "furya1as76h247wvey3aqmw22mlkq8g6vj8zj7qw4wywwn388s2mjt0rtqxf8grh",
+          hub: "furya1xskgvsew6u6nmfwv2mc58m4hscr77xw884x65fuxup8ewvvvuyysyu98n8",
           underlyingToken:
-            "terra1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7qke04hl",
+            "furya1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7q33urm2",
           underlyingPair:
-            "terra1fd68ah02gr2y8ze7tm9te7m70zlmc7vjyyhs6xlhsdmqqcjud4dql4wpxr",
+            "furya1fd68ah02gr2y8ze7tm9te7m70zlmc7vjyyhs6xlhsdmqqcjud4dqcaah2k",
         },
         protocol: "Eris Protocol",
         symbol: "Eris Usdc Luna Lp",
@@ -270,28 +270,28 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         },
         link: "https://www.erisprotocol.com/terra/amp-compounder",
         underlyingToken:
-          "terra1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7qke04hl",
-        underlyingName: "astroport-luna-axlUSDC",
+          "furya1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7q33urm2",
+        underlyingName: "astroport-fury-axlUSDC",
       },
       type: "amp_lp",
-      hub: "terra12w3e2wku288w3dz9w4h0m46g8qc27hfmawnea0v7ulncvramrvwq85fxr5",
+      hub: "furya12w3e2wku288w3dz9w4h0m46g8qc27hfmawnea0v7ulncvramrvwqqu6s0p",
       reward:
-        "terra18y33hym5q8fe7m7ne2g6ndfejry7s6rj2tp98uzf07xsmr4cn9cqrkkfu2",
-      token: "terra1hl4tqxa99w9ee2qs3umu9udmaq30yzz5cscqcpe3l60lvtqf4qxsdswgdh",
+        "furya18y33hym5q8fe7m7ne2g6ndfejry7s6rj2tp98uzf07xsmr4cn9cqy79lsl",
+      token: "furya1hl4tqxa99w9ee2qs3umu9udmaq30yzz5cscqcpe3l60lvtqf4qxs2ca7pz",
       custody:
-        "terra1cyj8eyuzwfjgdf77mp3ev5fhq8mqqxdq88u4qr8exszawp3t93usjsrm87",
+        "furya1cyj8eyuzwfjgdf77mp3ev5fhq8mqqxdq88u4qr8exszawp3t93us4csdtt",
     },
     "Spec Usdc Luna Lp": {
       info: {
         spectrum_lp: {
           token:
-            "terra1erm54gtdtfqv2s4c7ple3kmret7eecuj02nk5w8h08jjnenjffzsynsp0u",
+            "furya1erm54gtdtfqv2s4c7ple3kmret7eecuj02nk5w8h08jjnenjffzsrmrhrf",
           generator:
-            "terra1vf9ceekuxx8kycm7yv6hs96hgwsmrzt4la6s84skrgvfu7t09huqqdg09d",
+            "furya1vf9ceekuxx8kycm7yv6hs96hgwsmrzt4la6s84skrgvfu7t09huq89mefc",
           underlyingToken:
-            "terra1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7qke04hl",
+            "furya1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7q33urm2",
           underlyingPair:
-            "terra1fd68ah02gr2y8ze7tm9te7m70zlmc7vjyyhs6xlhsdmqqcjud4dql4wpxr",
+            "furya1fd68ah02gr2y8ze7tm9te7m70zlmc7vjyyhs6xlhsdmqqcjud4dqcaah2k",
         },
         protocol: "Spectrum Protocol",
         symbol: "Spec Usdc Luna Lp",
@@ -304,40 +304,40 @@ const PHOENIX_CONTRACT_ADDRESS: Record<string, any> = {
         },
         link: "https://terra.spec.finance/vaults",
         underlyingToken:
-          "terra1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7qke04hl",
-        underlyingName: "astroport-luna-axlUSDC",
+          "furya1ckmsqdhlky9jxcmtyj64crgzjxad9pvsd58k8zsxsnv4vzvwdt7q33urm2",
+        underlyingName: "astroport-fury-axlUSDC",
       },
       type: "spectrum_lp",
-      hub: "terra1vt0f0w39766djgmfzvecut6fwqm9swvmsym57rddyvcg5vxxz69qtd7fmn",
+      hub: "furya1vt0f0w39766djgmfzvecut6fwqm9swvmsym57rddyvcg5vxxz69qv9dlhx",
       reward:
-        "terra1l9eh64tkfq826keu2fdaedgw5ajcj3zphn0c2w2gypfpp7n23t3sjzd6w9",
-      token: "terra1v697322n7fny777xke4zkq8stcct2rn9v2esfpfs9xl98upvs98s4k7y3l",
+        "furya1l9eh64tkfq826keu2fdaedgw5ajcj3zphn0c2w2gypfpp7n23t3s427vzs",
+      token: "furya1v697322n7fny777xke4zkq8stcct2rn9v2esfpfs9xl98upvs98sj7dja2",
       custody:
-        "terra17y0a88ek2z95c0wl45e8wwf7upteq7vyt44f8n8zw02hyn756arsjkd4x7",
+        "furya17y0a88ek2z95c0wl45e8wwf7upteq7vyt44f8n8zw02hyn756ars477r2t",
     },
   },
 };
 
 const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
-  aLunaHub: "terra100d6vr63p9sm8mlzuqzv0ep83hhhkdglkffzwkmv2ed47tv7tkrsxl8mn8",
+  aLunaHub: "furya100d6vr63p9sm8mlzuqzv0ep83hhhkdglkffzwkmv2ed47tv7tkrsph5dlj",
   aLunaToken:
-    "terra134jnnsem9z4us90lcdm6j6mjf70kdcdzkv9mnz8z5ktl9vt0glksr0uau4",
+    "furya134jnnsem9z4us90lcdm6j6mjf70kdcdzkv9mnz8z5ktl9vt0glksy80tsq",
   mmInterestModel:
-    "terra1k9cn6dqyrdl0tq0rnler0jw8c7dm5gq37xvaksztayez0upkcvdqv7j4at",
-  mmOracle: "terra19hxng7vgnqshlxlc5cvmtuhkzfu7rrr4aj6vjxnxcnfausjse4yqlsw0np",
-  mmMarket: "terra1mz4pt5u9vs72h9tv3l2nug2kx8kmxufyszsyv0qx7p639nl0zews60360g",
+    "furya1k9cn6dqyrdl0tq0rnler0jw8c7dm5gq37xvaksztayez0upkcvdqtkpr37",
+  mmOracle: "furya19hxng7vgnqshlxlc5cvmtuhkzfu7rrr4aj6vjxnxcnfausjse4yqccael5",
+  mmMarket: "furya1mz4pt5u9vs72h9tv3l2nug2kx8kmxufyszsyv0qx7p639nl0zewsa8zvra",
   mmOverseer:
-    "terra1nlj0qj7km9rxh296wns7x2c43dywjfnfccasu35hhp626aw8wccsty4lfn",
+    "furya1nlj0qj7km9rxh296wns7x2c43dywjfnfccasu35hhp626aw8wccsvvxf9x",
   mmLiquidationQueue:
-    "terra14jj0ganc6m5d0vr39ety8p58nkexldydx7rpawkecfzfdx8dtpmszpnj7l",
-  aUSDC: "terra1cfh5sw34je6a8kuwdwefcm3xh8935r0md7eyud4rt2nhnvqgh0jsle7h47",
-  mmCustody: "terra16ulj2elu40xquhc3s9w50p288t5wz3xfl59x55m8x992dtk8t0ls2sfl75",
+    "furya14jj0ganc6m5d0vr39ety8p58nkexldydx7rpawkecfzfdx8dtpms9fqyj2",
+  aUSDC: "furya1cfh5sw34je6a8kuwdwefcm3xh8935r0md7eyud4rt2nhnvqgh0jsc3dpet",
+  mmCustody: "furya16ulj2elu40xquhc3s9w50p288t5wz3xfl59x55m8x992dtk8t0lsdc6fjp",
   aLunaReward:
-    "terra1xzxn94q6nf0y260nz2vwntng76c2jrkrzkj2h9696gd840efxfjshdypph",
+    "furya1xzxn94q6nf0y260nz2vwntng76c2jrkrzkj2h9696gd840efxfjss9hhdz",
   aLunaValidatorsRegistry:
-    "terra1mw0x5egps68z9e2zwvuk5pevzm4gthd6d4ndscqxfpl5h8f77clq7m6dsy",
+    "furya1mw0x5egps68z9e2zwvuk5pevzm4gthd6d4ndscqxfpl5h8f77clqenfmu3",
   mmDistributionModel:
-    "terra1tkzmmz3x8kuxtcygjvn9tajz7xx4r0n7nw7y3cexgferscuvm6tqul4uuq",
+    "furya1tkzmmz3x8kuxtcygjvn9tajz7xx4r0n7nw7y3cexgferscuvm6tqmhx2s4",
 
   aLunaLunaPair: "",
   aLunaLunaLPToken: "",
@@ -358,31 +358,31 @@ const PISCO_CONTRACT_ADDRESS: Record<string, any> = {
   astroUstPair: "",
   usd: "ibc/D70F005DE981F6EFFB3AD1DF85601258D1C01B9DEDC1F7C1B95C0993E83CF389",
   documentsMain:
-    "terra1ye9s4w39aaqd5e948tcvwddl77vr7dv2tyyrd9q7fzm8hnkgcuqqaqzwz4",
-  feeAddress: "terra1qyudfva64yk9sye5x7pp654hl0pvk4k0gdzv0k",
+    "furya1ye9s4w39aaqd5e948tcvwddl77vr7dv2tyyrd9q7fzm8hnkgcuqq6g3cwq",
+  feeAddress: "furya1qyudfva64yk9sye5x7pp654hl0pvk4k0pur6cy",
   tokenId: {
     whitePaper: "whitepaper",
   },
   nameservice:
-    "terra1zl866qkqmwygzcr8xwqa70mep0raqt40ddqhu9ur3yguekg7g3xq6ctmw4",
+    "furya1zl866qkqmwygzcr8xwqa70mep0raqt40ddqhu9ur3yguekg7g3xqascdzq",
   LSDs: {
     ampLuna: {
       info: {
         tokenAddress:
-          "terra1xgvp6p0qml53reqdyxgcl8ttl0pkh0n2mtx2n7tzfahn6e0vca7s0g7sg6",
+          "furya1xgvp6p0qml53reqdyxgcl8ttl0pkh0n2mtx2n7tzfahn6e0vca7sgqdxy0",
         hubAddress:
-          "terra1kye343r8hl7wm6f3uzynyyzl2zmcm2sqmvvzwzj7et2j5jj7rjkqa2ue88",
+          "furya1kye343r8hl7wm6f3uzynyyzl2zmcm2sqmvvzwzj7et2j5jj7rjkq6z00tj",
         protocol: "Eris Protocol",
         symbol: "ampLuna",
         name: "Eris Amplified Luna",
         icon: "https://www.erisprotocol.com/assets/ampLuna100.png",
       },
-      hub: "terra1qnvjpw834f8h7wfmqku43nndjnrh6v6hnggmeng0nafzlkqpnzwqt545cd",
+      hub: "furya1qnvjpw834f8h7wfmqku43nndjnrh6v6hnggmeng0nafzlkqpnzwqvuxz5c",
       reward:
-        "terra1pmfgs6jekpcjp3rfg3x2dw2whpex3ygms7d3h46axj6q5xs28n7qvk8375",
-      token: "terra1pw3ta7fzwxzuqut7e4e6uc9824fg8440yczvhvndz99gnfevggeqrqvmxf",
+        "furya1pmfgs6jekpcjp3rfg3x2dw2whpex3ygms7d3h46axj6q5xs28n7qt758jp",
+      token: "furya1pw3ta7fzwxzuqut7e4e6uc9824fg8440yczvhvndz99gnfevggeqygld2u",
       custody:
-        "terra1kqggdw6vkfdznss9tuvrqmkp4h2m7k7wut0egpv697efdh2hvj6sfk9qqf",
+        "furya1kqggdw6vkfdznss9tuvrqmkp4h2m7k7wut0egpv697efdh2hvj6sw7kkvu",
     },
   },
 };

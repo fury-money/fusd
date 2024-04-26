@@ -26,12 +26,12 @@ export const CLASSIC: CavernNetworkInfo = {
 
 export const MAINNET: CavernNetworkInfo = {
   name: "mainnet",
-  chainID: 'phoenix-1',
-  lcd: 'https://phoenix-lcd.terra.dev/',
-  prefix: "terra",
+  chainID: 'furya-1',
+  lcd: 'https://api.furya.xyz/',
+  prefix: "furya",
   gasAdjustment: 1.6,
-  gasPrices: "28.325uluna",
-  chainName: "terra2",
+  gasPrices: "28.325ufury",
+  chainName: "furya",
 };
 
 const LCDClients: Record<string, LCDClient> = {
@@ -48,7 +48,7 @@ const LCDClients: Record<string, LCDClient> = {
 
 const RPCClients: Record<string, string> = {
   testnet: "https://pisco-rpc.erisprotocol.com/",
-  mainnet: `https://phoenix-rpc.erisprotocol.com/`,
+  mainnet: `https://rpc.furya.xyz/`,
 }
 
 export const NetworkContext = createContext<CavernNetworkInfo>(MAINNET);
